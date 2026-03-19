@@ -10,7 +10,7 @@ export default function Newsletter() {
         <h2 className="text-4xl mb-4">
           Get exclusive <br /> property updates in <br /> your inbox.
         </h2>
-
+   
         <div className="flex mt-4">
           <input
             placeholder="Email"
