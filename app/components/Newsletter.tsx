@@ -6,7 +6,7 @@ export default function Newsletter() {
 
       {/* LEFT */}
       <div>
-         <Image src={winstead} alt="logo"/>
+         <Image src={winstead} alt="logo"/>   
         <h2 className="text-4xl mb-4">
           Get exclusive <br /> property updates in <br /> your inbox.
         </h2>
