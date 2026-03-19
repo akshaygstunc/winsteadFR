@@ -26,7 +26,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="h-screen relative overflow-hidden">
+    <div className="h-screen relative">
 
       {/* FALLBACK IMAGE */}
       {!videoLoaded && (
@@ -51,23 +51,19 @@ export default function Hero() {
         playsInline
         onLoadedData={() => setVideoLoaded(true)}
       />
-
-      {/* DARK OVERLAY */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black z-10" />
+      {/* DARK GRADIENT OVERLAY */}
+      <div className="absolute inset-0" />
 
       {/* CONTENT */}
-      <div className="absolute bottom-[-80px] w-full flex justify-center z-50">
+      <div className="hero-content absolute bottom-[-80px] w-full flex justify-center z-50">
         <div className="hero-box w-[90%] max-w-5xl bg-black/80 backdrop-blur-2xl rounded-3xl p-10 border border-yellow-500/20 shadow-[0_0_60px_rgba(201,162,74,0.15)]">
-
           <h1 className="text-4xl text-center mb-8 leading-snug">
             Find Curated Properties <br /> Across the Globe
           </h1>
 
           <SearchBar />
-
         </div>
       </div>
-
     </div>
   );
 }
