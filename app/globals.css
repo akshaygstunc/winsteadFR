@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ✅ SAFE — no @apply */
+body {
+  background-color: black;
+  color: white;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ✅ keep custom styles normal */
+.glass {
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(12px);
+}
+
+/* ✅ convert @apply → normal CSS */
+.gold-btn {
+  background-color: #C9A24A;
+  color: black;
+  padding: 8px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* ✅ convert spacing */
+.section {
+  padding: 80px 40px;
+}
