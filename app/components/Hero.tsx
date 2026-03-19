@@ -1,9 +1,14 @@
 "use client";
 import gsap from "gsap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
+import Image from "next/image";
+import subtractImage from "../../public/Subtract.png";
+// import videoSrc from "../../public/video.mp4";
 
 export default function Hero() {
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
   useEffect(() => {
     gsap.from(".hero-img", {
       scale: 1.1,
@@ -21,20 +26,37 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="h-screen relative">
+    <div className="h-screen relative overflow-hidden">
 
-      {/* IMAGE */}
-      <img
-        src="/subtract.png"
-        className="hero-img absolute w-full h-full object-cover object-top"
+      {/* FALLBACK IMAGE */}
+      {!videoLoaded && (
+        <Image
+          src={subtractImage}
+          alt="hero"
+          fill
+          priority
+          className="hero-img object-cover object-top z-0"
+        />
+      )}
+
+      {/* VIDEO */}
+      <video
+        className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 ${
+          videoLoaded ? "opacity-100" : "opacity-0"
+        }`}
+       src="/video.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        onLoadedData={() => setVideoLoaded(true)}
       />
 
-      {/* DARK GRADIENT OVERLAY */}
-      <div className="absolute inset-0" />
+      {/* DARK OVERLAY */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black z-10" />
 
       {/* CONTENT */}
-      <div className="hero-content absolute bottom-[-80px] w-full flex justify-center z-50">
-        
+      <div className="absolute bottom-[-80px] w-full flex justify-center z-50">
         <div className="hero-box w-[90%] max-w-5xl bg-black/80 backdrop-blur-2xl rounded-3xl p-10 border border-yellow-500/20 shadow-[0_0_60px_rgba(201,162,74,0.15)]">
 
           <h1 className="text-4xl text-center mb-8 leading-snug">
@@ -44,8 +66,8 @@ export default function Hero() {
           <SearchBar />
 
         </div>
-
       </div>
+
     </div>
   );
 }

@@ -1,15 +1,17 @@
 "use client";
 import gsap from "gsap";
 import { useEffect } from "react";
-
+import image1 from "../../public/Subtract.png";
+import Image from "next/image";
 
 const images = [
-  "/subtract.png",
-  "/subtract.png",
-  "/subtract.png",
-  "/subtract.png",
-  "/subtract.png",
-  "/subtract.png",
+  image1,
+  image1,
+  image1,
+  image1,
+  image1,
+  image1,
+  
 ];
 export default function Projects() {
   useEffect(() => {
@@ -49,8 +51,9 @@ export default function Projects() {
           >
 
             {/* IMAGE */}
-            <img
+            <Image
               src={images[i-1]}
+              alt="projects"
               className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
             />
 
