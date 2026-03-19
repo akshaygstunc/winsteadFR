@@ -31,7 +31,7 @@ export default function Hero() {
       {/* FALLBACK IMAGE */}
       {!videoLoaded && (
         <Image
-          src={subtractImage}
+          src={subtractImage} 
           alt="hero"
           fill
           priority
