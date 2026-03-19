@@ -32,7 +32,7 @@ export default function Hero() {
       {!videoLoaded && (
         <Image
           src={subtractImage} 
-          alt="hero"
+          alt="hero"  
           fill
           priority
           className="hero-img object-cover object-top z-0"
