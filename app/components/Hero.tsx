@@ -11,7 +11,7 @@ export default function Hero() {
 
   useEffect(() => {
     gsap.from(".hero-img", {
-      scale: 1.1,
+      scale: 1.1, 
       duration: 2,
       ease: "power2.out",
     });
