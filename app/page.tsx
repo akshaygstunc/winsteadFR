@@ -4,8 +4,8 @@ import Projects from "./components/Projects";
 import Stats from "./components/Stats";
 import Logos from "./components/Logos";
 import Blogs from "./components/Blogs";
-import Newsletter from "./components/Newsletter";
 import Testimonials from "./components/Testimonials";
+import Footer from "./components/Footer";
 
 export default function Home() {
   return (
@@ -17,7 +17,8 @@ export default function Home() {
       <Testimonials />
       <Logos />
       <Blogs />
-      <Newsletter />
+      {/* <Newsletter /> */}
+      <Footer/>
     </main>
   );
 }

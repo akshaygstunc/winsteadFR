@@ -6,7 +6,7 @@
 body {
   background-color: black;
   color: white;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 /* ✅ keep custom styles normal */
@@ -27,4 +27,8 @@ body {
 /* ✅ convert spacing */
 .section {
   padding: 80px 40px;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
