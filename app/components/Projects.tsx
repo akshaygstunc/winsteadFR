@@ -81,41 +81,39 @@ export default function Projects() {
       </div>
 
       {/* GRID */}
-     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[200px]">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+        {/* BIG LEFT */}
+        <div className="card md:row-span-2">
+          <Card img={images[0]} />
+        </div>
 
-  {/* BIG LEFT */}
-  <div className="card md:row-span-2">
-    <Card img={images[0]} />
-  </div>
+        {/* SMALL */}
+        <div className="card">
+          <Card img={images[1]} />
+        </div>
 
-  {/* SMALL */}
-  <div className="card">
-    <Card img={images[1]} />
-  </div>
+        <div className="card">
+          <Card img={images[2]} />
+        </div>
 
-  <div className="card">
-    <Card img={images[2]} />
-  </div>
+        {/* SMALL */}
+        <div className="card">
+          <Card img={images[3]} />
+        </div>
 
-  {/* SMALL */}
-  <div className="card">
-    <Card img={images[3]} />
-  </div>
+        {/* BIG RIGHT (TOP ALIGN) */}
+        <div className="card md:row-span-2">
+          <Card img={images[4]} />
+        </div>
 
-  {/* BIG RIGHT (TOP ALIGN) */}
-  <div className="card md:row-span-2">
-    <Card img={images[4]} />
-  </div>
-
-  {/* BOTTOM SMALL */}
-  <div className="card">
-    <Card img={images[5]} />
-  </div>
-  <div className="card">
-    <Card img={images[6]} />
-  </div>
-
-</div>
+        {/* BOTTOM SMALL */}
+        <div className="card">
+          <Card img={images[5]} />
+        </div>
+        <div className="card">
+          <Card img={images[6]} />
+        </div>
+      </div>
     </section>
   );
 }
@@ -123,7 +121,6 @@ export default function Projects() {
 function Card({ img }: any) {
   return (
     <div className="relative w-full h-full rounded-2xl overflow-hidden group cursor-pointer">
-
       {/* IMAGE */}
       <Image
         src={img}
@@ -136,10 +133,7 @@ function Card({ img }: any) {
 
       {/* CONTENT */}
       <div className="absolute bottom-0 p-5 w-full transition duration-500 group-hover:translate-y-[-4px]">
-
-        <h3 className="text-lg md:text-xl font-semibold">
-          Aurelia Heights
-        </h3>
+        <h3 className="text-lg md:text-xl font-semibold">Aurelia Heights</h3>
 
         <div className="text-xs md:text-sm text-gray-300 mt-2 space-y-1 opacity-90">
           <p>2–8</p>
@@ -152,7 +146,6 @@ function Card({ img }: any) {
         <button className="mt-3 text-xs md:text-sm border border-yellow-500 px-4 py-1.5 rounded-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500">
           Check Details
         </button>
-
       </div>
     </div>
   );

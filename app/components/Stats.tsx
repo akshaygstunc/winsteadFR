@@ -61,7 +61,7 @@ export default function Stats() {
       ref={sectionRef}
       className="bg-black text-white py-20 px-6 md:px-16"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className=" mx-auto">
         
         {/* TOP LINE */}
         <div className="border-t mb-16 h-[1px] w-full bg-[linear-gradient(84.04deg,#B9A650_0.77%,#F1DC7F_43.94%,#7C5700_82.27%)] opacity-70"></div>

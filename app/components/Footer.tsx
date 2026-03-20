@@ -16,7 +16,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#1a1a1a] text-white relative">
       {/* MAIN CONTENT */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-14">
+      <div className="mx-auto px-6 md:px-12 py-14">
         {/* TOP GRID */}
         <div className="grid lg:grid-cols-3 gap-10">
           {/* LEFT */}
@@ -141,11 +141,13 @@ export default function Footer() {
         </div>
 
         {/* middle grid */}
-        {/* <div className="w-full">
-          <h6 className="text-[160px] text-center">Winstead</h6>
-        </div> */}
         {/* BOTTOM BAR */}
         <div className="mt-16 h-[1px] w-full bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] bg-[length:200%_100%] animate-[shimmer_3s_linear_infinite]"></div>
+        <div className="overflow-hidden">
+          <h6 className="text-[18vw] leading-none text-center text-[#AFAFAF] font-bold whitespace-nowrap">
+            Winstead
+          </h6>
+        </div>
         <div className="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400 gap-4">
           <p>© 2026 Richkey Properties. All rights reserved.</p>
 

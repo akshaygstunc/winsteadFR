@@ -1,13 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import vector from "../../public/Vector.png";
-import vec2 from "../../public/brandlogo1.png";
-import vec3 from "../../public/brandlogo2.png";
+import vector from "../../public/logoo1.webp";
+import vec2 from "../../public/logoo2.webp";
+import vec3 from "../../public/logoo3.png";
+import vec4 from "../../public/logoo4.webp";
+import vec5 from "../../public/logoo5.png";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-const logos = [vector, vec2, vec3, vector, vec2, vec3, vector, vec2];
+const logos = [vector, vec2, vec3, vec4, vec5, vector, vec2];
 
 export default function Logos() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -57,12 +59,12 @@ export default function Logos() {
           {[...logos, ...logos].map((logo, i) => (
             <div
               key={i}
-              className="logo-item w-1/2 sm:w-1/4 flex justify-center items-center opacity-50 hover:opacity-100 transition"
+              className="logo-item w-1/2 sm:w-1/4 px-2 sm:px-1 flex justify-center items-center opacity-70 hover:opacity-100 transition"
             >
-              <Image
+               <Image
                 src={logo}
                 alt="logo"
-                className="w-[200px] px-4 object-contain"
+                className="w-[120px] h-auto sm:w-[150px] md:w-[180px] lg:w-[200px] object-contain bg-white"
               />
             </div>
           ))}
