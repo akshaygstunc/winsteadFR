@@ -9,7 +9,7 @@ import vec5 from "../../public/logoo5.png";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-const logos = [vector, vec2, vec3, vec4, vec5, vector, vec2];
+const logos = [vector, vec2, vec3, vec4, vec5];
 
 export default function Logos() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -49,26 +49,23 @@ export default function Logos() {
 
   return (
     <section className="bg-black py-6 overflow-hidden">
-      <div
-        ref={containerRef}
-        className="relative w-full overflow-hidden"
-      >
+      <div ref={containerRef} className="relative w-full overflow-hidden">
         {/* TRACK */}
         <div className="flex w-[200%] logo-track">
-          
           {[...logos, ...logos].map((logo, i) => (
             <div
               key={i}
-              className="logo-item w-1/2 sm:w-1/4 px-2 sm:px-1 flex justify-center items-center opacity-70 hover:opacity-100 transition"
+              className="logo-item flex-shrink-0 
+  w-[20%] sm:w-[5%] md:w-[10%] 
+  flex justify-center items-center px-1 opacity-70 hover:opacity-100 transition"
             >
-               <Image
+              <Image
                 src={logo}
                 alt="logo"
-                className="w-[120px] h-auto sm:w-[150px] md:w-[180px] lg:w-[200px] object-contain bg-white"
+                className="w-full max-w-[140px] sm:max-w-[160px] md:max-w-[180px] object-contain bg-white p-2 rounded-md"
               />
             </div>
           ))}
-
         </div>
       </div>
     </section>
