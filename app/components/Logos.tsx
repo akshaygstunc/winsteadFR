@@ -57,7 +57,7 @@ export default function Logos() {
               key={i}
               className="logo-item flex-shrink-0 
   w-[20%] sm:w-[5%] md:w-[10%] 
-  flex justify-center items-center px-1 opacity-70 hover:opacity-100 transition"
+  flex justify-center items-center px-2 opacity-70 hover:opacity-100 transition"
             >
               <Image
                 src={logo}
