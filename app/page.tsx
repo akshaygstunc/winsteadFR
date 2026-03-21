@@ -6,6 +6,7 @@ import Logos from "./components/Logos";
 import Blogs from "./components/Blogs";
 import Testimonials from "./components/Testimonials";
 import Footer from "./components/Footer";
+import Reel from "./components/Reel";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <Projects />
       <Stats />
       <Testimonials />
+      <Reel/>
       <Logos />
       <Blogs />
       {/* <Newsletter /> */}
