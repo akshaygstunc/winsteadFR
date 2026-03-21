@@ -82,7 +82,7 @@ const [hovered, setHovered] = useState<number | null>(null);
   onMouseLeave={() => setHovered(null)}
   className="relative flex-shrink-0 
   w-[20%] min-w-[180px] md:min-w-[220px] 
-  h-[300px] md:h-[450px] 
+  h-[300px] md:h-[400px] 
   rounded-xl overflow-hidden cursor-pointer"
 >
 
