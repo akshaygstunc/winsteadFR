@@ -166,7 +166,7 @@ export default function Footer() {
           </h6>
         </div>
         <div className="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400 gap-4">
-          <p>© 2026 Richkey Properties. All rights reserved.</p>
+          <p>© 2026 Winstead Properties. All rights reserved.</p>
 
           <div className="flex gap-4">
             <span className="hover:text-white cursor-pointer">
