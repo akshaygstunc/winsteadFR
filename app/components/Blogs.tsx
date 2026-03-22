@@ -54,7 +54,7 @@ export default function Blogs() {
   return (
     <section
       ref={sectionRef}
-      className="bg-black text-white px-6 md:px-16 py-0 "
+      className="bg-black text-white px-6 md:px-16 py-0 mb-10"
     >
       {/* HEADER */}
       <div className="flex justify-between items-center mb-12">
