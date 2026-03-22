@@ -83,7 +83,7 @@ export default function Testimonials() {
                 </h4>
 
                 {/* TEXT */}
-                <p className="text-sm text-gray-300 leading-relaxed mb-4 max-w-xs">
+                <p className="text-[1.05rem] text-gray-300 leading-relaxed mb-4 max-w-xs">
                   {review.text}
                 </p>
 
@@ -101,7 +101,7 @@ export default function Testimonials() {
         </div>
 
         {/* BUTTON */}
-        <div className="mt-16 flex justify-center md:justify-start">
+        <div className="mt-8 flex justify-center md:justify-start">
           <button className="border border-yellow-500 px-6 py-2 rounded-md text-sm hover:bg-yellow-500 hover:text-black transition">
             Write a Review
           </button>
@@ -110,7 +110,7 @@ export default function Testimonials() {
       </div>
 
       {/* GOLD LINE */}
-      <div className="mt-16 h-[0.5px] w-full bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] opacity-70"></div>
+      <div className="mt-8 h-[0.5px] w-full bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] opacity-70"></div>
     </section>
   );
 }

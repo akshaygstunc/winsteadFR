@@ -48,7 +48,7 @@ export default function Logos() {
   }, []);
 
   return (
-    <section className="bg-black py-6 overflow-hidden">
+    <section className="bg-black py-0 overflow-hidden">
       <div ref={containerRef} className="relative w-full overflow-hidden">
         {/* TRACK */}
         <div className="flex w-[200%] logo-track">
@@ -57,12 +57,12 @@ export default function Logos() {
               key={i}
               className="logo-item flex-shrink-0 
   w-[20%] sm:w-[5%] md:w-[10%] 
-  flex justify-center items-center px-2 opacity-70 hover:opacity-100 transition"
+  flex justify-center items-center px-2 opacity-70 hover:opacity-100 transition "
             >
               <Image
                 src={logo}
                 alt="logo"
-                className="w-full max-w-[140px] sm:max-w-[160px] md:max-w-[180px] object-contain bg-white p-2 rounded-md"
+                className="w-full max-w-[140px] sm:max-w-[160px]filter brightness-10 invert md:max-w-[180px] object-contain bg-white p-2 rounded-md"
               />
             </div>
           ))}

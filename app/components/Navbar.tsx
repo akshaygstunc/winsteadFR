@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import winstead from "../../public/winstead.png";
 import star from "../../public/hugeicons_star.png";
 import { FcGoogle } from "react-icons/fc";
+import FollowUsIcons from "./SocialMedia";
 
 const navLinks = [
   "Home",
@@ -77,7 +78,7 @@ export default function Navbar() {
             <a
               key={index}
               href="#"
-              className="nav-item relative text-white text-sm font-normal group"
+              className="text-[1.01rem] nav-item relative text-white text-sm font-normal group"
             >
               {link}
               <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
@@ -88,64 +89,29 @@ export default function Navbar() {
         {/* Right Section */}
         <div className="hidden lg:flex items-center gap-6 nav-item">
           {/* Follow Us */}
-          <div className="relative" ref={dropdownRef}>
-            {/* Trigger */}
-            <div
-              onClick={() => setShowDropdown(!showDropdown)}
-              className="text-white text-sm cursor-pointer hover:text-yellow-400 transition flex items-center gap-1"
-            >
-              Follow Us ▾
-            </div>
-
-            {/* Dropdown */}
-            {showDropdown && (
-              <div className="absolute top-10 right-0 w-56 bg-black/90 backdrop-blur-xl border border-white/10 rounded-lg p-4 shadow-2xl">
-                {["Discord", "Instagram", "X", "YouTube", "LinkedIn"].map(
-                  (item, index) => (
-                    <div
-                      key={index}
-                      className="dropdown-item relative text-white text-sm py-2 px-3 cursor-pointer overflow-hidden group"
-                    >
-                      {/* Gradient Hover Background */}
-                      <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-[linear-gradient(84.04deg,#B9A650_0.77%,#F1DC7F_43.94%,#7C5700_82.27%)]"></span>
-
-                      {/* Text */}
-                      <span className="relative z-10 group-hover:text-black transition duration-300">
-                        {item}
-                      </span>
-
-                      {/* Underline animation */}
-                      <span className="absolute left-3 bottom-1 w-0 h-[1px] bg-white group-hover:w-[80%] transition-all duration-300"></span>
-                    </div>
-                  ),
-                )}
-              </div>
-            )}
-          </div>
+          <FollowUsIcons/>
 
           {/* Divider */}
           <div className="h-6 w-[1px] bg-white/20"></div>
 
-          {/* Google Rating */}
-          <div className="flex items-center gap-2 text-white text-sm">
-            <div className="w-8 h-8 flex items-center justify-center rounded-full border border-white/20">
+          <div className="flex items-center gap-2">
+
+            {/* Logo */}
+            <div className="w-8 h-8 rounded-full border border-yellow-500/30 flex items-center justify-center bg-black">
               <FcGoogle size={18} />
             </div>
+
+            {/* Content */}
             <div>
-              <div className="flex items-center gap-1 font-semibold">
-                4.8{" "}
-                <span className="text-yellow-400">
-                  <Image
-                    src={star}
-                    alt="Winstead Logo"
-                    width={15}
-                    height={15}
-                    priority
-                  />
-                </span>
+              <div className="flex items-center gap-2">
+                <span className="text-2xs font-semibold text-white">4.8</span>
+                <span className="text-yellow-500 text-sm">★★★★★</span>
               </div>
-              <div className="text-xs text-gray-400">200+ Reviews</div>
+              <p className="text-gray-400 text-xs">
+                Rated by&nbsp; 200+ clients
+              </p>
             </div>
+
           </div>
         </div>
 
@@ -179,52 +145,36 @@ export default function Navbar() {
 
     {/* FOLLOW US (MOBILE DROPDOWN) */}
     <div className="mt-4">
-      <div
-        onClick={() => setShowDropdown(!showDropdown)}
-        className="text-white text-sm cursor-pointer flex justify-between items-center border-b border-white/10 pb-2"
-      >
-        Follow Us
-        <span className={`${showDropdown ? "rotate-180" : ""} transition`}>
-          ▾
-        </span>
-      </div>
+            <FollowUsIcons />
 
-      {/* Dropdown Items */}
-      {showDropdown && (
-        <div className="mt-2 space-y-2">
-          {["Discord", "Instagram", "X", "YouTube", "LinkedIn"].map(
-            (item, index) => (
-              <div
-                key={index}
-                className="text-white text-sm px-2 py-2 rounded-md hover:bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] hover:text-black transition"
-              >
-                {item}
-              </div>
-            )
-          )}
-        </div>
-      )}
+
     </div>
 
     {/* GOOGLE RATING */}
-    <div className="flex items-center gap-3 mt-4">
-      <div className="w-8 h-8 flex items-center justify-center rounded-full border border-white/20">
-        <FcGoogle size={18} />
-      </div>
+          <div className="flex items-center gap-2">
 
-      <div>
-        <div className="flex items-center gap-1 font-semibold text-white">
-          4.8
-          <Image src={star} alt="star" width={14} height={14} />
-        </div>
-        <div className="text-xs text-gray-400">200+ Reviews</div>
-      </div>
-    </div>
+            {/* Logo */}
+            <div className="w-8 h-8 rounded-full border border-yellow-500/30 flex items-center justify-center bg-black">
+              <FcGoogle size={18} />
+            </div>
+
+            {/* Content */}
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-2xs font-semibold text-white">4.8</span>
+                <span className="text-yellow-500 text-sm">★★★★★</span>
+              </div>
+              <p className="text-gray-400 text-xs">
+                Rated by&nbsp; 200+ clients
+              </p>
+            </div>
+
+          </div>
 
     {/* CTA */}
-    <button className="mt-4 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold py-2 rounded-md">
+    {/* <button className="mt-4 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold py-2 rounded-md">
       Contact Us
-    </button>
+    </button> */}
 
   </div>
 </div>

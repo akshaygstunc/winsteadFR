@@ -81,7 +81,7 @@ export default function Footer() {
           {/* CENTER */}
           <div>
             <h3 className="text-lg mb-4">Address</h3>
-            <p className="text-sm text-gray-300 leading-relaxed">
+            <p className="text-[1.01rem] text-gray-300 leading-relaxed">
               Dubai Hills Estate Business Park 4th, Office 204no <br />
               Dubai - UAE, PO Box No: 453881
             </p>
@@ -92,13 +92,13 @@ export default function Footer() {
               <div>
                 <h4 className="mb-3 text-white">Company Info</h4>
                 <ul className="space-y-2 text-gray-300">
-                  <li className="hover:text-yellow-400 cursor-pointer">
+                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
                     About Us
                   </li>
-                  <li className="hover:text-yellow-400 cursor-pointer">
+                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
                     Services
                   </li>
-                  <li className="hover:text-yellow-400 cursor-pointer">
+                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
                     Contact Us
                   </li>
                 </ul>
@@ -107,13 +107,13 @@ export default function Footer() {
               <div>
                 <h4 className="mb-3 text-white opacity-0">hidden</h4>
                 <ul className="space-y-2 text-gray-300">
-                  <li className="hover:text-yellow-400 cursor-pointer">
+                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
                     Our Team
                   </li>
-                  <li className="hover:text-yellow-400 cursor-pointer">
+                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
                     Partnership
                   </li>
-                  <li className="hover:text-yellow-400 cursor-pointer">
+                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
                     Career
                   </li>
                 </ul>
@@ -133,10 +133,10 @@ export default function Footer() {
               <div>
                 <h4 className="mb-3">Our Portfolio</h4>
                 <ul className="space-y-2 text-gray-300">
-                  <li className="hover:text-yellow-400 cursor-pointer">
+                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
                     Projects
                   </li>
-                  <li className="hover:text-yellow-400 cursor-pointer">
+                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
                     Locations
                   </li>
                 </ul>
@@ -148,7 +148,7 @@ export default function Footer() {
                   <li className="hover:text-yellow-400 cursor-pointer">
                     Our Partners
                   </li>
-                  <li className="hover:text-yellow-400 cursor-pointer">
+                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
                     News & Media
                   </li>
                 </ul>

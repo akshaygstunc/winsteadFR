@@ -102,7 +102,7 @@ export default function Stats() {
   return (
     <section
       ref={sectionRef}
-      className="bg-black text-white py-20 px-6 md:px-16"
+      className="bg-black text-white py-0 px-6 md:px-16"
     >
         <div className="mb-16 h-[1px] w-full bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] bg-[length:200%_100%] animate-[shimmer_3s_linear_infinite]"></div>
 
@@ -124,7 +124,7 @@ export default function Stats() {
                 </span>
               </h3>
 
-              <p className="text-sm text-gray-400 mt-2">{stat.label}</p>
+              <p className="text-[1.05rem] text-gray-400 mt-2">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -135,7 +135,7 @@ export default function Stats() {
         </h2>
 
         {/* HELP CARDS */}
-        <div className="help-section grid grid-cols-1 md:grid-cols-3 gap-10 justify-items-center">
+        <div className="help-section grid grid-cols-1 md:grid-cols-3 gap-5 justify-items-center">
           {help.map((item, i) => (
             <div
               key={i}
@@ -145,15 +145,15 @@ export default function Stats() {
                 {item.title}
               </h3>
 
-              <p className="text-xs md:text-sm text-gray-400 leading-relaxed">
+              <p className="text-[1.05rem] md:text-[1.05rem] text-gray-400 leading-relaxed">
                 {item.text}
               </p>
             </div>
           ))}
         </div>
-      <div className="mt-16 h-[0.5px] w-full bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] opacity-70"></div>
+      <div className="mt-8 h-[0.5px] w-full bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] opacity-70 "></div>
 
-        <div className="mt-16 h-[1px] w-full bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] bg-[length:200%_100%] animate-[shimmer_3s_linear_infinite]"></div>
+        <div className="mt-16 h-[1px] w-full bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] bg-[length:200%_100%] animate-[shimmer_3s_linear_infinite] mb-10"></div>
 
       </div>
     </section>

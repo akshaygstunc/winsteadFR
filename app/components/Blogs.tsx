@@ -54,13 +54,13 @@ export default function Blogs() {
   return (
     <section
       ref={sectionRef}
-      className="bg-black text-white px-6 md:px-16 py-20"
+      className="bg-black text-white px-6 md:px-16 py-0 "
     >
       {/* HEADER */}
       <div className="flex justify-between items-center mb-12">
         <h2 className="text-3xl md:text-4xl font-light">Our Latest Blogs</h2>
 
-        <button className="rounded-md hidden md:block border border-yellow-500 px-6 py-2 text-sm hover:bg-yellow-500 hover:text-black transition">
+        <button className="text-[1.05rem] rounded-md hidden md:block border border-yellow-500 px-6 py-2 text-sm hover:bg-yellow-500 hover:text-black transition">
           View All Blogs
         </button>
       </div>
@@ -83,7 +83,7 @@ export default function Blogs() {
 
             {/* CONTENT */}
             <div className="mt-4">
-              <h4 className="text-sm leading-relaxed mb-2 group-hover:text-yellow-400 transition">
+              <h4 className="text-[1.15rem] leading-relaxed mb-2 group-hover:text-yellow-400 transition">
                 {blog.title}
               </h4>
 
