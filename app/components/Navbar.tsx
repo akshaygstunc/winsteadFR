@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import winstead from "../../public/newlogo.jpeg";
@@ -62,15 +63,16 @@ export default function Navbar() {
     <header className="fixed top-0 left-0 w-full z-50 bg-black border-b border-white/10">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 py-4">
         {/* Logo */}
-        <div className="nav-item flex items-center">
-          <Image
-            src={winstead}
-            alt="Winstead Logo"
-            width={60}
-            height={30}
-            priority
-          />
-        </div>
+       <Link href="/" className="nav-item flex items-center">
+  <Image
+    src={winstead}
+    alt="Winstead Logo"
+    width={60}
+    height={30}
+    priority
+    className="cursor-pointer"
+  />
+</Link>
 
         {/* Desktop Menu */}
         <nav className="hidden lg:flex items-center gap-8">

@@ -1,5 +1,7 @@
 import Image from "next/image";
 import aboutImg from "../../../public/about.png";
+import Stats from "@/app/components/Stats";
+import Testimonials from "@/app/components/Testimonials";
 
 export default function AboutUs() {
   return (
@@ -17,16 +19,16 @@ export default function AboutUs() {
         <Image
           src={aboutImg}
           alt="About Winstead"
-          className="w-full h-[320px] md:h-[520px] object-cover"
+          className="w-full object-cover"
           priority
         />
 
         {/* PREMIUM OVERLAY */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-black"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black"></div>
       </div>
 
       {/* CONTENT */}
-      <div className="max-w-4xl mx-auto px-6 md:px-12 py-14 space-y-8 text-gray-300 leading-relaxed text-[15px] md:text-[16px]">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-14 space-y-8 text-gray-300 leading-relaxed text-[15px] md:text-[16px]">
 
         <p>
           At Winstead Global Real Estate, we believe real estate is more than
@@ -70,8 +72,9 @@ export default function AboutUs() {
       </div>
 
       {/* GOLDEN DIVIDER */}
-      <div className="h-[1px] w-full bg-[linear-gradient(84.04deg,#B9A650_0.77%,#F1DC7F_43.94%,#7C5700_82.27%)] opacity-70"></div>
-
+      {/* <div className="h-[1px] w-full bg-[linear-gradient(84.04deg,#B9A650_0.77%,#F1DC7F_43.94%,#7C5700_82.27%)] opacity-70"></div> */}
+<Stats />
+      <Testimonials />
     </section>
   );
 }

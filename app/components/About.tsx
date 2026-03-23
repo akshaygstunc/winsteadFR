@@ -5,7 +5,7 @@ import img2 from "../../public/img2.png"; // bottom image
 export default function About() {
   return (
     <section className="bg-black text-white py-10 px-12 md:px-6">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <div className="mx-auto grid md:grid-cols-2 gap-12 items-center">
 
         {/* LEFT SIDE (OVAL IMAGES) */}
         <div className="flex justify-center md:justify-start">
