@@ -184,7 +184,7 @@ export default function Projects() {
       {/* GRID */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
         {/* BIG LEFT */}
-        <div className="card md:row-span-2">
+        <div className="card">
           <Card img={images[0]} />
         </div>
 
@@ -203,7 +203,7 @@ export default function Projects() {
         </div>
 
         {/* BIG RIGHT (TOP ALIGN) */}
-        <div className="card md:row-span-2">
+        <div className="card">
           <Card img={images[4]} />
         </div>
 
@@ -211,9 +211,7 @@ export default function Projects() {
         <div className="card">
           <Card img={images[5]} />
         </div>
-        <div className="card">
-          <Card img={images[6]} />
-        </div>
+       
       </div>
     </section>
   );
