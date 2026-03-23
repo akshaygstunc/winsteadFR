@@ -5,7 +5,7 @@ import gsap from "gsap";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import winstead from "../../public/newlogo.jpeg";
+import winstead from "../../public/winstead.png";
 import star from "../../public/hugeicons_star.png";
 import { FcGoogle } from "react-icons/fc";
 import FollowUsIcons from "./SocialMedia";

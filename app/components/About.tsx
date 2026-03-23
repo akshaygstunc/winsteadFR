@@ -4,11 +4,11 @@ import img2 from "../../public/img2.png"; // bottom image
 
 export default function About() {
   return (
-    <section className="bg-black text-white py-10 px-12 md:px-6">
-      <div className="mx-auto grid md:grid-cols-2 gap-12 items-center">
+    <section className="bg-black text-white py-10 px-8">
+      <div className="mx-auto grid md:grid-cols-[2fr_3fr] gap-10 items-center">
 
         {/* LEFT SIDE (OVAL IMAGES) */}
-        <div className="flex justify-center md:justify-start">
+        <div className="flex justify-center">
           <div className="relative w-[260px] md:w-[320px] h-[420px] md:h-[520px] rounded-full border-2 border-yellow-500 overflow-hidden">
 
             {/* TOP IMAGE */}
