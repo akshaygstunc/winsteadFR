@@ -1,5 +1,5 @@
 import Image from "next/image";
-import aboutImg from "../../../public/about.png";
+import aboutImg from "../../public/about.png";
 import Stats from "@/app/components/Stats";
 import Testimonials from "@/app/components/Testimonials";
 

@@ -69,6 +69,7 @@ export default function HomePage() {
         </div>
       </section>
       <Logos />
+      
       <Projects />
       <Stats />
       <Testimonials />

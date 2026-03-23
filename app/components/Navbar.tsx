@@ -5,19 +5,19 @@ import gsap from "gsap";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import winstead from "../../public/winstead.png";
+import winstead from "../../public/win-logo.png";
 import star from "../../public/hugeicons_star.png";
 import { FcGoogle } from "react-icons/fc";
 import FollowUsIcons from "./SocialMedia";
 
 const navLinks = [
-  { name: "Home", href: "/src/home" },
-  { name: "About Us", href: "/src/about-us" },
-  { name: "Projects", href: "/src/projects" },
-  { name: "Our Services", href: "/src/our-services" },
-  { name: "Our Team", href: "/src/our-team" },
-  { name: "News & Media", href: "/src/news-media" },
-  { name: "Contact Us", href: "/src/contact-us" },
+  { name: "Home", href: "/" },
+  { name: "About Us", href: "/about-us" },
+  { name: "Projects", href: "/projects" },
+  { name: "Our Services", href: "/our-services" },
+  { name: "Our Team", href: "/our-team" },
+  { name: "News & Media", href: "/news-media" },
+  { name: "Contact Us", href: "/contact-us" },
 ];
 
 export default function Navbar() {
@@ -67,7 +67,7 @@ export default function Navbar() {
   <Image
     src={winstead}
     alt="Winstead Logo"
-    width={60}
+    width={80}
     height={30}
     priority
     className="cursor-pointer"
