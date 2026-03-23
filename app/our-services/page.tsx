@@ -115,7 +115,7 @@ function ServiceBlock({
             className="px-6 py-4 border border-white/20 rounded-xl text-md text-[#F1DC7F] hover:border-yellow-400 hover:text-white transition cursor-pointer"
           >
             {item}
-          </div>
+          </div> 
         ))}
       </div>
     </div>
