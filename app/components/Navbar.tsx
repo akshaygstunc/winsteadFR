@@ -67,7 +67,7 @@ export default function Navbar() {
   <Image
     src={winstead}
     alt="Winstead Logo"
-    width={80}
+    width={80} 
     height={30}
     priority
     className="cursor-pointer"
