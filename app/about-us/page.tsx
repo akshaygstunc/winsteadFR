@@ -8,7 +8,7 @@ export default function AboutUs() {
     <section className="bg-black text-white">
 
       {/* HEADER */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-6">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-4 pb-6">
         <h1 className="text-3xl md:text-4xl font-semibold tracking-wide">
           About Us
         </h1>
@@ -28,7 +28,7 @@ export default function AboutUs() {
       </div>
 
       {/* CONTENT */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-14 space-y-8 text-gray-300 leading-relaxed text-[15px] md:text-[16px]">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-14 space-y-8 text-gray-300 leading-relaxed text-[16px] md:text-[20px]">
 
         <p>
           At Winstead Global Real Estate, we believe real estate is more than
