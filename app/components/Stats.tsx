@@ -114,7 +114,7 @@ export default function Stats() {
               {/* glow */}
               <div className="stat-glow absolute inset-0 blur-2xl opacity-40 bg-yellow-400/20 rounded-full"></div>
 
-              <h3 className="text-3xl md:text-4xl font-bold relative">
+              <h3 className="text-3xl md:text-5xl font-bold relative">
                 <span
                   className="counter"
                   data-value={parseFloat(stat.value)}
@@ -139,9 +139,9 @@ export default function Stats() {
           {help.map((item, i) => (
             <div
               key={i}
-              className="help-card w-[260px] h-[260px] md:w-[300px] md:h-[300px] rounded-full flex flex-col items-center justify-center text-center px-6 border border-yellow-500/40 hover:border-yellow-400 transition duration-500"
+              className="help-card w-[260px] h-[260px] md:w-[300px] md:h-[300px] rounded-full flex flex-col items-center justify-center text-center px-6 border-2 border-yellow-500/40 hover:border-yellow-400 transition duration-500"
             >
-              <h3 className="text-xl md:text-2xl font-semibold mb-3">
+              <h3 className="text-2xl md:text-4xl font-bold mb-3">
                 {item.title}
               </h3>
 

@@ -5,19 +5,19 @@ import gsap from "gsap";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import winstead from "../../public/winstead.png";
+import winstead from "../../public/win-logo.png";
 import star from "../../public/hugeicons_star.png";
 import { FcGoogle } from "react-icons/fc";
 import FollowUsIcons from "./SocialMedia";
 
 const navLinks = [
-  { name: "Home", href: "/src/home" },
-  { name: "About Us", href: "/src/about-us" },
-  { name: "Projects", href: "/src/projects" },
-  { name: "Our Services", href: "/src/our-services" },
-  { name: "Our Team", href: "/src/our-team" },
-  { name: "News & Media", href: "/src/news-media" },
-  { name: "Contact Us", href: "/src/contact-us" },
+  { name: "Home", href: "/" },
+  { name: "About Us", href: "/about-us" },
+  { name: "Projects", href: "/projects" },
+  { name: "Our Services", href: "/our-services" },
+  { name: "Our Team", href: "/our-team" },
+  { name: "News & Media", href: "/news-media" },
+  { name: "Contact Us", href: "/contact-us" },
 ];
 
 export default function Navbar() {
@@ -63,16 +63,16 @@ export default function Navbar() {
     <header className="fixed top-0 left-0 w-full z-50 bg-black border-b border-white/10">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 py-4">
         {/* Logo */}
-       <Link href="/" className="nav-item flex items-center">
-  <Image
-    src={winstead}
-    alt="Winstead Logo"
-    width={60}
-    height={30}
-    priority
-    className="cursor-pointer"
-  />
-</Link>
+        <Link href="/" className="nav-item flex items-center">
+          <Image
+            src={winstead}
+            alt="Winstead Logo"
+            width={80}
+            height={30}
+            priority
+            className="cursor-pointer"
+          />
+        </Link>
 
         {/* Desktop Menu */}
         <nav className="hidden lg:flex items-center gap-8">
