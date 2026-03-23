@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import winstead from "../../public/winstead.png";
+import winstead from "../../public/newlogo.jpeg";
 import star from "../../public/hugeicons_star.png";
 import { FcGoogle } from "react-icons/fc";
 import FollowUsIcons from "./SocialMedia";
 
 const navLinks = [
-  { name: "Home", href: "/" },
+  { name: "Home", href: "/src/home" },
   { name: "About Us", href: "/src/about-us" },
   { name: "Projects", href: "/src/projects" },
   { name: "Our Services", href: "/src/our-services" },

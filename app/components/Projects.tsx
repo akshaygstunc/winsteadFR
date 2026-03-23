@@ -211,7 +211,9 @@ export default function Projects() {
         <div className="card">
           <Card img={images[5]} />
         </div>
-       
+        {/* <div className="card">
+          <Card img={images[6]} />
+        </div> */}
       </div>
     </section>
   );
