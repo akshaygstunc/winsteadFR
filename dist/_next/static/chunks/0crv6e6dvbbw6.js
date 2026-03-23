@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,34483,t=>{t.q("/_next/static/media/Subtract.0hb0u.v7ndp4m.png")}]);
