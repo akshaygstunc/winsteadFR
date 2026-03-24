@@ -81,26 +81,27 @@ function ServiceBlock({
   points: string[];
 }) {
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 animate-fadeUp">
 
       {/* TITLE + ICON */}
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-4 group">
+
         <div className="flex items-center justify-center">
-          <IoMdCheckboxOutline className="text-yellow-400 w-12 h-12" />
+          <IoMdCheckboxOutline className="text-yellow-400 w-12 h-12 animate-pulseSlow group-hover:scale-110 transition duration-300" />
         </div>
 
         <div>
-          <h2 className="text-xl md:text-2xl font-bold">
+          <h2 className="text-xl md:text-2xl font-bold transition group-hover:text-[#F1DC7F]">
             {title}
           </h2>
-          <p className="text-white font-thin text-xs mt-1">
+          <p className="text-white font-thin text-xs mt-1 opacity-70 group-hover:opacity-100 transition">
             {desc}
           </p>
         </div>
       </div>
 
-      {/* SUB DESCRIPTION (small line like image) */}
-      <p className="text-white text-xs leading-relaxed max-w-3xl">
+      {/* SUB DESCRIPTION */}
+      <p className="text-white text-xs leading-relaxed max-w-3xl opacity-70 hover:opacity-100 transition duration-300">
         Explore off-plan opportunities from leading developers, offering early
         access to new projects before completion. These properties are positioned
         in high-demand areas and structured to support both capital appreciation
@@ -112,10 +113,17 @@ function ServiceBlock({
         {points.map((item, i) => (
           <div
             key={i}
-            className="px-6 py-4 border border-white/20 rounded-xl text-md text-[#F1DC7F] hover:border-yellow-400 hover:text-white transition cursor-pointer"
+            className="group px-6 py-4 border border-white/20 rounded-xl text-md text-[#F1DC7F]
+            transition-all duration-300 cursor-pointer
+            hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(241,220,127,0.15)]
+            hover:border-[#F1DC7F] hover:text-white relative overflow-hidden"
+            style={{ animationDelay: `${i * 0.15}s` }}
           >
-            {item}
-          </div> 
+            {/* glow overlay */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-gradient-to-r from-transparent via-[#F1DC7F]/10 to-transparent" />
+
+            <span className="relative z-10">{item}</span>
+          </div>
         ))}
       </div>
     </div>
