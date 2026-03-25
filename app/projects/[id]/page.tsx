@@ -99,14 +99,14 @@ const router = useRouter();
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
 
         {/* CONTENT */}
-        <div className="absolute bottom-10 left-10 right-10 flex justify-between items-center items-end">
-          <div className="flex items-center p-2">
-            <h1 className="text-3xl md:text-5xl font-semibold mb-3 mr-4 border-r pr-4">
+        <div className="absolute bottom-6 left-4 right-4 md:bottom-10 md:left-10 md:right-10 flex flex-col md:flex-row md:justify-between md:items-end gap-4">
+<div className="flex flex-col md:flex-row md:items-center p-2 gap-2">
+              <h1 className="text-3xl md:text-5xl font-semibold mb-3 mr-4 border-r pr-4">
               {project?.title}
             </h1>
 
             <div className="flex flex-col justify-center gap-2 text-sm text-gray-300">
-              <h1 className="text-3xl md:text46xl font-bold">
+              <h1 className="text-xl md:text-3xl font-bold">
                 {project?.title}
               </h1>
               <span className="flex text-xl items-center gap-2">
@@ -131,7 +131,7 @@ const router = useRouter();
       </div>
 
       {/* 🔥 THUMBNAILS */}
-      <div className="flex gap-4 px-10 py-4 overflow-x-auto bg-[#FFFFFF1A] mb-6">
+      <div className="flex gap-4 px-4 md:px-10 py-4 overflow-x-auto scrollbar-hide">
         {gallery.map((g, i) => (
           <div
             key={i}
@@ -144,7 +144,7 @@ const router = useRouter();
       </div>
 
       {/* 🔥 TABS */}
-      <div className="px-10">
+      <div className="px-4 md:px-10">
         <div className="inline-flex bg-white/5 border border-white/10 rounded-2xl p-1 backdrop-blur-md">
           {["overview", "lifestyle", "amenities"].map((tab) => (
             <button
@@ -165,7 +165,7 @@ const router = useRouter();
       {/* 🔥 CONTENT */}
       <div ref={contentRef} className="px-10 py-8 max-w-5xl">
         {activeTab === "overview" && (
-          <div className="space-y-4 text-gray-300 text-xl leading-relaxed">
+          <div className="space-y-4 text-gray-300 text-md md:text-xl leading-relaxed">
             <p>
               Aurelia Heights offers a limited collection of ultra-luxury
               residences set within one of Dubai’s most prestigious districts.

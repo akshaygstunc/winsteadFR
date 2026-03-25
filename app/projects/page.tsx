@@ -10,7 +10,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { ChevronDown } from "lucide-react";
-import Link from 'next/link';
+import Link from "next/link";
 const allProjects = [
   {
     id: 1,
@@ -46,7 +46,6 @@ const allProjects = [
   },
 ];
 
-
 export default function Page() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -59,7 +58,7 @@ export default function Page() {
 function ProjectsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
+  const [showFilter, setShowFilter] = useState(false);
   const [filters, setFilters] = useState({
     type: "",
     residence: "",
@@ -108,9 +107,10 @@ function ProjectsContent() {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen">
+    // <div className="bg-black text-white min-h-screen">
+    <div className="bg-black text-white min-h-screen overflow-x-hidden">
       {/* 🔥 TOP FILTER */}
-      <form onSubmit={handleSearch} className="flex justify-center gap-4 p-6">
+      {/* <form onSubmit={handleSearch} className="flex justify-center gap-4 p-6">
         <div className="flex bg-[#FFFFFF1A] border border-white/10 rounded-2xl overflow-hidden">
           <select
             name="type"
@@ -150,15 +150,95 @@ function ProjectsContent() {
         >
           Search
         </button>
-      </form>
+      </form> */}
+      <form
+        onSubmit={handleSearch}
+        className="flex flex-col md:flex-row gap-3 p-4 md:p-6"
+      >
+        <div className="flex flex-col md:flex-row flex-1 p-2 bg-[#FFFFFF1A] border border-white/10 rounded-2xl overflow-hidden">
+          <select
+            name="type"
+            defaultValue={filters.type}
+            className="px-4 py-3 bg-transparent"
+          >
+            <option value="">Property Type</option>
+            <option value="Residential">Residential</option>
+            <option value="Commercial">Commercial</option>
+          </select>
 
+          <select
+            name="residence"
+            defaultValue={filters.residence}
+            className="px-4 py-3 bg-transparent md:border-l border-white/10"
+          >
+            <option value="">Residence Type</option>
+            <option value="Villa">Villa</option>
+            <option value="Apartment">Apartment</option>
+            <option value="Office">Office</option>
+          </select>
+
+          <select
+            name="location"
+            defaultValue={filters.location}
+            className="px-4 py-3 bg-transparent md:border-l border-white/10"
+          >
+            <option value="">Location</option>
+            <option value="Dubai">Dubai</option>
+            <option value="Abu Dhabi">Abu Dhabi</option>
+          </select>
+        </div>
+
+        <div className="flex gap-2">
+          {/* 🔥 FILTER BUTTON (MOBILE) */}
+          <button
+            type="button"
+            onClick={() => setShowFilter(true)}
+            className="md:hidden px-4 py-3 rounded-xl bg-white/10 border border-white/10"
+          >
+            Filters
+          </button>
+
+          <button
+            type="submit"
+            className="px-6 py-3 rounded-xl bg-yellow-500 text-black"
+          >
+            Search
+          </button>
+        </div>
+      </form>
       {/* 🔥 MAIN */}
-      <div className="flex items-start gap-6 px-6 md:px-12 pb-16 mt-3">
+      {/* <div className="flex items-start gap-6 px-6 md:px-12 pb-16 mt-3"> */}
+      <div className="flex flex-col md:flex-row items-start gap-6 px-4 md:px-12 pb-16 mt-3">
         {/* SIDEBAR */}
-        {isFiltered && <Sidebar filters={filters} setFilters={setFilters} />}
+        {/* 💻 DESKTOP SIDEBAR */}
+        <div className="hidden md:block">
+  <Sidebar filters={filters} setFilters={setFilters} />
+</div>
+
+        {/* 📱 MOBILE DRAWER */}
+        {showFilter && (
+          <div className="fixed inset-0 z-50 flex">
+            {/* BACKDROP */}
+            <div
+              className="flex-1 bg-black/60"
+              onClick={() => setShowFilter(false)}
+            />
+
+            {/* DRAWER */}
+            <div className="w-[80%] max-w-[320px] bg-[#0c0c0c] p-4 overflow-y-auto">
+              {/* HEADER */}
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold">Filters</h2>
+                <button onClick={() => setShowFilter(false)}>✕</button>
+              </div>
+
+              <Sidebar filters={filters} setFilters={setFilters} />
+            </div>
+          </div>
+        )}
 
         {/* GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 flex-1">
+       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 flex-1">
           {filteredProjects.length > 0 ? (
             filteredProjects.map((p) => <ProjectCard key={p.id} data={p} />)
           ) : (
@@ -166,8 +246,6 @@ function ProjectsContent() {
           )}
         </div>
       </div>
-
-     
     </div>
   );
 }
@@ -364,10 +442,10 @@ function ProjectCard({ data }: any) {
 
         {/* BUTTON */}
         <Link href={`/projects/${data.id}`}>
-        <button className="mt-4 w-full py-3 border border-white/20 rounded-xl text-sm hover:border-yellow-400 hover:text-white transition">
-          Check Details
-        </button>
-            </Link>
+          <button className="mt-4 w-full py-3 border border-white/20 rounded-xl text-sm hover:border-yellow-400 hover:text-white transition">
+            Check Details
+          </button>
+        </Link>
       </div>
     </div>
   );
