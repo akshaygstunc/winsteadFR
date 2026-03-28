@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import heroImg from "../../../public/Subtract.png";
 import Projects from "@/app/components/Projects";
-import About from "@/app/components/About";
+import About from "@/app/components/about/About";
 
 export default function HomePage() {
   useEffect(() => {
