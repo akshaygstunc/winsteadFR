@@ -48,7 +48,7 @@ export default function Logos() {
   }, []);
 
   return (
-    <section className="bg-black py-0 overflow-hidden">
+    <section className="bg-black py-4 overflow-hidden">
       <div ref={containerRef} className="relative w-full overflow-hidden">
         {/* TRACK */}
         <div className="flex w-[200%] logo-track">

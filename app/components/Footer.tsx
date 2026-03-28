@@ -15,21 +15,23 @@ import {
 
 export default function Footer() {
   const [openChat, setOpenChat] = useState(false);
- useEffect(() => {
-  if (openChat) {
-    gsap.fromTo(
-      ".chat-box",
-      { y: 120, opacity: 0, scale: 0.95 },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: "power3.out",
-      }
-    );
-  }
-}, [openChat]);
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState("");
+  useEffect(() => {
+    if (openChat) {
+      gsap.fromTo(
+        ".chat-box",
+        { y: 120, opacity: 0, scale: 0.95 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          ease: "power3.out",
+        },
+      );
+    }
+  }, [openChat]);
   return (
     <footer className="bg-[#1a1a1a] text-white relative">
       {/* MAIN CONTENT */}
@@ -40,12 +42,176 @@ export default function Footer() {
           <div>
             <Image src={logo} alt="logo" width={60} className="mb-6" />
             <h2 className="text-xl md:text-2xl font-light leading-snug mb-6">
-              Get exclusive <br />
-              <span className="text-yellow-400">property updates</span> <br />
+              Get exclusive
+              <span className="text-yellow-400"> property updates </span> <br />
               in your inbox.
             </h2>
+
+            {/* CONTACT FORM WRAPPER */}
+            <div className="max-w-md p-[1px] rounded-2xl bg-gradient-to-r from-yellow-400 via-yellow-200 to-yellow-600">
+              <div className="bg-[#1a1a1a] rounded-2xl p-3">
+                <form
+                  className="space-y-2 max-w-xl"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+
+                    const form = e.currentTarget;
+                    const formData = new FormData(form);
+
+                    const data = {
+                      name: formData.get("name"),
+                      email: formData.get("email"),
+                      phone: formData.get("phone"),
+                      type: formData.get("type"),
+                      bedrooms: formData.get("bedrooms"),
+                    };
+
+                    if (!data.name || !data.email) {
+                      alert("Please fill required fields");
+                      return;
+                    }
+
+                    console.log("FORM DATA:", data);
+                    alert("Form submitted successfully 🚀");
+                    form.reset();
+                  }}
+                >
+                  {/* FULL NAME */}
+                  <div>
+                    <label className="text-[12px] text-gray-300 mb-2 block">
+                      Full Name
+                    </label>
+                    <input
+                      name="name"
+                      type="text"
+                      placeholder="Enter your full name"
+                      className="w-full bg-white/5 border border-white/20 p-2 rounded-xl outline-none focus:border-yellow-400 transition text-xs"
+                    />
+                  </div>
+
+                  {/* ROW 1 */}
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* PHONE */}
+                    <div>
+                      <label className="text-[12px] text-gray-300 mb-2 block">
+                        Phone
+                      </label>
+                      <div className="flex border border-white/20 rounded-xl overflow-hidden focus-within:border-yellow-400 transition">
+                        <span className="px-3 flex items-center bg-white/10 text-sm">
+                          +91
+                        </span>
+                        <input
+                          name="phone"
+                          type="tel"
+                          placeholder="Enter phone"
+                          className="flex-1 bg-transparent p-2 outline-none text-xs"
+                        />
+                      </div>
+                    </div>
+
+                    {/* EMAIL */}
+                    <div>
+                      <label className="text-[12px] text-gray-300 mb-2 block">
+                        Email
+                      </label>
+                      <input
+                        name="email"
+                        type="email"
+                        placeholder="Enter your email"
+                        className="w-full bg-white/5 border border-white/20 p-2 rounded-xl outline-none focus:border-yellow-400 transition text-xs"
+                      />
+                    </div>
+                  </div>
+
+                  {/* ROW 2 */}
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* PROJECT TYPE */}
+                    <div>
+                      <label className="text-[12px] text-gray-300 mb-2 block">
+                        Project Type
+                      </label>
+
+                      <select
+                        name="type"
+                        className="w-full bg-white/5 border border-white/20 p-2 rounded-xl outline-none text-white focus:border-yellow-400 text-xs appearance-none cursor-pointer"
+                      >
+                        <option value="" className="bg-[#1a1a1a] text-gray-400">
+                          Select option
+                        </option>
+                        <option
+                          value="apartment"
+                          className="bg-[#1a1a1a] text-white"
+                        >
+                          Apartment
+                        </option>
+                        <option
+                          value="villa"
+                          className="bg-[#1a1a1a] text-white"
+                        >
+                          Villa
+                        </option>
+                        <option
+                          value="townhouse"
+                          className="bg-[#1a1a1a] text-white"
+                        >
+                          Townhouse
+                        </option>
+                      </select>
+                    </div>
+
+                    {/* BEDROOMS */}
+                    <div>
+                      <label className="text-[12px] text-gray-300 mb-2 block">
+                        Bedrooms
+                      </label>
+
+                      <select
+                        name="bedrooms"
+                        className="w-full bg-white/5 border border-white/20 p-2 rounded-xl outline-none text-white focus:border-yellow-400 text-xs appearance-none cursor-pointer"
+                      >
+                        <option value="" className="bg-[#1a1a1a] text-gray-400">
+                          Select bedrooms
+                        </option>
+                        <option value="1" className="bg-[#1a1a1a] text-white">
+                          1
+                        </option>
+                        <option value="2" className="bg-[#1a1a1a] text-white">
+                          2
+                        </option>
+                        <option value="3" className="bg-[#1a1a1a] text-white">
+                          3
+                        </option>
+                        <option value="4+" className="bg-[#1a1a1a] text-white">
+                          4+
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* BUTTON */}
+                  <button
+                    type="submit"
+                    className="w-full py-2 rounded-2xl font-semibold text-black bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] hover:opacity-90 transition text-sm"
+                  >
+                    Submit
+                  </button>
+
+                  {/* TERMS */}
+                  <p className="text-[10px] text-gray-400 text-center">
+                    By submitting this form, you agree to our{" "}
+                    <span className="text-yellow-400 cursor-pointer">
+                      Terms & Conditions
+                    </span>{" "}
+                    and{" "}
+                    <span className="text-yellow-400 cursor-pointer">
+                      Privacy Policy
+                    </span>
+                  </p>
+                </form>
+              </div>
+            </div>
             {/* SOCIAL */}
-            <div className="flex gap-5 text-xl mb-8">
+            <div className="flex gap-5 text-xl mt-8">
               {[
                 FaFacebookF,
                 FaInstagram,
@@ -60,21 +226,6 @@ export default function Footer() {
                   <Icon />
                 </div>
               ))}
-            </div>
-
-            {/* EMAIL SUBSCRIBE */}
-            <div className="flex max-w-md">
-              <div className="flex w-full max-w-md">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 bg-white/5 border border-white/20 px-4 py-3 rounded-l-md outline-none focus:border-yellow-400 transition"
-                />
-
-                <button className="px-6 py-3 text-black font-semibold rounded-r-md bg-[linear-gradient(84.04deg,#B9A650_0.77%,#F1DC7F_43.94%,#7C5700_82.27%)] hover:opacity-90 transition">
-                  Subscribe
-                </button>
-              </div>
             </div>
           </div>
 
@@ -122,7 +273,7 @@ export default function Footer() {
           </div>
 
           {/* RIGHT */}
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col justify-center">
             <div className="flex justify-end">
               <button className="border border-white/50 px-6 py-3 text-sm hover:bg-white hover:text-black transition">
                 Get Expert Help
@@ -157,7 +308,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* middle grid */}
         {/* BOTTOM BAR */}
         <div className="mt-16 h-[1px] w-full bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] bg-[length:200%_100%] animate-[shimmer_3s_linear_infinite]"></div>
         <div className="overflow-hidden">
