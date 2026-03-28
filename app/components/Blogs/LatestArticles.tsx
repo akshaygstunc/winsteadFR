@@ -34,7 +34,7 @@ export default function LatestArticles({ news }: { news: { id: number; title: st
                                     className="object-cover group-hover:scale-105 transition duration-700"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
+                                
                                 <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-black/70 border border-white/10 text-[11px] uppercase tracking-[0.15em] text-yellow-400 backdrop-blur-sm">
                                     {item.category}
                                 </div>
@@ -57,6 +57,7 @@ export default function LatestArticles({ news }: { news: { id: number; title: st
                                     Read More <FaArrowRight className="text-xs" />
                                 </button>
                             </div>
+                            
                         </article>
                     ))}
                 </div>

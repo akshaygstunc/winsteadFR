@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
 import Image from "next/image";
 import subtractImage from "../../public/Subtract.png";
+import { FaCircleNotch } from "react-icons/fa";
 // import videoSrc from "../../public/video.mp4";
 
 export default function Hero() {
@@ -30,13 +31,24 @@ export default function Hero() {
 
       {/* FALLBACK IMAGE */}
       {!videoLoaded && (
-        <Image
-          src={subtractImage} 
-          alt="hero"  
-          fill
-          priority
-          className="hero-img object-cover object-top z-0"
-        />
+        // <div
+         
+        //   className="hero-img object-cover object-top z-0 flex justify-center items-center"
+        // >
+         
+        // </div>
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black">
+          <div className="flex flex-col items-center gap-4">
+
+            {/* LOADER */}
+            <FaCircleNotch className="animate-spin text-yellow-400 text-3xl" />
+
+            {/* OPTIONAL TEXT */}
+            <p className="text-sm text-gray-400 tracking-wide">
+              Loading experience...
+            </p>
+          </div>
+        </div>
       )}
 
       {/* VIDEO */}

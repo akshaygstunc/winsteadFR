@@ -221,7 +221,7 @@ export default function Projects() {
 
 function Card({ img }: any) {
   return (
-    <div className="relative w-full h-full rounded-2xl overflow-hidden group cursor-pointer">
+    <div className="relative w-full h-full rounded-2xl overflow-hidden group cursor-pointer transition-all duration-500 hover:-translate-y-2">
       {/* IMAGE */}
       <Image
         src={img}
@@ -230,8 +230,10 @@ function Card({ img }: any) {
       />
 
       {/* SOFT OVERLAY (NO HEAVY SHADOW) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-transparent group-hover:border-yellow-400/40 transition duration-500" />
+      <div className="absolute top-0 left-0 w-0 h-[2px] bg-gradient-to-r from-transparent via-yellow-400 to-transparent transition-all duration-500 group-hover:w-full" />
+      <div className="absolute bottom-0 right-0 w-0 h-[2px] bg-gradient-to-l from-transparent via-yellow-400 to-transparent transition-all duration-500 group-hover:w-full" />
       {/* CONTENT */}
       <div className="absolute bottom-0 p-5 w-full transition duration-500 group-hover:translate-y-[-4px]">
         <h3 className="text-lg md:text-xl font-semibold">Aurelia Heights</h3>
