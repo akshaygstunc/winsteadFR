@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaBed, FaDollarSign, FaRulerCombined } from "react-icons/fa6";
+import Image from "next/image";
 
 export default function ProjectCard({ img }: { img: any }) {
     return (
         <div className="relative rounded-2xl overflow-hidden group border border-white/10 bg-white/5">
             <div className="relative h-[420px]">
-                {/* <Image
-                    src={img}
+                <Image
+                    src={"https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bGF4dXJ5JTIwcHJvcGVydHl8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60"}
                     alt="project"
                     fill
                     className="object-cover group-hover:scale-105 transition duration-500"
-                /> */}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
             </div>
 
