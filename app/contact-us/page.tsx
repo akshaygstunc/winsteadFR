@@ -1,8 +1,30 @@
+import Image from "next/image";
+import banner from "../../public/services.png";
+import { FaArrowRight, FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
+import { IoMdCheckboxOutline } from "react-icons/io";
+import ContactMap from "../components/contact/ContactMap";
+import ContactSection from "../components/contact/ContactSection";
+import ContactTrustStrip from "../components/contact/ContactTrustStrip";
+import ContactHero from "../components/contact/ContactHero";
+
+const contactPoints = [
+  "Personalized property consultation",
+  "Luxury residences and investment opportunities",
+  "Transparent guidance from inquiry to next steps",
+];
+
 export default function ContactUs() {
   return (
-    <div>
-      <h1>Contact Us</h1>
-      <p>Welcome to the Contact Us page!</p>
+    <div className="bg-black text-white">
+      <ContactHero />
+      <ContactSection contactPoints={contactPoints} />
+
+      <ContactTrustStrip />
     </div>
   );
 }
+
+/* ================= HERO ================= */
+
+
+
