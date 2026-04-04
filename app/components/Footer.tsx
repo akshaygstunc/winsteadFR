@@ -1,10 +1,8 @@
 "use client";
 
-import { PhoneCall, X } from "lucide-react";
 import Image from "next/image";
-import person from "../../public/person.png";
+import Link from "next/link";
 import logo from "../../public/winstead.png";
-import { useEffect, useState } from "react";
 import {
   FaFacebookF,
   FaInstagram,
@@ -14,440 +12,144 @@ import {
 } from "react-icons/fa";
 
 export default function Footer() {
-  const [openChat, setOpenChat] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState("");
-  useEffect(() => {
-    if (openChat) {
-      gsap.fromTo(
-        ".chat-box",
-        { y: 120, opacity: 0, scale: 0.95 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 0.6,
-          ease: "power3.out",
-        },
-      );
-    }
-  }, [openChat]);
   return (
-    <footer className="bg-[#1a1a1a] text-white relative">
-      {/* MAIN CONTENT */}
-      <div className="mx-auto px-6 md:px-12 py-14">
-        {/* TOP GRID */}
-        <div className="grid lg:grid-cols-3 gap-10">
-          {/* LEFT */}
+    <footer className="relative bg-[#0b0b0b] text-white overflow-hidden border-t border-white/10">
+      {/* top glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-[1px] bg-gradient-to-r from-transparent via-[#F1DC7F] to-transparent" />
+
+      {/* CTA BAND */}
+      <div className="px-6 md:px-12 lg:px-20 py-8 border-b border-white/10">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div>
-            <Image src={logo} alt="logo" width={60} className="mb-6" />
-            <h2 className="text-xl md:text-2xl font-light leading-snug mb-6">
-              Get exclusive
-              <span className="text-yellow-400"> property updates </span> <br />
-              in your inbox.
+            <p className="text-xs uppercase tracking-[0.3em] text-[#F1DC7F] mb-2">
+              Luxury Real Estate Concierge
+            </p>
+            <h2 className="text-2xl md:text-4xl font-light leading-tight">
+              Let’s help you find your next
+              <span className="text-[#F1DC7F]"> premium property</span>
             </h2>
-
-            {/* CONTACT FORM WRAPPER */}
-            <div className="max-w-md p-[1px] rounded-2xl bg-gradient-to-r from-yellow-400 via-yellow-200 to-yellow-600">
-              <div className="bg-[#1a1a1a] rounded-2xl p-3">
-                <form
-                  className="space-y-2 max-w-xl"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-
-                    const form = e.currentTarget;
-                    const formData = new FormData(form);
-
-                    const data = {
-                      name: formData.get("name"),
-                      email: formData.get("email"),
-                      phone: formData.get("phone"),
-                      type: formData.get("type"),
-                      bedrooms: formData.get("bedrooms"),
-                    };
-
-                    if (!data.name || !data.email) {
-                      alert("Please fill required fields");
-                      return;
-                    }
-
-                    console.log("FORM DATA:", data);
-                    alert("Form submitted successfully 🚀");
-                    form.reset();
-                  }}
-                >
-                  {/* FULL NAME */}
-                  <div>
-                    <label className="text-[12px] text-gray-300 mb-2 block">
-                      Full Name
-                    </label>
-                    <input
-                      name="name"
-                      type="text"
-                      placeholder="Enter your full name"
-                      className="w-full bg-white/5 border border-white/20 p-2 rounded-xl outline-none focus:border-yellow-400 transition text-xs"
-                    />
-                  </div>
-
-                  {/* ROW 1 */}
-                  <div className="grid grid-cols-2 gap-4">
-                    {/* PHONE */}
-                    <div>
-                      <label className="text-[12px] text-gray-300 mb-2 block">
-                        Phone
-                      </label>
-                      <div className="flex border border-white/20 rounded-xl overflow-hidden focus-within:border-yellow-400 transition">
-                        <span className="px-3 flex items-center bg-white/10 text-sm">
-                          +91
-                        </span>
-                        <input
-                          name="phone"
-                          type="tel"
-                          placeholder="Enter phone"
-                          className="flex-1 bg-transparent p-2 outline-none text-xs"
-                        />
-                      </div>
-                    </div>
-
-                    {/* EMAIL */}
-                    <div>
-                      <label className="text-[12px] text-gray-300 mb-2 block">
-                        Email
-                      </label>
-                      <input
-                        name="email"
-                        type="email"
-                        placeholder="Enter your email"
-                        className="w-full bg-white/5 border border-white/20 p-2 rounded-xl outline-none focus:border-yellow-400 transition text-xs"
-                      />
-                    </div>
-                  </div>
-
-                  {/* ROW 2 */}
-                  <div className="grid grid-cols-2 gap-4">
-                    {/* PROJECT TYPE */}
-                    <div>
-                      <label className="text-[12px] text-gray-300 mb-2 block">
-                        Project Type
-                      </label>
-
-                      <select
-                        name="type"
-                        className="w-full bg-white/5 border border-white/20 p-2 rounded-xl outline-none text-white focus:border-yellow-400 text-xs appearance-none cursor-pointer"
-                      >
-                        <option value="" className="bg-[#1a1a1a] text-gray-400">
-                          Select option
-                        </option>
-                        <option
-                          value="apartment"
-                          className="bg-[#1a1a1a] text-white"
-                        >
-                          Apartment
-                        </option>
-                        <option
-                          value="villa"
-                          className="bg-[#1a1a1a] text-white"
-                        >
-                          Villa
-                        </option>
-                        <option
-                          value="townhouse"
-                          className="bg-[#1a1a1a] text-white"
-                        >
-                          Townhouse
-                        </option>
-                      </select>
-                    </div>
-
-                    {/* BEDROOMS */}
-                    <div>
-                      <label className="text-[12px] text-gray-300 mb-2 block">
-                        Bedrooms
-                      </label>
-
-                      <select
-                        name="bedrooms"
-                        className="w-full bg-white/5 border border-white/20 p-2 rounded-xl outline-none text-white focus:border-yellow-400 text-xs appearance-none cursor-pointer"
-                      >
-                        <option value="" className="bg-[#1a1a1a] text-gray-400">
-                          Select bedrooms
-                        </option>
-                        <option value="1" className="bg-[#1a1a1a] text-white">
-                          1
-                        </option>
-                        <option value="2" className="bg-[#1a1a1a] text-white">
-                          2
-                        </option>
-                        <option value="3" className="bg-[#1a1a1a] text-white">
-                          3
-                        </option>
-                        <option value="4+" className="bg-[#1a1a1a] text-white">
-                          4+
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* BUTTON */}
-                  <button
-                    type="submit"
-                    className="w-full py-2 rounded-2xl font-semibold text-black bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] hover:opacity-90 transition text-sm"
-                  >
-                    Submit
-                  </button>
-
-                  {/* TERMS */}
-                  <p className="text-[10px] text-gray-400 text-center">
-                    By submitting this form, you agree to our{" "}
-                    <span className="text-yellow-400 cursor-pointer">
-                      Terms & Conditions
-                    </span>{" "}
-                    and{" "}
-                    <span className="text-yellow-400 cursor-pointer">
-                      Privacy Policy
-                    </span>
-                  </p>
-                </form>
-              </div>
-            </div>
-            {/* SOCIAL */}
-            <div className="flex gap-5 text-xl mt-8">
-              {[
-                FaFacebookF,
-                FaInstagram,
-                FaLinkedinIn,
-                FaWhatsapp,
-                FaYoutube,
-              ].map((Icon, i) => (
-                <div
-                  key={i}
-                  className="w-10 h-10 flex items-center justify-center border border-white/20 rounded-full cursor-pointer hover:bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] hover:text-black transition"
-                >
-                  <Icon />
-                </div>
-              ))}
-            </div>
+            <p className="text-sm md:text-base text-white/60 mt-3 max-w-2xl">
+              Explore curated opportunities across Dubai’s most desirable
+              communities with expert guidance from our team.
+            </p>
           </div>
 
-          {/* CENTER */}
+          <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+            <button className="px-6 py-3 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black font-medium hover:scale-[1.02] transition">
+              Book a Consultation
+            </button>
+            <button className="px-6 py-3 rounded-full border border-white/20 hover:border-[#F1DC7F] hover:text-[#F1DC7F] transition">
+              WhatsApp Us
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* MAIN FOOTER */}
+      <div className="relative px-6 md:px-12 lg:px-20 py-14">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Brand */}
           <div>
-            <h3 className="text-lg mb-4">Address</h3>
-            <p className="text-[1.01rem] text-gray-300 leading-relaxed">
-              Dubai Hills Estate Business Park 4th, Office 204no <br />
-              Dubai - UAE, PO Box No: 453881
+            <Image src={logo} alt="Winstead" width={74} className="mb-5" />
+            <p className="text-white/70 leading-relaxed text-sm md:text-base max-w-sm">
+              Winstead delivers access to refined living and high-potential real
+              estate opportunities through a tailored, investor-first approach.
             </p>
 
-            <div className="border-t border-white/10 my-6"></div>
-
-            <div className="grid grid-cols-2 gap-10 text-sm">
-              <div>
-                <h4 className="mb-3 text-white">Company Info</h4>
-                <ul className="space-y-2 text-gray-300">
-                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
-                    About Us
-                  </li>
-                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
-                    Services
-                  </li>
-                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
-                    Contact Us
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="mb-3 text-white opacity-0">hidden</h4>
-                <ul className="space-y-2 text-gray-300">
-                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
-                    Our Team
-                  </li>
-                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
-                    Partnership
-                  </li>
-                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
-                    Career
-                  </li>
-                </ul>
-              </div>
+            <div className="flex gap-3 mt-6">
+              {[FaFacebookF, FaInstagram, FaLinkedinIn, FaWhatsapp, FaYoutube].map(
+                (Icon, i) => (
+                  <a
+                    key={i}
+                    href="#"
+                    className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:text-black hover:bg-[#F1DC7F] hover:border-[#F1DC7F] transition"
+                  >
+                    <Icon size={14} />
+                  </a>
+                ),
+              )}
             </div>
           </div>
 
-          {/* RIGHT */}
-          <div className="flex flex-col justify-center">
-            <div className="flex justify-end">
-              <button className="border border-white/50 px-6 py-3 text-sm hover:bg-white hover:text-black transition">
-                Get Expert Help
-              </button>
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-white text-lg mb-5">Quick Links</h3>
+            <ul className="space-y-3 text-white/65">
+              <li><Link href="/about-us" className="hover:text-[#F1DC7F] transition">About Us</Link></li>
+              <li><Link href="/projects" className="hover:text-[#F1DC7F] transition">Projects</Link></li>
+              <li><Link href="/our-services" className="hover:text-[#F1DC7F] transition">Services</Link></li>
+              <li><Link href="/our-team" className="hover:text-[#F1DC7F] transition">Our Team</Link></li>
+              <li><Link href="/news-media" className="hover:text-[#F1DC7F] transition">News & Media</Link></li>
+            </ul>
+          </div>
+
+          {/* Explore */}
+          <div>
+            <h3 className="text-white text-lg mb-5">Explore</h3>
+            <ul className="space-y-3 text-white/65">
+              <li><a href="#" className="hover:text-[#F1DC7F] transition">Luxury Apartments</a></li>
+              <li><a href="#" className="hover:text-[#F1DC7F] transition">Villas & Townhouses</a></li>
+              <li><a href="#" className="hover:text-[#F1DC7F] transition">Waterfront Homes</a></li>
+              <li><a href="#" className="hover:text-[#F1DC7F] transition">Investment Opportunities</a></li>
+              <li><a href="#" className="hover:text-[#F1DC7F] transition">Prime Communities</a></li>
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h3 className="text-white text-lg mb-5">Contact</h3>
+            <div className="space-y-4 text-white/65 text-sm md:text-base">
+              <p>
+                Dubai Hills Estate Business Park, Office 204,
+                <br />
+                Dubai, UAE
+              </p>
+              <p>+971 XX XXX XXXX</p>
+              <p>info@winstead.com</p>
+              <p>Mon - Sat : 9:00 AM - 7:00 PM</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-10 text-sm mt-10">
-              <div>
-                <h4 className="mb-3">Our Portfolio</h4>
-                <ul className="space-y-2 text-gray-300">
-                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
-                    Projects
-                  </li>
-                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
-                    Locations
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="mb-3 opacity-0">hidden</h4>
-                <ul className="space-y-2 text-gray-300">
-                  <li className="hover:text-yellow-400 cursor-pointer">
-                    Our Partners
-                  </li>
-                  <li className="text-[1.01rem] hover:text-yellow-400 cursor-pointer">
-                    News & Media
-                  </li>
-                </ul>
+            <div className="mt-6 p-4 rounded-2xl border border-white/10 bg-white/[0.03]">
+              <p className="text-sm text-white/60 mb-2">Stay updated</p>
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="Your email"
+                  className="flex-1 bg-transparent border border-white/10 rounded-full px-4 py-2 text-sm outline-none focus:border-[#F1DC7F]"
+                />
+                <button className="px-4 py-2 rounded-full bg-[#F1DC7F] text-black text-sm font-medium">
+                  Join
+                </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* BOTTOM BAR */}
-        <div className="mt-16 h-[1px] w-full bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] bg-[length:200%_100%] animate-[shimmer_3s_linear_infinite]"></div>
-        <div className="overflow-hidden">
-          <h6 className="text-[18vw] leading-none text-center text-[#AFAFAF] font-bold whitespace-nowrap">
-            Winstead
+        {/* giant wordmark */}
+        <div className="relative">
+          <div className="absolute inset-0 blur-3xl opacity-20 
+    bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700]" />
+
+          <h6 className="relative text-[15vw] leading-none text-center font-bold whitespace-nowrap 
+    bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] 
+    bg-clip-text text-transparent opacity-80">
+            WINSTEAD
           </h6>
         </div>
-        <div className="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400 gap-4">
+      </div>
+
+      {/* bottom strip */}
+      <div className="px-6 md:px-12 lg:px-20 py-5 border-t border-white/10">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs md:text-sm text-white/50">
           <p>© 2026 Winstead Properties. All rights reserved.</p>
 
-          <div className="flex gap-4">
-            <span className="hover:text-white cursor-pointer">
-              Privacy Policy
-            </span>
-            <span>|</span>
-            <span className="hover:text-white cursor-pointer">
-              Terms & Conditions
-            </span>
+          <div className="flex items-center gap-4">
+            <a href="#" className="hover:text-[#F1DC7F] transition">Privacy Policy</a>
+            <a href="#" className="hover:text-[#F1DC7F] transition">Terms & Conditions</a>
+            <a href="#" className="hover:text-[#F1DC7F] transition">Sitemap</a>
           </div>
         </div>
       </div>
-
-      {/* FLOATING CALL BUTTON */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <div className="relative">
-          {/* Glow */}
-          <div className="absolute inset-0 rounded-xl bg-yellow-500 blur-2xl opacity-20 animate-pulse"></div>
-
-          {/* Button */}
-          <button className="relative w-14 h-14 flex items-center justify-center rounded-xl bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-lg hover:scale-110 transition">
-            <PhoneCall />
-          </button>
-        </div>
-      </div>
-
-      {/* AGENT CARD */}
-      <div
-        onClick={() => setOpenChat(true)}
-        className="fixed bottom-6 left-6 bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black px-5 py-3 rounded-full flex items-center gap-4 shadow-lg"
-      >
-        <div className="w-10 h-10 rounded-full bg-black">
-          <Image
-            src={person}
-            alt="Winstead Logo"
-            priority
-            className="relative"
-          />
-        </div>
-
-        <div className="text-sm">
-          <p className="font-semibold">Sophie</p>
-          <p className="text-xs">Property Sales Department</p>
-        </div>
-
-        <button>
-          <X size={16} />
-        </button>
-      </div>
-      {openChat && (
-        <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-black/70 backdrop-blur-md">
-          <div className="chat-box w-full md:max-w-md bg-white/95 backdrop-blur-xl text-black rounded-t-2xl md:rounded-2xl overflow-hidden shadow-[0_20px_80px_rgba(0,0,0,0.5)]">
-            {/* HEADER */}
-            <div className="relative px-5 py-4 flex items-center justify-between bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)]">
-              {/* glow */}
-              <div className="absolute inset-0 opacity-20 blur-xl bg-yellow-300"></div>
-
-              <div className="flex items-center gap-3 relative z-10">
-                <div className="relative">
-                  <Image
-                    src={person}
-                    alt="person"
-                    className="w-11 h-11 rounded-full object-cover"
-                  />
-
-                  {/* online pulse */}
-                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border border-white animate-ping"></span>
-                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border border-white"></span>
-                </div>
-
-                <div>
-                  <p className="font-semibold text-black">Sophie</p>
-                  <p className="text-xs text-black/80">
-                    Property Sales Department
-                  </p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setOpenChat(false)}
-                className="relative z-10 hover:scale-110 transition"
-              >
-                <X />
-              </button>
-            </div>
-
-            {/* BODY */}
-            <div className="p-6 space-y-5">
-              <p className="text-gray-600 text-sm">
-                Please share your details to start chatting.
-              </p>
-
-              {/* INPUTS */}
-              <div className="space-y-4">
-                <input
-                  placeholder="Your Name *"
-                  className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-yellow-500 focus:shadow-[0_0_10px_rgba(241,220,127,0.3)] transition"
-                />
-
-                <input
-                  placeholder="Email Address *"
-                  className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-yellow-500 focus:shadow-[0_0_10px_rgba(241,220,127,0.3)] transition"
-                />
-
-                <div className="flex border border-gray-300 rounded-xl overflow-hidden focus-within:border-yellow-500 focus-within:shadow-[0_0_10px_rgba(241,220,127,0.3)] transition">
-                  <div className="px-4 flex items-center bg-gray-100 text-sm">
-                    🇦🇪
-                  </div>
-
-                  <input
-                    placeholder="+971"
-                    className="flex-1 px-4 py-3 outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* BUTTON */}
-              <button className="w-full py-3 rounded-xl font-semibold text-black bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] hover:scale-[1.02] active:scale-[0.98] transition shadow-[0_10px_30px_rgba(241,220,127,0.3)]">
-                Start Chat
-              </button>
-
-              <p className="text-xs text-gray-500 text-center">
-                By starting this chat, you agree to our{" "}
-                <span className="text-yellow-600 cursor-pointer">
-                  Terms & Privacy Policy
-                </span>
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
     </footer>
   );
 }

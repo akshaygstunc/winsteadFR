@@ -11,7 +11,6 @@ import { FcGoogle } from "react-icons/fc";
 import FollowUsIcons from "./SocialMedia";
 
 const navLinks = [
-  { name: "Home", href: "/" },
   { name: "About Us", href: "/about-us" },
   { name: "Projects", href: "/projects" },
   { name: "Our Services", href: "/our-services" },

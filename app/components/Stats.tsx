@@ -114,9 +114,9 @@ export default function Stats() {
               {/* glow */}
               <div className="stat-glow absolute inset-0 blur-2xl opacity-40 bg-yellow-400/20 rounded-full"></div>
 
-              <h3 className="text-3xl md:text-5xl font-bold relative">
+              <h3 className="text-3xl md:text-5xl font-extrabold relative">
                 <span
-                  className="counter"
+                  className="counter bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-300 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(241,220,127,0.6)]"
                   data-value={parseFloat(stat.value)}
                   data-suffix={stat.value.replace(/[0-9.]/g, "")}
                 >
@@ -128,34 +128,8 @@ export default function Stats() {
             </div>
           ))}
         </div>
-
-        {/* TITLE */}
-        <h2 className="text-center text-2xl md:text-3xl font-semibold mb-14">
-          How We Help
-        </h2>
-
-        {/* HELP CARDS */}
-        <div className="help-section grid grid-cols-1 md:grid-cols-3 gap-5 justify-items-center">
-          {help.map((item, i) => (
-            <div
-              key={i}
-              className="help-card w-[260px] h-[260px] md:w-[300px] md:h-[300px] rounded-full flex flex-col items-center justify-center text-center px-6 border-2 border-yellow-500/40 hover:border-yellow-400 transition duration-500"
-            >
-              <h3 className="text-2xl md:text-4xl font-bold mb-3">
-                {item.title}
-              </h3>
-
-              <p className="text-[1.05rem] md:text-[1.05rem] text-gray-400 leading-relaxed">
-                {item.text}
-              </p>
-            </div>
-          ))}
-        </div>
-      <div className="mt-8 h-[0.5px] w-full bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] opacity-70 "></div>
-
-        <div className="mt-16 h-[1px] w-full bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] bg-[length:200%_100%] animate-[shimmer_3s_linear_infinite] mb-10"></div>
-
       </div>
+      {/* TITLE */}
     </section>
   );
 }
