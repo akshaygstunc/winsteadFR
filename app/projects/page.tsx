@@ -21,33 +21,53 @@ const allProjects = [
     id: 1,
     title: "Aurelia Heights",
     type: "Residential",
-    residence: "Villa",
+    residence: "Apartment",
+    bedrooms: "2 Bedroom",
     location: "Dubai",
+    subLocation: "Dubai Marina",
     category: "Luxury",
+    image: img,
+    price: "From AED 2.3M",
+    area: "2,800 – 7,200 sq.ft.",
   },
   {
     id: 2,
     title: "Skyline Tower",
     type: "Residential",
     residence: "Apartment",
+    bedrooms: "1 Bedroom",
     location: "Dubai",
+    subLocation: "Business Bay",
     category: "Elite",
+    image: img,
+    price: "From AED 1.8M",
+    area: "1,200 – 2,100 sq.ft.",
   },
   {
     id: 3,
     title: "Palm Villas",
     type: "Residential",
     residence: "Villa",
-    location: "Abu Dhabi",
+    bedrooms: "4 Bedroom",
+    location: "Dubai",
+    subLocation: "Palm Jumeirah",
     category: "Ultra Luxury",
+    image: img,
+    price: "From AED 8.5M",
+    area: "4,500 – 8,100 sq.ft.",
   },
   {
     id: 4,
-    title: "Business Bay Offices",
-    type: "Commercial",
-    residence: "Office",
-    location: "Dubai",
+    title: "Saadiyat Residences",
+    type: "Residential",
+    residence: "Apartment",
+    bedrooms: "3 Bedroom",
+    location: "Abu Dhabi",
+    subLocation: "Saadiyat Island",
     category: "Luxury",
+    image: img,
+    price: "From AED 3.4M",
+    area: "2,300 – 3,900 sq.ft.",
   },
 ];
 
@@ -66,7 +86,9 @@ function ProjectsContent() {
   const [filters, setFilters] = useState({
     type: "",
     residence: "",
+    bedrooms: "",
     location: "",
+    subLocation: "",
     category: "",
   });
 
@@ -74,7 +96,9 @@ function ProjectsContent() {
     setFilters({
       type: searchParams.get("type") || "",
       residence: searchParams.get("residence") || "",
+      bedrooms: searchParams.get("bedrooms") || "",
       location: searchParams.get("location") || "",
+      subLocation: searchParams.get("subLocation") || "",
       category: "",
     });
   }, [searchParams]);
@@ -83,7 +107,9 @@ function ProjectsContent() {
     return (
       (!filters.type || p.type === filters.type) &&
       (!filters.residence || p.residence === filters.residence) &&
+      (!filters.bedrooms || p.bedrooms === filters.bedrooms) &&
       (!filters.location || p.location === filters.location) &&
+      (!filters.subLocation || p.subLocation === filters.subLocation) &&
       (!filters.category || p.category === filters.category)
     );
   });
@@ -97,7 +123,8 @@ function ProjectsContent() {
     if (form.get("type")) params.set("type", form.get("type") as string);
     if (form.get("residence")) params.set("residence", form.get("residence") as string);
     if (form.get("location")) params.set("location", form.get("location") as string);
-
+    if (form.get("subLocation")) params.set("subLocation", form.get("subLocation") as string);
+    if (form.get("bedrooms")) params.set("bedrooms", form.get("bedrooms") as string);
     router.push(`/projects?${params.toString()}`);
   };
 
@@ -156,6 +183,25 @@ function ProjectsContent() {
 /* ================= TOOLBAR ================= */
 
 function ProjectsToolbar({ filters, handleSearch, setShowFilter }: any) {
+  const subLocationsMap: Record<string, string[]> = {
+    Dubai: [
+      "Downtown Dubai",
+      "Dubai Marina",
+      "Business Bay",
+      "Palm Jumeirah",
+      "Jumeirah Village Circle",
+    ],
+    "Abu Dhabi": [
+      "Saadiyat Island",
+      "Yas Island",
+      "Al Reem Island",
+      "Corniche Area",
+    ],
+  };
+  const availableSubLocations =
+    filters.location && subLocationsMap[filters.location]
+      ? subLocationsMap[filters.location]
+      : [];
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-12 py-8">
       <form
@@ -188,12 +234,26 @@ function ProjectsToolbar({ filters, handleSearch, setShowFilter }: any) {
             <select
               name="location"
               defaultValue={filters.location}
-              className="px-5 py-4 bg-transparent outline-none"
+              className="px-5 py-4 bg-transparent outline-none md:border-r border-white/10"
             >
               <option value="">Location</option>
               <option value="Dubai">Dubai</option>
               <option value="Abu Dhabi">Abu Dhabi</option>
             </select>
+
+            <select
+              name="subLocation"
+              defaultValue={filters.subLocation}
+              className="px-5 py-4 bg-transparent outline-none"
+            >
+              <option value="">Sub Location</option>
+              {availableSubLocations.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+            
           </div>
 
           <div className="flex gap-3">
@@ -265,11 +325,21 @@ function Sidebar({ filters, setFilters }: any) {
       <h2 className="text-2xl font-semibold mb-6">Filters</h2>
 
       <Section title="Category">
-        <Check label="Elite" filters={filters} setFilters={setFilters} />
-        <Check label="Luxury" filters={filters} setFilters={setFilters} />
-        <Check label="Ultra Luxury" filters={filters} setFilters={setFilters} />
+        <Check label="Elite" valueKey="category" filters={filters} setFilters={setFilters} />
+        <Check label="Luxury" valueKey="category" filters={filters} setFilters={setFilters} />
+        <Check label="Ultra Luxury" valueKey="category" filters={filters} setFilters={setFilters} />
       </Section>
-
+      <Section title="Residence Type">
+        {["1 Bedroom", "2 Bedroom", "3 Bedroom", "4 Bedroom", "5+ Bedroom"].map((item) => (
+          <Check
+            key={item}
+            label={item}
+            valueKey="bedrooms"
+            filters={filters}
+            setFilters={setFilters}
+          />
+        ))}
+      </Section>
       <div className="mb-7">
         <p className="text-sm uppercase tracking-[0.14em] text-gray-400 mb-3">Size</p>
         <div className="flex justify-between text-xs mb-3 text-gray-300">
@@ -342,18 +412,18 @@ function Section({ title, children }: any) {
   );
 }
 
-function Check({ label, filters, setFilters }: any) {
+function Check({ label, valueKey = "category", filters, setFilters }: any) {
   return (
     <label className="flex items-center gap-3 text-sm cursor-pointer group">
       <input
         type="checkbox"
         className="appearance-none w-4 h-4 border border-white/30 rounded bg-transparent checked:bg-[#d4a373] checked:border-[#d4a373]"
-        checked={filters?.category === label}
+        checked={filters?.[valueKey] === label}
         onChange={() => {
           if (!setFilters) return;
           setFilters((prev: any) => ({
             ...prev,
-            category: prev.category === label ? "" : label,
+            [valueKey]: prev[valueKey] === label ? "" : label,
           }));
         }}
       />
@@ -378,55 +448,55 @@ function Collapsible({ title, children, open, toggle }: any) {
 
 function ProjectCard({ data }: any) {
   return (
-    <div className="group relative rounded-[28px] overflow-hidden border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-yellow-500/30 hover:shadow-[0_0_30px_rgba(250,204,21,0.08)]">
-      <div className="relative h-[440px]">
-        <Image
-          src={img}
-          alt={data.title}
-          fill
-          className="object-cover group-hover:scale-105 transition duration-700"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-      </div>
+    <Link href={`/projects/${data.id}`} className="block">
+      <div className="group relative rounded-[28px] overflow-hidden border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-yellow-500/30 hover:shadow-[0_0_30px_rgba(250,204,21,0.08)] cursor-pointer">
+        <div className="relative h-[440px]">
+          <Image
+            src={data.image}
+            alt={data.title}
+            fill
+            className="object-cover group-hover:scale-105 transition duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+        </div>
 
-      <div className="absolute top-4 left-4 bg-black/70 text-xs px-3 py-1 rounded-full border border-white/20 backdrop-blur-sm">
-        {data.category}
-      </div>
+        <div className="absolute top-4 left-4 bg-black/70 text-xs px-3 py-1 rounded-full border border-white/20 backdrop-blur-sm">
+          {data.category}
+        </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-5">
-        <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-5">
-          <h2 className="text-xl font-semibold mb-3">{data.title}</h2>
+        <div className="absolute bottom-0 left-0 right-0 p-5">
+          <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-5">
+            <h2 className="text-xl font-semibold mb-3">{data.title}</h2>
 
-          <div className="space-y-2 text-sm text-gray-300">
-            <div className="flex items-center gap-2">
-              <FaBed className="text-yellow-400 text-xs" />
-              2-8 Bedrooms
+            <div className="space-y-2 text-sm text-gray-300">
+              <div className="flex items-center gap-2">
+                <FaBed className="text-yellow-400 text-xs" />
+                {data.bedrooms}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <FaDollarSign className="text-yellow-400 text-xs" />
+                {data.price}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <FaRulerCombined className="text-yellow-400 text-xs" />
+                {data.area}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <FaMapMarkerAlt className="text-yellow-400 text-xs" />
+                {data.location}, {data.subLocation}
+              </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <FaDollarSign className="text-yellow-400 text-xs" />
-              From $2.3M
-            </div>
-
-            <div className="flex items-center gap-2">
-              <FaRulerCombined className="text-yellow-400 text-xs" />
-              2,800 – 7,200 sq.ft.
-            </div>
-
-            <div className="flex items-center gap-2">
-              <FaMapMarkerAlt className="text-yellow-400 text-xs" />
-              {data.location}
+            <div className="mt-5 w-full py-3 rounded-xl border border-white/20 text-sm hover:border-yellow-400 hover:text-white transition inline-flex items-center justify-center gap-2">
+              Check Details <FaArrowRight className="text-xs" />
             </div>
           </div>
-
-          <Link href={`/projects/${data.id}`}>
-            <button className="mt-5 w-full py-3 rounded-xl border border-white/20 text-sm hover:border-yellow-400 hover:text-white transition inline-flex items-center justify-center gap-2">
-              Check Details <FaArrowRight className="text-xs" />
-            </button>
-          </Link>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
