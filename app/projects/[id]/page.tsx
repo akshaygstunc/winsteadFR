@@ -46,11 +46,7 @@ const allProjects = [
   },
 ];
 
-export async function generateStaticParams() {
-  return allProjects.map((project) => ({
-    id: project.id.toString(),
-  }));
-}
+
 
 export default function ProjectDetail({
   params,
