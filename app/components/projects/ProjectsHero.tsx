@@ -1,41 +1,66 @@
 import Image from "next/image";
-import heroImg from "../../../public/blog3.png";
+import heroImg from "../../../public/services.png";
 export default function ProjectsHero() {
     return (
-        <section className="relative overflow-hidden border-b border-white/10">
+
+        <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden bg-black text-white">
+
+            {/* IMAGE */}
             <div className="absolute inset-0">
-                <Image src={heroImg} alt="Projects Hero" fill className="object-cover opacity-30" priority />
-                <div className="absolute inset-0 bg-black/75" />
-                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/40" />
-                <div className="absolute top-0 left-[-10%] h-[320px] w-[320px] rounded-full bg-yellow-500/10 blur-3xl" />
+                <Image
+                    src={heroImg}
+                    alt="News Banner"
+                    fill
+                    priority
+                    className="object-cover object-center"
+                />
             </div>
 
-            <div className="relative max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-24">
-                <p className="text-sm uppercase tracking-[0.28em] text-yellow-400 mb-4">
-                    Curated Projects
-                </p>
+            {/* OVERLAY (only for readability, not full dark) */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
 
-                <h1 className="text-4xl md:text-6xl xl:text-7xl font-semibold leading-[1.05] max-w-5xl">
-                    Explore premium properties crafted for
-                    <span className="text-yellow-400"> luxury, value, and long-term appeal.</span>
-                </h1>
+            {/* CONTENT (BOTTOM LEFT ONLY) */}
+            <div className="relative z-10 h-full flex items-end justify-center">
+                <div className="w-full max-w-7xl  px-6 md:px-12 pb-14 md:pb-20">
 
-                <p className="text-gray-300 text-base md:text-lg mt-6 max-w-2xl leading-relaxed">
-                    Discover a curated collection of high-end residences, investment-led opportunities,
-                    and landmark developments across prime locations.
-                </p>
+                    <div className="max-w-xl text-left ">
 
-                <div className="flex flex-wrap gap-3 mt-8">
-                    {["Luxury", "Elite", "Ultra Luxury", "Prime Locations"].map((item) => (
-                        <span
-                            key={item}
-                            className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-gray-200 backdrop-blur-sm"
-                        >
-                            {item}
-                        </span>
-                    ))}
+                        <p className="mb-3 text-[11px] uppercase tracking-[0.35em] text-[#F1DC7F]">
+                            Curated Projects
+                        </p>
+
+                        <h1 className="text-xl md:text-2xl xl:text-5xl font-semibold leading-[1.05] max-w-[520px]">
+                            Explore premium
+                            <span className="block bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
+                                properties crafted for clients
+                            </span>
+                        </h1>
+
+                        <p className="mt-4 max-w-[420px] text-sm md:text-base text-white/70 leading-relaxed">
+                            Discover a curated collection of high-end residences, investment-led opportunities,
+                            and landmark.
+                        </p>
+
+                        <div className="flex flex-wrap gap-3 mt-8">
+                            {["Luxury", "Elite", "Ultra Luxury", "Prime Locations"].map((item) => (
+                                <span
+                                    key={item}
+                                    className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-gray-200 backdrop-blur-sm"
+                                >
+                                    {item}
+                                </span>
+                            ))}
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
+
+            {/* BOTTOM GOLD LINE */}
+            <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] opacity-80" />
+
         </section>
     );
 }
