@@ -9,6 +9,7 @@ import winstead from "../../public/win-logo.png";
 import star from "../../public/hugeicons_star.png";
 import { FcGoogle } from "react-icons/fc";
 import FollowUsIcons from "./SocialMedia";
+import { IoMdArrowDropdown } from "react-icons/io";
 
 const navLinks = [
   { name: "About Us", href: "/about-us" },
@@ -115,7 +116,7 @@ export default function Navbar() {
                   }}
                 >
                   <span className="cursor-pointer text-white text-sm flex items-center gap-1">
-                    {link.name}
+                    {link.name} <IoMdArrowDropdown />
                   </span>
 
                   {/* DROPDOWN */}
