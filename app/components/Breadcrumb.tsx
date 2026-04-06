@@ -17,7 +17,7 @@ export default function Breadcrumb() {
         {/* HOME */}
         <Link href="/" className="hover:text-yellow-400 transition">
           Home
-        </Link>
+        </Link>   
 
         {pathSegments.map((segment, index) => {
           const href = "/" + pathSegments.slice(0, index + 1).join("/");
