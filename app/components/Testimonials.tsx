@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { Star, Quote } from "lucide-react";
 import avatar from "../../public/Subtract.png";
-
+import ReviewText from "./ReviewText"
 const reviews = [
   {
     name: "Rubina Mukhtar",
@@ -166,9 +166,7 @@ export default function Testimonials() {
                
 
                 {/* review text */}
-                <p className="text-[15px] md:text-[16px] leading-7 text-white">
-                  {review.text}
-                </p>
+                <ReviewText text={review.text} />
                 <div className="flex gap-1 mt-5">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <div

@@ -80,6 +80,7 @@ export default function Footer() {
               <li><Link href="/our-services" className="hover:text-[#F1DC7F] transition">Services</Link></li>
               <li><Link href="/our-team" className="hover:text-[#F1DC7F] transition">Our Team</Link></li>
               <li><Link href="/news-media" className="hover:text-[#F1DC7F] transition">News & Media</Link></li>
+              <li><Link href="/career" className="hover:text-[#F1DC7F] transition">Career</Link></li>
             </ul>
           </div>
 
