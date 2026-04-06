@@ -15,8 +15,18 @@ const navLinks = [
   { name: "Projects", href: "/projects" },
   { name: "Our Services", href: "/our-services" },
   { name: "Our Team", href: "/our-team" },
-  { name: "News & Media", href: "/news-media" },
-  { name: "Contact Us", href: "/contact-us" },
+  {
+    name: "Media",
+    dropdown: [
+      { name: "Blogs", href: "/blogs" },
+      { name: "Gallery", href: "/gallery" },
+      { name: "Awards", href: "/awards" },
+      { name: "Contact Us", href: "/contact-us" },
+    ],
+  },
+  { name: "Developer", href: "/developer" },
+  // { name: "Media", href: "/news-media" },
+  // { name: "Contact Us", href: "/contact-us" },
 ];
 
 export default function Navbar() {
@@ -57,7 +67,7 @@ export default function Navbar() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
+  const timeoutRef = useRef<any>(null);
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black border-b border-white/10">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 py-4">
@@ -74,7 +84,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Menu */}
-        <nav className="hidden lg:flex items-center gap-8">
+        {/* <nav className="hidden lg:flex items-center gap-8">
           {navLinks.map((link, index) => (
             <a
               key={index}
@@ -85,8 +95,63 @@ export default function Navbar() {
               <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
             </a>
           ))}
-        </nav>
+        </nav> */}
+        <nav className="hidden lg:flex items-center gap-8">
+          {navLinks.map((link, index) => {
+            // ✅ WITH DROPDOWN
+            if (link.dropdown) {
+              return (
+                <div
+                  key={index}
+                  className="relative nav-item"
+                  onMouseEnter={() => {
+                    clearTimeout(timeoutRef.current);
+                    setShowDropdown(true);
+                  }}
+                  onMouseLeave={() => {
+                    timeoutRef.current = setTimeout(() => {
+                      setShowDropdown(false);
+                    }, 150); // small delay fixes flicker
+                  }}
+                >
+                  <span className="cursor-pointer text-white text-sm flex items-center gap-1">
+                    {link.name}
+                  </span>
 
+                  {/* DROPDOWN */}
+                  {showDropdown && (
+                    <div
+                      ref={dropdownRef}
+                      className="absolute top-full left-0 mt-4 w-48 bg-[#111] border border-white/10 rounded-xl shadow-xl py-2 z-50"
+                    >
+                      {link.dropdown.map((item, i) => (
+                        <Link
+                          key={i}
+                          href={item.href}
+                          className="dropdown-item block px-4 py-2 text-sm text-white hover:bg-yellow-500/10 hover:text-yellow-400 transition"
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            // ✅ NORMAL LINK
+            return (
+              <Link
+                key={index}
+                href={link.href}
+                className="text-[1.01rem] nav-item relative text-white text-sm font-normal group"
+              >
+                {link.name}
+                <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
+              </Link>
+            );
+          })}
+        </nav>
         {/* Right Section */}
         <div className="hidden lg:flex items-center gap-6 nav-item">
           {/* Follow Us */}
@@ -131,7 +196,7 @@ export default function Navbar() {
       >
         <div className="flex flex-col px-6 py-4 space-y-4">
           {/* NAV LINKS */}
-          {navLinks.map((link, index) => (
+          {/* {navLinks.map((link, index) => (
             <a
               key={index}
               href={link.href}
@@ -139,8 +204,40 @@ export default function Navbar() {
             >
               {link.name}
             </a>
-          ))}
+          ))} */}
+          {navLinks.map((link, index) => {
+            if (link.dropdown) {
+              return (
+                <div key={index}>
+                  <p className="text-white text-sm font-semibold">
+                    {link.name}
+                  </p>
 
+                  <div className="ml-3 mt-2 space-y-2">
+                    {link.dropdown.map((item, i) => (
+                      <Link
+                        key={i}
+                        href={item.href}
+                        className="block text-gray-300 text-sm hover:text-yellow-400"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={index}
+                href={link.href}
+                className="text-white text-sm border-b border-white/10 pb-2 hover:text-yellow-400 transition"
+              >
+                {link.name}
+              </Link>
+            );
+          })}
           {/* FOLLOW US (MOBILE DROPDOWN) */}
           <div className="mt-4">
             <FollowUsIcons />

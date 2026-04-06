@@ -300,7 +300,7 @@ function TeamCTA() {
   );
 }
 
-export default function TeamPage() {
+export default function DeveloperPage() {
   return (
     <main className="bg-black text-white">
       <TeamHero />

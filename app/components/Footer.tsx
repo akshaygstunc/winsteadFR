@@ -38,8 +38,8 @@ export default function Footer() {
             <button className="px-6 py-3 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black font-medium hover:scale-[1.02] transition">
               Book a Consultation
             </button>
-            <button className="px-6 py-3 rounded-full border border-white/20 hover:border-[#F1DC7F] hover:text-[#F1DC7F] transition">
-              WhatsApp Us
+            <button className="px-6 py-3 rounded-full border border-yellow-500/60 hover:border-[#F1DC7F] hover:text-[#F1DC7F] transition">
+              <FaWhatsapp className="w-6 h-6 text-yellow-400 text-lg transition duration-300"/>
             </button>
           </div>
         </div>
@@ -62,9 +62,10 @@ export default function Footer() {
                   <a
                     key={i}
                     href="#"
-                    className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white hover:text-black hover:bg-[#F1DC7F] hover:border-[#F1DC7F] transition"
+                    className="w-10 h-10 rounded-full border border-yellow-500/60 flex items-center justify-center text-yellow-400 text-xl hover:bg-yellow-500 hover:text-black transition duration-300"
                   >
-                    <Icon size={14} />
+                    <Icon />
+
                   </a>
                 ),
               )}
@@ -101,11 +102,11 @@ export default function Footer() {
             <h3 className="text-white text-lg mb-5">Contact</h3>
             <div className="space-y-4 text-white text-sm md:text-base">
               <p>
-                Dubai Hills Estate Business Park, Office 204,
+                2601, Iris Bay, Business Bay, Dubai
                 <br />
                 Dubai, UAE
               </p>
-              <p>+971 XX XXX XXXX</p>
+              <p>+971 54 755 8866</p>
               <p>info@winstead.com</p>
               <p>Mon - Sat : 9:00 AM - 7:00 PM</p>
             </div>
@@ -142,7 +143,7 @@ export default function Footer() {
       {/* bottom strip */}
       <div className="px-6 md:px-12 lg:px-20 py-5 border-t border-white/10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs md:text-sm text-white">
-          <p>© 2026 Winstead Properties. All rights reserved.</p>
+          <p>© 2026 Winstead Global Real Estate LLC</p>
 
           <div className="flex items-center gap-4">
             <a href="#" className="hover:text-[#F1DC7F] transition">Privacy Policy</a>
