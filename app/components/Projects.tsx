@@ -10,7 +10,7 @@ import image3 from "../../public/image_6.png";
 const images = [image1, image2, image1, image2, image3, image1, image2];
 import { useState } from "react";
 
-const vendors = ["Vendor A", "Vendor B", "Vendor C"];
+const vendors = ["DAMAC", "MERAAS", "EMAAR"];
 
 function FeaturedProjects() {
   const [activeFilter, setActiveFilter] = useState("All");
