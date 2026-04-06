@@ -14,6 +14,7 @@ import {
 } from "react-icons/fa";
 import Image from "next/image";
 import banner from "../../public/hero1.jpg";
+import AutoBreadcrumbs from "../components/BreadCrumbs";
 const openings = [
     {
         title: "Property Consultant",
@@ -142,7 +143,9 @@ export default function CareerPage() {
                         <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] opacity-80" />
             
                     </section>
-
+            <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
+                            <AutoBreadcrumbs />
+                          </section>
             <section id="culture" className="max-w-7xl mx-auto px-4 md:px-10 pt-16 md:pb-20">
                 <div className="grid lg:grid-cols-[0.95fr_1.05fr] gap-6">
                     <div className="rounded-[30px] border border-white/10 bg-white/[0.03] p-6 md:p-8">

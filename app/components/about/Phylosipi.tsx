@@ -1,3 +1,5 @@
+import AutoBreadcrumbs from "../BreadCrumbs";
+
 const philosophyItems = [
     {
         title: "Clarity Over Noise",
@@ -19,6 +21,7 @@ const philosophyItems = [
 export default function AboutPhilosophy() {
     return (
         <section className="py-20 px-6 md:px-10 border-t border-white/10">
+            <AutoBreadcrumbs />
             <div className="max-w-7xl mx-auto">
                 <div className="text-center max-w-3xl mx-auto mb-14">
                     <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">

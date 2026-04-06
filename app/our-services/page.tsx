@@ -6,6 +6,7 @@ import WhyChooseWinstead from "../components/services/WhyChooseWinstead";
 import ServicesCTA from "../components/services/ServicesCTA";
 
 import DetailedServices from "../components/services/DetailService";
+import AutoBreadcrumbs from "../components/BreadCrumbs";
 
 const services = [
   {
@@ -73,6 +74,9 @@ export default function OurServices() {
   return (
     <div className="bg-black text-white">
       <ServicesHero />
+       <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
+                <AutoBreadcrumbs />
+              </section>
       <ServicesOverview services={services} />
       <DetailedServices services={services} />
       <HowItWork processSteps={processSteps} />

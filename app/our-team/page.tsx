@@ -3,7 +3,7 @@
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaFacebookF, FaInstagram, FaLinkedinIn, FaTiktok, FaWhatsapp, FaYoutube } from "react-icons/fa";
 import heroImg from "../../public/blog3.png";
 import memberImg from "../../public/female.png";
 import memberImg2 from "../../public/male.png";
@@ -12,6 +12,7 @@ import memberImg4 from "../../public/female1.png";
 import memberImg5 from "../../public/male2.png";
 import memberImg6 from "../../public/female2.png";
 import TeamHero from "../components/teams/TeamHero";
+import AutoBreadcrumbs from "../components/BreadCrumbs";
 
 type TeamCategory =
   | "All"
@@ -124,6 +125,9 @@ function TeamTabsAndGrid() {
 
   return (
     <section className="bg-black text-white px-6 md:px-12 py-16 md:py-20">
+       <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
+                <AutoBreadcrumbs />
+              </section>
       <div className="max-w-7xl mx-auto">
         <div className="mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="max-w-2xl">
@@ -203,7 +207,19 @@ function TeamTabsAndGrid() {
                 <p className="text-white/55 mt-2 text-sm md:text-base">
                   {member.role}
                 </p>
-
+                <div className="flex gap-3 mt-6">
+                  {[FaFacebookF, FaInstagram, FaTiktok, FaLinkedinIn, FaWhatsapp, FaYoutube].map(
+                    (Icon, i) => (
+                      <a
+                        key={i}
+                        href="#"
+                        className="w-10 h-10 rounded-full border border-yellow-500/60 flex items-center justify-center text-yellow-400 text-xl hover:bg-yellow-500 hover:text-black transition duration-300"
+                      >
+                        <Icon />
+                      </a>
+                    )
+                  )}
+                </div>
                 <div className="mt-5">
                   <p className="text-xs uppercase tracking-[0.18em] text-white/35 mb-3">
                     Languages
@@ -231,13 +247,6 @@ function TeamTabsAndGrid() {
                   ))}
                 </div>
 
-                <Link
-                  href={`/our-team/${member.slug}`}
-                  className="mt-6 inline-flex items-center gap-2 text-sm text-yellow-400 transition group-hover:translate-x-1"
-                >
-                  View Profile
-                  <FaArrowRight className="text-xs" />
-                </Link>
               </div>
             </article>
           ))}

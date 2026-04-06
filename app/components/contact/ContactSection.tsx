@@ -36,17 +36,18 @@ export default function ContactSection({ contactPoints }: { contactPoints: strin
                         <InfoCard
                             icon={<FaPhoneAlt />}
                             label="Phone"
-                            value="+971 00 000 0000"
+                            value="+971 54 755 8866"
                         />
                         <InfoCard
                             icon={<FaEnvelope />}
                             label="Email"
-                            value="hello@winstead.com"
+                            value="info@winstead.com"
                         />
                         <InfoCard
                             icon={<FaMapMarkerAlt />}
                             label="Location"
-                            value="Dubai, UAE"
+                            value="2601, Iris Bay, Business Bay, Dubai
+Dubai, UAE"
                         />
                     </div>
 

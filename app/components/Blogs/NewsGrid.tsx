@@ -16,6 +16,7 @@ type NewsItem = {
 export default function NewsGrid({ news }: { news: NewsItem[] }) {
     return (
         <section className="bg-black text-white px-6 md:px-12 py-14 md:py-18">
+            
             <div className="max-w-7xl mx-auto">
                 {news.length === 0 ? (
                     <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-10 text-center text-white">

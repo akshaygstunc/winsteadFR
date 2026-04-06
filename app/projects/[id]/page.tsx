@@ -13,9 +13,10 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { FaArrowRight, FaDollarSign } from "react-icons/fa6";
-import hero1 from "../../../public/image_7.png";
-import hero2 from "../../../public/image_6.png";
-import hero3 from "../../../public/image_5.png";
+import hero1 from "../../../public/hero1.jpg";
+import hero2 from "../../../public/hero2.png";
+import hero3 from "../../../public/hero3.jpg";
+import AutoBreadcrumbs from "@/app/components/BreadCrumbs";
 
 type Project = {
   id: number;
@@ -163,9 +164,10 @@ export default function ProjectDetailPage() {
   );
 
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
-  const [activeImage, setActiveImage] = useState<StaticImageData>(
-    project?.heroImages?.[0] || hero1
-  );
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const activeImage =
+    project?.heroImages?.[activeImageIndex] || project?.heroImages?.[0] || hero1;
   const [selectedPlan, setSelectedPlan] = useState(
     project?.floorPlans?.[0]?.label || "1 Bedroom"
   );
@@ -211,6 +213,20 @@ export default function ProjectDetailPage() {
   const [bookingPercent, setBookingPercent] = useState(10);
   const [constructionPercent, setConstructionPercent] = useState(50);
   const [handoverPercent, setHandoverPercent] = useState(40);
+  useEffect(() => {
+    if (!project?.heroImages?.length) return;
+
+    const interval = setInterval(() => {
+      setActiveImageIndex((prev) =>
+        prev === project.heroImages.length - 1 ? 0 : prev + 1
+      );
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [project]);
+  useEffect(() => {
+    setActiveImageIndex(0);
+  }, [projectId]);
   useEffect(() => {
     if (selectedUnitPlan?.price) {
       setPropertyPrice(getNumericPrice(selectedUnitPlan.price));
@@ -309,15 +325,10 @@ export default function ProjectDetailPage() {
       <main className="bg-black text-white min-h-screen overflow-x-hidden">
         {/* back */}
         <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
-          <Link
-            href="/projects"
-            className="inline-flex items-center gap-2 text-sm text-white-300 hover:text-white transition"
-          >
-            <FaArrowLeft />
-            Back to Projects
-          </Link>
+          <AutoBreadcrumbs />
         </section>
 
+        {/* hero */}
         {/* hero */}
         <section className="relative mt-4 px-4 md:px-10">
           <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden rounded-[32px] border border-white/10">
@@ -326,7 +337,7 @@ export default function ProjectDetailPage() {
               alt={project.title}
               fill
               priority
-              className="object-cover"
+              className="object-cover transition-all duration-700 ease-in-out"
             />
 
             <div className="absolute inset-0 bg-black/25" />
@@ -340,24 +351,52 @@ export default function ProjectDetailPage() {
               <p className="text-white font-medium">{project.category}</p>
             </div>
 
-            <div className="absolute left-5 right-5 bottom-6 md:left-8 md:right-8 md:bottom-8">
+            <div className="absolute left-5 right-5 bottom-6 md:left-8 md:right-8 md:bottom-8 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
               <div className="max-w-[760px]">
                 <p className="text-[11px] md:text-sm uppercase tracking-[0.28em] text-yellow-400 mb-3">
                   Signature Residence
                 </p>
 
-                <h1 className="text-4xl md:text-6xl xl:text-4xl font-semibold leading-[1.02] mb-4">
+                <h1 className="text-4xl md:text-6xl xl:text-5xl font-semibold leading-[1.02] mb-4">
                   {project.title}
                 </h1>
 
-                <div className="flex items-center gap-2 text-base md:text-lg text-white-200 mb-4">
+                <div className="flex items-center gap-2 text-base md:text-lg text-white-200">
                   <FaMapMarkerAlt className="text-yellow-400" />
                   {project.subLocation}, {project.location}
                 </div>
+              </div>
 
-                <p className="max-w-[620px] text-sm md:text-base text-white-300 leading-relaxed">
-                  {project.description}
-                </p>
+              <div className="ml-auto w-full max-w-[420px]">
+                <div className="rounded-[24px] border border-white/10 bg-black/35 backdrop-blur-md p-3 md:p-4">
+                  <div className="flex gap-3 overflow-x-auto scrollbar-hide">
+                    {project.heroImages.map((image, index) => {
+                      const isActive = index === activeImageIndex;
+
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => setActiveImageIndex(index)}
+                          className={`relative h-[72px] w-[96px] md:h-[84px] md:w-[118px] shrink-0 overflow-hidden rounded-2xl border transition ${isActive
+                              ? "border-yellow-400 shadow-[0_0_18px_rgba(241,220,127,0.25)]"
+                              : "border-white/10 hover:border-yellow-500/40"
+                            }`}
+                        >
+                          <Image
+                            src={image}
+                            alt={`${project.title} ${index + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                          <div
+                            className={`absolute inset-0 transition ${isActive ? "bg-black/10" : "bg-black/30"
+                              }`}
+                          />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -412,27 +451,7 @@ export default function ProjectDetailPage() {
           </div>
         </section>
 
-        {/* gallery thumbs */}
-        <section className="max-w-7xl mx-auto px-4 md:px-10 py-8">
-          <div className="flex gap-4 overflow-x-auto scrollbar-hide">
-            {project.heroImages.map((image, index) => {
-              const active = activeImage === image;
-              return (
-                <button
-                  key={index}
-                  onClick={() => setActiveImage(image)}
-                  className={`relative w-[170px] h-[110px] md:w-[220px] md:h-[140px] rounded-2xl overflow-hidden border transition shrink-0 ${active
-                    ? "border-yellow-400 shadow-[0_0_20px_rgba(241,220,127,0.18)]"
-                    : "border-white/10 hover:border-yellow-500/40"
-                    }`}
-                >
-                  <Image src={image} alt="" fill className="object-cover" />
-                  <div className="absolute inset-0 bg-black/20" />
-                </button>
-              );
-            })}
-          </div>
-        </section>
+       
 
         {/* tabs */}
         <section className="max-w-7xl mx-auto px-4 md:px-10 pt-2 pb-8">

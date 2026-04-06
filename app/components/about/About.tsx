@@ -1,6 +1,7 @@
 import Image from "next/image";
 import img1 from "../../../public/hero2.png";
 import img2 from "../../../public/img2.png";
+import AutoBreadcrumbs from "../BreadCrumbs";
 
 export default function AboutHero() {
   return (
@@ -89,6 +90,7 @@ export default function AboutHero() {
 
             <p className="mb-3 text-[11px] uppercase tracking-[0.35em] text-[#F1DC7F]">
               About Winstead
+
             </p>
 
             <h1 className="text-xl md:text-2xl xl:text-5xl font-semibold leading-[1.05] max-w-[520px]">
@@ -97,7 +99,7 @@ export default function AboutHero() {
                 real estate decisions
               </span>
             </h1>
-
+            <AutoBreadcrumbs />
             {/* <p className="mt-4 max-w-[420px] text-sm md:text-base text-white leading-relaxed">
               Discover a curated collection of high-end residences, investment-led opportunities,
               and landmark.

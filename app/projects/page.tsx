@@ -18,6 +18,7 @@ import "rc-slider/assets/index.css";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import ProjectsHero from "../components/projects/ProjectsHero";
+import AutoBreadcrumbs from "../components/BreadCrumbs";
 
 const allProjects = [
   {
@@ -176,7 +177,7 @@ function ProjectsContent() {
         </div>
       </div>
 
-      <ProjectsCTA />
+      {/* <ProjectsCTA /> */}
     </div>
   );
 }
