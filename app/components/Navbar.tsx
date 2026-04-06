@@ -114,7 +114,7 @@ export default function Navbar() {
                       setShowDropdown(false);
                     }, 150); // small delay fixes flicker
                   }}
-                >
+                >  
                   <span className="cursor-pointer text-white text-sm flex items-center gap-1">
                     {link.name} <IoMdArrowDropdown />
                   </span>
