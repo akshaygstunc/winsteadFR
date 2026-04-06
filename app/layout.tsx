@@ -3,6 +3,7 @@ import "./globals.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Breadcrumb from "./components/Breadcrumb";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <main className="bg-black text-white pt-[100px]">
           <Navbar />
+          <Breadcrumb /> 
           {children}
           <Footer />
         </main>
