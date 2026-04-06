@@ -271,7 +271,7 @@ const [currentIndex, setCurrentIndex] = useState(0);
   const handleContactChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = e.ta;
     setContactForm((prev) => ({
       ...prev,
       [name]: value,

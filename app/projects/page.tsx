@@ -18,7 +18,13 @@ import "rc-slider/assets/index.css";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import ProjectsHero from "../components/projects/ProjectsHero";
-
+import ContactModal from "../components/ContactModal";
+type ContactIntent =
+  | "schedule-visit"
+  | "download-floor-plan"
+  | "request-brochure"
+  | "book-consultation"
+  | "general";
 const allProjects = [
   {
     id: 1,
@@ -333,7 +339,7 @@ function Sidebar({ filters, setFilters }: any) {
         <Check label="Ultra Luxury" valueKey="category" filters={filters} setFilters={setFilters} />
       </Section>
       <Section title="Residence Type">
-        {["1 Bedroom", "2 Bedroom", "3 Bedroom", "4 Bedroom", "5+ Bedroom"].map((item) => (
+        {["1 Bedroom", "2 Bedroom", "3 Bedroom", "4 Bedroom", "5+ Bedroom", "Villa", "Apartment", "Office"].map((item) => (
           <Check
             key={item}
             label={item}
@@ -506,6 +512,70 @@ function ProjectCard({ data }: any) {
 /* ================= CTA ================= */
 
 function ProjectsCTA() {
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+    const [contactIntent, setContactIntent] = useState<ContactIntent>("general");
+  
+    const [contactForm, setContactForm] = useState({
+      fullName: "",
+      email: "",
+      phone: "",
+      message: "",
+    });
+    const closeContactModal = () => {
+      setIsContactModalOpen(false);
+    };
+  
+    const handleContactChange = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+      const { name, value } = e.target;
+      setContactForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    };
+    const getDefaultMessage = (intent: ContactIntent) => {
+      switch (intent) {
+        case "schedule-visit":
+          return `I am interested in scheduling a private visit . Please contact me with available timings.`;
+        case "download-floor-plan":
+          return `I would like to receive the floor plan for`
+            ;
+        case "request-brochure":
+          return `Please share the latest brochure, pricing, and availability `;
+        case "book-consultation":
+          return `I would like to book a consultation regarding, financing options, and availability.`;
+        default:
+          return `I am interested. Please contact me with more details.`;
+      }
+    }
+    const openContactModal = (intent: ContactIntent) => {
+      setContactIntent(intent);
+      setContactForm((prev) => ({
+        ...prev,
+        message: getDefaultMessage(intent, "", ""),
+      }));
+      setIsContactModalOpen(true);
+    };
+    const handleContactSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+  
+      const payload = {
+        ...contactForm,
+        intent: contactIntent,
+        // projectId: project.id,
+        // projectTitle: project.title,
+        // floorPlan: activePlan?.label || "",
+      };
+  
+      console.log("Contact Form Submit:", payload);
+  
+      // TODO:
+      // connect API here
+      // await fetch("/api/inquiry", { method: "POST", body: JSON.stringify(payload) })
+  
+      closeContactModal();
+    };
   return (
     <section className="pb-20 px-4 md:px-12">
       <div className="max-w-7xl mx-auto rounded-[32px] border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 via-white/5 to-yellow-500/10 p-10 md:p-14 text-center">
@@ -521,13 +591,20 @@ function ProjectsCTA() {
         </p>
 
         <div className="flex flex-wrap justify-center gap-4">
-          <button className="bg-yellow-400 text-black px-6 py-3 rounded-full font-medium hover:scale-105 transition">
+          <button className="bg-yellow-400 text-black px-6 py-3 rounded-full font-medium hover:scale-105 transition" onClick={() => openContactModal("general")}>
             Speak With Our Team
           </button>
-          <button className="border border-yellow-500 text-yellow-400 px-6 py-3 rounded-full font-medium hover:bg-yellow-500 hover:text-black transition">
+          <button className="border border-yellow-500 text-yellow-400 px-6 py-3 rounded-full font-medium hover:bg-yellow-500 hover:text-black transition" onClick={() => openContactModal("general")}>
             Register Interest
           </button>
         </div>
+        <ContactModal isOpen={isContactModalOpen}
+          onClose={closeContactModal}
+          onSubmit={handleContactSubmit}
+          form={contactForm}
+          onChange={handleContactChange}
+          // projectTitle={project.title}
+          intent={contactIntent} />
       </div>
     </section>
   );

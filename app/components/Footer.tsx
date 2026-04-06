@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react"
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../../public/winstead.png";
@@ -10,8 +10,78 @@ import {
   FaWhatsapp,
   FaYoutube,
 } from "react-icons/fa";
-
+import ContactModal from "./ContactModal";
+type ContactIntent =
+  | "schedule-visit"
+  | "download-floor-plan"
+  | "request-brochure"
+  | "book-consultation"
+  | "general";
 export default function Footer() {
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [contactIntent, setContactIntent] = useState<ContactIntent>("general");
+
+  const [contactForm, setContactForm] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+  const closeContactModal = () => {
+    setIsContactModalOpen(false);
+  };
+
+  const handleContactChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setContactForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const getDefaultMessage = (intent: ContactIntent) => {
+    switch (intent) {
+      case "schedule-visit":
+        return `I am interested in scheduling a private visit . Please contact me with available timings.`;
+      case "download-floor-plan":
+        return `I would like to receive the floor plan for`
+          ;
+      case "request-brochure":
+        return `Please share the latest brochure, pricing, and availability `;
+      case "book-consultation":
+        return `I would like to book a consultation regarding, financing options, and availability.`;
+      default:
+        return `I am interested. Please contact me with more details.`;
+    }
+  }
+  const openContactModal = (intent: ContactIntent) => {
+    setContactIntent(intent);
+    setContactForm((prev) => ({
+      ...prev,
+      message: getDefaultMessage(intent, "", ""),
+    }));
+    setIsContactModalOpen(true);
+  };
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const payload = {
+      ...contactForm,
+      intent: contactIntent,
+      // projectId: project.id,
+      // projectTitle: project.title,
+      // floorPlan: activePlan?.label || "",
+    };
+
+    console.log("Contact Form Submit:", payload);
+
+    // TODO:
+    // connect API here
+    // await fetch("/api/inquiry", { method: "POST", body: JSON.stringify(payload) })
+
+    closeContactModal();
+  };
   return (
     <footer className="relative bg-[#0b0b0b] text-white overflow-hidden border-t border-white/10">
       {/* top glow */}
@@ -35,12 +105,14 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-            <button className="px-6 py-3 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black font-medium hover:scale-[1.02] transition">
+            <button className="px-6 py-3 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black font-medium hover:scale-[1.02] transition" onClick={() => openContactModal("book-consultation")}>
               Book a Consultation
             </button>
+
             <button className="px-6 py-3 rounded-full border border-yellow-500/60 hover:border-[#F1DC7F] hover:text-[#F1DC7F] transition">
               <FaWhatsapp className="w-6 h-6 text-yellow-400 text-lg transition duration-300"/>
             </button>
+
           </div>
         </div>
       </div>
@@ -152,6 +224,15 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={closeContactModal}
+        onSubmit={handleContactSubmit}
+        form={contactForm}
+        onChange={handleContactChange}
+        // projectTitle={project.title}
+        intent={contactIntent}
+      />
     </footer>
   );
 }
