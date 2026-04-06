@@ -8,7 +8,7 @@ export default function TeamCTA({ teamPerson }: { teamPerson: string }) {
                 <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-5">
                     Connect with {teamPerson.split(" ")[0]} for a more thoughtful property journey.
                 </h2>
-                <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-8">
+                <p className="text-white-400 max-w-2xl mx-auto leading-relaxed mb-8">
                     Whether you are exploring premium residences or evaluating investment
                     opportunities, we are here to help you move with more clarity and confidence.
                 </p>

@@ -18,7 +18,7 @@ export default function TeamStrengths() {
                     <h2 className="text-3xl md:text-4xl font-semibold mb-4">
                         Expertise shaped around trust, relevance, and value.
                     </h2>
-                    <p className="text-gray-400 leading-relaxed">
+                    <p className="text-white-400 leading-relaxed">
                         A premium advisory experience is not just about access. It is about
                         filtering well, communicating clearly, and guiding each step with care.
                     </p>

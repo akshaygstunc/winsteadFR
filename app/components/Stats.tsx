@@ -124,7 +124,7 @@ export default function Stats() {
                 </span>
               </h3>
 
-              <p className="text-[1.05rem] text-gray-400 mt-2">{stat.label}</p>
+              <p className="text-[1.05rem] text-white mt-2">{stat.label}</p>
             </div>
           ))}
         </div>

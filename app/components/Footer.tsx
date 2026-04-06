@@ -28,7 +28,7 @@ export default function Footer() {
               Let’s help you find your next
               <span className="text-[#F1DC7F]"> premium property</span>
             </h2>
-            <p className="text-sm md:text-base text-white/60 mt-3 max-w-2xl">
+            <p className="text-sm md:text-base text-white mt-3 max-w-2xl">
               Explore curated opportunities across Dubai’s most desirable
               communities with expert guidance from our team.
             </p>
@@ -51,7 +51,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Image src={logo} alt="Winstead" width={74} className="mb-5" />
-            <p className="text-white/70 leading-relaxed text-sm md:text-base max-w-sm">
+            <p className="text-white leading-relaxed text-sm md:text-base max-w-sm">
               Winstead delivers access to refined living and high-potential real
               estate opportunities through a tailored, investor-first approach.
             </p>
@@ -62,7 +62,7 @@ export default function Footer() {
                   <a
                     key={i}
                     href="#"
-                    className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:text-black hover:bg-[#F1DC7F] hover:border-[#F1DC7F] transition"
+                    className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white hover:text-black hover:bg-[#F1DC7F] hover:border-[#F1DC7F] transition"
                   >
                     <Icon size={14} />
                   </a>
@@ -74,7 +74,7 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h3 className="text-white text-lg mb-5">Quick Links</h3>
-            <ul className="space-y-3 text-white/65">
+            <ul className="space-y-3 text-white">
               <li><Link href="/about-us" className="hover:text-[#F1DC7F] transition">About Us</Link></li>
               <li><Link href="/projects" className="hover:text-[#F1DC7F] transition">Projects</Link></li>
               <li><Link href="/our-services" className="hover:text-[#F1DC7F] transition">Services</Link></li>
@@ -86,7 +86,7 @@ export default function Footer() {
           {/* Explore */}
           <div>
             <h3 className="text-white text-lg mb-5">Explore</h3>
-            <ul className="space-y-3 text-white/65">
+            <ul className="space-y-3 text-white">
               <li><a href="#" className="hover:text-[#F1DC7F] transition">Luxury Apartments</a></li>
               <li><a href="#" className="hover:text-[#F1DC7F] transition">Villas & Townhouses</a></li>
               <li><a href="#" className="hover:text-[#F1DC7F] transition">Waterfront Homes</a></li>
@@ -98,7 +98,7 @@ export default function Footer() {
           {/* Contact */}
           <div>
             <h3 className="text-white text-lg mb-5">Contact</h3>
-            <div className="space-y-4 text-white/65 text-sm md:text-base">
+            <div className="space-y-4 text-white text-sm md:text-base">
               <p>
                 Dubai Hills Estate Business Park, Office 204,
                 <br />
@@ -110,7 +110,7 @@ export default function Footer() {
             </div>
 
             <div className="mt-6 p-4 rounded-2xl border border-white/10 bg-white/[0.03]">
-              <p className="text-sm text-white/60 mb-2">Stay updated</p>
+              <p className="text-sm text-white mb-2">Stay updated</p>
               <div className="flex gap-2">
                 <input
                   type="email"
@@ -140,7 +140,7 @@ export default function Footer() {
 
       {/* bottom strip */}
       <div className="px-6 md:px-12 lg:px-20 py-5 border-t border-white/10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs md:text-sm text-white/50">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs md:text-sm text-white">
           <p>© 2026 Winstead Properties. All rights reserved.</p>
 
           <div className="flex items-center gap-4">

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import heroImg from "../../../public/services.png";
+import heroImg from "../../../public/hero5.png";
 import { FaArrowRight } from "react-icons/fa";
 
 export default function TeamHero({ teamPerson }: { teamPerson: string }) {

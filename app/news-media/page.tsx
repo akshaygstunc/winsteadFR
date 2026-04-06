@@ -7,6 +7,10 @@ import LatestArticles from "../components/Blogs/LatestArticles";
 import NewsGrid from "../components/Blogs/NewsGrid";
 import NewsToolbar from "../components/Blogs/NewsToolbar";
 import { useState, useMemo } from "react";
+import Img1 from "../../public/hero5.png";
+import Img2 from "../../public/hero1.jpg";
+import Img3 from "../../public/hero2.png";
+import Img4 from "../../public/hero3.jpg";
 
 const news = [
   {
@@ -14,6 +18,7 @@ const news = [
     title: "Dubai Real Estate Market Hits New Highs",
     desc: "Luxury properties continue to dominate with increasing global demand.",
     date: "March 2026",
+    img: Img1,
     category: "Market Update",
   },
   {
@@ -21,6 +26,7 @@ const news = [
     title: "Top Investment Hotspots in UAE",
     desc: "Explore emerging areas offering strong ROI and growth potential.",
     date: "Feb 2026",
+    img: Img2,
     category: "Investment",
   },
   {
@@ -28,6 +34,7 @@ const news = [
     title: "Why Off-Plan Investments Are Booming",
     desc: "Flexible payment plans and capital appreciation driving demand.",
     date: "Jan 2026",
+    img: Img4,
     category: "Off-Plan",
   },
   {
@@ -35,6 +42,7 @@ const news = [
     title: "Luxury Living Redefined",
     desc: "A new wave of ultra-premium developments reshaping skylines.",
     date: "Dec 2025",
+    img: Img2,
     category: "Luxury Trends",
   },
   {
@@ -42,6 +50,7 @@ const news = [
     title: "Dubai Real Estate Market Hits New Highs",
     desc: "Luxury properties continue to dominate with increasing global demand.",
     date: "March 2026",
+    img: Img1,
     category: "Market Update",
   },
   {
@@ -49,6 +58,7 @@ const news = [
     title: "Top Investment Hotspots in UAE",
     desc: "Explore emerging areas offering strong ROI and growth potential.",
     date: "Feb 2026",
+    img: Img3,
     category: "Investment",
   },
   {
@@ -56,6 +66,7 @@ const news = [
     title: "Why Off-Plan Investments Are Booming",
     desc: "Flexible payment plans and capital appreciation driving demand.",
     date: "Jan 2026",
+    img: Img4,
     category: "Off-Plan",
   },
   {
@@ -63,6 +74,7 @@ const news = [
     title: "Luxury Living Redefined",
     desc: "A new wave of ultra-premium developments reshaping skylines.",
     date: "Dec 2025",
+    img: Img1,
     category: "Luxury Trends",
   },
   {
@@ -70,6 +82,7 @@ const news = [
     title: "Dubai Real Estate Market Hits New Highs",
     desc: "Luxury properties continue to dominate with increasing global demand.",
     date: "March 2026",
+    img: Img3,
     category: "Market Update",
   },
   {
@@ -77,6 +90,7 @@ const news = [
     title: "Top Investment Hotspots in UAE",
     desc: "Explore emerging areas offering strong ROI and growth potential.",
     date: "Feb 2026",
+    img: Img1,
     category: "Investment",
   },
   {
@@ -84,6 +98,7 @@ const news = [
     title: "Why Off-Plan Investments Are Booming",
     desc: "Flexible payment plans and capital appreciation driving demand.",
     date: "Jan 2026",
+    img: Img1,
     category: "Off-Plan",
   },
   {
@@ -91,6 +106,7 @@ const news = [
     title: "Luxury Living Redefined",
     desc: "A new wave of ultra-premium developments reshaping skylines.",
     date: "Dec 2025",
+    img: Img1,
     category: "Luxury Trends",
   },
   {
@@ -98,6 +114,7 @@ const news = [
     title: "Dubai Real Estate Market Hits New Highs",
     desc: "Luxury properties continue to dominate with increasing global demand.",
     date: "March 2026",
+    img: Img1,
     category: "Market Update",
   },
   {
@@ -105,6 +122,7 @@ const news = [
     title: "Top Investment Hotspots in UAE",
     desc: "Explore emerging areas offering strong ROI and growth potential.",
     date: "Feb 2026",
+    img: Img1,
     category: "Investment",
   },
   {
@@ -112,6 +130,7 @@ const news = [
     title: "Why Off-Plan Investments Are Booming",
     desc: "Flexible payment plans and capital appreciation driving demand.",
     date: "Jan 2026",
+    img: Img1,
     category: "Off-Plan",
   },
   {
@@ -119,6 +138,7 @@ const news = [
     title: "Luxury Living Redefined",
     desc: "A new wave of ultra-premium developments reshaping skylines.",
     date: "Dec 2025",
+    img: Img1,
     category: "Luxury Trends",
   },
 ];

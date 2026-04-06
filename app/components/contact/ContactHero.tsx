@@ -1,5 +1,5 @@
 import Image from "next/image";
-import banner from "../../../public/services.png";
+import banner from "../../../public/hero1.jpg";
 export default function ContactHero() {
     return (
         // <section className="relative overflow-hidden border-b border-white/10">
@@ -26,7 +26,7 @@ export default function ContactHero() {
         //                 <span className="text-yellow-400"> real estate conversation.</span>
         //             </h1>
 
-        //             <p className="text-gray-300 text-base md:text-lg mt-6 max-w-2xl leading-relaxed">
+        //             <p className="text-white-300 text-base md:text-lg mt-6 max-w-2xl leading-relaxed">
         //                 Whether you are exploring premium residences, evaluating investment
         //                 opportunities, or registering interest in a featured property, our
         //                 team is here to guide you with clarity and discretion.
@@ -36,7 +36,7 @@ export default function ContactHero() {
         //                 {["Private Consultation", "Investment Inquiry", "Luxury Properties"].map((item) => (
         //                     <span
         //                         key={item}
-        //                         className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-gray-200 backdrop-blur-sm"
+        //                         className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-white-200 backdrop-blur-sm"
         //                     >
         //                         {item}
         //                     </span>
@@ -79,21 +79,7 @@ export default function ContactHero() {
                             </span>
                         </h1>
 
-                        <p className="mt-4 max-w-[420px] text-sm md:text-base text-white/70 leading-relaxed">
-                            Whether you are exploring premium residences, evaluating investment
-                            opportunities, or registering interest
-                        </p>
 
-                        <div className="flex flex-wrap gap-3 mt-8">
-                            {["Market Trends", "Luxury Insights", "Investment Signals"].map((item) => (
-                                <span
-                                    key={item}
-                                    className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-gray-200 backdrop-blur-sm"
-                                >
-                                    {item}
-                                </span>
-                            ))}
-                        </div>
 
                     </div>
 

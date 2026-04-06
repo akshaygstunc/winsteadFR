@@ -63,7 +63,7 @@ const [hovered, setHovered] = useState<number | null>(null);
               <p className="font-semibold text-white text-sm">
                 Winstead_properties
               </p>
-              <p className="text-xs text-gray-400">Latest On Our Social</p>
+              <p className="text-xs text-white-400">Latest On Our Social</p>
             </div>
           </div>
 

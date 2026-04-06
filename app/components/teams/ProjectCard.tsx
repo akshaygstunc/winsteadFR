@@ -23,7 +23,7 @@ export default function ProjectCard({ img }: { img: any }) {
             <div className="absolute bottom-0 p-5 w-full">
                 <h3 className="text-xl font-semibold mb-2">Aurelia Heights</h3>
 
-                <div className="space-y-1 text-sm text-gray-300">
+                <div className="space-y-1 text-sm text-white-300">
                     <div className="flex items-center gap-2">
                         <FaBed className="text-yellow-400 text-xs" />
                         2-8 Bedrooms

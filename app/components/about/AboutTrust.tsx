@@ -28,7 +28,7 @@ export default function AboutTrust() {
                     <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
                         Built on trust, guided by experience.
                     </h2>
-                    <p className="text-gray-400 leading-relaxed max-w-xl">
+                    <p className="text-white-400 leading-relaxed max-w-xl">
                         At the heart of Winstead is a commitment to thoughtful service,
                         honest guidance, and relationships that go beyond transactions.
                     </p>
@@ -43,7 +43,7 @@ export default function AboutTrust() {
                             <h3 className="text-lg font-semibold text-white mb-2">
                                 {item.title}
                             </h3>
-                            <p className="text-gray-400 leading-relaxed text-sm md:text-base">
+                            <p className="text-white-400 leading-relaxed text-sm md:text-base">
                                 {item.description}
                             </p>
                         </div>

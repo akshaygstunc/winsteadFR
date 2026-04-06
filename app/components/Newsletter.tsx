@@ -55,7 +55,7 @@ export default function Newsletter() {
  {/* CENTER */}
           <div>
             <h3 className="text-lg mb-4">Address</h3>
-            <p className="text-sm text-gray-300 leading-relaxed">
+          <p className="text-sm text-white-300 leading-relaxed">
               Dubai Hills Estate Business Park 4th, Office 204no <br />
               Dubai - UAE, PO Box No: 453881
             </p>
@@ -65,7 +65,7 @@ export default function Newsletter() {
             <div className="grid grid-cols-2 gap-10 text-sm">
               <div>
                 <h4 className="mb-3 text-white">Company Info</h4>
-                <ul className="space-y-2 text-gray-300">
+              <ul className="space-y-2 text-white-300">
                   <li className="hover:text-yellow-400 cursor-pointer">About Us</li>
                   <li className="hover:text-yellow-400 cursor-pointer">Services</li>
                   <li className="hover:text-yellow-400 cursor-pointer">Contact Us</li>
@@ -74,7 +74,7 @@ export default function Newsletter() {
 
               <div>
                 <h4 className="mb-3 text-white opacity-0">hidden</h4>
-                <ul className="space-y-2 text-gray-300">
+              <ul className="space-y-2 text-white-300">
                   <li className="hover:text-yellow-400 cursor-pointer">Our Team</li>
                   <li className="hover:text-yellow-400 cursor-pointer">Partnership</li>
                   <li className="hover:text-yellow-400 cursor-pointer">Career</li>
@@ -95,7 +95,7 @@ export default function Newsletter() {
             <div className="grid grid-cols-2 gap-10 text-sm mt-10">
               <div>
                 <h4 className="mb-3">Our Portfolio</h4>
-                <ul className="space-y-2 text-gray-300">
+              <ul className="space-y-2 text-white-300">
                   <li className="hover:text-yellow-400 cursor-pointer">Projects</li>
                   <li className="hover:text-yellow-400 cursor-pointer">Locations</li>
                 </ul>
@@ -103,7 +103,7 @@ export default function Newsletter() {
 
               <div>
                 <h4 className="mb-3 opacity-0">hidden</h4>
-                <ul className="space-y-2 text-gray-300">
+              <ul className="space-y-2 text-white-300">
                   <li className="hover:text-yellow-400 cursor-pointer">Our Partners</li>
                   <li className="hover:text-yellow-400 cursor-pointer">News & Media</li>
                 </ul>
@@ -114,7 +114,7 @@ export default function Newsletter() {
         {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-10 text-sm">
           
           <div>
-            <h4 className="text-gray-400 mb-4">Company Info</h4>
+            <h4 className="text-white-400 mb-4">Company Info</h4>
             <ul className="space-y-2">
               {["About Us", "Services", "Contact Us"].map((item, i) => (
                 <li
@@ -128,7 +128,7 @@ export default function Newsletter() {
           </div>
 
           <div>
-            <h4 className="text-gray-400 mb-4">Our Team</h4>
+            <h4 className="text-white-400 mb-4">Our Team</h4>
             <ul className="space-y-2">
               {["Our Team", "Partnership", "Career"].map((item, i) => (
                 <li
@@ -142,7 +142,7 @@ export default function Newsletter() {
           </div>
 
           <div>
-            <h4 className="text-gray-400 mb-4">Portfolio</h4>
+            <h4 className="text-white-400 mb-4">Portfolio</h4>
             <ul className="space-y-2">
               {["Projects", "Locations", "News & Media"].map((item, i) => (
                 <li

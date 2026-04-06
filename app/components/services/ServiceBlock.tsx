@@ -22,13 +22,13 @@ export default function ServiceBlock({
                     <h3 className="text-2xl md:text-3xl font-semibold transition group-hover:text-[#F1DC7F]">
                         {title}
                     </h3>
-                    <p className="text-white/70 text-sm md:text-base mt-2 max-w-3xl">
+                    <p className="text-white text-sm md:text-base mt-2 max-w-3xl">
                         {desc}
                     </p>
                 </div>
             </div>
 
-            <p className="text-gray-400 text-sm md:text-base leading-relaxed max-w-4xl">
+            <p className="text-white-400 text-sm md:text-base leading-relaxed max-w-4xl">
                 {longDesc}
             </p>
 

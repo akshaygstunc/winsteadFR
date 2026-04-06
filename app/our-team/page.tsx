@@ -5,8 +5,12 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import heroImg from "../../public/blog3.png";
-import memberImg from "../../public/images.jpeg";
-import memberImg2 from "../../public/images (1).jpeg";
+import memberImg from "../../public/female.png";
+import memberImg2 from "../../public/male.png";
+import memberImg3 from "../../public/male1.png";
+import memberImg4 from "../../public/female1.png";
+import memberImg5 from "../../public/male2.png";
+import memberImg6 from "../../public/female2.png";
 import TeamHero from "../components/teams/TeamHero";
 
 type TeamCategory =
@@ -66,7 +70,7 @@ const teamMembers: TeamMember[] = [
     name: "Nadia Rahman",
     role: "Luxury Sales Consultant",
     category: "Sales",
-    image: memberImg,
+    image: memberImg3,
     experience: "6+ Years Experience",
     languages: ["English", "Arabic"],
     tags: ["Waterfront", "Branded Residences", "Family Homes"],
@@ -77,7 +81,7 @@ const teamMembers: TeamMember[] = [
     name: "Daniel Morris",
     role: "International Client Advisor",
     category: "International",
-    image: memberImg2,
+    image: memberImg4,
     experience: "7+ Years Experience",
     languages: ["English", "French"],
     tags: ["Cross-Border Buyers", "Relocation", "Investment Planning"],
@@ -88,7 +92,7 @@ const teamMembers: TeamMember[] = [
     name: "Aisha Noor",
     role: "Leasing & Portfolio Consultant",
     category: "Leasing",
-    image: memberImg,
+    image: memberImg5,
     experience: "5+ Years Experience",
     languages: ["English", "Arabic"],
     tags: ["Premium Leasing", "Yield Focus", "Tenant Strategy"],
@@ -99,45 +103,13 @@ const teamMembers: TeamMember[] = [
     name: "Zaid Malik",
     role: "Luxury Property Consultant",
     category: "Sales",
-    image: memberImg2,
+    image: memberImg6,
     experience: "9+ Years Experience",
     languages: ["English", "Hindi"],
     tags: ["Villas", "End Users", "Negotiation"],
     slug: "zaid-malik",
   },
-  {
-    id: 7,
-    name: "Elena Petrova",
-    role: "Global Wealth & Property Advisor",
-    category: "International",
-    image: memberImg,
-    experience: "11+ Years Experience",
-    languages: ["English", "Russian"],
-    tags: ["UHNW Clients", "Global Buyers", "Luxury Assets"],
-    slug: "elena-petrova",
-  },
-  {
-    id: 8,
-    name: "Omar Faris",
-    role: "Real Estate Strategy Lead",
-    category: "Leadership",
-    image: memberImg,
-    experience: "12+ Years Experience",
-    languages: ["English", "Arabic"],
-    tags: ["Market Strategy", "Investment Vision", "Advisory"],
-    slug: "omar-faris",
-  },
-  {
-    id: 9,
-    name: "Mira Thomas",
-    role: "Investor Relations Advisor",
-    category: "Advisory",
-    image: memberImg2,
-    experience: "6+ Years Experience",
-    languages: ["English"],
-    tags: ["Capital Allocation", "Market Entry", "ROI Planning"],
-    slug: "mira-thomas",
-  },
+
 ];
 
 
@@ -164,7 +136,7 @@ function TeamTabsAndGrid() {
             </h2>
           </div>
 
-          <p className="text-gray-400 text-sm md:text-base max-w-xl leading-relaxed">
+          <p className="text-white-400 text-sm md:text-base max-w-xl leading-relaxed">
             Browse our specialists by function and discover the expertise that
             supports every stage of your buying, leasing, or investment journey.
           </p>
@@ -180,7 +152,7 @@ function TeamTabsAndGrid() {
                 onClick={() => setActiveTab(tab)}
                 className={`whitespace-nowrap rounded-full px-5 py-2.5 text-sm border transition ${isActive
                   ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
-                  : "border-white/10 bg-white/[0.03] text-white/70 hover:border-yellow-400/40 hover:text-white"
+                  : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
                   }`}
               >
                 {tab}
@@ -189,7 +161,7 @@ function TeamTabsAndGrid() {
           })}
         </div>
 
-        <div className="mb-8 text-sm text-gray-400">
+        <div className="mb-8 text-sm text-white-400">
           Showing{" "}
           <span className="text-yellow-400 font-medium">
             {filteredMembers.length}
@@ -208,7 +180,7 @@ function TeamTabsAndGrid() {
                   src={member.image}
                   alt={member.name}
                   fill
-                  className="object-cover transition duration-700 group-hover:scale-105"
+                  className="object-contain transition duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
 
@@ -217,7 +189,7 @@ function TeamTabsAndGrid() {
                 </div>
 
                 <div className="absolute bottom-4 left-4 right-4">
-                  <p className="inline-block px-3 py-1.5 rounded-full bg-black/65 border border-white/10 text-xs text-white/80 backdrop-blur-sm">
+                  <p className="inline-block px-3 py-1.5 rounded-full bg-black/65 border border-white/10 text-xs text-white backdrop-blur-sm">
                     {member.experience}
                   </p>
                 </div>
@@ -240,7 +212,7 @@ function TeamTabsAndGrid() {
                     {member.languages.map((language) => (
                       <span
                         key={language}
-                        className="px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-xs text-white/65"
+                        className="px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-xs text-white"
                       >
                         {language}
                       </span>
@@ -252,7 +224,7 @@ function TeamTabsAndGrid() {
                   {member.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-xs text-white/60"
+                      className="px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-xs text-white"
                     >
                       {tag}
                     </span>
@@ -291,7 +263,7 @@ function TeamCTA() {
               <h3 className="text-3xl md:text-4xl font-semibold leading-tight">
                 Speak with the right expert for your next property move
               </h3>
-              <p className="mt-4 text-gray-400 text-base md:text-lg leading-relaxed">
+              <p className="mt-4 text-white-400 text-base md:text-lg leading-relaxed">
                 Whether you are buying, investing, or leasing, our advisors are
                 ready to guide you with tailored market insight and premium
                 support.

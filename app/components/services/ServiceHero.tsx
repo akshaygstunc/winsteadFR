@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import serviceImg from "../../../public/services.png";
+import serviceImg from "../../../public/hero1.jpg";
 import { FaArrowRight } from "react-icons/fa";
 
 export default function ServicesHero() {
@@ -40,19 +40,6 @@ export default function ServicesHero() {
                             </span>
                         </h1>
 
-                        <p className="mt-4 max-w-[420px] text-sm md:text-base text-white/70 leading-relaxed">
-                            Expert support for buying, investing, and leasing premium properties.
-                        </p>
-
-                        <div className="mt-6 flex gap-3 flex-wrap">
-                            <button className="px-6 py-3 rounded-full text-sm font-medium text-black bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] hover:scale-[1.03] transition">
-                                Explore Services
-                            </button>
-
-                            <button className="px-6 py-3 rounded-full text-sm font-medium border border-white/20 hover:border-[#F1DC7F] hover:text-[#F1DC7F] transition">
-                                Speak With Expert
-                            </button>
-                        </div>
 
                     </div>
 

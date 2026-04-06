@@ -11,7 +11,7 @@ export default function DetailedServices({ services }: { services: any[] }) {
                     <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
                         A closer look at what we offer.
                     </h2>
-                    <p className="text-gray-400 leading-relaxed">
+                    <p className="text-white-400 leading-relaxed">
                         Each service is designed to solve a different property need while
                         keeping the experience structured, transparent, and client-focused.
                     </p>

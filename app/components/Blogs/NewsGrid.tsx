@@ -18,7 +18,7 @@ export default function NewsGrid({ news }: { news: NewsItem[] }) {
         <section className="bg-black text-white px-6 md:px-12 py-14 md:py-18">
             <div className="max-w-7xl mx-auto">
                 {news.length === 0 ? (
-                    <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-10 text-center text-white/60">
+                    <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-10 text-center text-white">
                         No articles found.
                     </div>
                 ) : (
@@ -35,7 +35,7 @@ export default function NewsGrid({ news }: { news: NewsItem[] }) {
                                     <Link href={`/news-media/${item.slug}`} className="block">
                                         <div className={`relative w-full ${isLarge ? "h-[320px] md:h-[360px]" : "h-[260px]"}`}>
                                             <Image
-                                                src={img}
+                                                src={item.img}
                                                 alt={item.title}
                                                 fill
                                                 className="object-cover transition duration-700 group-hover:scale-105"
@@ -55,7 +55,7 @@ export default function NewsGrid({ news }: { news: NewsItem[] }) {
                                                 {item.title}
                                             </h3>
 
-                                            <p className="mt-4 text-white/60 text-sm md:text-base leading-relaxed">
+                                            <p className="mt-4 text-white text-sm md:text-base leading-relaxed">
                                                 {item.desc}
                                             </p>
 

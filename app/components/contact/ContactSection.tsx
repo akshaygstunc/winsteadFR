@@ -14,7 +14,7 @@ export default function ContactSection({ contactPoints }: { contactPoints: strin
                         <h2 className="text-3xl md:text-4xl font-semibold leading-tight mb-4">
                             Register your interest with a more premium experience.
                         </h2>
-                        <p className="text-gray-400 leading-relaxed max-w-xl">
+                        <p className="text-white-400 leading-relaxed max-w-xl">
                             Share your preferences and our team will connect with relevant
                             options, next steps, and a more personalized property discussion.
                         </p>
@@ -27,7 +27,7 @@ export default function ContactSection({ contactPoints }: { contactPoints: strin
                                 className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4"
                             >
                                 <IoMdCheckboxOutline className="text-yellow-400 w-6 h-6 mt-0.5 shrink-0" />
-                                <p className="text-gray-300 leading-relaxed">{point}</p>
+                                <p className="text-white-300 leading-relaxed">{point}</p>
                             </div>
                         ))}
                     </div>
@@ -55,7 +55,7 @@ export default function ContactSection({ contactPoints }: { contactPoints: strin
                 {/* RIGHT SIDE FORM */}
                 <div className="rounded-[32px] border border-yellow-500/20 bg-white/5 backdrop-blur-sm p-6 md:p-8 shadow-[0_0_40px_rgba(250,204,21,0.08)]">
                     <div className="mb-8">
-                        <p className="text-sm uppercase tracking-[0.22em] text-gray-400 mb-2">
+                        <p className="text-sm uppercase tracking-[0.22em] text-white-400 mb-2">
                             Inquiry Form
                         </p>
                         <h3 className="text-2xl md:text-3xl font-semibold leading-tight">
@@ -67,32 +67,32 @@ export default function ContactSection({ contactPoints }: { contactPoints: strin
                     <form className="space-y-5">
                         {/* FULL NAME */}
                         <div>
-                            <label className="text-sm mb-2 block text-gray-300">Full Name</label>
+                            <label className="text-sm mb-2 block text-white-300">Full Name</label>
                             <input
                                 placeholder="Enter your full name"
-                                className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition"
+                                className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white-500 focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition"
                             />
                         </div>
 
                         {/* PHONE + EMAIL */}
                         <div className="grid md:grid-cols-2 gap-4">
                             <div>
-                                <label className="text-sm mb-2 block text-gray-300">Phone</label>
+                                <label className="text-sm mb-2 block text-white-300">Phone</label>
                                 <div className="flex items-center bg-black/40 border border-white/10 rounded-2xl px-4 py-4 focus-within:border-yellow-400 focus-within:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition">
                                     <div className="w-6 h-4 mr-2 rounded-sm bg-[linear-gradient(to_bottom,#00732f_33%,#fff_33%,#fff_66%,#000_66%)]" />
-                                    <span className="text-gray-300 mr-3">+971</span>
+                                    <span className="text-white-300 mr-3">+971</span>
                                     <input
-                                        className="bg-transparent outline-none flex-1 text-white placeholder:text-gray-500"
+                                        className="bg-transparent outline-none flex-1 text-white placeholder:text-white-500"
                                         placeholder="Enter phone"
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="text-sm mb-2 block text-gray-300">Email</label>
+                                <label className="text-sm mb-2 block text-white-300">Email</label>
                                 <input
                                     placeholder="Enter your email"
-                                    className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition"
+                                    className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white-500 focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition"
                                 />
                             </div>
                         </div>
@@ -100,7 +100,7 @@ export default function ContactSection({ contactPoints }: { contactPoints: strin
                         {/* SELECTS */}
                         <div className="grid md:grid-cols-2 gap-4">
                             <div>
-                                <label className="text-sm mb-2 block text-gray-300">Project Type</label>
+                                <label className="text-sm mb-2 block text-white-300">Project Type</label>
                                 <select className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition">
                                     <option>Apartment</option>
                                     <option>Villa</option>
@@ -109,7 +109,7 @@ export default function ContactSection({ contactPoints }: { contactPoints: strin
                             </div>
 
                             <div>
-                                <label className="text-sm mb-2 block text-gray-300">Bedrooms</label>
+                                <label className="text-sm mb-2 block text-white-300">Bedrooms</label>
                                 <select className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition">
                                     <option>1 Bedroom</option>
                                     <option>2 Bedrooms</option>
@@ -121,11 +121,11 @@ export default function ContactSection({ contactPoints }: { contactPoints: strin
 
                         {/* MESSAGE */}
                         <div>
-                            <label className="text-sm mb-2 block text-gray-300">Message</label>
+                            <label className="text-sm mb-2 block text-white-300">Message</label>
                             <textarea
                                 rows={5}
                                 placeholder="Tell us what kind of property or opportunity you are looking for"
-                                className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition resize-none"
+                                className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white-500 focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition resize-none"
                             />
                         </div>
 
@@ -138,7 +138,7 @@ export default function ContactSection({ contactPoints }: { contactPoints: strin
                         </button>
 
                         {/* FOOTER TEXT */}
-                        <p className="text-xs text-gray-500 text-center mt-3 leading-relaxed">
+                        <p className="text-xs text-white-500 text-center mt-3 leading-relaxed">
                             By submitting this form, you agree to our{" "}
                             <span className="text-yellow-400">Terms & Conditions</span> and{" "}
                             <span className="text-yellow-400">Privacy Policy</span>.

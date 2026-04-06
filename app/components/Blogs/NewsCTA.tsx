@@ -10,7 +10,7 @@ export default function NewsCTA() {
                     Follow the market with sharper insight and more perspective.
                 </h2>
 
-                <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-8">
+                <p className="text-white-400 max-w-2xl mx-auto leading-relaxed mb-8">
                     Explore curated updates, premium property intelligence, and real
                     estate signals designed for more informed decisions.
                 </p>

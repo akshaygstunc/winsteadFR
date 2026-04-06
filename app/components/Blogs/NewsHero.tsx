@@ -1,5 +1,5 @@
 import Image from "next/image";
-import banner from "../../../public/services.png";
+import banner from "../../../public/hero3.jpg";
 
 
 export default function NewsHero() {
@@ -38,20 +38,7 @@ export default function NewsHero() {
                             </span>
                         </h1>
 
-                        <p className="mt-4 max-w-[420px] text-sm md:text-base text-white/70 leading-relaxed">
-                            Stay ahead with curated market movements, premium property trends
-                        </p>
 
-                        <div className="flex flex-wrap gap-3 mt-8">
-                            {["Market Trends", "Luxury Insights", "Investment Signals"].map((item) => (
-                                <span
-                                    key={item}
-                                    className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-gray-200 backdrop-blur-sm"
-                                >
-                                    {item}
-                                </span>
-                            ))}
-                        </div>
 
                     </div>
 

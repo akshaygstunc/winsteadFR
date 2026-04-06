@@ -14,7 +14,7 @@ export default function Check({ label, filters, setFilters }: any) {
                     }));
                 }}
             />
-            <span className="group-hover:text-white text-gray-300 transition">{label}</span>
+            <span className="group-hover:text-white text-white-300 transition">{label}</span>
         </label>
     );
 }

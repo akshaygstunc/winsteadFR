@@ -11,7 +11,7 @@ export default function TeamAbout({ teamPerson }: { teamPerson: string }) {
                     </h2>
                 </div>
 
-                <div className="space-y-5 text-gray-400 leading-relaxed">
+                <div className="space-y-5 text-white-400 leading-relaxed">
                     <p>
                         Sophie works closely with clients who value more than just listings.
                         Her focus is on understanding intent, identifying relevant

@@ -10,7 +10,7 @@ export default function HowItWorks({processSteps}: {processSteps: any[]}) {
                     <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
                         A simple process designed to reduce confusion.
                     </h2>
-                    <p className="text-gray-400 leading-relaxed">
+                    <p className="text-white-400 leading-relaxed">
                         Our workflow helps clients move through the real estate journey with
                         better clarity, better filtering, and more confidence.
                     </p>
@@ -26,7 +26,7 @@ export default function HowItWorks({processSteps}: {processSteps: any[]}) {
                                 {index + 1}
                             </div>
                             <h3 className="text-xl font-semibold mb-3 pr-10">{step.title}</h3>
-                            <p className="text-gray-400 leading-relaxed text-sm md:text-base">
+                            <p className="text-white-400 leading-relaxed text-sm md:text-base">
                                 {step.desc}
                             </p>
                         </div>

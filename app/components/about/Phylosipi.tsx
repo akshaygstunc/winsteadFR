@@ -27,7 +27,7 @@ export default function AboutPhilosophy() {
                     <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
                         What Makes Winstead Different
                     </h2>
-                    <p className="text-gray-400 leading-relaxed">
+                    <p className="text-white-400 leading-relaxed">
                         We do not believe great real estate service is about showing more.
                         It is about understanding better, filtering smarter, and guiding with integrity.
                     </p>
@@ -45,7 +45,7 @@ export default function AboutPhilosophy() {
                             <h3 className="text-xl font-semibold text-white mb-3">
                                 {item.title}
                             </h3>
-                            <p className="text-gray-400 leading-relaxed">
+                            <p className="text-white-400 leading-relaxed">
                                 {item.description}
                             </p>
                         </div>

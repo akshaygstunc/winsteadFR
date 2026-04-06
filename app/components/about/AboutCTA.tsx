@@ -10,7 +10,7 @@ export default function AboutCTA() {
                     Start your property journey with more clarity and less guesswork.
                 </h2>
 
-                <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-8">
+                <p className="text-white-400 max-w-2xl mx-auto leading-relaxed mb-8">
                     Whether you are exploring opportunities, comparing options, or ready
                     to move forward, Winstead is here to guide you with confidence.
                 </p>

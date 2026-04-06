@@ -8,7 +8,7 @@ export default function ProjectsCTA() {
                 <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-5">
                     Let us help you discover the right property with more clarity.
                 </h2>
-                <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-8">
+                <p className="text-white-400 max-w-2xl mx-auto leading-relaxed mb-8">
                     From luxury residences to investment-led opportunities, Winstead helps you
                     shortlist better options and move forward with confidence.
                 </p>

@@ -44,7 +44,7 @@ export default function Hero() {
             <FaCircleNotch className="animate-spin text-yellow-400 text-3xl" />
 
             {/* OPTIONAL TEXT */}
-            <p className="text-sm text-gray-400 tracking-wide">
+            <p className="text-sm text-white-400 tracking-wide">
               Loading experience...
             </p>
           </div>

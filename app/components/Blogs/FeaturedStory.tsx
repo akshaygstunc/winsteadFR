@@ -26,7 +26,7 @@ export default function FeaturedStory() {
                     </div>
 
                     <div className="space-y-5">
-                        <p className="text-sm uppercase tracking-[0.22em] text-gray-400">
+                        <p className="text-sm uppercase tracking-[0.22em] text-white-400">
                             March 2026
                         </p>
 
@@ -34,14 +34,14 @@ export default function FeaturedStory() {
                             Dubai’s luxury property market continues to set new benchmarks.
                         </h3>
 
-                        <p className="text-gray-400 leading-relaxed text-base md:text-lg">
+                        <p className="text-white-400 leading-relaxed text-base md:text-lg">
                             High-net-worth investors are continuing to reshape demand across
                             the premium property segment, with design-led developments,
                             waterfront locations, and branded residences remaining at the
                             center of attention.
                         </p>
 
-                        <p className="text-gray-400 leading-relaxed text-base md:text-lg">
+                        <p className="text-white-400 leading-relaxed text-base md:text-lg">
                             As capital becomes more selective, curated real estate strategies
                             are proving more valuable than broad market exposure.
                         </p>

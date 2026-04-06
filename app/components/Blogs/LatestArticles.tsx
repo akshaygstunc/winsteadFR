@@ -1,7 +1,7 @@
 import { FaArrowRight } from "react-icons/fa6";
 import Image from "next/image";
 import img from "../../../public/image_7.png";
-export default function LatestArticles({ news }: { news: { id: number; title: string; desc: string; date: string; category: string }[] }) {
+export default function LatestArticles({ news }: { news: { id: number; title: string; desc: string; date: string; category: string, img: string }[] }) {
     return (
         <section className="py-20 px-6 md:px-12 border-b border-white/10">
             <div className="max-w-7xl mx-auto">
@@ -28,7 +28,7 @@ export default function LatestArticles({ news }: { news: { id: number; title: st
                         >
                             <div className="relative h-[260px] overflow-hidden">
                                 <Image
-                                    src={img}
+                                    src={item.img}
                                     alt={item.title}
                                     fill
                                     className="object-cover group-hover:scale-105 transition duration-700"
@@ -41,7 +41,7 @@ export default function LatestArticles({ news }: { news: { id: number; title: st
                             </div>
 
                             <div className="p-5 space-y-4">
-                                <p className="text-xs uppercase tracking-[0.18em] text-gray-400">
+                                <p className="text-xs uppercase tracking-[0.18em] text-white-400">
                                     {item.date}
                                 </p>
 
@@ -49,7 +49,7 @@ export default function LatestArticles({ news }: { news: { id: number; title: st
                                     {item.title}
                                 </h3>
 
-                                <p className="text-sm text-gray-400 leading-relaxed">
+                                <p className="text-sm text-white-400 leading-relaxed">
                                     {item.desc}
                                 </p>
 

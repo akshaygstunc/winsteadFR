@@ -10,7 +10,7 @@ export default function ServicesOverview({ services }: { services: any[] }) {
                     <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
                         Focused services for different real estate goals.
                     </h2>
-                    <p className="text-gray-400 leading-relaxed">
+                    <p className="text-white-400 leading-relaxed">
                         Whether your priority is investment growth, immediate ownership, or
                         long-term leasing, our services are designed to match specific
                         property goals with greater precision.
@@ -27,7 +27,7 @@ export default function ServicesOverview({ services }: { services: any[] }) {
                                 0{index + 1}
                             </div>
                             <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                            <p className="text-gray-400 leading-relaxed text-sm md:text-base">
+                            <p className="text-white-400 leading-relaxed text-sm md:text-base">
                                 {service.desc}
                             </p>
                         </div>

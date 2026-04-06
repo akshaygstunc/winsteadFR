@@ -13,7 +13,7 @@ export default function ResultsBar({ count, filters }: any) {
                         {active.map((item: string) => (
                             <span
                                 key={item}
-                                className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-sm text-gray-300"
+                                className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-sm text-white-300"
                             >
                                 {item}
                             </span>
@@ -22,7 +22,7 @@ export default function ResultsBar({ count, filters }: any) {
                 )}
             </div>
 
-            <button className="border border-white/10 text-gray-300 px-5 py-3 rounded-full hover:border-yellow-500 hover:text-white transition w-fit">
+            <button className="border border-white/10 text-white-300 px-5 py-3 rounded-full hover:border-yellow-500 hover:text-white transition w-fit">
                 Sort by Featured
             </button>
         </div>

@@ -107,7 +107,7 @@ export default function Navbar() {
                 <span className="text-2xs font-semibold text-white">4.8</span>
                 <span className="text-yellow-500 text-sm">★★★★★</span>
               </div>
-              <p className="text-gray-400 text-xs">
+              <p className="text-white-400 text-xs">
                 Rated by&nbsp; 200+ clients
               </p>
             </div>
@@ -159,7 +159,7 @@ export default function Navbar() {
                 <span className="text-2xs font-semibold text-white">4.8</span>
                 <span className="text-yellow-500 text-sm">★★★★★</span>
               </div>
-              <p className="text-gray-400 text-xs">
+              <p className="text-white-400 text-xs">
                 Rated by&nbsp; 200+ clients
               </p>
             </div>

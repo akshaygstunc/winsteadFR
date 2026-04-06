@@ -25,7 +25,7 @@ export default function ProjectCard({ data }: any) {
                 <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-5">
                     <h2 className="text-xl font-semibold mb-3">{data.title}</h2>
 
-                    <div className="space-y-2 text-sm text-gray-300">
+                    <div className="space-y-2 text-sm text-white-300">
                         <div className="flex items-center gap-2">
                             <FaBed className="text-yellow-400 text-xs" />
                             2-8 Bedrooms

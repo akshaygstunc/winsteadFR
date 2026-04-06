@@ -221,7 +221,7 @@ export default function ProjectDetailPage() {
       <div className="min-h-screen bg-black text-white px-6 md:px-12 py-14">
         <Link
           href="/projects"
-          className="inline-flex items-center gap-2 text-sm text-gray-300 hover:text-white transition"
+          className="inline-flex items-center gap-2 text-sm text-white-300 hover:text-white transition"
         >
           <FaArrowLeft />
           Back to Projects
@@ -229,7 +229,7 @@ export default function ProjectDetailPage() {
 
         <div className="mt-8 rounded-[28px] border border-white/10 bg-white/[0.03] p-8">
           <h1 className="text-2xl font-semibold mb-2">Project not found</h1>
-          <p className="text-gray-400">
+          <p className="text-white-400">
             The requested property could not be located.
           </p>
         </div>
@@ -311,7 +311,7 @@ export default function ProjectDetailPage() {
         <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 text-sm text-gray-300 hover:text-white transition"
+            className="inline-flex items-center gap-2 text-sm text-white-300 hover:text-white transition"
           >
             <FaArrowLeft />
             Back to Projects
@@ -350,12 +350,12 @@ export default function ProjectDetailPage() {
                   {project.title}
                 </h1>
 
-                <div className="flex items-center gap-2 text-base md:text-lg text-gray-200 mb-4">
+                <div className="flex items-center gap-2 text-base md:text-lg text-white-200 mb-4">
                   <FaMapMarkerAlt className="text-yellow-400" />
                   {project.subLocation}, {project.location}
                 </div>
 
-                <p className="max-w-[620px] text-sm md:text-base text-gray-300 leading-relaxed">
+                <p className="max-w-[620px] text-sm md:text-base text-white-300 leading-relaxed">
                   {project.description}
                 </p>
               </div>
@@ -395,7 +395,7 @@ export default function ProjectDetailPage() {
             </div>
 
             <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6 shadow-[0_0_40px_rgba(250,204,21,0.06)]">
-              <div className="space-y-3 text-sm text-gray-300">
+              <div className="space-y-3 text-sm text-white-300">
                 <MetaRow label="Developer" value={project.developer} />
                 <MetaRow label="Property Type" value={project.residence} />
                 <MetaRow label="Handover" value={project.handover} />
@@ -445,7 +445,7 @@ export default function ProjectDetailPage() {
                   onClick={() => setActiveTab(tab)}
                   className={`whitespace-nowrap rounded-full px-5 py-3 text-sm border transition ${active
                     ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
-                    : "border-white/10 bg-white/[0.03] text-white/70 hover:border-yellow-400/40 hover:text-white"
+                    : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
                     }`}
                 >
                   {tab === "floorplans"
@@ -468,7 +468,7 @@ export default function ProjectDetailPage() {
                 <h2 className="text-3xl md:text-4xl font-semibold leading-tight mb-5">
                   Premium living shaped by design, location, and long-term value
                 </h2>
-                <p className="text-gray-400 leading-relaxed text-base md:text-lg">
+                <p className="text-white-400 leading-relaxed text-base md:text-lg">
                   {project.description}
                 </p>
 
@@ -479,7 +479,7 @@ export default function ProjectDetailPage() {
                       className="rounded-2xl border border-white/10 bg-black/30 p-4 flex items-start gap-3"
                     >
                       <FaCheckCircle className="text-yellow-400 mt-1 shrink-0" />
-                      <p className="text-gray-300 text-sm leading-relaxed">
+                      <p className="text-white-300 text-sm leading-relaxed">
                         {item}
                       </p>
                     </div>
@@ -491,7 +491,7 @@ export default function ProjectDetailPage() {
                 <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
                   Why It Stands Out
                 </p>
-                <div className="space-y-5 text-gray-400">
+                <div className="space-y-5 text-white-400">
                   <div>
                     <h3 className="text-white text-lg font-semibold mb-2">
                       Strategic Positioning
@@ -549,7 +549,7 @@ export default function ProjectDetailPage() {
                         onClick={() => setSelectedPlan(plan.label)}
                         className={`rounded-full px-5 py-2.5 text-sm border transition ${active
                           ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
-                          : "border-white/10 bg-white/[0.03] text-white/70 hover:border-yellow-400/40 hover:text-white"
+                          : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
                           }`}
                       >
                         {plan.label}
@@ -657,7 +657,7 @@ export default function ProjectDetailPage() {
                     onClick={() => setCalcTab("mortgage")}
                     className={`rounded-full px-6 py-3 text-xs md:text-sm font-semibold tracking-[0.18em] uppercase transition ${calcTab === "mortgage"
                       ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
-                      : "border border-white/10 bg-white/[0.03] text-white/65 hover:border-yellow-400/30 hover:text-white"
+                      : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
                       }`}
                   >
                     Mortgage Calculator
@@ -667,7 +667,7 @@ export default function ProjectDetailPage() {
                     onClick={() => setCalcTab("payment-plan")}
                     className={`rounded-full px-6 py-3 text-xs md:text-sm font-semibold tracking-[0.18em] uppercase transition ${calcTab === "payment-plan"
                       ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
-                      : "border border-white/10 bg-white/[0.03] text-white/65 hover:border-yellow-400/30 hover:text-white"
+                      : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
                       }`}
                   >
                     Payment Plans
@@ -678,7 +678,7 @@ export default function ProjectDetailPage() {
                   {/* left side */}
                   <div className="rounded-[28px] border border-white/10 bg-black/25 p-5 md:p-7">
                     <div className="mb-8">
-                      <label className="block text-sm font-medium text-gray-300 mb-3">
+                      <label className="block text-sm font-medium text-white-300 mb-3">
                         Select Unit
                       </label>
 
@@ -764,7 +764,7 @@ export default function ProjectDetailPage() {
                       </div>
 
                       <div className="text-left md:text-right">
-                        <p className="text-sm uppercase tracking-[0.15em] text-gray-400 mb-1">
+                        <p className="text-sm uppercase tracking-[0.15em] text-white-400 mb-1">
                           Property Value
                         </p>
                         <p className="text-3xl md:text-5xl font-semibold leading-none text-transparent bg-clip-text bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)]">
@@ -897,7 +897,7 @@ export default function ProjectDetailPage() {
                 <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-4">
                   Let’s help you evaluate the right opportunity with more clarity
                 </h2>
-                <p className="text-gray-400 leading-relaxed">
+                <p className="text-white-400 leading-relaxed">
                   Speak with our team for brochure access, floor plans, pricing,
                   availability, and personalized project guidance.
                 </p>
@@ -950,7 +950,7 @@ function FactCard({
     <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
       <div className="flex items-center gap-3 mb-3">
         {icon}
-        <p className="text-sm text-gray-400">{label}</p>
+        <p className="text-sm text-white-400">{label}</p>
       </div>
       <p className="text-white font-semibold">{value}</p>
     </div>
@@ -990,7 +990,7 @@ function PremiumCalcInput({
 }) {
   return (
     <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
-      <label className="block text-sm text-gray-400 mb-2">{label}</label>
+      <label className="block text-sm text-white-400 mb-2">{label}</label>
       <input
         type="number"
         value={value}
@@ -1020,12 +1020,12 @@ function PremiumResultCard({
         : "border-white/10 bg-white/[0.03]"
         }`}
     >
-      <p className="text-sm text-gray-400">{title}</p>
+      <p className="text-sm text-white-400">{title}</p>
       <div>
         <p className="text-2xl md:text-3xl font-semibold text-white leading-tight">
           {value}
         </p>
-        <p className="mt-2 text-base font-medium text-gray-300">{suffix}</p>
+        <p className="mt-2 text-base font-medium text-white-300">{suffix}</p>
       </div>
     </div>
   );
@@ -1042,7 +1042,7 @@ function PremiumBreakdownRow({
 }) {
   return (
     <div className="flex items-center justify-between gap-5">
-      <p className={bold ? "text-lg md:text-xl font-semibold text-white" : "text-base md:text-lg text-gray-300"}>
+      <p className={bold ? "text-lg md:text-xl font-semibold text-white" : "text-base md:text-lg text-white-300"}>
         {label}
       </p>
       <p className={bold ? "text-lg md:text-xl font-semibold text-yellow-400" : "text-base md:text-lg font-medium text-white"}>
@@ -1104,21 +1104,21 @@ function ContactModal({
               {getModalHeading(intent)}
             </h3>
 
-            <p className="text-gray-400 leading-relaxed mb-6">
+            <p className="text-white-400 leading-relaxed mb-6">
               Share your details and our team will connect with you regarding{" "}
               <span className="text-white font-medium">{projectTitle}</span>.
             </p>
 
             <div className="space-y-4">
               <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                <p className="text-xs uppercase tracking-[0.16em] text-gray-500 mb-1">
+                <p className="text-xs uppercase tracking-[0.16em] text-white-500 mb-1">
                   Project
                 </p>
                 <p className="text-white font-medium">{projectTitle}</p>
               </div>
 
               <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                <p className="text-xs uppercase tracking-[0.16em] text-gray-500 mb-1">
+                <p className="text-xs uppercase tracking-[0.16em] text-white-500 mb-1">
                   Request Type
                 </p>
                 <p className="text-white font-medium">{getIntentLabel(intent)}</p>
@@ -1136,7 +1136,7 @@ function ContactModal({
 
             <form onSubmit={onSubmit} className="space-y-4 pr-0 md:pr-8">
               <div>
-                <label className="text-sm text-gray-300 mb-2 block">
+                <label className="text-sm text-white-300 mb-2 block">
                   Full Name
                 </label>
                 <input
@@ -1151,7 +1151,7 @@ function ContactModal({
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm text-gray-300 mb-2 block">
+                  <label className="text-sm text-white-300 mb-2 block">
                     Email Address
                   </label>
                   <input
@@ -1166,7 +1166,7 @@ function ContactModal({
                 </div>
 
                 <div>
-                  <label className="text-sm text-gray-300 mb-2 block">
+                  <label className="text-sm text-white-300 mb-2 block">
                     Phone Number
                   </label>
                   <input
@@ -1181,7 +1181,7 @@ function ContactModal({
               </div>
 
               <div>
-                <label className="text-sm text-gray-300 mb-2 block">
+                <label className="text-sm text-white-300 mb-2 block">
                   Message
                 </label>
                 <textarea

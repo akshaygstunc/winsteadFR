@@ -21,7 +21,7 @@ function CheckboxItem({ label, filters, setFilters }: CheckboxProps) {
                 onChange={(e) => setChecked(e.target.checked)}
                 className="w-4 h-4 rounded"
             />
-            <span className="text-sm text-gray-300">{label}</span>
+            <span className="text-sm text-white-300">{label}</span>
         </label>
     );
 }
@@ -45,8 +45,8 @@ export default function Sidebar({ filters, setFilters }: any) {
             </Collapsible>
 
             <div className="mb-7">
-                <p className="text-sm uppercase tracking-[0.14em] text-gray-400 mb-3">Size</p>
-                <div className="flex justify-between text-xs mb-3 text-gray-300">
+                <p className="text-sm uppercase tracking-[0.14em] text-white-400 mb-3">Size</p>
+                <div className="flex justify-between text-xs mb-3 text-white-300">
                     <span>{size[0].toLocaleString()} sq. ft.</span>
                     <span>{size[1].toLocaleString()} sq. ft.</span>
                 </div>
@@ -65,8 +65,8 @@ export default function Sidebar({ filters, setFilters }: any) {
             </div>
 
             <div className="mb-7">
-                <p className="text-sm uppercase tracking-[0.14em] text-gray-400 mb-3">Price Range</p>
-                <div className="flex justify-between text-xs mb-3 text-gray-300">
+                <p className="text-sm uppercase tracking-[0.14em] text-white-400 mb-3">Price Range</p>
+                <div className="flex justify-between text-xs mb-3 text-white-300">
                     <span>{price[0].toLocaleString()} AED</span>
                     <span>{price[1].toLocaleString()} AED</span>
                 </div>

@@ -37,7 +37,7 @@ function FeaturedProjects() {
         <h2 className="text-2xl md:text-3xl font-semibold">
           Featured Projects
         </h2>
-        <p className="text-gray-400 text-[.95rem] mt-2 max-w-xl">
+        <p className="text-white-400 text-[.95rem] mt-2 max-w-xl">
           Discover exceptional properties with Winstead in premium locations worldwide.
         </p>
       </div>
@@ -170,7 +170,7 @@ export default function Projects() {
           <h2 className="text-2xl md:text-3xl font-semibold">
             Featured Projects
           </h2>
-          <p className="text-gray-400 text-md mt-2 max-w-xl">
+          <p className="text-white-400 text-md mt-2 max-w-xl">
             Discover exceptional properties with Winstead in premium locations
             worldwide.
           </p>
@@ -238,7 +238,7 @@ function Card({ img }: any) {
       <div className="absolute bottom-0 p-5 w-full transition duration-500 group-hover:translate-y-[-4px]">
         <h3 className="text-lg md:text-xl font-semibold">Aurelia Heights</h3>
 
-        <div className="text-[1.15rem] md:text-sm text-gray-300 mt-2 space-y-1 opacity-90">
+        <div className="text-[1.15rem] md:text-sm text-white mt-2 space-y-1 opacity-90">
           <p className="text-[1.05rem]">2–8</p>
           <p className="text-[1.05rem]">$2.3M – $3.8M</p>
           <p className="text-[1.05rem]">2,800 – 7,200 sq.ft.</p>

@@ -113,7 +113,7 @@ export default function Testimonials() {
               </span>
             </h2>
 
-            <p className="testimonial-subtext mt-5 text-white/60 text-base md:text-lg leading-relaxed">
+            <p className="testimonial-subtext mt-5 text-white/90 text-base md:text-lg leading-relaxed">
               Discover how our clients experienced a smoother, smarter, and more
               refined property journey with expert guidance every step of the way.
             </p>
@@ -163,7 +163,13 @@ export default function Testimonials() {
                 </div>
 
                 {/* stars */}
-                <div className="flex gap-1 mb-5">
+               
+
+                {/* review text */}
+                <p className="text-[15px] md:text-[16px] leading-7 text-white">
+                  {review.text}
+                </p>
+                <div className="flex gap-1 mt-5">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <div
                       key={star}
@@ -173,15 +179,9 @@ export default function Testimonials() {
                     </div>
                   ))}
                 </div>
-
-                {/* review text */}
-                <p className="text-[15px] md:text-[16px] leading-7 text-white/70">
-                  {review.text}
-                </p>
-
                 {/* bottom accent */}
                 <div className="mt-7 pt-5 border-t border-white/10 flex items-center justify-between">
-                  <span className="text-xs uppercase tracking-[0.22em] text-white/35">
+                  <span className="text-xs uppercase tracking-[0.22em] text-white">
                     Verified Review
                   </span>
 

@@ -32,7 +32,7 @@ export default function AboutProcess() {
                     <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
                         A Clear Process. A More Confident Decision.
                     </h2>
-                    <p className="text-gray-400 leading-relaxed">
+                    <p className="text-white-400 leading-relaxed">
                         Our process is designed to remove confusion and create a smoother, more guided real estate experience.
                     </p>
                 </div>
@@ -49,7 +49,7 @@ export default function AboutProcess() {
                             <h3 className="text-xl font-semibold text-white mb-3 pr-10">
                                 {step.title}
                             </h3>
-                            <p className="text-gray-400 leading-relaxed text-sm md:text-base">
+                            <p className="text-white-400 leading-relaxed text-sm md:text-base">
                                 {step.description}
                             </p>
                         </div>

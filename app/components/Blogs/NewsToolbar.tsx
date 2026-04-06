@@ -24,7 +24,7 @@ export default function NewsToolbar({
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col xl:flex-row gap-4 xl:items-center xl:justify-between">
                     <div className="relative w-full xl:max-w-md">
-                        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
+                        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white" />
                         <input
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}

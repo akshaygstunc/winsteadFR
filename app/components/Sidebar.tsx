@@ -85,7 +85,7 @@ export default function Sidebar({ filters, setFilters }: any) {
 function Section({ title, children }: any) {
   return (
     <div className="mb-6">
-      <p className="text-sm text-gray-400 mb-3">{title}</p>
+      <p className="text-sm text-white-400 mb-3">{title}</p>
       <div className="space-y-2">{children}</div>
     </div>
   );
@@ -106,7 +106,7 @@ function Check({ label, filters, setFilters }: any) {
         }
         className="w-4 h-4"
       />
-      <span className="text-gray-300 group-hover:text-white">{label}</span>
+      <span className="text-white-300 group-hover:text-white">{label}</span>
     </label>
   );
 }
@@ -118,7 +118,7 @@ function Collapsible({ title, children, open, toggle }: any) {
         onClick={toggle}
         className="flex justify-between items-center cursor-pointer mb-3"
       >
-        <p className="text-sm text-gray-400">{title}</p>
+        <p className="text-sm text-white-400">{title}</p>
         <ChevronDown className={`${open ? "rotate-180" : ""}`} />
       </div>
       {open && <div className="space-y-2">{children}</div>}
@@ -129,7 +129,7 @@ function Collapsible({ title, children, open, toggle }: any) {
 function RangeSlider({ title, value, setValue, min, max, unit }: any) {
   return (
     <div className="mb-6">
-      <p className="text-sm text-gray-400 mb-3">{title}</p>
+      <p className="text-sm text-white-400 mb-3">{title}</p>
 
       <div className="flex justify-between text-xs mb-2">
         <span>{value[0].toLocaleString()} {unit}</span>

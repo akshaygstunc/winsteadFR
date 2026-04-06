@@ -8,6 +8,9 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import img from "../../public/image_7.png";
+import img2 from "../../public/hero4.png";
+import img3 from "../../public/hero2.png";
+import img4 from "../../public/hero3.jpg";
 import { FaBed, FaDollarSign, FaRulerCombined } from "react-icons/fa6";
 import { FaMapMarkerAlt, FaArrowRight } from "react-icons/fa";
 import Slider from "rc-slider";
@@ -39,7 +42,7 @@ const allProjects = [
     location: "Dubai",
     subLocation: "Business Bay",
     category: "Elite",
-    image: img,
+    image: img2,
     price: "From AED 1.8M",
     area: "1,200 – 2,100 sq.ft.",
   },
@@ -52,7 +55,7 @@ const allProjects = [
     location: "Dubai",
     subLocation: "Palm Jumeirah",
     category: "Ultra Luxury",
-    image: img,
+    image: img4,
     price: "From AED 8.5M",
     area: "4,500 – 8,100 sq.ft.",
   },
@@ -65,7 +68,7 @@ const allProjects = [
     location: "Abu Dhabi",
     subLocation: "Saadiyat Island",
     category: "Luxury",
-    image: img,
+    image: img3,
     price: "From AED 3.4M",
     area: "2,300 – 3,900 sq.ft.",
   },
@@ -164,7 +167,7 @@ function ProjectsContent() {
             ) : (
               <div className="col-span-full rounded-3xl border border-white/10 bg-white/5 p-10 text-center">
                 <h3 className="text-2xl font-semibold mb-3">No matching properties found</h3>
-                <p className="text-gray-400">
+                  <p className="text-white-400">
                   Try adjusting your filters to explore more curated opportunities.
                 </p>
               </div>
@@ -294,7 +297,7 @@ function ResultsBar({ count, filters }: any) {
             {active.map((item: string) => (
               <span
                 key={item}
-                className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-sm text-gray-300"
+                className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-sm text-white-300"
               >
                 {item}
               </span>
@@ -303,7 +306,7 @@ function ResultsBar({ count, filters }: any) {
         )}
       </div>
 
-      <button className="border border-white/10 text-gray-300 px-5 py-3 rounded-full hover:border-yellow-500 hover:text-white transition w-fit">
+      <button className="border border-white/10 text-white-300 px-5 py-3 rounded-full hover:border-yellow-500 hover:text-white transition w-fit">
         Sort by Featured
       </button>
     </div>
@@ -341,8 +344,8 @@ function Sidebar({ filters, setFilters }: any) {
         ))}
       </Section>
       <div className="mb-7">
-        <p className="text-sm uppercase tracking-[0.14em] text-gray-400 mb-3">Size</p>
-        <div className="flex justify-between text-xs mb-3 text-gray-300">
+        <p className="text-sm uppercase tracking-[0.14em] text-white-400 mb-3">Size</p>
+        <div className="flex justify-between text-xs mb-3 text-white-300">
           <span>{size[0].toLocaleString()} sq. ft.</span>
           <span>{size[1].toLocaleString()} sq. ft.</span>
         </div>
@@ -361,8 +364,8 @@ function Sidebar({ filters, setFilters }: any) {
       </div>
 
       <div className="mb-7">
-        <p className="text-sm uppercase tracking-[0.14em] text-gray-400 mb-3">Price Range</p>
-        <div className="flex justify-between text-xs mb-3 text-gray-300">
+        <p className="text-sm uppercase tracking-[0.14em] text-white-400 mb-3">Price Range</p>
+        <div className="flex justify-between text-xs mb-3 text-white-300">
           <span>{price[0].toLocaleString()} AED</span>
           <span>{price[1].toLocaleString()} AED</span>
         </div>
@@ -406,7 +409,7 @@ function Sidebar({ filters, setFilters }: any) {
 function Section({ title, children }: any) {
   return (
     <div className="mb-7">
-      <p className="text-sm uppercase tracking-[0.14em] text-gray-400 mb-3">{title}</p>
+      <p className="text-sm uppercase tracking-[0.14em] text-white-400 mb-3">{title}</p>
       <div className="space-y-2">{children}</div>
     </div>
   );
@@ -427,7 +430,7 @@ function Check({ label, valueKey = "category", filters, setFilters }: any) {
           }));
         }}
       />
-      <span className="group-hover:text-white text-gray-300 transition">{label}</span>
+      <span className="group-hover:text-white text-white-300 transition">{label}</span>
     </label>
   );
 }
@@ -436,7 +439,7 @@ function Collapsible({ title, children, open, toggle }: any) {
   return (
     <div className="mb-7 border-t border-white/10 pt-5">
       <div className="flex justify-between items-center cursor-pointer mb-3" onClick={toggle}>
-        <p className="text-sm uppercase tracking-[0.14em] text-gray-400">{title}</p>
+        <p className="text-sm uppercase tracking-[0.14em] text-white-400">{title}</p>
         <ChevronDown size={16} className={`transition ${open ? "rotate-180" : ""}`} />
       </div>
       {open && <div className="space-y-2">{children}</div>}
@@ -468,7 +471,7 @@ function ProjectCard({ data }: any) {
           <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-5">
             <h2 className="text-xl font-semibold mb-3">{data.title}</h2>
 
-            <div className="space-y-2 text-sm text-gray-300">
+            <div className="space-y-2 text-sm text-white-300">
               <div className="flex items-center gap-2">
                 <FaBed className="text-yellow-400 text-xs" />
                 {data.bedrooms}
@@ -512,7 +515,7 @@ function ProjectsCTA() {
         <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-5">
           Let us help you discover the right property with more clarity.
         </h2>
-        <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-8">
+        <p className="text-white-400 max-w-2xl mx-auto leading-relaxed mb-8">
           From luxury residences to investment-led opportunities, Winstead helps you
           shortlist better options and move forward with confidence.
         </p>
