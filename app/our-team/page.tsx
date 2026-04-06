@@ -292,7 +292,7 @@ export default function TeamPage() {
     <main className="bg-black text-white">
       <TeamHero />
       <TeamTabsAndGrid />
-      <TeamCTA />
+      {/* <TeamCTA /> */}
     </main>
   );
 }

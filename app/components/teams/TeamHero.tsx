@@ -11,7 +11,7 @@ export default function TeamHero({ teamPerson }: { teamPerson: string }) {
             <div className="absolute inset-0">
                 <Image
                     src={heroImg}
-                    alt={teamPerson}
+                    alt={"Winstead global Team page"}
                     fill
                     priority
                     className="object-cover object-center"

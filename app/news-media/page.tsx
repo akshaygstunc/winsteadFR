@@ -197,7 +197,7 @@ export default function NewsMedia() {
         setSort={setSort}
       />
       <NewsGrid news={news} />
-      <NewsCTA />
+      {/* <NewsCTA /> */}
     </div>
   );
 }
