@@ -109,9 +109,9 @@ export default function Footer() {
               Book a Consultation
             </button>
 
-            <button className="px-6 py-3 rounded-full border border-yellow-500/60 hover:border-[#F1DC7F] hover:text-[#F1DC7F] transition">
+            <Link href="https://wa.me/971547558866" target="_blank" className="px-6 py-3 rounded-full border border-yellow-500/60 hover:border-[#F1DC7F] hover:text-[#F1DC7F] transition">
               <FaWhatsapp className="w-6 h-6 text-yellow-400 text-lg transition duration-300" />
-            </button>
+            </Link>
 
           </div>
         </div>
@@ -179,7 +179,7 @@ export default function Footer() {
                 Dubai, UAE
               </p>
               <p>+971 54 755 8866</p>
-              <p>info@winstead.com</p>
+              <p>info@winsteadglobal.com</p>
               <p>Mon - Sat : 9:00 AM - 7:00 PM</p>
             </div>
 
