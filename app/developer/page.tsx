@@ -2,21 +2,12 @@
 
 import Image, { StaticImageData } from "next/image";
 import { useMemo, useState } from "react";
-import {
-    FaArrowRight,
-    FaFacebookF,
-    FaInstagram,
-    FaLinkedinIn,
-    FaTiktok,
-    FaWhatsapp,
-    FaYoutube,
-} from "react-icons/fa";
+import { FaChevronDown, FaSearch } from "react-icons/fa";
 import memberImg from "../../public/logoo4.webp";
 import memberImg2 from "../../public/logoo2.webp";
 import memberImg3 from "../../public/logoo5.png";
 import memberImg4 from "../../public/logoo1.webp";
 import memberImg5 from "../../public/logoo3.png";
-import memberImg6 from "../../public/female2.png";
 import TeamHero from "../components/teams/TeamHero";
 import AutoBreadcrumbs from "../components/BreadCrumbs";
 
@@ -27,6 +18,34 @@ type DeveloperCategory =
     | "Commercial"
     | "Mixed Use"
     | "International";
+
+type PropertyType =
+    | "Apartment"
+    | "Villa"
+    | "Townhouse"
+    | "Penthouse"
+    | "Commercial";
+
+type CityFilter =
+    | "Dubai"
+    | "Abu Dhabi"
+    | "Sharjah"
+    | "Ras Al Khaimah";
+
+type StatusFilter = "Ready" | "Off Plan" | "New Launch";
+
+type DeveloperTypeFilter =
+    | "Master Developer"
+    | "Luxury Builder"
+    | "Residential Developer"
+    | "Mixed Use Developer"
+    | "Commercial Builder";
+
+type PriceRangeFilter =
+    | "Under AED 1M"
+    | "AED 1M - 3M"
+    | "AED 3M - 5M"
+    | "AED 5M+";
 
 type Developer = {
     id: number;
@@ -40,6 +59,13 @@ type Developer = {
     specializations: string[];
     tags: string[];
     slug: string;
+    propertyTypes: PropertyType[];
+    cities: CityFilter[];
+    status: StatusFilter;
+    developerType: DeveloperTypeFilter;
+    priceRange: PriceRangeFilter;
+    rating: number;
+    reviews: string;
 };
 
 const tabs: DeveloperCategory[] = [
@@ -49,6 +75,38 @@ const tabs: DeveloperCategory[] = [
     "Commercial",
     "Mixed Use",
     "International",
+];
+
+const propertyTypes: PropertyType[] = [
+    "Apartment",
+    "Villa",
+    "Townhouse",
+    "Penthouse",
+    "Commercial",
+];
+
+const cities: CityFilter[] = [
+    "Dubai",
+    "Abu Dhabi",
+    "Sharjah",
+    "Ras Al Khaimah",
+];
+
+const statuses: StatusFilter[] = ["Ready", "Off Plan", "New Launch"];
+
+const developerTypes: DeveloperTypeFilter[] = [
+    "Master Developer",
+    "Luxury Builder",
+    "Residential Developer",
+    "Mixed Use Developer",
+    "Commercial Builder",
+];
+
+const priceRanges: PriceRangeFilter[] = [
+    "Under AED 1M",
+    "AED 1M - 3M",
+    "AED 3M - 5M",
+    "AED 5M+",
 ];
 
 const developers: Developer[] = [
@@ -64,6 +122,13 @@ const developers: Developer[] = [
         specializations: ["Luxury Communities", "Waterfront Towers", "Branded Residences"],
         tags: ["Premium Developer", "High ROI", "Trusted Builder"],
         slug: "emaar-developments",
+        propertyTypes: ["Apartment", "Villa", "Penthouse"],
+        cities: ["Dubai"],
+        status: "Ready",
+        developerType: "Master Developer",
+        priceRange: "AED 3M - 5M",
+        rating: 4.4,
+        reviews: "1.7k+ reviews",
     },
     {
         id: 2,
@@ -77,6 +142,13 @@ const developers: Developer[] = [
         specializations: ["Golf Communities", "Luxury Apartments", "Villas"],
         tags: ["Investor Choice", "Luxury Living", "Prime Locations"],
         slug: "damac-properties",
+        propertyTypes: ["Apartment", "Villa", "Townhouse"],
+        cities: ["Dubai", "Sharjah"],
+        status: "Off Plan",
+        developerType: "Luxury Builder",
+        priceRange: "AED 1M - 3M",
+        rating: 4.1,
+        reviews: "980 reviews",
     },
     {
         id: 3,
@@ -89,7 +161,14 @@ const developers: Developer[] = [
         projects: "70+ Projects",
         specializations: ["Apartments", "Family Communities", "Quality Construction"],
         tags: ["Premium Finish", "Residential Focus", "End User Friendly"],
-        slug: "sobha-realty",
+        slug: "omniyat",
+        propertyTypes: ["Apartment", "Penthouse"],
+        cities: ["Dubai"],
+        status: "New Launch",
+        developerType: "Residential Developer",
+        priceRange: "AED 5M+",
+        rating: 4.0,
+        reviews: "760 reviews",
     },
     {
         id: 4,
@@ -98,160 +177,333 @@ const developers: Developer[] = [
         category: "Mixed Use",
         image: memberImg4,
         experience: "22+ Years in Market",
-        headquarters: "Dubai, UAE",
+        headquarters: "Abu Dhabi, UAE",
         projects: "60+ Projects",
         specializations: ["Communities", "Retail", "Waterfront Developments"],
-        tags: ["Community Builder", "Iconic Projects", "Dubai Landmarks"],
-        slug: "nakheel",
+        tags: ["Community Builder", "Iconic Projects", "Landmark Projects"],
+        slug: "aldar-properties",
+        propertyTypes: ["Apartment", "Villa", "Commercial"],
+        cities: ["Abu Dhabi"],
+        status: "Ready",
+        developerType: "Mixed Use Developer",
+        priceRange: "AED 1M - 3M",
+        rating: 4.3,
+        reviews: "1.2k reviews",
     },
-    {
-        id: 5,
-        name: "Meraas",
-        type: "Commercial & Residential Builder",
-        category: "Commercial",
-        image: memberImg5,
-        experience: "12+ Years in Market",
-        headquarters: "Dubai, UAE",
-        projects: "45+ Projects",
-        specializations: ["Urban Destinations", "Retail Spaces", "Lifestyle Communities"],
-        tags: ["Lifestyle Focus", "Commercial Spaces", "Modern Design"],
-        slug: "meraas",
-    },
+   
 ];
 
-function DevelopersTabsAndGrid() {
-    const [activeTab, setActiveTab] = useState<DeveloperCategory>("All");
-
-    const [search, setSearch] = useState("");
-
-    const filteredDevelopers = useMemo(() => {
-        const base =
-            activeTab === "All"
-                ? developers
-                : developers.filter((developer) => developer.category === activeTab);
-
-        return base.filter((developer) =>
-            `${developer.name} ${developer.type} ${developer.headquarters} ${developer.category}`
-                .toLowerCase()
-                .includes(search.toLowerCase())
-        );
-    }, [activeTab, search]);
-
+function FilterCheckbox({
+    label,
+    checked,
+    onChange,
+    count,
+}: {
+    label: string;
+    checked: boolean;
+    onChange: () => void;
+    count?: number;
+}) {
     return (
-        <div className="ml-20 mr-20 mx-auto space-y-4 mt-4 mb-8">
-            <div className="mb-6 ">
-                <input
-                    type="text"
-                    placeholder="Search developers..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full md:w-[360px] rounded-full border border-white/10 bg-white/[0.03] px-5 py-3 text-sm text-white placeholder:text-white/35 outline-none focus:border-yellow-400/40"
-                />
-            </div>
-            {filteredDevelopers.map((developer) => (
-                <article
-                    key={developer.id}
-                    className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 md:px-6 py-4 hover:border-yellow-400/30 transition"
-                >
-                    <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-6">
-                        <div className="flex items-center gap-4 min-w-0 flex-1">
-                            <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-white/10 bg-white">
-                                <Image
-                                    src={developer.image}
-                                    alt={developer.name}
-                                    fill
-                                    className="object-contain p-2"
-                                />
-                            </div>
-
-                            <div className="min-w-0">
-                                <div className="flex flex-wrap items-center gap-2 mb-1">
-                                    <h3 className="text-lg md:text-xl font-semibold text-white">
-                                        {developer.name}
-                                    </h3>
-                                    <span className="px-2 py-1 rounded-full text-[10px] uppercase tracking-[0.18em] bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">
-                                        {developer.category}
-                                    </span>
-                                </div>
-
-                                <p className="text-sm text-white/55">{developer.type}</p>
-
-                                <div className="flex flex-wrap gap-2 mt-2">
-                                    {developer.tags.slice(0, 2).map((tag) => (
-                                        <span
-                                            key={tag}
-                                            className="px-2.5 py-1 rounded-full border border-white/10 bg-white/[0.03] text-xs text-white/80"
-                                        >
-                                            {tag}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 lg:min-w-[420px]">
-                            <div className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
-                                <span className="block text-[10px] uppercase tracking-[0.18em] text-white/35 mb-1">
-                                    HQ
-                                </span>
-                                <span className="text-sm text-white">{developer.headquarters}</span>
-                            </div>
-
-                            <div className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
-                                <span className="block text-[10px] uppercase tracking-[0.18em] text-white/35 mb-1">
-                                    Projects
-                                </span>
-                                <span className="text-sm text-white">{developer.projects}</span>
-                            </div>
-
-                            <div className="flex items-center">
-                                <a
-                                    href={`/developer/${developer.slug}`}
-                                    className="w-full text-center rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black px-4 py-2.5 text-sm font-medium hover:scale-[1.02] transition"
-                                >
-                                    View Details
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            ))}
-        </div>
+        <label className="flex cursor-pointer items-start gap-3 text-sm text-white/75">
+            <input
+                type="checkbox"
+                checked={checked}
+                onChange={onChange}
+                className="mt-0.5 h-5 w-5 rounded border border-white/20 bg-transparent accent-yellow-400"
+            />
+            <span className="leading-5">
+                {label} {typeof count === "number" ? <span className="text-white/45">({count})</span> : null}
+            </span>
+        </label>
     );
 }
 
-function DeveloperCTA() {
-    return (
-        <section className="px-6 md:px-12 pb-20 md:pb-24 bg-black text-white">
-            <div className="max-w-7xl mx-auto">
-                <div className="relative overflow-hidden rounded-[32px] border border-yellow-500/20 bg-white/[0.03] px-6 md:px-10 py-10 md:py-14">
-                    <div className="absolute top-0 left-[10%] h-[220px] w-[220px] rounded-full bg-yellow-500/10 blur-3xl" />
-                    <div className="absolute bottom-[-60px] right-[5%] h-[220px] w-[220px] rounded-full bg-yellow-400/10 blur-3xl" />
+function DeveloperListingSection() {
+    const [activeTab, setActiveTab] = useState<DeveloperCategory>("All");
+    const [search, setSearch] = useState("");
 
-                    <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-                        <div className="max-w-2xl">
-                            <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
-                                Let’s Connect
-                            </p>
-                            <h3 className="text-3xl md:text-4xl font-semibold leading-tight">
-                                Explore the right builder for your next property investment
-                            </h3>
-                            <p className="mt-4 text-white/60 text-base md:text-lg leading-relaxed">
-                                Compare leading developers, understand their strengths, and find
-                                the best builder portfolio for residential, commercial, or luxury
-                                investment opportunities.
+    const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<PropertyType[]>([]);
+    const [selectedCities, setSelectedCities] = useState<CityFilter[]>([]);
+    const [selectedStatuses, setSelectedStatuses] = useState<StatusFilter[]>([]);
+    const [selectedDeveloperTypes, setSelectedDeveloperTypes] = useState<DeveloperTypeFilter[]>([]);
+    const [selectedPriceRanges, setSelectedPriceRanges] = useState<PriceRangeFilter[]>([]);
+
+    const toggleValue = <T,>(value: T, selected: T[], setter: (next: T[]) => void) => {
+        setter(selected.includes(value) ? selected.filter((item) => item !== value) : [...selected, value]);
+    };
+
+    const filteredDevelopers = useMemo(() => {
+        return developers.filter((developer) => {
+            const matchesTab =
+                activeTab === "All" ? true : developer.category === activeTab;
+
+            const matchesSearch =
+                `${developer.name} ${developer.type} ${developer.headquarters} ${developer.category} ${developer.developerType} ${developer.status} ${developer.cities.join(" ")} ${developer.propertyTypes.join(" ")}`
+                    .toLowerCase()
+                    .includes(search.toLowerCase());
+
+            const matchesPropertyType =
+                selectedPropertyTypes.length === 0 ||
+                developer.propertyTypes.some((item) => selectedPropertyTypes.includes(item));
+
+            const matchesCity =
+                selectedCities.length === 0 ||
+                developer.cities.some((item) => selectedCities.includes(item));
+
+            const matchesStatus =
+                selectedStatuses.length === 0 || selectedStatuses.includes(developer.status);
+
+            const matchesDeveloperType =
+                selectedDeveloperTypes.length === 0 ||
+                selectedDeveloperTypes.includes(developer.developerType);
+
+            const matchesPriceRange =
+                selectedPriceRanges.length === 0 ||
+                selectedPriceRanges.includes(developer.priceRange);
+
+            return (
+                matchesTab &&
+                matchesSearch &&
+                matchesPropertyType &&
+                matchesCity &&
+                matchesStatus &&
+                matchesDeveloperType &&
+                matchesPriceRange
+            );
+        });
+    }, [
+        activeTab,
+        search,
+        selectedPropertyTypes,
+        selectedCities,
+        selectedStatuses,
+        selectedDeveloperTypes,
+        selectedPriceRanges,
+    ]);
+
+    return (
+        <section className="px-4 md:px-8 xl:px-10 pb-16 mt-10">
+            <div className="mx-auto max-w-7xl">
+                <div className="mb-6 flex flex-col gap-4">
+                    <div className="flex flex-wrap gap-3">
+                        {tabs.map((tab) => {
+                            const active = activeTab === tab;
+                            return (
+                                <button
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
+                                    className={`rounded-full px-4 py-2 text-sm font-medium transition ${active
+                                            ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black"
+                                            : "border border-white/10 bg-white/[0.03] text-white/75 hover:border-yellow-500/30 hover:text-white"
+                                        }`}
+                                >
+                                    {tab}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    <div className="relative max-w-md">
+                        <FaSearch className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-white/35" />
+                        <input
+                            type="text"
+                            placeholder="Search developers here"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="w-full rounded-full border border-white/10 bg-white/[0.03] py-3 pl-11 pr-5 text-sm text-white placeholder:text-white/35 outline-none focus:border-yellow-500/30"
+                        />
+                    </div>
+                </div>
+
+                <div className="grid gap-6 lg:grid-cols-[280px,minmax(0,1fr)]">
+                    <aside className="h-fit rounded-[28px] border border-white/10 bg-white/[0.03] p-5">
+                        <h3 className="text-xl font-semibold text-white">All Filters</h3>
+
+                        <div className="mt-6 border-t border-white/10 pt-6">
+                            <button className="flex w-full items-center justify-between text-left">
+                                <span className="text-lg font-medium text-white">Property Type</span>
+                                <FaChevronDown className="text-sm text-white/55" />
+                            </button>
+
+                            <div className="mt-5 space-y-4">
+                                {propertyTypes.map((item) => (
+                                    <FilterCheckbox
+                                        key={item}
+                                        label={item}
+                                        count={developers.filter((d) => d.propertyTypes.includes(item)).length}
+                                        checked={selectedPropertyTypes.includes(item)}
+                                        onChange={() =>
+                                            toggleValue(item, selectedPropertyTypes, setSelectedPropertyTypes)
+                                        }
+                                    />
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="mt-8 border-t border-white/10 pt-6">
+                            <button className="flex w-full items-center justify-between text-left">
+                                <span className="text-lg font-medium text-white">City</span>
+                                <FaChevronDown className="text-sm text-white/55" />
+                            </button>
+
+                            <div className="mt-5 space-y-4">
+                                {cities.map((item) => (
+                                    <FilterCheckbox
+                                        key={item}
+                                        label={item}
+                                        count={developers.filter((d) => d.cities.includes(item)).length}
+                                        checked={selectedCities.includes(item)}
+                                        onChange={() => toggleValue(item, selectedCities, setSelectedCities)}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="mt-8 border-t border-white/10 pt-6">
+                            <button className="flex w-full items-center justify-between text-left">
+                                <span className="text-lg font-medium text-white">Price Range</span>
+                                <FaChevronDown className="text-sm text-white/55" />
+                            </button>
+
+                            <div className="mt-5 space-y-4">
+                                {priceRanges.map((item) => (
+                                    <FilterCheckbox
+                                        key={item}
+                                        label={item}
+                                        count={developers.filter((d) => d.priceRange === item).length}
+                                        checked={selectedPriceRanges.includes(item)}
+                                        onChange={() =>
+                                            toggleValue(item, selectedPriceRanges, setSelectedPriceRanges)
+                                        }
+                                    />
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="mt-8 border-t border-white/10 pt-6">
+                            <button className="flex w-full items-center justify-between text-left">
+                                <span className="text-lg font-medium text-white">Developer Type</span>
+                                <FaChevronDown className="text-sm text-white/55" />
+                            </button>
+
+                            <div className="mt-5 space-y-4">
+                                {developerTypes.map((item) => (
+                                    <FilterCheckbox
+                                        key={item}
+                                        label={item}
+                                        count={developers.filter((d) => d.developerType === item).length}
+                                        checked={selectedDeveloperTypes.includes(item)}
+                                        onChange={() =>
+                                            toggleValue(item, selectedDeveloperTypes, setSelectedDeveloperTypes)
+                                        }
+                                    />
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="mt-8 border-t border-white/10 pt-6">
+                            <button className="flex w-full items-center justify-between text-left">
+                                <span className="text-lg font-medium text-white">Status</span>
+                                <FaChevronDown className="text-sm text-white/55" />
+                            </button>
+
+                            <div className="mt-5 space-y-4">
+                                {statuses.map((item) => (
+                                    <FilterCheckbox
+                                        key={item}
+                                        label={item}
+                                        count={developers.filter((d) => d.status === item).length}
+                                        checked={selectedStatuses.includes(item)}
+                                        onChange={() => toggleValue(item, selectedStatuses, setSelectedStatuses)}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </aside>
+
+                    <div>
+                        <div className="mb-5 flex items-center justify-between">
+                            <p className="text-base font-medium text-white/80">
+                                Showing <span className="text-white">{filteredDevelopers.length}</span> developers
                             </p>
                         </div>
 
-                        <div className="flex flex-wrap gap-4">
-                            <button className="bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black px-6 py-3 rounded-full font-medium hover:scale-[1.03] transition inline-flex items-center gap-2">
-                                Contact Us
-                                <FaArrowRight className="text-sm" />
-                            </button>
+                        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+                            {filteredDevelopers.map((developer) => (
+                                <article
+                                    key={developer.id}
+                                    className="group rounded-[28px] border border-white/10 bg-white/[0.03] p-5 transition hover:-translate-y-1 hover:border-yellow-500/25 hover:bg-white/[0.05]"
+                                >
+                                    <div className="flex justify-center">
+                                        <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white">
+                                            <Image
+                                                src={developer.image}
+                                                alt={developer.name}
+                                                fill
+                                                className="object-contain p-3"
+                                            />
+                                        </div>
+                                    </div>
 
-                            <button className="border border-white/20 text-white px-6 py-3 rounded-full font-medium hover:border-yellow-400 hover:text-yellow-400 transition">
-                                Explore Projects
-                            </button>
+                                    <div className="mt-5 text-center">
+                                        <a
+                                            href={`/developer/${developer.slug}`}
+                                            className="line-clamp-2 text-2xl font-semibold text-white transition group-hover:text-yellow-300"
+                                        >
+                                            {developer.name}
+                                        </a>
+
+                                        {/* <div className="mt-3 flex items-center justify-center gap-2 text-sm text-white/65">
+                                            <span className="text-yellow-400">★ {developer.rating.toFixed(1)}</span>
+                                            <span>|</span>
+                                            <span>{developer.reviews}</span>
+                                        </div> */}
+                                    </div>
+
+                                    {/* <div className="mt-4 flex flex-wrap justify-center gap-2">
+                                        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70">
+                                            {developer.developerType}
+                                        </span>
+                                        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70">
+                                            {developer.status}
+                                        </span>
+                                        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70">
+                                            {developer.priceRange}
+                                        </span>
+                                    </div> */}
+
+                                    {/* <div className="mt-5 space-y-2 text-center text-sm text-white/60">
+                                        <p>{developer.headquarters}</p>
+                                        <p>{developer.projects}</p>
+                                        <p>{developer.experience}</p>
+                                    </div> */}
+
+                                    <div className="mt-5 flex flex-wrap justify-center gap-2">
+                                        {developer.tags.slice(0, 2).map((tag) => (
+                                            <span
+                                                key={tag}
+                                                className="rounded-full border border-yellow-500/15 bg-yellow-500/10 px-3 py-1 text-xs text-yellow-300"
+                                            >
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+
+                                    <a
+                                        href={`/developer/${developer.slug}`}
+                                        className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-4 py-3 text-sm font-medium text-black transition hover:scale-[1.02]"
+                                    >
+                                        View Details
+                                    </a>
+                                </article>
+                            ))}
+
+                            {!filteredDevelopers.length && (
+                                <div className="col-span-full rounded-[28px] border border-dashed border-white/10 bg-white/[0.02] p-10 text-center text-white/55">
+                                    No developers found for the selected filters.
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -264,11 +516,10 @@ export default function DeveloperPage() {
     return (
         <main className="bg-black text-white">
             <TeamHero />
-            <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
-                                        <AutoBreadcrumbs />
-                                      </section>
-            <DevelopersTabsAndGrid />
-            {/* <DeveloperCTA /> */}
+            <section className="mx-auto max-w-7xl px-4 pt-6 md:px-10">
+                <AutoBreadcrumbs />
+            </section>
+            <DeveloperListingSection />
         </main>
     );
 }
