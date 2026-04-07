@@ -2,29 +2,47 @@
 
 import Image from "next/image";
 import heroImg from "../../../public/hero5.png";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaCircleNotch } from "react-icons/fa";
+import { useState } from "react";
 
 export default function TeamHero({ teamPerson }: { teamPerson: string }) {
+    const [videoLoaded, setVideoLoaded] = useState(false);
     return (
         <section className="relative h-[78vh] min-h-[620px] overflow-hidden border-b border-white/10 bg-black text-white">
             {/* BACKGROUND IMAGE */}
             <div className="absolute inset-0">
-                <Image
-                    src={heroImg}
-                    alt={teamPerson}
-                    fill
-                    priority
-                    className="object-cover object-center"
+                {!videoLoaded && (
+                // <div
+
+                    //   className="hero-img object-cover object-top z-0 flex justify-center items-center"
+                    // >
+
+                    // </div>
+                    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black">
+                        <div className="flex flex-col items-center gap-4">
+
+                            {/* LOADER */}
+                            <FaCircleNotch className="animate-spin text-yellow-400 text-3xl" />
+
+                            {/* OPTIONAL TEXT */}
+                            <p className="text-sm text-white-400 tracking-wide">
+                                Loading experience...
+                            </p>
+                        </div>
+                    </div>
+                )}
+
+                {/* VIDEO */}
+                <video
+                    className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 ${videoLoaded ? "opacity-100" : "opacity-0"
+                        }`}
+                    src="/videoabout.mp4"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    onLoadedData={() => setVideoLoaded(true)}
                 />
-
-                {/* OVERLAYS */}
-                {/* <div className="absolute inset-0 bg-black/50" /> */}
-                {/* <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" /> */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-transparent" />
-
-                {/* SOFT GLOW */}
-                <div className="absolute top-0 left-[-8%] h-[320px] w-[320px] rounded-full bg-yellow-500/10 blur-3xl" />
-                <div className="absolute bottom-[-80px] right-[-5%] h-[280px] w-[280px] rounded-full bg-yellow-400/10 blur-3xl" />
             </div>
 
             {/* CONTENT */}

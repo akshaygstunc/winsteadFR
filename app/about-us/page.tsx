@@ -11,7 +11,7 @@ import AutoBreadcrumbs from "../components/BreadCrumbs";
 export default function AboutUs() {
   return (<>
     <AboutHero />
-    <AutoBreadcrumbs />
+    {/* <AutoBreadcrumbs /> */}
     <AboutPhilosophyy />
     <AboutProcess />
     <AboutTrust />
