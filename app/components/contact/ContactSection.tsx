@@ -41,7 +41,7 @@ export default function ContactSection({ contactPoints }: { contactPoints: strin
                         <InfoCard
                             icon={<FaEnvelope />}
                             label="Email"
-                            value="info@winstead.com"
+                            value="info@winsteadglobal.com"
                         />
                         <InfoCard
                             icon={<FaMapMarkerAlt />}
