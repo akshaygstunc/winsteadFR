@@ -1,3 +1,4 @@
+"use client";
 import Hero from "./components/Hero";
 import Projects from "./components/Projects";
 import Stats from "./components/Stats";
@@ -10,7 +11,10 @@ import img1 from "../public/hero1.jpg";
 import img2 from "../public/hero2.png";
 import img3 from "../public/hero3.jpg";
 import img4 from "../public/hero4.png";
+import { useEffect, useState } from "react";
+import WebsiteContentService from "./services/websitecontent.service";
 export default function Home() {
+  const [homepagecontent, setHomepageContent] = useState(null);
   const news = [
     {
       id: 1,
@@ -45,10 +49,21 @@ export default function Home() {
       category: "Luxury Trends",
     },
   ];
+  useEffect(() => {
+    async function loadContent() {
+      try {
+        const content = await WebsiteContentService.getHomePageContent({ slug: "home" });
+        setHomepageContent(content[0]);
+      } catch (error) {
+        console.error("Failed to load homepage content:", error);
+      }
+    }
+    loadContent();
+  }, []);
   return (
     <div className="bg-black text-white">
       {/* <Navbar /> */}
-      <Hero />
+      <Hero asset={homepagecontent?.data?.herovideo}/>
       <Projects />
       <Stats />
       <Testimonials />

@@ -7,7 +7,7 @@ import subtractImage from "../../public/Subtract.png";
 import { FaCircleNotch } from "react-icons/fa";
 // import videoSrc from "../../public/video.mp4";
 
-export default function Hero() {
+export default function Hero({ asset }) {
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function Hero() {
         // >
          
         // </div>
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black">
+        <div className="absolute inset-0 z-20 flex items-center justify-center ">
           <div className="flex flex-col items-center gap-4">
 
             {/* LOADER */}
@@ -53,10 +53,10 @@ export default function Hero() {
 
       {/* VIDEO */}
       <video
-        className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 ${
+        className={`absolute  w-full h-full object-cover object-top transition-opacity duration-700 ${
           videoLoaded ? "opacity-100" : "opacity-0"
         }`}
-       src="/video.mp4"
+        src={"/videoabout.mp4"}
         autoPlay
         muted
         loop
@@ -64,7 +64,7 @@ export default function Hero() {
         onLoadedData={() => setVideoLoaded(true)}
       />
       {/* DARK GRADIENT OVERLAY */}
-      <div className="absolute inset-0" />
+      {/* <div className="absolute inset-0" /> */}
 
       {/* CONTENT */}
       <div className="hero-content absolute bottom-[-80px] sm:bottom-[-120px] w-full flex justify-center z-30">

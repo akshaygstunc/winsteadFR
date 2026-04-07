@@ -9,7 +9,7 @@ export default function AboutHero() {
   const [videoLoaded, setVideoLoaded] = useState(false);
   return (
 
-    <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden bg-black text-white">
+    <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden  text-white">
 
       {/* IMAGE */}
       <div className="absolute inset-0">
@@ -48,8 +48,8 @@ export default function AboutHero() {
       </div>
 
       {/* OVERLAY (only for readability, not full dark) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
+      {/* <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" /> */}
 
       {/* CONTENT (BOTTOM LEFT ONLY) */}
       <div className="relative z-10 h-full flex items-end justify-center">
