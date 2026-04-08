@@ -103,4 +103,4 @@ export default function UltraLuxury() {
       </div>
     </section>
   );
-}
+}   
