@@ -246,7 +246,7 @@ export default function DeveloperDetailsPage() {
                                 <span className="px-4 py-2 rounded-full border border-yellow-500/20 bg-yellow-500/10 text-yellow-400 text-xs uppercase tracking-[0.22em]">
                                     {developer.category}
                                 </span>
-                                <span className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] text-white/80 text-xs uppercase tracking-[0.22em]">
+                                <span className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] text-white text-xs uppercase tracking-[0.22em]">
                                     {developer.type}
                                 </span>
                             </div>
@@ -261,7 +261,7 @@ export default function DeveloperDetailsPage() {
 
                             <div className="grid sm:grid-cols-3 gap-4 mt-8">
                                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                                    <div className="flex items-center gap-2 text-yellow-400 text-sm mb-2">
+                                    <div className="flex items-center gap-2 text-yellow-400 text-sm lg:text-md lg:text-md mb-2">
                                         <FaClock />
                                         <span>Experience</span>
                                     </div>
@@ -269,7 +269,7 @@ export default function DeveloperDetailsPage() {
                                 </div>
 
                                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                                    <div className="flex items-center gap-2 text-yellow-400 text-sm mb-2">
+                                    <div className="flex items-center gap-2 text-yellow-400 text-sm lg:text-md lg:text-md mb-2">
                                         <FaMapMarkerAlt />
                                         <span>Headquarters</span>
                                     </div>
@@ -277,7 +277,7 @@ export default function DeveloperDetailsPage() {
                                 </div>
 
                                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                                    <div className="flex items-center gap-2 text-yellow-400 text-sm mb-2">
+                                    <div className="flex items-center gap-2 text-yellow-400 text-sm lg:text-md lg:text-md mb-2">
                                         <FaBuilding />
                                         <span>Portfolio</span>
                                     </div>
@@ -291,7 +291,7 @@ export default function DeveloperDetailsPage() {
                                     className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black px-6 py-3 font-medium"
                                 >
                                     View Projectre Projects
-                                    <FaArrowRight className="text-sm" />
+                                    <FaArrowRight className="text-sm lg:text-md lg:text-md" />
                                 </Link>
 
                                 <Link
@@ -321,7 +321,7 @@ export default function DeveloperDetailsPage() {
             <section className="px-6 md:px-10 py-16 md:py-20">
                 <div className="max-w-7xl mx-auto grid lg:grid-cols-[1.3fr_0.7fr] gap-8">
                     <div className="rounded-[30px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-                        <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                        <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
                             Developer Details
                         </p>
                         <h2 className="text-3xl md:text-4xl font-semibold mb-6">
@@ -332,14 +332,14 @@ export default function DeveloperDetailsPage() {
                         </p>
 
                         <div className="mt-8">
-                            <p className="text-sm uppercase tracking-[0.22em] text-white mb-4">
+                            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-white mb-4">
                                 Specializations
                             </p>
                             <div className="flex flex-wrap gap-3">
                                 {developer.specializations.map((item) => (
                                     <span
                                         key={item}
-                                        className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] text-sm text-white"
+                                        className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] text-sm lg:text-md lg:text-md text-white"
                                     >
                                         {item}
                                     </span>
@@ -348,14 +348,14 @@ export default function DeveloperDetailsPage() {
                         </div>
 
                         <div className="mt-8">
-                            <p className="text-sm uppercase tracking-[0.22em]  mb-4">
+                            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em]  mb-4">
                                 Highlights
                             </p>
                             <div className="flex flex-wrap gap-3">
                                 {developer.tags.map((tag) => (
                                     <span
                                         key={tag}
-                                        className="px-4 py-2 rounded-full border border-yellow-500/20 bg-yellow-500/10 text-sm text-yellow-400"
+                                        className="px-4 py-2 rounded-full border border-yellow-500/20 bg-yellow-500/10 text-sm lg:text-md lg:text-md text-yellow-400"
                                     >
                                         {tag}
                                     </span>
@@ -365,41 +365,41 @@ export default function DeveloperDetailsPage() {
                     </div>
 
                     <div className="rounded-[30px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-                        <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                        <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
                             Quick Info
                         </p>
 
                         <div className="space-y-4">
                             <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                <span className="block text-xs uppercase tracking-[0.18em] text-white/35 mb-1">
+                                <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
                                     Developer Name
                                 </span>
                                 <span className="text-white font-medium">{developer.name}</span>
                             </div>
 
                             <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                <span className="block text-xs uppercase tracking-[0.18em] text-white/35 mb-1">
+                                <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
                                     Category
                                 </span>
                                 <span className="text-white font-medium">{developer.category}</span>
                             </div>
 
                             <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                <span className="block text-xs uppercase tracking-[0.18em] text-white/35 mb-1">
+                                <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
                                     Developer Type
                                 </span>
                                 <span className="text-white font-medium">{developer.type}</span>
                             </div>
 
                             <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                <span className="block text-xs uppercase tracking-[0.18em] text-white/35 mb-1">
+                                <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
                                     Portfolio Size
                                 </span>
                                 <span className="text-white font-medium">{developer.projects}</span>
                             </div>
 
                             <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                <span className="block text-xs uppercase tracking-[0.18em] text-white/35 mb-1">
+                                <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
                                     Headquarters
                                 </span>
                                 <span className="text-white font-medium">{developer.headquarters}</span>
@@ -413,7 +413,7 @@ export default function DeveloperDetailsPage() {
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
                         <div>
-                            <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
                                 Properties
                             </p>
                             <h2 className="text-3xl md:text-5xl font-semibold">
@@ -421,7 +421,7 @@ export default function DeveloperDetailsPage() {
                             </h2>
                         </div>
 
-                        <p className="text-white/60 max-w-2xl">
+                        <p className="text-white max-w-2xl">
                             Explore selected properties associated with this developer, including
                             residential, luxury, and investment-driven opportunities.
                         </p>
@@ -449,11 +449,11 @@ export default function DeveloperDetailsPage() {
 
                                     <div className="p-5 md:p-6">
                                         <h3 className="text-2xl font-semibold">{property.title}</h3>
-                                        <p className="text-white/55 mt-2">{property.location}</p>
+                                        <p className="text-white mt-2">{property.location}</p>
 
                                         <div className="mt-5 flex items-center justify-between gap-3">
                                             <div>
-                                                <span className="block text-xs uppercase tracking-[0.18em] text-white/35 mb-1">
+                                                <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
                                                     Starting From
                                                 </span>
                                                 <span className="text-lg font-medium text-yellow-400">
@@ -463,7 +463,7 @@ export default function DeveloperDetailsPage() {
 
                                             <Link
                                                 href={`/projects/${property.slug}`}
-                                                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-5 py-2.5 text-sm font-medium text-black"
+                                                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-5 py-2.5 text-sm lg:text-md lg:text-md font-medium text-black"
                                             >
                                                 View Project
                                                 <FaArrowRight className="text-xs" />
@@ -476,7 +476,7 @@ export default function DeveloperDetailsPage() {
                     ) : (
                         <div className="rounded-[28px] border border-dashed border-white/10 bg-white/[0.02] px-6 py-14 text-center">
                             <h3 className="text-2xl font-semibold mb-2">No properties added yet</h3>
-                            <p className="text-white/55">
+                                <p className="text-white">
                                 Once properties are mapped with this developer, they can be shown here.
                             </p>
                         </div>

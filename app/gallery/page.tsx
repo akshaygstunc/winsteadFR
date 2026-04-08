@@ -185,7 +185,7 @@ function GalleryStats() {
                         <p className="text-2xl md:text-3xl font-semibold text-yellow-400">
                             {item.value}
                         </p>
-                        <p className="mt-2 text-sm text-white/60">{item.label}</p>
+                        <p className="mt-2 text-sm lg:text-md lg:text-md text-white">{item.label}</p>
                     </div>
                 ))}
             </div>
@@ -286,7 +286,7 @@ function GalleryModal({
                         <h3 className="text-2xl md:text-3xl font-semibold text-white">
                             {activeItem.title}
                         </h3>
-                        <p className="text-white/60">{activeItem.location}</p>
+                        <p className="text-white">{activeItem.location}</p>
                         <div className="flex items-center justify-center gap-3">
                             <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs uppercase tracking-[0.18em] text-yellow-400">
                                 {activeItem.category}
@@ -353,7 +353,7 @@ function GalleryGrid() {
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
                         <div className="max-w-2xl">
-                            <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
                                 Curated Collections
                             </p>
                             <h2 className="text-3xl md:text-5xl font-semibold leading-tight">
@@ -362,7 +362,7 @@ function GalleryGrid() {
                             </h2>
                         </div>
 
-                        <p className="max-w-xl text-sm md:text-base leading-relaxed text-white">
+                        <p className="max-w-xl text-sm lg:text-md lg:text-md md:text-base leading-relaxed text-white">
                             From premium villas and apartments to sophisticated interiors and
                             commercial developments, explore every visual detail in one place.
                         </p>
@@ -376,7 +376,7 @@ function GalleryGrid() {
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
-                                    className={`whitespace-nowrap rounded-full px-5 py-2.5 text-sm border transition ${isActive
+                                    className={`whitespace-nowrap rounded-full px-5 py-2.5 text-sm lg:text-md lg:text-md border transition ${isActive
                                         ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
                                         : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40"
                                         }`}
@@ -387,7 +387,7 @@ function GalleryGrid() {
                         })}
                     </div>
 
-                    <div className="mb-8 flex items-center justify-between gap-4 text-sm text-white/60">
+                    <div className="mb-8 flex items-center justify-between gap-4 text-sm lg:text-md lg:text-md text-white">
                         <p>
                             Showing{" "}
                             <span className="font-medium text-yellow-400">
@@ -460,7 +460,7 @@ function GalleryGrid() {
                                     <h3 className="text-xl md:text-2xl font-semibold leading-tight">
                                         {item.title}
                                     </h3>
-                                    <p className="mt-2 text-sm text-white/70">{item.location}</p>
+                                    <p className="mt-2 text-sm lg:text-md lg:text-md text-white">{item.location}</p>
                                 </div>
                             </article>
                         ))}
@@ -490,13 +490,13 @@ function GalleryCTA() {
 
                     <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
                         <div className="max-w-2xl">
-                            <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
                                 Need More Details?
                             </p>
                             <h3 className="text-3xl md:text-4xl font-semibold leading-tight">
                                 Let us help you explore the right property visually and strategically
                             </h3>
-                            <p className="mt-4 text-base md:text-lg leading-relaxed text-white/60">
+                            <p className="mt-4 text-base md:text-lg leading-relaxed text-white">
                                 From image galleries to project walkthroughs, our team can guide
                                 you through the finest real estate opportunities tailored to your
                                 lifestyle and investment goals.
@@ -506,7 +506,7 @@ function GalleryCTA() {
                         <div className="flex flex-wrap gap-4">
                             <button className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-6 py-3 font-medium text-black transition hover:scale-[1.03]">
                                 Contact Us
-                                <FaArrowRight className="text-sm" />
+                                <FaArrowRight className="text-sm lg:text-md lg:text-md" />
                             </button>
 
                             <button className="rounded-full border border-white/20 px-6 py-3 font-medium text-white transition hover:border-yellow-400 hover:text-yellow-400">

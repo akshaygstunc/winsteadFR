@@ -205,7 +205,7 @@ function FilterCheckbox({
     count?: number;
 }) {
     return (
-        <label className="flex cursor-pointer items-start gap-3 text-sm text-white/75">
+        <label className="flex cursor-pointer items-start gap-3 text-sm lg:text-md lg:text-md text-white">
             <input
                 type="checkbox"
                 checked={checked}
@@ -213,7 +213,7 @@ function FilterCheckbox({
                 className="mt-0.5 h-5 w-5 rounded border border-white/20 bg-transparent accent-yellow-400"
             />
             <span className="leading-5">
-                {label} {typeof count === "number" ? <span className="text-white/45">({count})</span> : null}
+                {label} {typeof count === "number" ? <span className="text-white">({count})</span> : null}
             </span>
         </label>
     );
@@ -293,9 +293,9 @@ function DeveloperListingSection() {
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
-                                    className={`rounded-full px-4 py-2 text-sm font-medium transition ${active
+                                    className={`rounded-full px-4 py-2 text-sm lg:text-md lg:text-md font-medium transition ${active
                                             ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black"
-                                            : "border border-white/10 bg-white/[0.03] text-white/75 hover:border-yellow-500/30 hover:text-white"
+                                        : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-500/30 hover:text-white"
                                         }`}
                                 >
                                     {tab}
@@ -305,13 +305,13 @@ function DeveloperListingSection() {
                     </div>
 
                     <div className="relative max-w-md">
-                        <FaSearch className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-white/35" />
+                        <FaSearch className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm lg:text-md lg:text-md text-white" />
                         <input
                             type="text"
                             placeholder="Search developers here"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="w-full rounded-full border border-white/10 bg-white/[0.03] py-3 pl-11 pr-5 text-sm text-white placeholder:text-white/35 outline-none focus:border-yellow-500/30"
+                            className="w-full rounded-full border border-white/10 bg-white/[0.03] py-3 pl-11 pr-5 text-sm lg:text-md lg:text-md text-white placeholder:text-white outline-none focus:border-yellow-500/30"
                         />
                     </div>
                 </div>
@@ -323,7 +323,7 @@ function DeveloperListingSection() {
                         <div className="mt-6 border-t border-white/10 pt-6">
                             <button className="flex w-full items-center justify-between text-left">
                                 <span className="text-lg font-medium text-white">Property Type</span>
-                                <FaChevronDown className="text-sm text-white/55" />
+                                <FaChevronDown className="text-sm lg:text-md lg:text-md text-white" />
                             </button>
 
                             <div className="mt-5 space-y-4">
@@ -344,7 +344,7 @@ function DeveloperListingSection() {
                         <div className="mt-8 border-t border-white/10 pt-6">
                             <button className="flex w-full items-center justify-between text-left">
                                 <span className="text-lg font-medium text-white">City</span>
-                                <FaChevronDown className="text-sm text-white/55" />
+                                <FaChevronDown className="text-sm lg:text-md lg:text-md text-white" />
                             </button>
 
                             <div className="mt-5 space-y-4">
@@ -363,7 +363,7 @@ function DeveloperListingSection() {
                         <div className="mt-8 border-t border-white/10 pt-6">
                             <button className="flex w-full items-center justify-between text-left">
                                 <span className="text-lg font-medium text-white">Price Range</span>
-                                <FaChevronDown className="text-sm text-white/55" />
+                                <FaChevronDown className="text-sm lg:text-md lg:text-md text-white" />
                             </button>
 
                             <div className="mt-5 space-y-4">
@@ -384,7 +384,7 @@ function DeveloperListingSection() {
                         <div className="mt-8 border-t border-white/10 pt-6">
                             <button className="flex w-full items-center justify-between text-left">
                                 <span className="text-lg font-medium text-white">Developer Type</span>
-                                <FaChevronDown className="text-sm text-white/55" />
+                                <FaChevronDown className="text-sm lg:text-md lg:text-md text-white" />
                             </button>
 
                             <div className="mt-5 space-y-4">
@@ -405,7 +405,7 @@ function DeveloperListingSection() {
                         <div className="mt-8 border-t border-white/10 pt-6">
                             <button className="flex w-full items-center justify-between text-left">
                                 <span className="text-lg font-medium text-white">Status</span>
-                                <FaChevronDown className="text-sm text-white/55" />
+                                <FaChevronDown className="text-sm lg:text-md lg:text-md text-white" />
                             </button>
 
                             <div className="mt-5 space-y-4">
@@ -424,7 +424,7 @@ function DeveloperListingSection() {
 
                     <div>
                         <div className="mb-5 flex items-center justify-between">
-                            <p className="text-base font-medium text-white/80">
+                            <p className="text-base font-medium text-white">
                                 Showing <span className="text-white">{filteredDevelopers.length}</span> developers
                             </p>
                         </div>
@@ -454,7 +454,7 @@ function DeveloperListingSection() {
                                             {developer.name}
                                         </a>
 
-                                        {/* <div className="mt-3 flex items-center justify-center gap-2 text-sm text-white/65">
+                                        {/* <div className="mt-3 flex items-center justify-center gap-2 text-sm lg:text-md lg:text-md text-white">
                                             <span className="text-yellow-400">★ {developer.rating.toFixed(1)}</span>
                                             <span>|</span>
                                             <span>{developer.reviews}</span>
@@ -462,18 +462,18 @@ function DeveloperListingSection() {
                                     </div>
 
                                     {/* <div className="mt-4 flex flex-wrap justify-center gap-2">
-                                        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70">
+                                        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white">
                                             {developer.developerType}
                                         </span>
-                                        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70">
+                                        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white">
                                             {developer.status}
                                         </span>
-                                        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70">
+                                        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white">
                                             {developer.priceRange}
                                         </span>
                                     </div> */}
 
-                                    {/* <div className="mt-5 space-y-2 text-center text-sm text-white/60">
+                                    {/* <div className="mt-5 space-y-2 text-center text-sm lg:text-md lg:text-md text-white">
                                         <p>{developer.headquarters}</p>
                                         <p>{developer.projects}</p>
                                         <p>{developer.experience}</p>
@@ -492,7 +492,7 @@ function DeveloperListingSection() {
 
                                     <a
                                         href={`/developer/${developer.slug}`}
-                                        className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-4 py-3 text-sm font-medium text-black transition hover:scale-[1.02]"
+                                        className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-4 py-3 text-sm lg:text-md lg:text-md font-medium text-black transition hover:scale-[1.02]"
                                     >
                                         View Details
                                     </a>
@@ -500,7 +500,7 @@ function DeveloperListingSection() {
                             ))}
 
                             {!filteredDevelopers.length && (
-                                <div className="col-span-full rounded-[28px] border border-dashed border-white/10 bg-white/[0.02] p-10 text-center text-white/55">
+                                <div className="col-span-full rounded-[28px] border border-dashed border-white/10 bg-white/[0.02] p-10 text-center text-white">
                                     No developers found for the selected filters.
                                 </div>
                             )}

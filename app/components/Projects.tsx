@@ -37,7 +37,7 @@ function FeaturedProjects() {
         <h2 className="text-2xl md:text-3xl font-semibold">
           Featured Projects
         </h2>
-        <p className="text-white-400 text-[.95rem] mt-2 max-w-xl">
+        <p className="text-lg text-white-400 text-[.95rem] mt-2 max-w-xl">
           Discover exceptional properties with Winstead in premium locations worldwide.
         </p>
       </div>
@@ -46,7 +46,7 @@ function FeaturedProjects() {
         {/* All */}
         <button
           onClick={() => handleMainFilter("All")}
-          className={`text-[1.05rem] px-4 py-2 text-sm rounded-lg border transition ${activeFilter === "All"
+          className={`text-[1.05rem] px-4 py-2 text-sm lg:text-md lg:text-md rounded-lg border transition ${activeFilter === "All"
             ? "bg-yellow-500 text-black border-yellow-500"
             : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
             }`}
@@ -57,7 +57,7 @@ function FeaturedProjects() {
         {/* Elite */}
         <button
           onClick={() => handleMainFilter("Elite")}
-          className={`text-[1.05rem] px-4 py-2 text-sm rounded-lg border transition ${activeFilter === "Elite"
+          className={`text-[1.05rem] px-4 py-2 text-sm lg:text-md lg:text-md rounded-lg border transition ${activeFilter === "Elite"
             ? "bg-yellow-500 text-black border-yellow-500"
             : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
             }`}
@@ -68,12 +68,30 @@ function FeaturedProjects() {
         {/* Luxury */}
         <button
           onClick={() => handleMainFilter("Luxury")}
-          className={`text-[1.05rem] px-4 py-2 text-sm rounded-lg border transition ${activeFilter === "Luxury"
+          className={`text-[1.05rem] px-4 py-2 text-sm lg:text-md lg:text-md rounded-lg border transition ${activeFilter === "Luxury"
             ? "bg-yellow-500 text-black border-yellow-500"
             : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
             }`}
         >
           Luxury
+        </button>
+        <button
+          onClick={() => handleMainFilter("Luxury")}
+          className={`text-[1.05rem] px-4 py-2 text-sm lg:text-md lg:text-md rounded-lg border transition ${activeFilter === "Luxury"
+            ? "bg-yellow-500 text-black border-yellow-500"
+            : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
+            }`}
+        >
+          Offplan
+        </button>
+        <button
+          onClick={() => handleMainFilter("Luxury")}
+          className={`text-[1.05rem] px-4 py-2 text-sm lg:text-md lg:text-md rounded-lg border transition ${activeFilter === "Luxury"
+            ? "bg-yellow-500 text-black border-yellow-500"
+            : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
+            }`}
+        >
+          Commercial
         </button>
 
         {/* Vendor Dropdown */}
@@ -83,7 +101,7 @@ function FeaturedProjects() {
               setVendorOpen(!vendorOpen);
               setActiveFilter("Vendor");
             }}
-            className={`text-[1.05rem] px-4 py-2 text-sm rounded-lg border transition flex items-center gap-2 ${activeFilter === "Vendor"
+            className={`text-[1.05rem] px-4 py-2 text-sm lg:text-md lg:text-md rounded-lg border transition flex items-center gap-2 ${activeFilter === "Vendor"
               ? "bg-yellow-500 text-black border-yellow-500"
               : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
               }`}
@@ -98,7 +116,7 @@ function FeaturedProjects() {
                 <button
                   key={vendor}
                   onClick={() => handleVendorSelect(vendor)}
-                  className="text-[1.05rem] block w-full text-left px-4 py-2 text-sm text-yellow-500 hover:bg-yellow-500 hover:text-black transition"
+                  className="text-[1.05rem] block w-full text-left px-4 py-2 text-sm lg:text-md lg:text-md text-yellow-500 hover:bg-yellow-500 hover:text-black transition"
                 >
                   {vendor}
                 </button>
@@ -170,16 +188,47 @@ export default function Projects() {
           <h2 className="text-2xl md:text-3xl font-semibold">
             Featured Projects
           </h2>
-          <p className="text-white-400 text-md mt-2 max-w-xl">
+          <p className="text-white-400 text-md lg:text-md mt-2 max-w-xl">
             Discover exceptional properties with Winstead in premium locations
             worldwide.
           </p>
         </div>
 
-        <button className="border border-yellow-500 px-5 py-2 rounded-lg text-sm hover:bg-yellow-500 hover:text-black transition">
+        <button className="border border-yellow-500 px-5 py-2 rounded-lg text-sm lg:text-md lg:text-md hover:bg-yellow-500 hover:text-black transition">
           View All Projects
         </button>
       </div> */}
+      {/* About Winstead */}
+      <section className="bg-black text-white py-16">
+        <div className="grid md:grid-cols-[30%_70%] gap-10 items-center">
+          {/* LEFT IMAGE */}
+          <div>
+            <Image
+              src={image2}
+              alt="About"
+              className="w-full h-[200px] md:h-[300px] object-cover rounded-xl"
+            />
+          </div>
+
+          {/* RIGHT TEXT */}
+          <div className="max-w-7xl">
+            <h3 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
+              About Winstead
+            </h3>
+
+            <p className="text-lg text-gray-300 leading-relaxed">
+              Our extensive portfolio features an array of premium villas,
+              apartments, and townhouses designed to offer unmatched comfort
+              and elegance.
+            </p>
+
+            <p className="text-gray-300 mt-4 leading-relaxed">
+              Our team of experienced professionals is dedicated to helping
+              you find the perfect home that exceeds your expectations.
+            </p>
+          </div>
+        </div>
+      </section>
       <FeaturedProjects />
       {/* GRID */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
@@ -238,7 +287,7 @@ function Card({ img }: any) {
       <div className="absolute bottom-0 p-5 w-full transition duration-500 group-hover:translate-y-[-4px]">
         <h3 className="text-lg md:text-xl font-semibold">Aurelia Heights</h3>
 
-        <div className="text-[1.15rem] md:text-sm text-white mt-2 space-y-1 opacity-90">
+        <div className="text-[1.15rem] md:text-sm lg:text-md lg:text-md text-white mt-2 space-y-1 opacity-90">
           <p className="text-[1.05rem]">2–8</p>
           <p className="text-[1.05rem]">$2.3M – $3.8M</p>
           <p className="text-[1.05rem]">2,800 – 7,200 sq.ft.</p>
@@ -246,7 +295,7 @@ function Card({ img }: any) {
         </div>
 
         {/* BUTTON */}
-        <button className="mt-3 text-xs md:text-sm border border-yellow-500 px-4 py-1.5 rounded-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500">
+        <button className="mt-3 text-xs md:text-sm lg:text-md lg:text-md border border-yellow-500 px-4 py-1.5 rounded-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500">
           Check Details
         </button>
       </div>

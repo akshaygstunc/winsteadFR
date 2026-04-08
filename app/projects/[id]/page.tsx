@@ -13,9 +13,10 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { FaArrowRight, FaDollarSign } from "react-icons/fa6";
-import hero1 from "../../../public/hero1.jpg";
-import hero2 from "../../../public/hero2.png";
-import hero3 from "../../../public/hero3.jpg";
+import hero2 from "../../../public/image_6.png";
+import hero1 from "../../../public/image_7.png";
+import hero3 from "../../../public/image_5.png";
+import projectImage from "../../../public/hero1.jpg";
 import AutoBreadcrumbs from "@/app/components/BreadCrumbs";
 
 type Project = {
@@ -59,7 +60,7 @@ const allProjects: Project[] = [
     developer: "Emaar",
     description:
       "A refined collection of ultra-luxury residences crafted for buyers seeking iconic location, architectural elegance, and long-term value in one of Dubai’s most desirable districts.",
-    heroImages: [hero1, hero2, hero3, hero1, hero2],
+    heroImages: [hero2, hero1, hero3, hero1, hero2],
     floorPlans: [
       {
         label: "1 Bedroom",
@@ -144,7 +145,7 @@ const allProjects: Project[] = [
   },
 ];
 
-const tabs = ["overview", "floorplans", "amenities", "gallery"] as const;
+const tabs = ["overview", "amenities"] as const;
 type TabKey = (typeof tabs)[number];
 
 type ContactIntent =
@@ -155,21 +156,23 @@ type ContactIntent =
   | "general";
 
 export default function ProjectDetailPage() {
+  const [previewImage, setPreviewImage] = useState<StaticImageData | null>(
+    null,
+  );
   const params = useParams();
   const projectId = Number(params?.id);
-
+  const [currentIndex, setCurrentIndex] = useState(0);
   const project = useMemo(
     () => allProjects.find((item) => item.id === projectId),
-    [projectId]
+    [projectId],
   );
 
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
-
-  const activeImage =
-    project?.heroImages?.[activeImageIndex] || project?.heroImages?.[0] || hero1;
+  const [activeImage, setActiveImage] = useState<StaticImageData>(
+    project?.heroImages?.[0] || hero1,
+  );
   const [selectedPlan, setSelectedPlan] = useState(
-    project?.floorPlans?.[0]?.label || "1 Bedroom"
+    project?.floorPlans?.[0]?.label || "1 Bedroom",
   );
 
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
@@ -183,9 +186,11 @@ export default function ProjectDetailPage() {
   });
 
   // Mortgage calculator defaults (Dubai-style estimate)
-  const [calcTab, setCalcTab] = useState<"mortgage" | "payment-plan">("mortgage");
+  const [calcTab, setCalcTab] = useState<"mortgage" | "payment-plan">(
+    "mortgage",
+  );
   const [selectedUnit, setSelectedUnit] = useState(
-    project?.floorPlans?.[0]?.label || ""
+    project?.floorPlans?.[0]?.label || "",
   );
 
   const getNumericPrice = (value: string) => {
@@ -204,7 +209,7 @@ export default function ProjectDetailPage() {
     project?.floorPlans?.[0];
 
   const [propertyPrice, setPropertyPrice] = useState(
-    selectedUnitPlan?.price ? getNumericPrice(selectedUnitPlan.price) : 2300000
+    selectedUnitPlan?.price ? getNumericPrice(selectedUnitPlan.price) : 2300000,
   );
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [interestRate, setInterestRate] = useState(3.5);
@@ -214,30 +219,28 @@ export default function ProjectDetailPage() {
   const [constructionPercent, setConstructionPercent] = useState(50);
   const [handoverPercent, setHandoverPercent] = useState(40);
   useEffect(() => {
-    if (!project?.heroImages?.length) return;
-
-    const interval = setInterval(() => {
-      setActiveImageIndex((prev) =>
-        prev === project.heroImages.length - 1 ? 0 : prev + 1
-      );
-    }, 3500);
-
-    return () => clearInterval(interval);
-  }, [project]);
-  useEffect(() => {
-    setActiveImageIndex(0);
-  }, [projectId]);
-  useEffect(() => {
     if (selectedUnitPlan?.price) {
       setPropertyPrice(getNumericPrice(selectedUnitPlan.price));
     }
   }, [selectedUnitPlan]);
+
+  useEffect(() => {
+    if (!project?.heroImages?.length) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) =>
+        prev === project.heroImages.length - 1 ? 0 : prev + 1,
+      );
+    }, 4000); // ⏱️ 4 sec
+
+    return () => clearInterval(interval);
+  }, [project]);
   if (!project) {
     return (
       <div className="min-h-screen bg-black text-white px-6 md:px-12 py-14">
         <Link
           href="/projects"
-          className="inline-flex items-center gap-2 text-sm text-white-300 hover:text-white transition"
+          className="inline-flex items-center gap-2 text-sm lg:text-md lg:text-md text-white-300 hover:text-white transition"
         >
           <FaArrowLeft />
           Back to Projects
@@ -271,7 +274,7 @@ export default function ProjectDetailPage() {
   };
 
   const handleContactChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setContactForm((prev) => ({
@@ -320,29 +323,34 @@ export default function ProjectDetailPage() {
   const bookingAmount = (propertyPrice * bookingPercent) / 100;
   const constructionAmount = (propertyPrice * constructionPercent) / 100;
   const handoverAmount = (propertyPrice * handoverPercent) / 100;
+
+  useEffect(() => {
+    const handleEsc = (e: any) => {
+      if (e.key === "Escape") setPreviewImage(null);
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
   return (
     <>
       <main className="bg-black text-white min-h-screen overflow-x-hidden">
         {/* back */}
-        <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
-          <AutoBreadcrumbs />
-        </section>
 
-        {/* hero */}
         {/* hero */}
         <section className="relative mt-4 px-4 md:px-10">
           <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden rounded-[32px] border border-white/10">
             <Image
-              src={activeImage}
+              // src={activeImage}
+              src={project.heroImages[currentIndex]}
               alt={project.title}
               fill
               priority
-              className="object-cover transition-all duration-700 ease-in-out"
+              className="object-cover"
             />
 
-            <div className="absolute inset-0 bg-black/25" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/15 to-transparent" />
+            {/* <div className="absolute inset-0 bg-black/20" /> */}
+            {/* <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" /> */}
+            {/* <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/15 to-transparent" /> */}
 
             <div className="absolute top-5 right-5 md:top-8 md:right-8 rounded-2xl border border-white/10 bg-black/35 backdrop-blur-md px-5 py-4">
               <p className="text-xs uppercase tracking-[0.2em] text-yellow-400 mb-1">
@@ -351,59 +359,72 @@ export default function ProjectDetailPage() {
               <p className="text-white font-medium">{project.category}</p>
             </div>
 
-            <div className="absolute left-5 right-5 bottom-6 md:left-8 md:right-8 md:bottom-8 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            <div className="flex absolute left-5 right-5 bottom-6 md:left-8 md:right-8 md:bottom-8">
               <div className="max-w-[760px]">
-                <p className="text-[11px] md:text-sm uppercase tracking-[0.28em] text-yellow-400 mb-3">
+                <p className="text-[11px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.28em] text-yellow-400 mb-3">
                   Signature Residence
                 </p>
 
-                <h1 className="text-4xl md:text-6xl xl:text-5xl font-semibold leading-[1.02] mb-4">
+                <h1 className="text-4xl md:text-6xl xl:text-4xl font-semibold leading-[1.02] mb-4">
                   {project.title}
                 </h1>
 
-                <div className="flex items-center gap-2 text-base md:text-lg text-white-200">
+                <div className="flex items-center gap-2 text-base md:text-lg text-white-200 mb-4">
                   <FaMapMarkerAlt className="text-yellow-400" />
                   {project.subLocation}, {project.location}
                 </div>
+
+                {/* <p className="max-w-[620px] text-sm lg:text-md lg:text-md md:text-base text-white-300 leading-relaxed">
+                  {project.description}
+                </p> */}
               </div>
+              {/* gallery thumbs */}
 
-              <div className="ml-auto w-full max-w-[420px]">
-                <div className="rounded-[24px] border border-white/10 bg-black/35 backdrop-blur-md p-3 md:p-4">
-                  <div className="flex gap-3 overflow-x-auto scrollbar-hide">
-                    {project.heroImages.map((image, index) => {
-                      const isActive = index === activeImageIndex;
-
-                      return (
-                        <button
-                          key={index}
-                          onClick={() => setActiveImageIndex(index)}
-                          className={`relative h-[72px] w-[96px] md:h-[84px] md:w-[118px] shrink-0 overflow-hidden rounded-2xl border transition ${isActive
-                              ? "border-yellow-400 shadow-[0_0_18px_rgba(241,220,127,0.25)]"
-                              : "border-white/10 hover:border-yellow-500/40"
-                            }`}
-                        >
-                          <Image
-                            src={image}
-                            alt={`${project.title} ${index + 1}`}
-                            fill
-                            className="object-cover"
-                          />
-                          <div
-                            className={`absolute inset-0 transition ${isActive ? "bg-black/10" : "bg-black/30"
-                              }`}
-                          />
-                        </button>
-                      );
-                    })}
-                  </div>
+              <section className="max-w-4xl mx-auto px-4 md:px-10 py-8">
+                <div className="flex gap-4 overflow-x-auto scrollbar-hide">
+                  {project.heroImages.map((image, index) => {
+                    const active = currentIndex === index;
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentIndex(index)}
+                        className={`relative w-[120px] h-[70px] md:w-[150px] md:h-[100px] rounded-2xl overflow-hidden border transition shrink-0 ${active
+                          ? "border-yellow-400 shadow-[0_0_20px_rgba(241,220,127,0.18)]"
+                          : "border-white/10 hover:border-yellow-500/40"
+                          }`}
+                      >
+                        <Image
+                          src={image}
+                          alt=""
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/20" />
+                      </button>
+                    );
+                  })}
                 </div>
-              </div>
+              </section>
             </div>
           </div>
         </section>
+        <div className="flex justify-between w-full items-center">
 
+          <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6">
+            <AutoBreadcrumbs />
+          </section>
+          <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-2 text-sm lg:text-md lg:text-md text-white-300 hover:text-white transition"
+            >
+              <FaArrowLeft />
+              Back to Projects
+            </Link>
+          </section>
+        </div>
         {/* quick facts + mortgage */}
-        <section className="max-w-7xl mx-auto px-4 md:px-10 mt-6 md:mt-8 relative z-20">
+        <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 relative z-20">
           <div className="grid lg:grid-cols-[1fr_420px] gap-6 items-start">
             <div className="space-y-6">
               <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6">
@@ -430,11 +451,10 @@ export default function ProjectDetailPage() {
                   />
                 </div>
               </div>
-
             </div>
 
             <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6 shadow-[0_0_40px_rgba(250,204,21,0.06)]">
-              <div className="space-y-3 text-sm text-white-300">
+              <div className="space-y-3 text-sm lg:text-md lg:text-md text-white-300">
                 <MetaRow label="Developer" value={project.developer} />
                 <MetaRow label="Property Type" value={project.residence} />
                 <MetaRow label="Handover" value={project.handover} />
@@ -451,10 +471,8 @@ export default function ProjectDetailPage() {
           </div>
         </section>
 
-       
-
         {/* tabs */}
-        <section className="max-w-7xl mx-auto px-4 md:px-10 pt-2 pb-8">
+        <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-2 pb-8">
           <div className="flex gap-3 overflow-x-auto scrollbar-hide">
             {tabs.map((tab) => {
               const active = activeTab === tab;
@@ -462,7 +480,7 @@ export default function ProjectDetailPage() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`whitespace-nowrap rounded-full px-5 py-3 text-sm border transition ${active
+                  className={`whitespace-nowrap rounded-full px-5 py-3 text-sm lg:text-md lg:text-md border transition ${active
                     ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
                     : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
                     }`}
@@ -478,13 +496,13 @@ export default function ProjectDetailPage() {
 
         {/* overview */}
         {activeTab === "overview" && (
-          <section className="max-w-7xl mx-auto px-4 md:px-10 pb-14">
+          <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
             <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
               <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-                <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
+                <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
                   Project Overview
                 </p>
-                <h2 className="text-3xl md:text-4xl font-semibold leading-tight mb-5">
+                <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-5">
                   Premium living shaped by design, location, and long-term value
                 </h2>
                 <p className="text-white-400 leading-relaxed text-base md:text-lg">
@@ -498,7 +516,7 @@ export default function ProjectDetailPage() {
                       className="rounded-2xl border border-white/10 bg-black/30 p-4 flex items-start gap-3"
                     >
                       <FaCheckCircle className="text-yellow-400 mt-1 shrink-0" />
-                      <p className="text-white-300 text-sm leading-relaxed">
+                      <p className="text-white-300 text-sm lg:text-md lg:text-md leading-relaxed">
                         {item}
                       </p>
                     </div>
@@ -507,7 +525,7 @@ export default function ProjectDetailPage() {
               </div>
 
               <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-                <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
+                <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
                   Why It Stands Out
                 </p>
                 <div className="space-y-5 text-white-400">
@@ -546,12 +564,12 @@ export default function ProjectDetailPage() {
         )}
 
         {/* floor plans */}
-        {activeTab === "floorplans" && (
+        {/* {activeTab === "floorplans" && (
           <section className="max-w-7xl mx-auto px-4 md:px-10 pb-14">
             <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
               <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
+                  <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
                     Floor Plans
                   </p>
                   <h2 className="text-3xl md:text-4xl font-semibold leading-tight">
@@ -566,10 +584,11 @@ export default function ProjectDetailPage() {
                       <button
                         key={plan.label}
                         onClick={() => setSelectedPlan(plan.label)}
-                        className={`rounded-full px-5 py-2.5 text-sm border transition ${active
-                          ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
-                          : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
-                          }`}
+                        className={`rounded-full px-5 py-2.5 text-sm lg:text-md lg:text-md border transition ${
+                          active
+                            ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
+                            : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
+                        }`}
                       >
                         {plan.label}
                       </button>
@@ -607,16 +626,16 @@ export default function ProjectDetailPage() {
               </div>
             </div>
           </section>
-        )}
+        )} */}
 
         {/* amenities */}
         {activeTab === "amenities" && (
           <section className="max-w-7xl mx-auto px-4 md:px-10 pb-14">
             <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-              <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
+              <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
                 Amenities
               </p>
-              <h2 className="text-3xl md:text-4xl font-semibold leading-tight mb-8">
+              <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-8">
                 Elevated lifestyle experiences
               </h2>
 
@@ -638,10 +657,10 @@ export default function ProjectDetailPage() {
         )}
 
         {/* gallery */}
-        {activeTab === "gallery" && (
+        {/* {activeTab === "gallery" && (
           <section className="max-w-7xl mx-auto px-4 md:px-10 pb-14">
             <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-              <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
+              <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
                 Gallery
               </p>
               <h2 className="text-3xl md:text-4xl font-semibold leading-tight mb-8">
@@ -661,6 +680,136 @@ export default function ProjectDetailPage() {
               </div>
             </div>
           </section>
+        )} */}
+
+        <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
+          {/* HEADER SAME */}
+          <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8 mb-8">
+            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
+              Floor Plans
+            </p>
+            <h2 className="text-2xl md:text-3xl font-semibold leading-tight">
+              Explore available layouts
+            </h2>
+          </div>
+
+          {/* 🔥 GRID CARDS */}
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {project.floorPlans.map((plan) => {
+              const active = selectedPlan === plan.label;
+
+              return (
+                <div
+                  key={plan.label}
+                  onClick={() => setSelectedPlan(plan.label)}
+                  className={`group cursor-pointer rounded-[28px] overflow-hidden border transition duration-300 ${active
+                    ? "border-yellow-400 shadow-[0_0_30px_rgba(241,220,127,0.1)]"
+                    : "border-white/10 hover:border-yellow-400/40"
+                    }`}
+                >
+                  {/* IMAGE */}
+                  <div className="relative h-[240px]">
+                    <Image
+                      src={plan.image}
+                      alt={plan.label}
+                      fill
+                      className="object-cover group-hover:scale-105 transition duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  </div>
+
+                  {/* CONTENT */}
+                  <div className="p-5 bg-black/40 backdrop-blur-sm">
+                    {/* UNIT TYPE */}
+                    <h3 className="text-xl font-semibold mb-3 text-white">
+                      {plan.label}
+                    </h3>
+
+                    {/* DETAILS */}
+                    <div className="space-y-2 text-sm lg:text-md lg:text-md text-white">
+                      <div className="flex justify-between">
+                        <span>Size</span>
+                        <span>{plan.size}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Starting Price</span>
+                        <span>{plan.price}</span>
+                      </div>
+                    </div>
+
+                    {/* BUTTON */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openContactModal("download-floor-plan");
+                      }}
+                      className="mt-5 w-full rounded-xl border border-white/15 py-3 text-sm lg:text-md lg:text-md hover:border-yellow-400 hover:text-white transition"
+                    >
+                      Download Plan
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
+          <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
+            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
+              Gallery
+            </p>
+            <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-8">
+              Visual highlights of the project
+            </h2>
+
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {project.heroImages.map((image, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => setPreviewImage(image)}
+                  className="relative h-[260px] rounded-[24px] overflow-hidden border border-white/10 cursor-pointer group"
+                >
+                  <Image
+                    src={image}
+                    alt=""
+                    fill
+                    className="object-cover group-hover:scale-110 transition duration-500"
+                  />
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        {previewImage && (
+          <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+            {/* Close on background click */}
+            <div
+              className="absolute inset-0"
+              onClick={() => setPreviewImage(null)}
+            />
+
+            {/* Image */}
+            <div className="relative max-w-4xl w-full px-4">
+              <div className="relative w-full h-[80vh] rounded-2xl overflow-hidden">
+                <Image
+                  src={previewImage}
+                  alt="Preview"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+
+              {/* Close Button */}
+              <button
+                onClick={() => setPreviewImage(null)}
+                className="absolute top-2 right-6 text-white text-3xl font-bold"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
         )}
         <section className="max-w-7xl mx-auto px-4 md:px-10 mt-6 md:mt-8 relative z-20">
           <div className="space-y-6">
@@ -674,7 +823,7 @@ export default function ProjectDetailPage() {
                 <div className="flex flex-wrap gap-3 mb-8">
                   <button
                     onClick={() => setCalcTab("mortgage")}
-                    className={`rounded-full px-6 py-3 text-xs md:text-sm font-semibold tracking-[0.18em] uppercase transition ${calcTab === "mortgage"
+                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md lg:text-md font-semibold tracking-[0.18em] uppercase transition ${calcTab === "mortgage"
                       ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
                       : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
                       }`}
@@ -684,7 +833,7 @@ export default function ProjectDetailPage() {
 
                   <button
                     onClick={() => setCalcTab("payment-plan")}
-                    className={`rounded-full px-6 py-3 text-xs md:text-sm font-semibold tracking-[0.18em] uppercase transition ${calcTab === "payment-plan"
+                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md lg:text-md font-semibold tracking-[0.18em] uppercase transition ${calcTab === "payment-plan"
                       ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
                       : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
                       }`}
@@ -697,7 +846,7 @@ export default function ProjectDetailPage() {
                   {/* left side */}
                   <div className="rounded-[28px] border border-white/10 bg-black/25 p-5 md:p-7">
                     <div className="mb-8">
-                      <label className="block text-sm font-medium text-white-300 mb-3">
+                      <label className="block text-sm lg:text-md lg:text-md font-medium text-white-300 mb-3">
                         Select Unit
                       </label>
 
@@ -725,12 +874,16 @@ export default function ProjectDetailPage() {
                         <PremiumCalcInput
                           label="Property Value"
                           value={propertyPrice}
-                          onChange={(value) => setPropertyPrice(Number(value) || 0)}
+                          onChange={(value) =>
+                            setPropertyPrice(Number(value) || 0)
+                          }
                         />
                         <PremiumCalcInput
                           label="Down Payment %"
                           value={downPaymentPercent}
-                          onChange={(value) => setDownPaymentPercent(Number(value) || 0)}
+                          onChange={(value) =>
+                            setDownPaymentPercent(Number(value) || 0)
+                          }
                         />
                         <PremiumCalcInput
                           label="Term (Years)"
@@ -741,7 +894,9 @@ export default function ProjectDetailPage() {
                           label="Interest Rate %"
                           value={interestRate}
                           step="0.1"
-                          onChange={(value) => setInterestRate(Number(value) || 0)}
+                          onChange={(value) =>
+                            setInterestRate(Number(value) || 0)
+                          }
                         />
                       </div>
                     ) : (
@@ -749,22 +904,30 @@ export default function ProjectDetailPage() {
                         <PremiumCalcInput
                           label="Property Value"
                           value={propertyPrice}
-                          onChange={(value) => setPropertyPrice(Number(value) || 0)}
+                            onChange={(value) =>
+                              setPropertyPrice(Number(value) || 0)
+                            }
                         />
                         <PremiumCalcInput
                           label="Booking %"
                           value={bookingPercent}
-                          onChange={(value) => setBookingPercent(Number(value) || 0)}
+                            onChange={(value) =>
+                              setBookingPercent(Number(value) || 0)
+                            }
                         />
                         <PremiumCalcInput
                           label="During Construction %"
                           value={constructionPercent}
-                          onChange={(value) => setConstructionPercent(Number(value) || 0)}
+                            onChange={(value) =>
+                              setConstructionPercent(Number(value) || 0)
+                            }
                         />
                         <PremiumCalcInput
                           label="On Handover %"
                           value={handoverPercent}
-                          onChange={(value) => setHandoverPercent(Number(value) || 0)}
+                            onChange={(value) =>
+                              setHandoverPercent(Number(value) || 0)
+                            }
                         />
                       </div>
                     )}
@@ -778,15 +941,17 @@ export default function ProjectDetailPage() {
                           Financial Estimate
                         </p>
                         <h3 className="text-2xl md:text-3xl font-semibold text-white">
-                          {calcTab === "mortgage" ? "Mortgage Overview" : "Payment Plan Overview"}
+                          {calcTab === "mortgage"
+                            ? "Mortgage Overview"
+                            : "Payment Plan Overview"}
                         </h3>
                       </div>
 
                       <div className="text-left md:text-right">
-                        <p className="text-sm uppercase tracking-[0.15em] text-white-400 mb-1">
+                        <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.15em] text-white-400 mb-1">
                           Property Value
                         </p>
-                        <p className="text-3xl md:text-5xl font-semibold leading-none text-transparent bg-clip-text bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)]">
+                        <p className="text-2xl md:text-3xl font-semibold leading-none text-transparent bg-clip-text bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)]">
                           AED {formatAED(propertyPrice)}
                         </p>
                       </div>
@@ -899,22 +1064,22 @@ export default function ProjectDetailPage() {
                 </div>
               </div>
             </div>
-
           </div>
         </section>
         {/* cta */}
-        <section className="max-w-7xl mx-auto px-4 md:px-10 py-20">
+        {/* <section className="max-w-7xl mx-auto px-4 md:px-10 py-20">
           <div className="relative overflow-hidden rounded-[32px] border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 via-white/5 to-yellow-500/10 p-8 md:p-12">
             <div className="absolute top-0 left-[10%] h-[220px] w-[220px] rounded-full bg-yellow-500/10 blur-3xl" />
             <div className="absolute bottom-[-60px] right-[5%] h-[220px] w-[220px] rounded-full bg-yellow-400/10 blur-3xl" />
 
             <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
               <div className="max-w-2xl">
-                <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
                   Interested In This Project?
                 </p>
                 <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-4">
-                  Let’s help you evaluate the right opportunity with more clarity
+                  Let’s help you evaluate the right opportunity with more
+                  clarity
                 </h2>
                 <p className="text-white-400 leading-relaxed">
                   Speak with our team for brochure access, floor plans, pricing,
@@ -928,7 +1093,7 @@ export default function ProjectDetailPage() {
                   className="bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black px-6 py-3 rounded-full font-medium hover:scale-[1.03] transition inline-flex items-center gap-2"
                 >
                   Request Brochure
-                  <FaArrowRight className="text-sm" />
+                  <FaArrowRight className="text-sm lg:text-md lg:text-md" />
                 </button>
 
                 <button
@@ -940,7 +1105,7 @@ export default function ProjectDetailPage() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
 
       <ContactModal
@@ -969,7 +1134,7 @@ function FactCard({
     <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
       <div className="flex items-center gap-3 mb-3">
         {icon}
-        <p className="text-sm text-white-400">{label}</p>
+        <p className="text-sm lg:text-md lg:text-md text-white-400">{label}</p>
       </div>
       <p className="text-white font-semibold">{value}</p>
     </div>
@@ -1009,7 +1174,7 @@ function PremiumCalcInput({
 }) {
   return (
     <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
-      <label className="block text-sm text-white-400 mb-2">{label}</label>
+      <label className="block text-sm lg:text-md lg:text-md text-white-400 mb-2">{label}</label>
       <input
         type="number"
         value={value}
@@ -1039,9 +1204,9 @@ function PremiumResultCard({
         : "border-white/10 bg-white/[0.03]"
         }`}
     >
-      <p className="text-sm text-white-400">{title}</p>
+      <p className="text-sm lg:text-md lg:text-md text-white-400">{title}</p>
       <div>
-        <p className="text-2xl md:text-3xl font-semibold text-white leading-tight">
+        <p className="text-xl md:text-2xl font-semibold text-white leading-tight">
           {value}
         </p>
         <p className="mt-2 text-base font-medium text-white-300">{suffix}</p>
@@ -1061,10 +1226,22 @@ function PremiumBreakdownRow({
 }) {
   return (
     <div className="flex items-center justify-between gap-5">
-      <p className={bold ? "text-lg md:text-xl font-semibold text-white" : "text-base md:text-lg text-white-300"}>
+      <p
+        className={
+          bold
+            ? "text-md lg:text-md md:text-lg font-semibold text-white"
+            : "text-base md:text-md lg:text-md text-white-300"
+        }
+      >
         {label}
       </p>
-      <p className={bold ? "text-lg md:text-xl font-semibold text-yellow-400" : "text-base md:text-lg font-medium text-white"}>
+      <p
+        className={
+          bold
+            ? "text-md lg:text-md md:text-lg font-semibold text-yellow-400"
+            : "text-base md:text-md lg:text-md font-medium text-white"
+        }
+      >
         {value}
       </p>
     </div>
@@ -1095,7 +1272,7 @@ function ContactModal({
     message: string;
   };
   onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
   projectTitle: string;
   intent: ContactIntent;
@@ -1105,7 +1282,7 @@ function ContactModal({
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-black/75 backdrop-blur-md"
+        className="absolute inset-0 bg-black/5 backdrop-blur-sm"
         onClick={onClose}
       />
 
@@ -1130,17 +1307,27 @@ function ContactModal({
 
             <div className="space-y-4">
               <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                <p className="text-xs uppercase tracking-[0.16em] text-white-500 mb-1">
+                <p className="text-xs uppercase tracking-[0.16em] text-white-500 mb-2">
                   Project
                 </p>
-                <p className="text-white font-medium">{projectTitle}</p>
+
+                <div className="w-full h-32 relative rounded-xl overflow-hidden">
+                  <Image
+                    src={projectImage}
+                    alt="Project"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               </div>
 
               <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
                 <p className="text-xs uppercase tracking-[0.16em] text-white-500 mb-1">
                   Request Type
                 </p>
-                <p className="text-white font-medium">{getIntentLabel(intent)}</p>
+                <p className="text-white font-medium">
+                  {getIntentLabel(intent)}
+                </p>
               </div>
             </div>
           </div>
@@ -1155,7 +1342,7 @@ function ContactModal({
 
             <form onSubmit={onSubmit} className="space-y-4 pr-0 md:pr-8">
               <div>
-                <label className="text-sm text-white-300 mb-2 block">
+                <label className="text-sm lg:text-md lg:text-md text-white-300 mb-2 block">
                   Full Name
                 </label>
                 <input
@@ -1168,51 +1355,53 @@ function ContactModal({
                 />
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm text-white-300 mb-2 block">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={onChange}
-                    placeholder="Enter your email"
-                    className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-yellow-400/50"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm text-white-300 mb-2 block">
-                    Phone Number
-                  </label>
-                  <input
-                    name="phone"
-                    value={form.phone}
-                    onChange={onChange}
-                    placeholder="Enter your phone number"
-                    className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-yellow-400/50"
-                    required
-                  />
-                </div>
-              </div>
-
+              {/* <div className="grid md:grid-cols-2 gap-4"> */}
               <div>
-                <label className="text-sm text-white-300 mb-2 block">
-                  Message
+                <label className="text-sm lg:text-md lg:text-md text-white-300 mb-2 block">
+                  Email Address
                 </label>
-                <textarea
-                  name="message"
-                  value={form.message}
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
                   onChange={onChange}
-                  placeholder="Tell us what you are looking for"
-                  rows={5}
-                  className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-yellow-400/50 resize-none"
+                  placeholder="Enter your email"
+                  className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-yellow-400/50"
+                  required
                 />
               </div>
 
+              <div>
+                <label className="text-sm lg:text-md lg:text-md text-white-300 mb-2 block">
+                  Phone Number
+                </label>
+                <input
+                  name="phone"
+                  value={form.phone}
+                  onChange={onChange}
+                  placeholder="Enter your phone number"
+                  className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-yellow-400/50"
+                  required
+                />
+              </div>
+              {/* </div> */}
+
+              <div className="flex items-start gap-2 mt-2">
+                <input
+                  type="checkbox"
+                  name="terms"
+                  checked={form.terms || false}
+                  onChange={onChange}
+                  className="mt-1 accent-yellow-500"
+                  required
+                />
+                <label className="text-sm lg:text-md lg:text-md text-white-300">
+                  I accept all{" "}
+                  <span className="text-yellow-400 underline cursor-pointer">
+                    terms and conditions
+                  </span>
+                </label>
+              </div>
               <button
                 type="submit"
                 className="w-full rounded-2xl bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black py-4 font-semibold hover:scale-[1.01] transition"
@@ -1265,7 +1454,7 @@ function getModalHeading(intent: ContactIntent) {
 function getDefaultMessage(
   intent: ContactIntent,
   projectTitle: string,
-  floorPlanLabel?: string
+  floorPlanLabel?: string,
 ) {
   switch (intent) {
     case "schedule-visit":

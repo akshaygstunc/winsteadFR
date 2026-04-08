@@ -47,7 +47,7 @@ const news = [
     category: "Luxury Trends",
   },
   {
-    id: 1,
+    id: 5,
     title: "Dubai Real Estate Market Hits New Highs",
     desc: "Luxury properties continue to dominate with increasing global demand.",
     date: "March 2026",
@@ -55,7 +55,7 @@ const news = [
     category: "Market Update",
   },
   {
-    id: 2,
+    id: 6,
     title: "Top Investment Hotspots in UAE",
     desc: "Explore emerging areas offering strong ROI and growth potential.",
     date: "Feb 2026",
@@ -63,7 +63,7 @@ const news = [
     category: "Investment",
   },
   {
-    id: 3,
+    id: 7,
     title: "Why Off-Plan Investments Are Booming",
     desc: "Flexible payment plans and capital appreciation driving demand.",
     date: "Jan 2026",
@@ -71,7 +71,7 @@ const news = [
     category: "Off-Plan",
   },
   {
-    id: 4,
+    id: 8,
     title: "Luxury Living Redefined",
     desc: "A new wave of ultra-premium developments reshaping skylines.",
     date: "Dec 2025",
@@ -79,7 +79,7 @@ const news = [
     category: "Luxury Trends",
   },
   {
-    id: 1,
+    id: 9,
     title: "Dubai Real Estate Market Hits New Highs",
     desc: "Luxury properties continue to dominate with increasing global demand.",
     date: "March 2026",
@@ -87,7 +87,7 @@ const news = [
     category: "Market Update",
   },
   {
-    id: 2,
+    id: 10,
     title: "Top Investment Hotspots in UAE",
     desc: "Explore emerging areas offering strong ROI and growth potential.",
     date: "Feb 2026",
@@ -95,7 +95,7 @@ const news = [
     category: "Investment",
   },
   {
-    id: 3,
+    id: 11,
     title: "Why Off-Plan Investments Are Booming",
     desc: "Flexible payment plans and capital appreciation driving demand.",
     date: "Jan 2026",
@@ -103,7 +103,7 @@ const news = [
     category: "Off-Plan",
   },
   {
-    id: 4,
+    id: 12,
     title: "Luxury Living Redefined",
     desc: "A new wave of ultra-premium developments reshaping skylines.",
     date: "Dec 2025",
@@ -111,7 +111,7 @@ const news = [
     category: "Luxury Trends",
   },
   {
-    id: 1,
+    id: 13,
     title: "Dubai Real Estate Market Hits New Highs",
     desc: "Luxury properties continue to dominate with increasing global demand.",
     date: "March 2026",
@@ -119,7 +119,7 @@ const news = [
     category: "Market Update",
   },
   {
-    id: 2,
+    id: 14,
     title: "Top Investment Hotspots in UAE",
     desc: "Explore emerging areas offering strong ROI and growth potential.",
     date: "Feb 2026",
@@ -127,7 +127,7 @@ const news = [
     category: "Investment",
   },
   {
-    id: 3,
+    id: 15,
     title: "Why Off-Plan Investments Are Booming",
     desc: "Flexible payment plans and capital appreciation driving demand.",
     date: "Jan 2026",
@@ -135,7 +135,7 @@ const news = [
     category: "Off-Plan",
   },
   {
-    id: 4,
+    id: 16,
     title: "Luxury Living Redefined",
     desc: "A new wave of ultra-premium developments reshaping skylines.",
     date: "Dec 2025",

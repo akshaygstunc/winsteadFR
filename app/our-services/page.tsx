@@ -81,7 +81,7 @@ export default function OurServices() {
       <DetailedServices services={services} />
       <HowItWork processSteps={processSteps} />
       <WhyChooseWinstead trustPoints={trustPoints} />
-      <ServicesCTA />
+      {/* <ServicesCTA /> */}
       <Testimonials />
     </div>
   );

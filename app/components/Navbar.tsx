@@ -111,7 +111,7 @@ export default function Navbar() {
                     }, 150);
                   }}
                 >
-                  <span className="cursor-pointer text-white text-sm flex items-center gap-1">
+                  <span className="cursor-pointer text-white text-sm lg:text-md lg:text-md flex items-center gap-1">
                     {link.name} <IoMdArrowDropdown />
                   </span>
 
@@ -125,7 +125,7 @@ export default function Navbar() {
                         <Link
                           key={i}
                           href={item.href}
-                          className="dropdown-item block px-4 py-2 text-sm text-white hover:bg-yellow-500/10 hover:text-yellow-400 transition"
+                          className="dropdown-item block px-4 py-2 text-sm lg:text-md lg:text-md text-white hover:bg-yellow-500/10 hover:text-yellow-400 transition"
                         >
                           {item.name}
                         </Link>
@@ -141,7 +141,7 @@ export default function Navbar() {
               <Link
                 key={index}
                 href={link.href}
-                className="text-[1.01rem] nav-item relative text-white text-sm font-normal group"
+                className="text-[1.01rem] nav-item relative text-white text-sm lg:text-md  font-normal group"
               >
                 {link.name}
                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
@@ -167,7 +167,7 @@ export default function Navbar() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-2xs font-semibold text-white">4.8</span>
-                <span className="text-yellow-500 text-sm">★★★★★</span>
+                <span className="text-yellow-500 text-sm lg:text-md lg:text-md">★★★★★</span>
               </div>
               <p className="text-white-400 text-xs">
                 Rated by&nbsp; 200+ clients
@@ -197,7 +197,7 @@ export default function Navbar() {
             <a
               key={index}
               href={link.href}
-              className="text-white text-sm border-b border-white/10 pb-2 hover:text-yellow-400 transition"
+              className="text-white text-sm lg:text-md lg:text-md border-b border-white/10 pb-2 hover:text-yellow-400 transition"
             >
               {link.name}
             </a>
@@ -206,7 +206,7 @@ export default function Navbar() {
             if (link.dropdown) {
               return (
                 <div key={index}>
-                  <p className="text-white text-sm font-semibold">
+                  <p className="text-white text-sm lg:text-md lg:text-md font-semibold">
                     {link.name}
                   </p>
 
@@ -215,7 +215,7 @@ export default function Navbar() {
                       <Link
                         key={i}
                         href={item.href}
-                        className="block text-gray-300 text-sm hover:text-yellow-400"
+                        className="block text-gray-300 text-sm lg:text-md lg:text-md hover:text-yellow-400"
                       >
                         {item.name}
                       </Link>
@@ -229,7 +229,7 @@ export default function Navbar() {
               <Link
                 key={index}
                 href={link.href}
-                className="text-white text-sm border-b border-white/10 pb-2 hover:text-yellow-400 transition"
+                className="text-white text-sm lg:text-md lg:text-md border-b border-white/10 pb-2 hover:text-yellow-400 transition"
               >
                 {link.name}
               </Link>
@@ -251,7 +251,7 @@ export default function Navbar() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-2xs font-semibold text-white">4.8</span>
-                <span className="text-yellow-500 text-sm">★★★★★</span>
+                <span className="text-yellow-500 text-sm lg:text-md lg:text-md">★★★★★</span>
               </div>
               <p className="text-white-400 text-xs">
                 Rated by&nbsp; 200+ clients

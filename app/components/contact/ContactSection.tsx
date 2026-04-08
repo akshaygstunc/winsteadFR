@@ -76,7 +76,7 @@ Dubai, UAE"
                         </div>
 
                         {/* PHONE + EMAIL */}
-                        <div className="grid md:grid-cols-2 gap-4">
+                        {/* <div className="grid md:grid-cols-2 gap-4"> */}
                             <div>
                                 <label className="text-sm mb-2 block text-white-300">Phone</label>
                                 <div className="flex items-center bg-black/40 border border-white/10 rounded-2xl px-4 py-4 focus-within:border-yellow-400 focus-within:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition">
@@ -96,10 +96,10 @@ Dubai, UAE"
                                     className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white-500 focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition"
                                 />
                             </div>
-                        </div>
+                        {/* </div> */}
 
                         {/* SELECTS */}
-                        <div className="grid md:grid-cols-2 gap-4">
+                        {/* <div className="grid md:grid-cols-2 gap-4">
                             <div>
                                 <label className="text-sm mb-2 block text-white-300">Project Type</label>
                                 <select className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition">
@@ -118,17 +118,17 @@ Dubai, UAE"
                                     <option>4+ Bedrooms</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* MESSAGE */}
-                        <div>
+                        {/* <div>
                             <label className="text-sm mb-2 block text-white-300">Message</label>
                             <textarea
                                 rows={5}
                                 placeholder="Tell us what kind of property or opportunity you are looking for"
                                 className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white-500 focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition resize-none"
                             />
-                        </div>
+                        </div> */}
 
                         {/* SUBMIT */}
                         <button

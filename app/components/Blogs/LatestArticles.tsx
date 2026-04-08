@@ -49,7 +49,7 @@ export default function LatestArticles({ news }: { news: { id: number; title: st
                                     {item.title}
                                 </h3>
 
-                                <p className="text-sm text-white-400 leading-relaxed">
+                                <p className="text-sm lg:text-md text-white-400 leading-relaxed">
                                     {item.desc}
                                 </p>
 

@@ -29,7 +29,7 @@ export default function NewsToolbar({
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search articles..."
-                            className="w-full rounded-full border border-white/10 bg-white/[0.03] pl-11 pr-4 py-3 text-sm outline-none placeholder:text-white/35 focus:border-[#F1DC7F]"
+                            className="w-full rounded-full border border-white/10 bg-white/[0.03] pl-11 pr-4 py-3 text-sm lg:text-md lg:text-md outline-none placeholder:text-white focus:border-[#F1DC7F]"
                         />
                     </div>
 
@@ -37,7 +37,7 @@ export default function NewsToolbar({
                         <select
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
-                            className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-3 text-sm outline-none focus:border-[#F1DC7F]"
+                            className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-3 text-sm lg:text-md lg:text-md outline-none focus:border-[#F1DC7F]"
                         >
                             <option value="all" className="bg-black">All Categories</option>
                             <option value="market-trends" className="bg-black">Market Trends</option>
@@ -48,7 +48,7 @@ export default function NewsToolbar({
                         <select
                             value={sort}
                             onChange={(e) => setSort(e.target.value)}
-                            className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-3 text-sm outline-none focus:border-[#F1DC7F]"
+                            className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-3 text-sm lg:text-md lg:text-md outline-none focus:border-[#F1DC7F]"
                         >
                             <option value="latest" className="bg-black">Latest First</option>
                             <option value="oldest" className="bg-black">Oldest First</option>

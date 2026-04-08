@@ -141,7 +141,7 @@ function ProjectsContent() {
         setShowFilter={setShowFilter}
       />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-12 pb-20">
+      <div className="max-w-[85rem] mx-auto px-4 md:px-12 pb-20">
         <ResultsBar count={filteredProjects.length} filters={filters} />
 
         <div className="flex flex-col md:flex-row items-start gap-8">

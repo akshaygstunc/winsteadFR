@@ -116,7 +116,7 @@ export default function ContactModal({
 
                         <form onSubmit={onSubmit} className="space-y-4 pr-0 md:pr-8">
                             <div>
-                                <label className="text-sm text-white-300 mb-2 block">
+                                <label className="text-sm lg:text-md lg:text-md text-white-300 mb-2 block">
                                     Full Name
                                 </label>
                                 <input
@@ -131,7 +131,7 @@ export default function ContactModal({
 
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="text-sm text-white-300 mb-2 block">
+                                    <label className="text-sm lg:text-md lg:text-md text-white-300 mb-2 block">
                                         Email Address
                                     </label>
                                     <input
@@ -146,7 +146,7 @@ export default function ContactModal({
                                 </div>
 
                                 <div>
-                                    <label className="text-sm text-white-300 mb-2 block">
+                                    <label className="text-sm lg:text-md lg:text-md text-white-300 mb-2 block">
                                         Phone Number
                                     </label>
                                     <input
@@ -161,7 +161,7 @@ export default function ContactModal({
                             </div>
 
                             <div>
-                                <label className="text-sm text-white-300 mb-2 block">
+                                <label className="text-sm lg:text-md lg:text-md text-white-300 mb-2 block">
                                     Message
                                 </label>
                                 <textarea

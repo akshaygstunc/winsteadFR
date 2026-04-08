@@ -25,7 +25,7 @@ export default function TeamHero({ teamPerson }: { teamPerson: string }) {
                             <FaCircleNotch className="animate-spin text-yellow-400 text-3xl" />
 
                             {/* OPTIONAL TEXT */}
-                            <p className="text-sm text-white-400 tracking-wide">
+                            <p className="text-sm lg:text-md lg:text-md text-white-400 tracking-wide">
                                 Loading experience...
                             </p>
                         </div>
@@ -49,11 +49,11 @@ export default function TeamHero({ teamPerson }: { teamPerson: string }) {
             <div className="relative z-10 h-full flex items-end">
                 <div className="w-full max-w-7xl mx-auto px-6 md:px-12 pb-14 md:pb-20">
                     <div className="max-w-[620px]">
-                        <p className="text-[11px] md:text-sm uppercase tracking-[0.28em] text-yellow-400 mb-4">
+                        <p className="text-[11px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.28em] text-yellow-400 mb-4">
                             Meet The Advisor
                         </p>
 
-                        <h4 className="mt-3 text-lg md:text-4xl text-white/90 font-medium">
+                        <h4 className="mt-3 text-lg md:text-4xl text-white font-medium">
                             Luxury Property  <span className="block bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
                                 Advisor.
                             </span>

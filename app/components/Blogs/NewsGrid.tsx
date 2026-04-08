@@ -33,7 +33,7 @@ export default function NewsGrid({ news }: { news: NewsItem[] }) {
                                     className={`group rounded-[28px] overflow-hidden border border-white/10 bg-white/[0.03] hover:border-[#F1DC7F]/30 hover:shadow-[0_0_40px_rgba(241,220,127,0.08)] transition duration-300 ${isLarge ? "md:col-span-1 xl:col-span-1" : ""
                                         }`}
                                 >
-                                    <Link href={`/news-media/${item.slug}`} className="block">
+                                    <Link href={`/blogs/${item.id}`}className="block">
                                         <div className={`relative w-full ${isLarge ? "h-[320px] md:h-[360px]" : "h-[260px]"}`}>
                                             <Image
                                                 src={item.img}

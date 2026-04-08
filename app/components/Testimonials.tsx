@@ -113,17 +113,17 @@ export default function Testimonials() {
               </span>
             </h2>
 
-            <p className="testimonial-subtext mt-5 text-white/90 text-base md:text-lg leading-relaxed">
+            <p className="testimonial-subtext mt-5 text-white text-base md:text-lg leading-relaxed">
               Discover how our clients experienced a smoother, smarter, and more
               refined property journey with expert guidance every step of the way.
             </p>
           </div>
 
-          <div className="review-cta">
-            <button className="group border border-[#F1DC7F]/40 px-6 py-3 rounded-full text-sm font-medium hover:bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] hover:text-black transition-all duration-300">
+          {/* <div className="review-cta">
+            <button className="group border border-[#F1DC7F]/40 px-6 py-3 rounded-full text-sm lg:text-md lg:text-md font-medium hover:bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] hover:text-black transition-all duration-300">
               Write a Review
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* slider */}
@@ -158,7 +158,7 @@ export default function Testimonials() {
                     <h4 className="text-lg font-semibold text-white">
                       {review.name}
                     </h4>
-                    <p className="text-sm text-white/45">{review.role}</p>
+                    <p className="text-sm lg:text-md lg:text-md text-white">{review.role}</p>
                   </div>
                 </div>
 
@@ -183,7 +183,7 @@ export default function Testimonials() {
                     Verified Review
                   </span>
 
-                  <span className="text-sm text-[#F1DC7F]">
+                  <span className="text-sm lg:text-md lg:text-md text-[#F1DC7F]">
                     5.0 Rating
                   </span>
                 </div>
