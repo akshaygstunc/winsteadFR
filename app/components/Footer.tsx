@@ -39,7 +39,7 @@ export default function Footer() {
               Book a Consultation
             </button>
             <button className="px-6 py-3 rounded-full border border-yellow-500/60 hover:border-[#F1DC7F] hover:text-[#F1DC7F] transition">
-              <FaWhatsapp className="w-6 h-6 text-yellow-400 text-lg transition duration-300"/>
+              <FaWhatsapp className="w-6 h-6 text-yellow-400 text-lg transition duration-300" />
             </button>
           </div>
         </div>
@@ -51,24 +51,27 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Image src={logo} alt="Winstead" width={74} className="mb-5" />
-            <p className="text-white leading-relaxed text-sm md:text-base max-w-sm">
+            {/* <p className="text-white leading-relaxed text-sm md:text-base max-w-sm">
               Winstead delivers access to refined living and high-potential real
               estate opportunities through a tailored, investor-first approach.
-            </p>
+            </p> */}
 
             <div className="flex gap-3 mt-6">
-              {[FaFacebookF, FaInstagram, FaLinkedinIn, FaWhatsapp, FaYoutube].map(
-                (Icon, i) => (
-                  <a
-                    key={i}
-                    href="#"
-                    className="w-10 h-10 rounded-full border border-yellow-500/60 flex items-center justify-center text-yellow-400 text-xl hover:bg-yellow-500 hover:text-black transition duration-300"
-                  >
-                    <Icon />
-
-                  </a>
-                ),
-              )}
+              {[
+                FaFacebookF,
+                FaInstagram,
+                FaLinkedinIn,
+                FaWhatsapp,
+                FaYoutube,
+              ].map((Icon, i) => (
+                <a
+                  key={i}
+                  href="#"
+                  className="w-10 h-10 rounded-full border border-yellow-500/60 flex items-center justify-center text-yellow-400 text-xl hover:bg-yellow-500 hover:text-black transition duration-300"
+                >
+                  <Icon />
+                </a>
+              ))}
             </div>
           </div>
 
@@ -76,12 +79,54 @@ export default function Footer() {
           <div>
             <h3 className="text-white text-lg mb-5">Quick Links</h3>
             <ul className="space-y-3 text-white">
-              <li><Link href="/about-us" className="hover:text-[#F1DC7F] transition">About Us</Link></li>
-              <li><Link href="/projects" className="hover:text-[#F1DC7F] transition">Projects</Link></li>
-              <li><Link href="/our-services" className="hover:text-[#F1DC7F] transition">Services</Link></li>
-              <li><Link href="/our-team" className="hover:text-[#F1DC7F] transition">Our Team</Link></li>
-              <li><Link href="/news-media" className="hover:text-[#F1DC7F] transition">News & Media</Link></li>
-              <li><Link href="/career" className="hover:text-[#F1DC7F] transition">Career</Link></li>
+              <li>
+                <Link
+                  href="/about-us"
+                  className="hover:text-[#F1DC7F] transition"
+                >
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/projects"
+                  className="hover:text-[#F1DC7F] transition"
+                >
+                  Projects
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/our-services"
+                  className="hover:text-[#F1DC7F] transition"
+                >
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/our-team"
+                  className="hover:text-[#F1DC7F] transition"
+                >
+                  Our Team
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/news-media"
+                  className="hover:text-[#F1DC7F] transition"
+                >
+                  News & Media
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/career"
+                  className="hover:text-[#F1DC7F] transition"
+                >
+                  Career
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -89,15 +134,35 @@ export default function Footer() {
           <div>
             <h3 className="text-white text-lg mb-5">Explore</h3>
             <ul className="space-y-3 text-white">
-              <li><a href="#" className="hover:text-[#F1DC7F] transition">Luxury Apartments</a></li>
-              <li><a href="#" className="hover:text-[#F1DC7F] transition">Villas & Townhouses</a></li>
-              <li><a href="#" className="hover:text-[#F1DC7F] transition">Waterfront Homes</a></li>
-              <li><a href="#" className="hover:text-[#F1DC7F] transition">Investment Opportunities</a></li>
-              <li><a href="#" className="hover:text-[#F1DC7F] transition">Prime Communities</a></li>
+              <li>
+                <a href="#" className="hover:text-[#F1DC7F] transition">
+                  Luxury Apartments
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-[#F1DC7F] transition">
+                  Villas & Townhouses
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-[#F1DC7F] transition">
+                  Waterfront Homes
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-[#F1DC7F] transition">
+                  Investment Opportunities
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-[#F1DC7F] transition">
+                  Prime Communities
+                </a>
+              </li>
             </ul>
           </div>
 
-          {/* Contact */}  
+          {/* Contact */}
           <div>
             <h3 className="text-white text-lg mb-5">Contact</h3>
             <div className="space-y-4 text-white text-sm md:text-base">
@@ -129,12 +194,16 @@ export default function Footer() {
 
         {/* giant wordmark */}
         <div className="relative">
-          <div className="absolute inset-0 blur-3xl opacity-20 
-    bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700]" />
+          <div
+            className="absolute inset-0 blur-3xl opacity-20 
+    bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700]"
+          />
 
-          <h6 className="relative text-[15vw] leading-none text-center font-bold whitespace-nowrap 
+          <h6
+            className="relative text-[15vw] leading-none text-center font-bold whitespace-nowrap 
     bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] 
-    bg-clip-text text-transparent opacity-80">
+    bg-clip-text text-transparent opacity-80"
+          >
             WINSTEAD
           </h6>
         </div>
@@ -146,9 +215,15 @@ export default function Footer() {
           <p>© 2026 Winstead Global Real Estate LLC</p>
 
           <div className="flex items-center gap-4">
-            <a href="#" className="hover:text-[#F1DC7F] transition">Privacy Policy</a>
-            <a href="#" className="hover:text-[#F1DC7F] transition">Terms & Conditions</a>
-            <a href="#" className="hover:text-[#F1DC7F] transition">Sitemap</a>
+            <a href="#" className="hover:text-[#F1DC7F] transition">
+              Privacy Policy
+            </a>
+            <a href="#" className="hover:text-[#F1DC7F] transition">
+              Terms & Conditions
+            </a>
+            <a href="#" className="hover:text-[#F1DC7F] transition">
+              Sitemap
+            </a>
           </div>
         </div>
       </div>

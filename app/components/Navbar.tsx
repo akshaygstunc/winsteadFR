@@ -13,7 +13,16 @@ import { IoMdArrowDropdown } from "react-icons/io";
 
 const navLinks = [
   { name: "About Us", href: "/about-us" },
-  { name: "Projects", href: "/projects" },
+  // { name: "Projects", href: "/projects" },
+  {
+    name: "Projects",
+    dropdown: [
+      { name: "Offplan", href: "/projects" },
+      { name: "Commercial", href: "/projects" },
+      { name: "Residencial", href: "/projects" },
+      { name: "Plot", href: "/projects" },
+    ],
+  },
   { name: "Our Services", href: "/our-services" },
   { name: "Our Team", href: "/our-team" },
   {
@@ -71,7 +80,7 @@ export default function Navbar() {
   const timeoutRef = useRef<any>(null);
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black border-b border-white/10">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 py-4">
+      <div className="flex items-center justify-between px-6 md:px-10 py-4">
         {/* Logo */}
         <Link href="/" className="nav-item flex items-center">
           <Image
@@ -114,7 +123,7 @@ export default function Navbar() {
                       setShowDropdown(false);
                     }, 150); // small delay fixes flicker
                   }}
-                >  
+                >
                   <span className="cursor-pointer text-white text-sm flex items-center gap-1">
                     {link.name} <IoMdArrowDropdown />
                   </span>
@@ -271,4 +280,4 @@ export default function Navbar() {
       </div>
     </header>
   );
-}  
+}

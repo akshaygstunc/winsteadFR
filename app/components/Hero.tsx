@@ -12,7 +12,7 @@ export default function Hero() {
 
   useEffect(() => {
     gsap.from(".hero-img", {
-      scale: 1.1, 
+      scale: 1.1,
       duration: 1,
       ease: "power2.out",
     });
@@ -28,18 +28,16 @@ export default function Hero() {
 
   return (
     <div className="h-screen relative">
-
       {/* FALLBACK IMAGE */}
       {!videoLoaded && (
         // <div
-         
+
         //   className="hero-img object-cover object-top z-0 flex justify-center items-center"
         // >
-         
+
         // </div>
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-black">
           <div className="flex flex-col items-center gap-4">
-
             {/* LOADER */}
             <FaCircleNotch className="animate-spin text-yellow-400 text-3xl" />
 
@@ -56,7 +54,7 @@ export default function Hero() {
         className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 ${
           videoLoaded ? "opacity-100" : "opacity-0"
         }`}
-       src="/video.mp4"
+        src="/video.mp4"
         autoPlay
         muted
         loop
@@ -75,6 +73,7 @@ export default function Hero() {
 
           <SearchBar />
         </div>
+        
       </div>
     </div>
   );

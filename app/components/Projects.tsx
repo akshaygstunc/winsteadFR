@@ -38,7 +38,8 @@ function FeaturedProjects() {
           Featured Projects
         </h2>
         <p className="text-white-400 text-[.95rem] mt-2 max-w-xl">
-          Discover exceptional properties with Winstead in premium locations worldwide.
+          Discover exceptional properties with Winstead in premium locations
+          worldwide.
         </p>
       </div>
 
@@ -46,10 +47,11 @@ function FeaturedProjects() {
         {/* All */}
         <button
           onClick={() => handleMainFilter("All")}
-          className={`text-[1.05rem] px-4 py-2 text-sm rounded-lg border transition ${activeFilter === "All"
-            ? "bg-yellow-500 text-black border-yellow-500"
-            : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
-            }`}
+          className={`text-[1.05rem] px-4 py-2 text-sm rounded-lg border transition ${
+            activeFilter === "All"
+              ? "bg-yellow-500 text-black border-yellow-500"
+              : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
+          }`}
         >
           All
         </button>
@@ -57,10 +59,11 @@ function FeaturedProjects() {
         {/* Elite */}
         <button
           onClick={() => handleMainFilter("Elite")}
-          className={`text-[1.05rem] px-4 py-2 text-sm rounded-lg border transition ${activeFilter === "Elite"
-            ? "bg-yellow-500 text-black border-yellow-500"
-            : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
-            }`}
+          className={`text-[1.05rem] px-4 py-2 text-sm rounded-lg border transition ${
+            activeFilter === "Elite"
+              ? "bg-yellow-500 text-black border-yellow-500"
+              : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
+          }`}
         >
           Elite
         </button>
@@ -68,10 +71,11 @@ function FeaturedProjects() {
         {/* Luxury */}
         <button
           onClick={() => handleMainFilter("Luxury")}
-          className={`text-[1.05rem] px-4 py-2 text-sm rounded-lg border transition ${activeFilter === "Luxury"
-            ? "bg-yellow-500 text-black border-yellow-500"
-            : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
-            }`}
+          className={`text-[1.05rem] px-4 py-2 text-sm rounded-lg border transition ${
+            activeFilter === "Luxury"
+              ? "bg-yellow-500 text-black border-yellow-500"
+              : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
+          }`}
         >
           Luxury
         </button>
@@ -83,10 +87,11 @@ function FeaturedProjects() {
               setVendorOpen(!vendorOpen);
               setActiveFilter("Vendor");
             }}
-            className={`text-[1.05rem] px-4 py-2 text-sm rounded-lg border transition flex items-center gap-2 ${activeFilter === "Vendor"
-              ? "bg-yellow-500 text-black border-yellow-500"
-              : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
-              }`}
+            className={`text-[1.05rem] px-4 py-2 text-sm rounded-lg border transition flex items-center gap-2 ${
+              activeFilter === "Vendor"
+                ? "bg-yellow-500 text-black border-yellow-500"
+                : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
+            }`}
           >
             {selectedVendor || "Vendor"}
             <span className="text-xs">▼</span>
@@ -164,22 +169,37 @@ export default function Projects() {
       ref={sectionRef}
       className="relative px-6 md:px-10 pt-24 md:pt-40 pb-20 bg-black text-white"
     >
-      {/* HEADER */}
-      {/* <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
-        <div>
-          <h2 className="text-2xl md:text-3xl font-semibold">
-            Featured Projects
-          </h2>
-          <p className="text-white-400 text-md mt-2 max-w-xl">
-            Discover exceptional properties with Winstead in premium locations
-            worldwide.
-          </p>
-        </div>
+      {/* About Winstead */}
+      <section className="bg-black text-white py-16">
+          <div className="grid md:grid-cols-[30%_70%] gap-10 items-center">
+            {/* LEFT IMAGE */}
+            <div>
+              <Image
+                src={image2}
+                alt="About"
+                className="w-full h-[200px] md:h-[300px] object-cover rounded-xl"
+              />
+            </div>
 
-        <button className="border border-yellow-500 px-5 py-2 rounded-lg text-sm hover:bg-yellow-500 hover:text-black transition">
-          View All Projects
-        </button>
-      </div> */}
+            {/* RIGHT TEXT */}
+            <div className="max-w-7xl">
+              <h3 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
+                About Winstead
+              </h3>
+
+              <p className="text-gray-300 leading-relaxed">
+                Our extensive portfolio features an array of premium villas,
+                apartments, and townhouses designed to offer unmatched comfort
+                and elegance.
+              </p>
+
+              <p className="text-gray-300 mt-4 leading-relaxed">
+                Our team of experienced professionals is dedicated to helping
+                you find the perfect home that exceeds your expectations.
+              </p>
+            </div>
+          </div>
+      </section>
       <FeaturedProjects />
       {/* GRID */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">

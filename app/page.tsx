@@ -10,6 +10,7 @@ import img1 from "../public/hero1.jpg";
 import img2 from "../public/hero2.png";
 import img3 from "../public/hero3.jpg";
 import img4 from "../public/hero4.png";
+import UltraLuxury from "./components/ultraLuxury";
 export default function Home() {
   const news = [
     {
@@ -50,10 +51,11 @@ export default function Home() {
       {/* <Navbar /> */}
       <Hero />
       <Projects />
-      <Stats />
+      <Logos />
+      <UltraLuxury />
       <Testimonials />
       <Reel/>
-      <Logos />
+      <Stats />
       <LatestArticles news={news} />
     </div>
   );
