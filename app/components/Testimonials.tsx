@@ -92,12 +92,12 @@ export default function Testimonials() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-black text-white px-6 md:px-16 py-24"
+      className="relative overflow-hidden  text-white px-6 md:px-16 py-24"
     >
       {/* background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[45rem] h-[45rem] bg-yellow-400/5 blur-[160px] rounded-full pointer-events-none" />
 
-      <div className="relative mx-auto">
+      <div className="max-w-[85rem] relative mx-auto">
         {/* header */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
           <div className="max-w-2xl">

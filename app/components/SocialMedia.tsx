@@ -31,7 +31,7 @@ export default function FollowUsIcons() {
     ];
 
     return (
-        <div>
+        <div className="">
          
 
             <div className="flex flex-wrap items-center gap-3">

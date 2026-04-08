@@ -3,8 +3,8 @@ import Image from "next/image";
 import img from "../../../public/image_7.png";
 export default function LatestArticles({ news }: { news: { id: number; title: string; desc: string; date: string; category: string, img: string }[] }) {
     return (
-        <section className="py-20 px-6 md:px-12 border-b border-white/10">
-            <div className="max-w-7xl mx-auto">
+        <section className="py-20 px-6 md:px-6 border-b border-white/10">
+            <div className="max-w-[85rem] mx-auto">
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
                     <div>
                         <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">

@@ -162,7 +162,7 @@ export default function Projects() {
   return (
     <section
       ref={sectionRef}
-      className="relative px-6 md:px-10 pt-24 md:pt-40 pb-20 bg-black text-white"
+      className="mx-auto max-w-[85rem] relative px-6 md:px-10 pt-24 md:pt-40 pb-20 bg-black text-white"
     >
       {/* HEADER */}
       {/* <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">

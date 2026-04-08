@@ -51,7 +51,7 @@ const [hovered, setHovered] = useState<number | null>(null);
 
   return (
     <section className="bg-black pb-16 px-4 md:px-12 overflow-hidden">
-      <div className="mx-auto">
+      <div className="max-w-[85rem] mx-auto">
         {/* HEADER */}
         <div className="flex items-center justify-between mb-8 px-5 py-4 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
           <div className="flex items-center gap-4">
