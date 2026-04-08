@@ -13,9 +13,10 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { FaArrowRight, FaDollarSign } from "react-icons/fa6";
-import hero2 from "../../../public/image_6.png";
-import hero1 from "../../../public/image_7.png";
-import hero3 from "../../../public/image_5.png";
+import hero1 from "../../../public/hero1.jpg";
+import hero2 from "../../../public/hero2.png";
+import hero3 from "../../../public/hero3.jpg";
+import AutoBreadcrumbs from "@/app/components/BreadCrumbs";
 
 type Project = {
   id: number;
@@ -58,7 +59,7 @@ const allProjects: Project[] = [
     developer: "Emaar",
     description:
       "A refined collection of ultra-luxury residences crafted for buyers seeking iconic location, architectural elegance, and long-term value in one of Dubai’s most desirable districts.",
-    heroImages: [hero2, hero1, hero3, hero1, hero2],
+    heroImages: [hero1, hero2, hero3, hero1, hero2],
     floorPlans: [
       {
         label: "1 Bedroom",
@@ -156,18 +157,19 @@ type ContactIntent =
 export default function ProjectDetailPage() {
   const params = useParams();
   const projectId = Number(params?.id);
-  const [currentIndex, setCurrentIndex] = useState(0);
+
   const project = useMemo(
     () => allProjects.find((item) => item.id === projectId),
-    [projectId],
+    [projectId]
   );
 
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
-  const [activeImage, setActiveImage] = useState<StaticImageData>(
-    project?.heroImages?.[0] || hero1,
-  );
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const activeImage =
+    project?.heroImages?.[activeImageIndex] || project?.heroImages?.[0] || hero1;
   const [selectedPlan, setSelectedPlan] = useState(
-    project?.floorPlans?.[0]?.label || "1 Bedroom",
+    project?.floorPlans?.[0]?.label || "1 Bedroom"
   );
 
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
@@ -181,11 +183,9 @@ export default function ProjectDetailPage() {
   });
 
   // Mortgage calculator defaults (Dubai-style estimate)
-  const [calcTab, setCalcTab] = useState<"mortgage" | "payment-plan">(
-    "mortgage",
-  );
+  const [calcTab, setCalcTab] = useState<"mortgage" | "payment-plan">("mortgage");
   const [selectedUnit, setSelectedUnit] = useState(
-    project?.floorPlans?.[0]?.label || "",
+    project?.floorPlans?.[0]?.label || ""
   );
 
   const getNumericPrice = (value: string) => {
@@ -204,7 +204,7 @@ export default function ProjectDetailPage() {
     project?.floorPlans?.[0];
 
   const [propertyPrice, setPropertyPrice] = useState(
-    selectedUnitPlan?.price ? getNumericPrice(selectedUnitPlan.price) : 2300000,
+    selectedUnitPlan?.price ? getNumericPrice(selectedUnitPlan.price) : 2300000
   );
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [interestRate, setInterestRate] = useState(3.5);
@@ -214,22 +214,24 @@ export default function ProjectDetailPage() {
   const [constructionPercent, setConstructionPercent] = useState(50);
   const [handoverPercent, setHandoverPercent] = useState(40);
   useEffect(() => {
+    if (!project?.heroImages?.length) return;
+
+    const interval = setInterval(() => {
+      setActiveImageIndex((prev) =>
+        prev === project.heroImages.length - 1 ? 0 : prev + 1
+      );
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [project]);
+  useEffect(() => {
+    setActiveImageIndex(0);
+  }, [projectId]);
+  useEffect(() => {
     if (selectedUnitPlan?.price) {
       setPropertyPrice(getNumericPrice(selectedUnitPlan.price));
     }
   }, [selectedUnitPlan]);
-
-  useEffect(() => {
-    if (!project?.heroImages?.length) return;
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) =>
-        prev === project.heroImages.length - 1 ? 0 : prev + 1
-      );
-    }, 4000); // ⏱️ 4 sec
-
-    return () => clearInterval(interval);
-  }, [project]);
   if (!project) {
     return (
       <div className="min-h-screen bg-black text-white px-6 md:px-12 py-14">
@@ -269,7 +271,7 @@ export default function ProjectDetailPage() {
   };
 
   const handleContactChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setContactForm((prev) => ({
@@ -323,30 +325,24 @@ export default function ProjectDetailPage() {
       <main className="bg-black text-white min-h-screen overflow-x-hidden">
         {/* back */}
         <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
-          <Link
-            href="/projects"
-            className="inline-flex items-center gap-2 text-sm text-white-300 hover:text-white transition"
-          >
-            <FaArrowLeft />
-            Back to Projects
-          </Link>
+          <AutoBreadcrumbs />
         </section>
 
+        {/* hero */}
         {/* hero */}
         <section className="relative mt-4 px-4 md:px-10">
           <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden rounded-[32px] border border-white/10">
             <Image
-              // src={activeImage}
-              src={project.heroImages[currentIndex]}
+              src={activeImage}
               alt={project.title}
               fill
               priority
-              className="object-cover"
+              className="object-cover transition-all duration-700 ease-in-out"
             />
 
-            <div className="absolute inset-0 bg-black/20" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/15 to-transparent" />
+            <div className="absolute inset-0 bg-black/25" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/15 to-transparent" />
 
             <div className="absolute top-5 right-5 md:top-8 md:right-8 rounded-2xl border border-white/10 bg-black/35 backdrop-blur-md px-5 py-4">
               <p className="text-xs uppercase tracking-[0.2em] text-yellow-400 mb-1">
@@ -355,52 +351,53 @@ export default function ProjectDetailPage() {
               <p className="text-white font-medium">{project.category}</p>
             </div>
 
-            <div className="flex absolute left-5 right-5 bottom-6 md:left-8 md:right-8 md:bottom-8">
+            <div className="absolute left-5 right-5 bottom-6 md:left-8 md:right-8 md:bottom-8 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
               <div className="max-w-[760px]">
                 <p className="text-[11px] md:text-sm uppercase tracking-[0.28em] text-yellow-400 mb-3">
                   Signature Residence
                 </p>
 
-                <h1 className="text-4xl md:text-6xl xl:text-4xl font-semibold leading-[1.02] mb-4">
+                <h1 className="text-4xl md:text-6xl xl:text-5xl font-semibold leading-[1.02] mb-4">
                   {project.title}
                 </h1>
 
-                <div className="flex items-center gap-2 text-base md:text-lg text-white-200 mb-4">
+                <div className="flex items-center gap-2 text-base md:text-lg text-white-200">
                   <FaMapMarkerAlt className="text-yellow-400" />
                   {project.subLocation}, {project.location}
                 </div>
-
-                {/* <p className="max-w-[620px] text-sm md:text-base text-white-300 leading-relaxed">
-                  {project.description}
-                </p> */}
               </div>
-              {/* gallery thumbs */}
 
-              <section className="max-w-4xl mx-auto px-4 md:px-10 py-8">
-                <div className="flex gap-4 overflow-x-auto scrollbar-hide">
-                  {project.heroImages.map((image, index) => {
-                    const active = currentIndex === index;
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentIndex(index)}
-                        className={`relative w-[120px] h-[70px] md:w-[150px] md:h-[100px] rounded-2xl overflow-hidden border transition shrink-0 ${active
-                            ? "border-yellow-400 shadow-[0_0_20px_rgba(241,220,127,0.18)]"
-                            : "border-white/10 hover:border-yellow-500/40"
-                          }`}
-                      >
-                        <Image
-                          src={image}
-                          alt=""
-                          fill
-                          className="object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/20" />
-                      </button>
-                    );
-                  })}
+              <div className="ml-auto w-full max-w-[420px]">
+                <div className="rounded-[24px] border border-white/10 bg-black/35 backdrop-blur-md p-3 md:p-4">
+                  <div className="flex gap-3 overflow-x-auto scrollbar-hide">
+                    {project.heroImages.map((image, index) => {
+                      const isActive = index === activeImageIndex;
+
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => setActiveImageIndex(index)}
+                          className={`relative h-[72px] w-[96px] md:h-[84px] md:w-[118px] shrink-0 overflow-hidden rounded-2xl border transition ${isActive
+                              ? "border-yellow-400 shadow-[0_0_18px_rgba(241,220,127,0.25)]"
+                              : "border-white/10 hover:border-yellow-500/40"
+                            }`}
+                        >
+                          <Image
+                            src={image}
+                            alt={`${project.title} ${index + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                          <div
+                            className={`absolute inset-0 transition ${isActive ? "bg-black/10" : "bg-black/30"
+                              }`}
+                          />
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </section>
+              </div>
             </div>
           </div>
         </section>
@@ -433,6 +430,7 @@ export default function ProjectDetailPage() {
                   />
                 </div>
               </div>
+
             </div>
 
             <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6 shadow-[0_0_40px_rgba(250,204,21,0.06)]">
@@ -453,6 +451,8 @@ export default function ProjectDetailPage() {
           </div>
         </section>
 
+       
+
         {/* tabs */}
         <section className="max-w-7xl mx-auto px-4 md:px-10 pt-2 pb-8">
           <div className="flex gap-3 overflow-x-auto scrollbar-hide">
@@ -463,8 +463,8 @@ export default function ProjectDetailPage() {
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`whitespace-nowrap rounded-full px-5 py-3 text-sm border transition ${active
-                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
-                      : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
+                    ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
+                    : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
                     }`}
                 >
                   {tab === "floorplans"
@@ -567,8 +567,8 @@ export default function ProjectDetailPage() {
                         key={plan.label}
                         onClick={() => setSelectedPlan(plan.label)}
                         className={`rounded-full px-5 py-2.5 text-sm border transition ${active
-                            ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
-                            : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
+                          ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
+                          : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
                           }`}
                       >
                         {plan.label}
@@ -675,8 +675,8 @@ export default function ProjectDetailPage() {
                   <button
                     onClick={() => setCalcTab("mortgage")}
                     className={`rounded-full px-6 py-3 text-xs md:text-sm font-semibold tracking-[0.18em] uppercase transition ${calcTab === "mortgage"
-                        ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
-                        : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
+                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
+                      : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
                       }`}
                   >
                     Mortgage Calculator
@@ -685,8 +685,8 @@ export default function ProjectDetailPage() {
                   <button
                     onClick={() => setCalcTab("payment-plan")}
                     className={`rounded-full px-6 py-3 text-xs md:text-sm font-semibold tracking-[0.18em] uppercase transition ${calcTab === "payment-plan"
-                        ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
-                        : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
+                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
+                      : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
                       }`}
                   >
                     Payment Plans
@@ -725,16 +725,12 @@ export default function ProjectDetailPage() {
                         <PremiumCalcInput
                           label="Property Value"
                           value={propertyPrice}
-                          onChange={(value) =>
-                            setPropertyPrice(Number(value) || 0)
-                          }
+                          onChange={(value) => setPropertyPrice(Number(value) || 0)}
                         />
                         <PremiumCalcInput
                           label="Down Payment %"
                           value={downPaymentPercent}
-                          onChange={(value) =>
-                            setDownPaymentPercent(Number(value) || 0)
-                          }
+                          onChange={(value) => setDownPaymentPercent(Number(value) || 0)}
                         />
                         <PremiumCalcInput
                           label="Term (Years)"
@@ -745,9 +741,7 @@ export default function ProjectDetailPage() {
                           label="Interest Rate %"
                           value={interestRate}
                           step="0.1"
-                          onChange={(value) =>
-                            setInterestRate(Number(value) || 0)
-                          }
+                          onChange={(value) => setInterestRate(Number(value) || 0)}
                         />
                       </div>
                     ) : (
@@ -755,30 +749,22 @@ export default function ProjectDetailPage() {
                         <PremiumCalcInput
                           label="Property Value"
                           value={propertyPrice}
-                          onChange={(value) =>
-                            setPropertyPrice(Number(value) || 0)
-                          }
+                          onChange={(value) => setPropertyPrice(Number(value) || 0)}
                         />
                         <PremiumCalcInput
                           label="Booking %"
                           value={bookingPercent}
-                          onChange={(value) =>
-                            setBookingPercent(Number(value) || 0)
-                          }
+                          onChange={(value) => setBookingPercent(Number(value) || 0)}
                         />
                         <PremiumCalcInput
                           label="During Construction %"
                           value={constructionPercent}
-                          onChange={(value) =>
-                            setConstructionPercent(Number(value) || 0)
-                          }
+                          onChange={(value) => setConstructionPercent(Number(value) || 0)}
                         />
                         <PremiumCalcInput
                           label="On Handover %"
                           value={handoverPercent}
-                          onChange={(value) =>
-                            setHandoverPercent(Number(value) || 0)
-                          }
+                          onChange={(value) => setHandoverPercent(Number(value) || 0)}
                         />
                       </div>
                     )}
@@ -792,9 +778,7 @@ export default function ProjectDetailPage() {
                           Financial Estimate
                         </p>
                         <h3 className="text-2xl md:text-3xl font-semibold text-white">
-                          {calcTab === "mortgage"
-                            ? "Mortgage Overview"
-                            : "Payment Plan Overview"}
+                          {calcTab === "mortgage" ? "Mortgage Overview" : "Payment Plan Overview"}
                         </h3>
                       </div>
 
@@ -915,6 +899,7 @@ export default function ProjectDetailPage() {
                 </div>
               </div>
             </div>
+
           </div>
         </section>
         {/* cta */}
@@ -929,8 +914,7 @@ export default function ProjectDetailPage() {
                   Interested In This Project?
                 </p>
                 <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-4">
-                  Let’s help you evaluate the right opportunity with more
-                  clarity
+                  Let’s help you evaluate the right opportunity with more clarity
                 </h2>
                 <p className="text-white-400 leading-relaxed">
                   Speak with our team for brochure access, floor plans, pricing,
@@ -1051,8 +1035,8 @@ function PremiumResultCard({
   return (
     <div
       className={`rounded-[24px] border p-5 min-h-[150px] flex flex-col justify-between ${highlighted
-          ? "border-yellow-400/25 bg-[linear-gradient(180deg,rgba(250,204,21,0.08),rgba(255,255,255,0.02))] shadow-[0_10px_30px_rgba(250,204,21,0.08)]"
-          : "border-white/10 bg-white/[0.03]"
+        ? "border-yellow-400/25 bg-[linear-gradient(180deg,rgba(250,204,21,0.08),rgba(255,255,255,0.02))] shadow-[0_10px_30px_rgba(250,204,21,0.08)]"
+        : "border-white/10 bg-white/[0.03]"
         }`}
     >
       <p className="text-sm text-white-400">{title}</p>
@@ -1077,22 +1061,10 @@ function PremiumBreakdownRow({
 }) {
   return (
     <div className="flex items-center justify-between gap-5">
-      <p
-        className={
-          bold
-            ? "text-lg md:text-xl font-semibold text-white"
-            : "text-base md:text-lg text-white-300"
-        }
-      >
+      <p className={bold ? "text-lg md:text-xl font-semibold text-white" : "text-base md:text-lg text-white-300"}>
         {label}
       </p>
-      <p
-        className={
-          bold
-            ? "text-lg md:text-xl font-semibold text-yellow-400"
-            : "text-base md:text-lg font-medium text-white"
-        }
-      >
+      <p className={bold ? "text-lg md:text-xl font-semibold text-yellow-400" : "text-base md:text-lg font-medium text-white"}>
         {value}
       </p>
     </div>
@@ -1123,7 +1095,7 @@ function ContactModal({
     message: string;
   };
   onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   projectTitle: string;
   intent: ContactIntent;
@@ -1168,9 +1140,7 @@ function ContactModal({
                 <p className="text-xs uppercase tracking-[0.16em] text-white-500 mb-1">
                   Request Type
                 </p>
-                <p className="text-white font-medium">
-                  {getIntentLabel(intent)}
-                </p>
+                <p className="text-white font-medium">{getIntentLabel(intent)}</p>
               </div>
             </div>
           </div>
@@ -1295,7 +1265,7 @@ function getModalHeading(intent: ContactIntent) {
 function getDefaultMessage(
   intent: ContactIntent,
   projectTitle: string,
-  floorPlanLabel?: string,
+  floorPlanLabel?: string
 ) {
   switch (intent) {
     case "schedule-visit":
