@@ -11,31 +11,31 @@ const reels = [
     link: "https://www.instagram.com/reel/DWf0_vakeF7/",
   },
   {
-    video: "/video1.mp4",
+    video: "https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/video1.MP4",
     link: "https://www.instagram.com/reel/DWf0_vakeF7/",
   },
   {
-    video: "/video2.mp4",
+    video: "https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/video2.MP4",
     link: "https://www.instagram.com/reel/DWf0_vakeF7/",
   },
   {
-    video: "/video3.mp4",
+    video: "https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/video3.MP4",
     link: "https://www.instagram.com/reel/DWf0_vakeF7/",
   },
   {
-    video: "/video1.mp4",
+    video: "https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/video1.MP4",
     link: "https://www.instagram.com/reel/DWf0_vakeF7/",
   },
   {
-    video: "/video3.mp4",
+    video: "https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/video3.MP4",
     link: "https://www.instagram.com/reel/DWf0_vakeF7/",
   },
   {
-    video: "/video1.mp4",
+    video: "https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/video1.MP4",
     link: "https://www.instagram.com/reel/DWf0_vakeF7/",
   },
   {
-    video: "/video2.mp4",
+    video: "https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/video2.MP4",
     link: "https://www.instagram.com/reel/DWf0_vakeF7/",
   },
 ];
