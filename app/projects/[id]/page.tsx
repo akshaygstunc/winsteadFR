@@ -102,6 +102,7 @@ type UiFloorPlan = {
 };
 
 type UiProject = {
+  gallery: any;
   id: string;
   title: string;
   category: string;
@@ -487,23 +488,43 @@ export default function ProjectDetailPage() {
               </div>
 
               <section className="max-w-4xl mx-auto px-4 md:px-10 py-8">
-                <div className="flex gap-4 overflow-x-auto scrollbar-hide">
-                  {project.heroImages.map((image, index) => {
-                    const active = currentIndex === index;
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentIndex(index)}
-                        className={`relative w-[120px] h-[70px] md:w-[150px] md:h-[100px] rounded-2xl overflow-hidden border transition shrink-0 ${active
-                          ? "border-yellow-400 shadow-[0_0_20px_rgba(241,220,127,0.18)]"
-                          : "border-white/10 hover:border-yellow-500/40"
-                          }`}
-                      >
-                        <Image src={image} alt="" fill className="object-cover" />
-                        <div className="absolute inset-0 bg-black/20" />
-                      </button>
-                    );
-                  })}
+                {/* Thumbnail Grid (Bottom Right) */}
+                <div className="absolute bottom-2 right-2 md:bottom-[-30px] md:right-2 z-10">
+                  <div className="grid grid-cols-4 gap-2 md:gap-3">
+                    {project?.gallery?.length > 0 ? project?.gallery?.slice(0, 8).map((image, index) => {
+                      const active = currentIndex === index;
+
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentIndex(index)}
+                          className={`relative w-[70px] h-[50px] md:w-[90px] md:h-[65px] rounded-xl overflow-hidden border transition ${active
+                            ? "border-yellow-400 shadow-[0_0_15px_rgba(241,220,127,0.25)]"
+                            : "border-white/20 hover:border-yellow-400/60"
+                            }`}
+                        >
+                          <Image src={image} alt="" fill className="object-cover" />
+                          <div className="absolute inset-0 bg-black/20" />
+                        </button>
+                      );
+                    }) : project.heroImages.slice(0, 8).map((image, index) => {
+                      const active = currentIndex === index;
+
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentIndex(index)}
+                          className={`relative w-[70px] h-[50px] md:w-[90px] md:h-[65px] rounded-xl overflow-hidden border transition ${active
+                            ? "border-yellow-400 shadow-[0_0_15px_rgba(241,220,127,0.25)]"
+                            : "border-white/20 hover:border-yellow-400/60"
+                            }`}
+                        >
+                          <Image src={image} alt="" fill className="object-cover" />
+                          <div className="absolute inset-0 bg-black/20" />
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </section>
             </div>
