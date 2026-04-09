@@ -87,11 +87,11 @@ export default class WebsiteContentService {
     name: string;
     email: string;
     message: string;
-    intent: ContactIntent;
+    intent: any;
     projectTitle?: string;
   }) {
     try {
-      const response = await api.post("/createContactQuery", data);
+      const response = await api.post("/contact-query", data);
       return response?.data;
     } catch (error) {
       console.error("Error sending contact form:", error);
