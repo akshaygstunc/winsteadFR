@@ -10,7 +10,7 @@ export default function AutoBreadcrumbs() {
 
     return (
         <nav>
-            <ol className="flex flex-wrap items-center gap-2 text-md lg:text-md mt-4  text-white">
+            <ol className="flex flex-wrap items-center gap-2 text-md lg:text-md mt-4 ml-4 text-white">
                 <li>
                     <Link href="/">Home</Link>
                 </li>

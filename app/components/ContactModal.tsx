@@ -23,6 +23,13 @@ const countryCodes = [
     { code: "+965", label: "Kuwait (+965)" },
 ];
 
+type FormErrors = {
+    fullName?: string;
+    email?: string;
+    phone?: string;
+    terms?: string;
+};
+
 export default function ContactModal({
     isOpen,
     onClose,
@@ -30,7 +37,7 @@ export default function ContactModal({
     intent,
 }: {
     isOpen: boolean;
-        onClose: () => void;
+    onClose: () => void;
     projectTitle?: string;
     intent: ContactIntent;
 }) {
@@ -73,6 +80,7 @@ export default function ContactModal({
         terms: false,
     });
 
+    const [errors, setErrors] = useState<FormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [locationStatus, setLocationStatus] = useState<
@@ -88,23 +96,75 @@ export default function ContactModal({
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
         const { name, value, type } = e.target as HTMLInputElement;
+        const nextValue =
+            type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
 
         setContactForm((prev) => ({
             ...prev,
-            [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+            [name]: nextValue,
         }));
+
+        setErrors((prev) => ({
+            ...prev,
+            [name]: "",
+        }));
+    };
+
+    const validateForm = () => {
+        const newErrors: FormErrors = {};
+
+        const fullName = contactForm.fullName.trim();
+        const email = contactForm.email.trim();
+        const phone = contactForm.phone.trim();
+
+        if (!fullName) {
+            newErrors.fullName = "Full name is required";
+        } else if (fullName.length < 3) {
+            newErrors.fullName = "Full name must be at least 3 characters";
+        } else if (!/^[a-zA-Z\s]+$/.test(fullName)) {
+            newErrors.fullName = "Full name should contain only letters";
+        }
+
+        if (!email) {
+            newErrors.email = "Email address is required";
+        } else if (
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)
+        ) {
+            newErrors.email = "Please enter a valid email address";
+        }
+
+        if (!phone) {
+            newErrors.phone = "Phone number is required";
+        } else if (!/^\d+$/.test(phone)) {
+            newErrors.phone = "Phone number should contain only digits";
+        } else if (phone.length < 7 || phone.length > 15) {
+            newErrors.phone = "Phone number must be between 7 and 15 digits";
+        }
+
+        if (!contactForm.terms) {
+            newErrors.terms = "Please accept terms and conditions";
+        }
+
+        setErrors(newErrors);
+
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleContactSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!validateForm()) {
+            toast.error("Please fix the highlighted fields before submitting.");
+            return;
+        }
 
         try {
             setIsSubmitting(true);
 
             const payload = {
                 contact: {
-                    fullName: contactForm.fullName,
-                    email: contactForm.email,
+                    fullName: contactForm.fullName.trim(),
+                    email: contactForm.email.trim(),
                     phone: `${contactForm.countryCode}${contactForm.phone}`.replace(/\s+/g, ""),
                     location:
                         browserLocation?.latitude && browserLocation?.longitude
@@ -134,6 +194,7 @@ export default function ContactModal({
             await WebsiteContentService.createContactQuery(payload);
 
             setIsSubmitted(true);
+            setErrors({});
 
             setContactForm({
                 fullName: "",
@@ -143,7 +204,9 @@ export default function ContactModal({
                 message: "",
                 terms: false,
             });
+
             toast.success("Inquiry submitted successfully!");
+
             setTimeout(() => {
                 onClose();
                 setIsSubmitted(false);
@@ -216,7 +279,7 @@ export default function ContactModal({
                                     </p>
                                 </div>
 
-                                {!isSubmitted && (
+                                {/* {!isSubmitted && (
                                     <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
                                         <p className="text-xs uppercase tracking-[0.16em] text-white/50 mb-1">
                                             Location Access
@@ -230,7 +293,7 @@ export default function ContactModal({
                                                 "Please allow location for better inquiry tracking"}
                                         </p>
                                     </div>
-                                )}
+                                )} */}
                             </div>
                         </div>
 
@@ -257,94 +320,105 @@ export default function ContactModal({
                             ) : (
                                 <form onSubmit={handleContactSubmit} className="space-y-4 pt-8 sm:pt-4">
                                     <div>
-                                            <label className="text-sm text-white/80 mb-2 block">
-                                                Full Name
-                                            </label>
-                                            <input
-                                                name="fullName"
-                                                value={contactForm.fullName}
+                                        <label className="text-sm text-white/80 mb-2 block">Full Name</label>
+                                        <input
+                                            name="fullName"
+                                            value={contactForm.fullName}
+                                            onChange={handleContactChange}
+                                            placeholder="Enter your full name"
+                                            className={`w-full rounded-2xl border bg-black/30 px-4 py-3 text-white outline-none ${errors.fullName
+                                                    ? "border-red-500"
+                                                    : "border-white/10 focus:border-yellow-400/50"
+                                                }`}
+                                        />
+                                        {errors.fullName && (
+                                            <p className="mt-1 text-sm text-red-400">{errors.fullName}</p>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <label className="text-sm text-white/80 mb-2 block">Email Address</label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={contactForm.email}
+                                            onChange={handleContactChange}
+                                            placeholder="Enter your email"
+                                            className={`w-full rounded-2xl border bg-black/30 px-4 py-3 text-white outline-none ${errors.email
+                                                    ? "border-red-500"
+                                                    : "border-white/10 focus:border-yellow-400/50"
+                                                }`}
+                                        />
+                                        {errors.email && (
+                                            <p className="mt-1 text-sm text-red-400">{errors.email}</p>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <label className="text-sm text-white/80 mb-2 block">Phone Number</label>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-[130px_1fr] gap-3">
+                                            <select
+                                                name="countryCode"
+                                                value={contactForm.countryCode}
                                                 onChange={handleContactChange}
-                                                placeholder="Enter your full name"
-                                                className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-yellow-400/50"
-                                                required
+                                                className="rounded-2xl border border-white/10 bg-black/30 px-3 py-3 text-white outline-none focus:border-yellow-400/50"
+                                            >
+                                                {countryCodes.map((item) => (
+                                                    <option
+                                                        key={item.code}
+                                                        value={item.code}
+                                                        className="bg-[#111] text-white"
+                                                    >
+                                                        {item.label}
+                                                    </option>
+                                                ))}
+                                            </select>
+
+                                            <input
+                                                name="phone"
+                                                value={contactForm.phone}
+                                                onChange={handleContactChange}
+                                                placeholder="Enter phone number"
+                                                className={`w-full rounded-2xl border bg-black/30 px-4 py-3 text-white outline-none ${errors.phone
+                                                        ? "border-red-500"
+                                                        : "border-white/10 focus:border-yellow-400/50"
+                                                    }`}
                                             />
                                         </div>
 
-                                        <div>
-                                            <label className="text-sm text-white/80 mb-2 block">
-                                                Email Address
-                                            </label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                value={contactForm.email}
-                                                onChange={handleContactChange}
-                                                placeholder="Enter your email"
-                                                className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-yellow-400/50"
-                                                required
-                                            />
-                                        </div>
+                                        {errors.phone && (
+                                            <p className="mt-1 text-sm text-red-400">{errors.phone}</p>
+                                        )}
+                                    </div>
 
-                                        <div>
-                                            <label className="text-sm text-white/80 mb-2 block">
-                                                Phone Number
-                                            </label>
+                                    <div className="flex items-start gap-2 mt-2">
+                                        <input
+                                            type="checkbox"
+                                            name="terms"
+                                            checked={contactForm.terms}
+                                            onChange={handleContactChange}
+                                            className="mt-1 accent-yellow-500"
+                                        />
+                                        <label className="text-sm text-white/70">
+                                            I accept all{" "}
+                                            <span className="text-yellow-400 underline cursor-pointer">
+                                                terms and conditions
+                                            </span>
+                                        </label>
+                                    </div>
+                                    {errors.terms && (
+                                        <p className="text-sm text-red-400">{errors.terms}</p>
+                                    )}
 
-                                            <div className="grid grid-cols-1 sm:grid-cols-[130px_1fr] gap-3">
-                                                <select
-                                                    name="countryCode"
-                                                    value={contactForm.countryCode}
-                                                    onChange={handleContactChange}
-                                                    className="rounded-2xl border border-white/10 bg-black/30 px-3 py-3 text-white outline-none focus:border-yellow-400/50"
-                                                >
-                                                    {countryCodes.map((item) => (
-                                                        <option
-                                                            key={item.code}
-                                                            value={item.code}
-                                                            className="bg-[#111] text-white"
-                                                        >
-                                                            {item.label}
-                                                        </option>
-                                                    ))}
-                                                </select>
-
-                                                <input
-                                                    name="phone"
-                                                    value={contactForm.phone}
-                                                    onChange={handleContactChange}
-                                                    placeholder="Enter phone number"
-                                                    className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-yellow-400/50"
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-start gap-2 mt-2">
-                                            <input
-                                                type="checkbox"
-                                                name="terms"
-                                                checked={contactForm.terms}
-                                                onChange={handleContactChange}
-                                                className="mt-1 accent-yellow-500"
-                                                required
-                                            />
-                                            <label className="text-sm text-white/70">
-                                                I accept all{" "}
-                                                <span className="text-yellow-400 underline cursor-pointer">
-                                                    terms and conditions
-                                                </span>
-                                            </label>
-                                        </div>
-
-                                        <button
-                                            type="submit"
-                                            disabled={isSubmitting}
-                                            className="w-full rounded-2xl bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black py-4 font-semibold hover:scale-[1.01] transition disabled:opacity-70 disabled:cursor-not-allowed"
-                                            onClick={handleContactSubmit}
-                                        >
-                                            {isSubmitting ? "Submitting..." : "Submit Inquiry"}
-                                        </button>
-                                    </form>
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="w-full rounded-2xl bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black py-4 font-semibold hover:scale-[1.01] transition disabled:opacity-70 disabled:cursor-not-allowed"
+                                    >
+                                        {isSubmitting ? "Submitting..." : "Submit Inquiry"}
+                                    </button>
+                                </form>
                             )}
                         </div>
                     </div>

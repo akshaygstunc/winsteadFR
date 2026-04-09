@@ -87,10 +87,12 @@ export default function AboutUs() {
 
 
 
-      <AutoBreadcrumbs />
+      <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6">
+                      <AutoBreadcrumbs />
+                    </section>
 
       {/* 1. ABOUT SMALL SECTION - IMAGE + TEXT */}
-      <section className="py-12 md:py-20">
+      <section className="">
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <section className="bg-black text-white py-16">
             <div className="grid md:grid-cols-[30%_70%] gap-10 items-center">
@@ -99,12 +101,12 @@ export default function AboutUs() {
                 <Image
                   src={image2}
                   alt="About"
-                  className="w-full h-[200px] md:h-[300px] object-cover rounded-xl"
+                  className="w-full h-[100px] md:h-[180px] object-cover rounded-xl"
                 />
               </div>
 
               {/* RIGHT TEXT */}
-              <div className="max-w-7xl">
+              <div className="max-w-[85rem]">
                 <h3 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
                   About Winstead
                 </h3>
@@ -127,7 +129,7 @@ export default function AboutUs() {
               <Image
                 src={img1}
                 alt="About Winstead section"
-                className="w-full h-[320px] md:h-[500px] object-cover"
+                className="w-full h-[320px] md:h-[400px] object-cover"
               />
             </div>
 
@@ -176,7 +178,7 @@ export default function AboutUs() {
                     key={item.label}
                     className="rounded-[28px] border border-[#b89b45]/30 bg-white/[0.03] p-6 md:p-8 shadow-[0_0_30px_rgba(184,155,69,0.08)] text-center"
                   >
-                    <h3 className="text-3xl md:text-5xl font-light text-[#d7bd70]">
+                    <h3 className="text-2xl md:text-2xl font-light text-[#d7bd70]">
                       {item.value}
                     </h3>
                     <p className="mt-3 text-sm lg:text-md lg:text-md md:text-base text-white">
@@ -191,7 +193,7 @@ export default function AboutUs() {
               <Image
                 src={img2}
                 alt="Stats section image"
-                className="w-full h-[320px] md:h-[620px] object-cover"
+                className="w-full h-[320px] md:h-[520px] object-cover"
               />
             </div>
           </div>
@@ -199,7 +201,7 @@ export default function AboutUs() {
       </section>
 
       {/* 3. WORD FROM CEO - CLEARLY VISIBLE IMAGE + TEXT */}
-      <section className="py-12 md:py-20">
+      <section className="">
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="rounded-[32px] border border-[#b89b45]/25 bg-gradient-to-br from-[#0f0f0f] to-[#151515] overflow-hidden">
             <div className="grid lg:grid-cols-[0.9fr_1.1fr] items-center">
@@ -245,7 +247,7 @@ export default function AboutUs() {
       </section>
 
       {/* 4. WHY US - IMAGE + TEXT */}
-      <section className="py-12 md:py-20">
+      <section className="py-12 md:py-15">
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-center">
             <div>
@@ -264,13 +266,16 @@ export default function AboutUs() {
                 {whyUs.map((item) => (
                   <div
                     key={item.title}
-                    className="rounded-[28px] border border-[#b89b45]/25 bg-white/[0.03] p-7 md:p-8 shadow-[0_0_25px_rgba(184,155,69,0.06)]"
+                    className="flex space-x-4 rounded-[28px] border border-[#b89b45]/25 bg-white/[0.03] p-2 md:p-6 shadow-[0_0_25px_rgba(184,155,69,0.06)]"
                   >
-                    <div className="w-14 h-14 rounded-2xl border border-[#b89b45]/40 bg-[#b89b45]/10 flex items-center justify-center text-[#d7bd70] mb-6">
+                    <div className="w-16 h-10 rounded-xl border border-[#b89b45]/40 bg-[#b89b45]/10 flex items-center justify-center text-[#d7bd70] mb-6">
                       {item.icon}
+
                     </div>
-                    <h3 className="text-2xl font-light mb-4">{item.title}</h3>
+                    <div>
+                    <h3 className="text-lg font-light mb-1">{item.title}</h3>
                     <p className="text-white leading-7">{item.description}</p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -280,7 +285,7 @@ export default function AboutUs() {
               <Image
                 src={img4}
                 alt="Why choose us"
-                className="w-full h-[320px] md:h-[720px] object-cover"
+                className="w-full h-[320px] md:h-[690px] object-cover"
               />
             </div>
           </div>
@@ -288,14 +293,14 @@ export default function AboutUs() {
       </section>
 
       {/* 5. HOW WE CAN HELP - IMAGE + TEXT */}
-      <section className="py-12 md:py-20">
+      <section className="py-8 md:py-8">
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5 order-2 lg:order-1">
               <Image
                 src={aboutImg}
                 alt="How we can help"
-                className="w-full h-[320px] md:h-[650px] object-cover"
+                className="w-full h-[320px] md:h-[950px] object-cover"
               />
             </div>
 
@@ -311,7 +316,7 @@ export default function AboutUs() {
                 and make sure every decision feels more strategic and better supported.
               </p>
 
-              <div className="grid gap-4 mb-8">
+              <div className="grid grid-cols-2 gap-4 mb-8">
                 {helpItems.map((item, index) => (
                   <div
                     key={item}
@@ -320,22 +325,26 @@ export default function AboutUs() {
                     <div className="w-10 h-10 shrink-0 rounded-full bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black flex items-center justify-center font-semibold">
                       {index + 1}
                     </div>
-                    <p className="text-white leading-7 pt-1">{item}</p>
+                    <p className="text-white leading-2 ">{item}</p>
                   </div>
                 ))}
               </div>
 
               <div className="grid md:grid-cols-2 gap-5">
-                <div className="rounded-[28px] border border-[#b89b45]/25 bg-white/[0.03] p-7">
+               
+                  <div
+                    className=" items-start gap-4 rounded-[22px] border border-[#b89b45]/20 bg-white/[0.03] px-5 py-4"
+                  >
                   <div className="w-14 h-14 rounded-2xl border border-[#b89b45]/40 bg-[#b89b45]/10 flex items-center justify-center text-[#d7bd70] mb-5">
-                    <RiSparklingLine className="text-[28px]" />
-                  </div>
+                      <RiSparklingLine className="text-[22px]" />
+                    </div>
                   <h3 className="text-2xl font-light mb-3">Curated Experience</h3>
                   <p className="text-white leading-7">
                     We help reduce noise and focus on properties that actually align
                     with your needs.
                   </p>
                 </div>
+              
 
                 <div className="rounded-[28px] border border-[#b89b45]/25 bg-white/[0.03] p-7">
                   <div className="w-14 h-14 rounded-2xl border border-[#b89b45]/40 bg-[#b89b45]/10 flex items-center justify-center text-[#d7bd70] mb-5">
@@ -354,7 +363,7 @@ export default function AboutUs() {
       </section>
 
       {/* 6. GALLERY WITH SLIDER */}
-      <section className="py-12 md:py-20 pb-20 md:pb-24">
+      <section className="py-8 md:py-8 pb-20 md:pb-4">
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-16 items-center mb-10">
             <div>
@@ -395,7 +404,7 @@ export default function AboutUs() {
                     <Image
                       src={item.src}
                       alt={item.alt}
-                      className="w-full h-[320px] md:h-[620px] object-cover"
+                      className="w-full h-[320px] md:h-[320px] object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   </div>

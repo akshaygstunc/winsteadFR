@@ -6,9 +6,9 @@ import hero2 from "../../../public/hero2.png";
 
 export default function HowItWorks({ processSteps }: { processSteps: any[] }) {
     return (
-        <section className="py-20 px-6 md:px-12 border-b border-white/10">
-            <div className="max-w-7xl mx-auto grid lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-14 items-start">
-                <div className="relative rounded-[28px] overflow-hidden border border-yellow-500/20 bg-white/5 min-h-[320px] md:min-h-[720px]">
+        <section className="py-8 px-6 md:px-12 border-b border-white/10">
+            <div className="max-w-[85rem] mx-auto grid lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-14 items-start">
+                <div className="relative rounded-[28px] overflow-hidden border border-yellow-500/20 bg-white/5 min-h-[320px] md:min-h-[650px]">
                     <Image
                         src={hero2}
                         alt="How it works"

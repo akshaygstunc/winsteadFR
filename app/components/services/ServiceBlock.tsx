@@ -12,7 +12,7 @@ export default function ServiceBlock({
     points: string[];
 }) {
     return (
-        <div className="space-y-6 rounded-3xl border border-white/10 p-8 md:p-10 bg-gradient-to-b from-white/10 to-transparent backdrop-blur-sm">
+        <div className="space-y-16 rounded-3xl border border-white/10 p-8 md:p-10 bg-gradient-to-b from-white/10 to-transparent backdrop-blur-sm">
             <div className="flex items-start gap-4 group">
                 <div className="flex items-center justify-center shrink-0">
                     <IoMdCheckboxOutline className="text-yellow-400 w-12 h-12 group-hover:scale-110 transition duration-300" />

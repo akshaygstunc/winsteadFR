@@ -17,9 +17,9 @@ const navLinks = [
   {
     name: "Projects",
     dropdown: [
-      { name: "Offplan", href: "/projects" },
+      { name: "Off-Plan", href: "/projects" },
+      { name: "Ready to Move In", href: "/projects" },
       { name: "Commercial", href: "/projects" },
-      { name: "Residencial", href: "/projects" },
       // { name: "Plot", href: "/projects" },
     ],
   },

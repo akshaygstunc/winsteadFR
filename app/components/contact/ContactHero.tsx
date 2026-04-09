@@ -45,7 +45,7 @@ export default function ContactHero() {
         //         </div>
         //     </div>
         // </section>
-        <section className="relative h-[80vh] min-h-[560px] w-full overflow-hidden bg-black text-white">
+        <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
 
             {/* IMAGE */}
             <div className="absolute inset-0">

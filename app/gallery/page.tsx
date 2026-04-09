@@ -118,7 +118,7 @@ const galleryItems: GalleryItem[] = [
 
 function GalleryHero() {
     return (
-        <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden bg-black text-white">
+        <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
        
                    {/* IMAGE */}
                    <div className="absolute inset-0">
@@ -137,7 +137,7 @@ function GalleryHero() {
        
                    {/* CONTENT (BOTTOM LEFT ONLY) */}
                    <div className="relative z-10 h-full flex items-end justify-center">
-                       <div className="w-full max-w-7xl  px-6 md:px-12 pb-14 md:pb-20">
+                <div className="w-full max-w-[85rem]  px-6 md:px-12 pb-14 md:pb-20">
        
                            <div className="max-w-xl text-left ">
        
@@ -176,7 +176,7 @@ function GalleryStats() {
 
     return (
         <section className="bg-black px-6 md:px-12 py-6">
-            <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="max-w-[85rem] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {stats.map((item) => (
                     <div
                         key={item.label}
@@ -349,8 +349,8 @@ function GalleryGrid() {
 
     return (
         <>
-            <section className="bg-black px-6 md:px-12 py-16 md:py-20 text-white">
-                <div className="max-w-7xl mx-auto">
+            <section className="bg-black px-6 md:px-12  md:py-8 text-white">
+                <div className="max-w-[85rem] mx-auto">
                     <div className="mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
                         <div className="max-w-2xl">
                             <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
@@ -387,20 +387,6 @@ function GalleryGrid() {
                         })}
                     </div>
 
-                    <div className="mb-8 flex items-center justify-between gap-4 text-sm lg:text-md lg:text-md text-white">
-                        <p>
-                            Showing{" "}
-                            <span className="font-medium text-yellow-400">
-                                {filteredItems.length}
-                            </span>{" "}
-                            gallery item{filteredItems.length !== 1 ? "s" : ""}
-                        </p>
-
-                        <button className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 hover:border-yellow-400/40 transition">
-                            <FaImage className="text-yellow-400" />
-                            View All Media
-                        </button>
-                    </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 auto-rows-[240px] gap-6">
                         {filteredItems.map((item, index) => (

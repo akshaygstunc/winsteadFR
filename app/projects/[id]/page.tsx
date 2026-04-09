@@ -174,13 +174,16 @@ function getProjectImages(data?: BackendProject) {
 }
 
 function getAmenities(data?: BackendProject) {
-  if (!Array.isArray(data?.amenities) || !data!.amenities!.length) {
-    return [EMPTY_VALUE];
-  }
+  // if (!Array.isArray(data?.amenities) || !data!.amenities!.length) {
+  //   return [EMPTY_VALUE];
+  // }
 
   return data!.amenities!.map((item) => {
     if (typeof item === "string") return item || EMPTY_VALUE;
-    return item?.name || EMPTY_VALUE;
+    return {
+      name: item.title,
+      icon: item.icon,
+    };
   });
 }
 
@@ -450,8 +453,8 @@ export default function ProjectDetailPage() {
   return (
     <>
       <main className="bg-black text-white min-h-screen overflow-x-hidden">
-        <section className="relative mt-4 px-4 md:px-10">
-          <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden rounded-[32px] border border-white/10">
+        <section className="relative  ">
+          <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden  border border-white/10">
             <Image
               src={project.heroImages[currentIndex] || fallbackImages[0]}
               alt={project.title}
@@ -530,7 +533,7 @@ export default function ProjectDetailPage() {
                   <FactCard
                     icon={<FaDollarSign className="text-yellow-400" />}
                     label="Starting Price"
-                    value={project.price}
+                    value={project?.price}
                   />
                   <FactCard
                     icon={<FaBed className="text-yellow-400" />}
@@ -648,7 +651,7 @@ export default function ProjectDetailPage() {
               <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-8">
                 Elevated lifestyle experiences
               </h2>
-
+              {console.log(project.amenities)}
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {project.amenities.map((item, index) => (
                   <div
@@ -656,9 +659,13 @@ export default function ProjectDetailPage() {
                     className="rounded-2xl border border-white/10 bg-black/30 p-5 hover:border-yellow-400/30 transition"
                   >
                     <div className="w-10 h-10 rounded-full bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center mb-4">
-                      <FaCheckCircle className="text-yellow-400" />
+                      {item.icon !== "" ? (
+                        <item.icon className="text-yellow-400" />
+                      ) : (
+                        <FaCheckCircle className="text-yellow-400" />
+                      )}
                     </div>
-                    <p className="text-white font-medium">{item}</p>
+                    <p className="text-white font-medium">{item.name}</p>
                   </div>
                 ))}
               </div>

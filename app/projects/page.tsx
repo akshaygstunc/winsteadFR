@@ -208,7 +208,9 @@ function ProjectsContent() {
   return (
     <div className="bg-black text-white min-h-screen overflow-x-hidden">
       <ProjectsHero />
-      <AutoBreadcrumbs/>
+       <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6">
+                                        <AutoBreadcrumbs />
+                                      </section>
       <ProjectsToolbar
         filters={filters}
         handleSearch={handleSearch}
@@ -257,8 +259,8 @@ function ProjectsContent() {
             {loading ? (
               Array.from({ length: 6 }).map((_, i) => <PropertyCardSkeleton key={i} />)
             ) : filteredProjects.length > 0 ? (
-              filteredProjects.map((p: any) => (
-                <ProjectCard key={p.id || p._id || p.slug} data={p} />
+                filteredProjects.map((p: any, index: number) => (
+                  <ProjectCard key={p.id || p._id || `project-${index}`} data={p} />
               ))
             ) : (
               <div className="col-span-full rounded-3xl border border-white/10 bg-white/5 p-10 text-center">

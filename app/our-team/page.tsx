@@ -124,11 +124,11 @@ function TeamTabsAndGrid() {
   }, [activeTab]);
 
   return (
-    <section className="bg-black text-white px-6 md:px-12 py-16 md:py-20">
-       <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
-                <AutoBreadcrumbs />
-              </section>
-      <div className="max-w-7xl mx-auto">
+    <section className="bg-black text-white px-6 md:px-12 ">
+        <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6 py-8">
+                       <AutoBreadcrumbs />
+                     </section>
+      <div className="max-w-[85rem] mx-auto">
         <div className="mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="max-w-2xl">
             <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
@@ -165,13 +165,13 @@ function TeamTabsAndGrid() {
           })}
         </div>
 
-        <div className="mb-8 text-sm lg:text-md lg:text-md text-white-400">
+        {/* <div className="mb-8 text-sm lg:text-md lg:text-md text-white-400">
           Showing{" "}
           <span className="text-yellow-400 font-medium">
             {filteredMembers.length}
           </span>{" "}
           team member{filteredMembers.length !== 1 ? "s" : ""}
-        </div>
+        </div> */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredMembers.map((member) => (

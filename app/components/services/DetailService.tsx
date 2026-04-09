@@ -10,12 +10,12 @@ export default function DetailedServices({ services }: { services: any[] }) {
   const bgImages = [hero1, hero2, hero3];
 
   return (
-    <section className="relative py-20 px-6 md:px-12 border-b border-white/10 overflow-hidden">
+    <section className="relative py-8 px-6 md:px-12 border-b border-white/10 overflow-hidden">
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none">
         <Image src={hero1} alt="bg" fill className="object-cover" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto space-y-16">
+      <div className="relative max-w-[85rem] mx-auto space-y-5">
         <div className="max-w-3xl">
           <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
             Detailed Services
@@ -39,12 +39,12 @@ export default function DetailedServices({ services }: { services: any[] }) {
               className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center"
             >
               <div className={`${isReverse ? "lg:order-2" : "lg:order-1"}`}>
-                <div className="relative rounded-[28px] overflow-hidden border border-yellow-500/20 bg-white/5 min-h-[320px] md:min-h-[520px]">
+                <div className=" relative rounded-[28px] overflow-hidden border border-yellow-500/20 bg-white/5 min-h-[320px] md:min-h-[520px]">
                   <Image
                     src={image}
                     alt={service.title}
                     fill
-                    className="object-cover"
+                    className="object-cover h-65"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
                 </div>

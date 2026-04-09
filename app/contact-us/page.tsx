@@ -18,7 +18,7 @@ export default function ContactUs() {
   return (
     <div className="bg-black text-white">
       <ContactHero />
-      <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
+      <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6">
                                   <AutoBreadcrumbs />
                                 </section>
       <ContactSection contactPoints={contactPoints} />

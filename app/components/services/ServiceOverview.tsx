@@ -9,8 +9,8 @@ export default function ServicesOverview({ services }: { services: any[] }) {
   const serviceImages = [hero1, hero2, hero3];
 
   return (
-    <section className="py-20 px-6 md:px-12 border-b border-white/10">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-8 px-6 md:px-12 border-b border-white/10">
+      <div className="max-w-[85rem] mx-auto">
         {/* HEADER */}
         <div className="max-w-3xl mx-auto text-center mb-14">
           <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
@@ -49,7 +49,7 @@ export default function ServicesOverview({ services }: { services: any[] }) {
               </div>
 
               {/* CONTENT */}
-              <div className="p-6 md:p-7">
+              <div className="p-6 md:p-7 h-full">
                 <h3 className="text-xl md:text-2xl font-semibold text-white mb-3">
                   {service.title}
                 </h3>
