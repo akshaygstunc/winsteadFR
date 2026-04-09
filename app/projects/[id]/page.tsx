@@ -672,7 +672,6 @@ export default function ProjectDetailPage() {
               <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-8">
                 Elevated lifestyle experiences
               </h2>
-              {console.log(project.amenities)}
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {project.amenities.map((item, index) => (
                   <div
@@ -680,8 +679,8 @@ export default function ProjectDetailPage() {
                     className="rounded-2xl border border-white/10 bg-black/30 p-5 hover:border-yellow-400/30 transition"
                   >
                     <div className="w-10 h-10 rounded-full bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center mb-4">
-                      {item.icon !== "" ? (
-                        <item.icon className="text-yellow-400" />
+                      {item?.icon !== "" ? (
+                        <img src={item?.icon} alt={item.name} className="w-full h-full object-contain" />
                       ) : (
                         <FaCheckCircle className="text-yellow-400" />
                       )}
