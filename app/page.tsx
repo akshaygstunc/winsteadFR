@@ -68,6 +68,32 @@ export default function Home() {
       category: "Luxury Trends",
     },
   ];
+  useEffect(() => {
+     const requestBrowserLocation = () => {
+            if (typeof window === "undefined" || !navigator.geolocation) {
+                // setLocationStatus("unavailable");
+                return;
+            }
+    
+            // setLocationStatus("fetching");
+    
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                   localStorage.setItem("long",position.longitude)
+                   localStroage.setItem("lat", postion.latitude)
+                },
+                () => {
+                   
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0,
+                },
+            );
+        };
+        requestBrowserLocation()
+  })
   return (
     <div className="bg-black text-white">
       {/* <Navbar /> */}
