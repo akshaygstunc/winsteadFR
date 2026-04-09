@@ -85,7 +85,7 @@ export default function Sidebar({ filters, setFilters }: any) {
 function Section({ title, children }: any) {
   return (
     <div className="mb-6">
-      <p className="text-sm text-white-400 mb-3">{title}</p>
+      <p className="text-sm lg:text-xl lg:text-xl text-white-400 mb-3">{title}</p>
       <div className="space-y-2">{children}</div>
     </div>
   );
@@ -93,7 +93,7 @@ function Section({ title, children }: any) {
 
 function Check({ label, filters, setFilters }: any) {
   return (
-    <label className="flex items-center gap-2 text-sm cursor-pointer group">
+    <label className="flex items-center gap-2 text-sm lg:text-xl lg:text-xl cursor-pointer group">
       <input
         type="checkbox"
         checked={filters?.category === label}
@@ -118,7 +118,7 @@ function Collapsible({ title, children, open, toggle }: any) {
         onClick={toggle}
         className="flex justify-between items-center cursor-pointer mb-3"
       >
-        <p className="text-sm text-white-400">{title}</p>
+        <p className="text-sm lg:text-xl lg:text-xl text-white-400">{title}</p>
         <ChevronDown className={`${open ? "rotate-180" : ""}`} />
       </div>
       {open && <div className="space-y-2">{children}</div>}
@@ -129,7 +129,7 @@ function Collapsible({ title, children, open, toggle }: any) {
 function RangeSlider({ title, value, setValue, min, max, unit }: any) {
   return (
     <div className="mb-6">
-      <p className="text-sm text-white-400 mb-3">{title}</p>
+      <p className="text-sm lg:text-xl lg:text-xl text-white-400 mb-3">{title}</p>
 
       <div className="flex justify-between text-xs mb-2">
         <span>{value[0].toLocaleString()} {unit}</span>

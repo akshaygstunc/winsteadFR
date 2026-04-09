@@ -47,7 +47,7 @@ export default function UltraLuxury() {
 
         <Link
           href="/projects"
-          className="border border-[#F1DC7F]/40 px-5 py-2 rounded-full text-sm hover:bg-yellow-400 hover:text-black transition"
+          className="border border-[#F1DC7F]/40 px-5 py-2 rounded-full text-sm lg:text-md hover:bg-yellow-400 hover:text-black transition"
         >
           View Projects
         </Link>

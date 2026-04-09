@@ -7,7 +7,7 @@ export default function FeaturedStory() {
         <section className="py-20 px-6 md:px-12 border-b border-white/10">
             <div className="max-w-7xl mx-auto">
                 <div className="mb-10 max-w-3xl">
-                    <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                    <p className="text-sm lg:text-xl lg:text-xl uppercase tracking-[0.25em] text-yellow-400 mb-3">
                         Featured Story
                     </p>
                     <h2 className="text-3xl md:text-4xl font-semibold leading-tight">
@@ -26,7 +26,7 @@ export default function FeaturedStory() {
                     </div>
 
                     <div className="space-y-5">
-                        <p className="text-sm uppercase tracking-[0.22em] text-white-400">
+                        <p className="text-sm lg:text-xl lg:text-xl uppercase tracking-[0.22em] text-white-400">
                             March 2026
                         </p>
 
@@ -47,7 +47,7 @@ export default function FeaturedStory() {
                         </p>
 
                         <button className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-yellow-400 text-black font-semibold hover:scale-105 transition duration-300">
-                            Read Full Story <FaArrowRight className="text-sm" />
+                            Read Full Story <FaArrowRight className="text-sm lg:text-xl lg:text-xl" />
                         </button>
                     </div>
                 </div>

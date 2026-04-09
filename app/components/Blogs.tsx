@@ -60,7 +60,7 @@ export default function Blogs() {
       <div className="flex justify-between items-center mb-12">
         <h2 className="text-3xl md:text-4xl font-light">Our Latest Blogs</h2>
 
-        <button className="text-[1.05rem] rounded-md hidden md:block border border-yellow-500 px-6 py-2 text-sm hover:bg-yellow-500 hover:text-black transition">
+        <button className="text-[1.05rem] rounded-md hidden md:block border border-yellow-500 px-6 py-2 text-sm lg:text-xl lg:text-xl hover:bg-yellow-500 hover:text-black transition">
           View All Blogs
         </button>
       </div>
@@ -97,7 +97,7 @@ export default function Blogs() {
 
       {/* MOBILE BUTTON */}
       <div className="mt-10 md:hidden">
-        <button className="w-full border border-yellow-500 py-3 text-sm hover:bg-yellow-500 hover:text-black transition">
+        <button className="w-full border border-yellow-500 py-3 text-sm lg:text-xl lg:text-xl hover:bg-yellow-500 hover:text-black transition">
           View All Blogs
         </button>
       </div>

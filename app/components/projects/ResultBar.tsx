@@ -13,7 +13,7 @@ export default function ResultsBar({ count, filters }: any) {
                         {active.map((item: string) => (
                             <span
                                 key={item}
-                                className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-sm text-white-300"
+                                className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-sm lg:text-xl lg:text-xl text-white-300"
                             >
                                 {item}
                             </span>

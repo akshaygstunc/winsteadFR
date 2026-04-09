@@ -25,7 +25,7 @@ export default function ProjectCard({ data }: any) {
                 <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-5">
                     <h2 className="text-xl font-semibold mb-3">{data.title}</h2>
 
-                    <div className="space-y-2 text-sm text-white-300">
+                    <div className="space-y-2 text-sm lg:text-xl lg:text-xl text-white-300">
                         <div className="flex items-center gap-2">
                             <FaBed className="text-yellow-400 text-xs" />
                             2-8 Bedrooms
@@ -48,7 +48,7 @@ export default function ProjectCard({ data }: any) {
                     </div>
 
                     <Link href={`/projects/${data.id}`}>
-                        <button className="mt-5 w-full py-3 rounded-xl border border-white/20 text-sm hover:border-yellow-400 hover:text-white transition inline-flex items-center justify-center gap-2">
+                        <button className="mt-5 w-full py-3 rounded-xl border border-white/20 text-sm lg:text-xl lg:text-xl hover:border-yellow-400 hover:text-white transition inline-flex items-center justify-center gap-2">
                             Check Details <FaArrowRight className="text-xs" />
                         </button>
                     </Link>

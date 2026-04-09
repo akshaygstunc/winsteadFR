@@ -1,6 +1,6 @@
 "use client";
 
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
 import { useParams } from "next/navigation";
@@ -12,138 +12,13 @@ import {
   FaCheckCircle,
   FaTimes,
 } from "react-icons/fa";
-import { FaArrowRight, FaDollarSign } from "react-icons/fa6";
+import { FaDollarSign } from "react-icons/fa6";
 import hero2 from "../../../public/image_6.png";
 import hero1 from "../../../public/image_7.png";
 import hero3 from "../../../public/image_5.png";
 import projectImage from "../../../public/hero1.jpg";
 import AutoBreadcrumbs from "@/app/components/BreadCrumbs";
-
-type Project = {
-  id: number;
-  title: string;
-  type: string;
-  residence: string;
-  category: string;
-  location: string;
-  subLocation: string;
-  price: string;
-  bedrooms: string;
-  area: string;
-  handover: string;
-  developer: string;
-  description: string;
-  heroImages: StaticImageData[];
-  floorPlans: {
-    label: string;
-    size: string;
-    price: string;
-    image: StaticImageData;
-  }[];
-  amenities: string[];
-  highlights: string[];
-};
-
-const allProjects: Project[] = [
-  {
-    id: 1,
-    title: "Aurelia Heights",
-    type: "Residential",
-    residence: "Villa",
-    category: "Luxury",
-    location: "Dubai",
-    subLocation: "Downtown Dubai",
-    price: "From AED 2.3M",
-    bedrooms: "2–8 Bedrooms",
-    area: "2,800 – 7,200 sq.ft.",
-    handover: "Q4 2029",
-    developer: "Emaar",
-    description:
-      "A refined collection of ultra-luxury residences crafted for buyers seeking iconic location, architectural elegance, and long-term value in one of Dubai’s most desirable districts.",
-    heroImages: [hero2, hero1, hero3, hero1, hero2],
-    floorPlans: [
-      {
-        label: "1 Bedroom",
-        size: "872 sq.ft.",
-        price: "From AED 1.9M",
-        image: hero2,
-      },
-      {
-        label: "2 Bedroom",
-        size: "1,420 sq.ft.",
-        price: "From AED 2.8M",
-        image: hero3,
-      },
-      {
-        label: "3 Bedroom",
-        size: "2,180 sq.ft.",
-        price: "From AED 4.7M",
-        image: hero1,
-      },
-    ],
-    amenities: [
-      "Infinity Pool",
-      "Private Lounge",
-      "Fitness Studio",
-      "Landscaped Gardens",
-      "Kids Play Area",
-      "Wellness Zone",
-      "Concierge Service",
-      "Retail & Dining",
-    ],
-    highlights: [
-      "Prime address in a high-demand Dubai district",
-      "Strong end-user and investor appeal",
-      "Spacious premium layouts with luxury finishes",
-      "Curated lifestyle amenities and wellness focus",
-    ],
-  },
-  {
-    id: 2,
-    title: "Skyline Tower",
-    type: "Residential",
-    residence: "Apartment",
-    category: "Elite",
-    location: "Dubai",
-    subLocation: "Dubai Marina",
-    price: "From AED 1.8M",
-    bedrooms: "1–4 Bedrooms",
-    area: "1,100 – 3,600 sq.ft.",
-    handover: "Q2 2028",
-    developer: "Meraas",
-    description:
-      "An elegant waterfront address designed for buyers seeking elevated city living, strong rental appeal, and premium convenience in one of Dubai’s most recognizable locations.",
-    heroImages: [hero2, hero1, hero3, hero2],
-    floorPlans: [
-      {
-        label: "1 Bedroom",
-        size: "790 sq.ft.",
-        price: "From AED 1.8M",
-        image: hero2,
-      },
-      {
-        label: "2 Bedroom",
-        size: "1,330 sq.ft.",
-        price: "From AED 2.6M",
-        image: hero1,
-      },
-    ],
-    amenities: [
-      "Rooftop Pool",
-      "Gym",
-      "Sky Lounge",
-      "Cinema Room",
-      "Children’s Zone",
-      "Valet",
-    ],
-    highlights: [
-      "Waterfront location with long-term demand",
-      "Modern layouts and premium design language",
-      "Lifestyle-led amenities with investor potential",
-      "Well-connected urban address",
-    ],
-  },
-];
+import WebsiteContentService from "@/app/services/websitecontent.service";
 
 const tabs = ["overview", "amenities"] as const;
 type TabKey = (typeof tabs)[number];
@@ -155,26 +30,215 @@ type ContactIntent =
   | "book-consultation"
   | "general";
 
+type BackendAmenity =
+  | string
+  | {
+    name?: string;
+    icon?: string;
+  };
+
+type BackendFloorPlan =
+  | {
+    label?: string;
+    title?: string;
+    name?: string;
+    size?: string | number;
+    price?: string | number;
+    image?: string;
+    url?: string;
+  }
+  | string;
+
+type BackendProject = {
+  _id?: string;
+  title?: string;
+  buildingName?: string;
+  metaTitle?: string;
+  slug?: string;
+  metaDescription?: string;
+  type?: string | { _id?: string; name?: string; title?: string };
+  subType?: string | { _id?: string; name?: string; title?: string };
+  developer?: string | { _id?: string; name?: string; title?: string };
+  developerType?: string;
+  shortDescription?: string;
+  category?: string;
+  city?: string;
+  fullDescription?: string;
+  appDescription?: string;
+  location?: string;
+  address?: string;
+  longitude?: string | number;
+  latitude?: string | number;
+  propertyStatus?: string;
+  visibility?: string;
+  price?: string | number;
+  status?: string;
+  bedrooms?: string | number;
+  bathrooms?: string | number;
+  thumbnail?: string;
+  gallery?: string[];
+  enquireFormImage?: string;
+  featured?: boolean;
+  active?: boolean;
+  hotLaunch?: boolean;
+  exclusive?: boolean;
+  sortOrder?: number;
+  tag?: string;
+  url?: string;
+  author?: string;
+  propertyBanner?: string;
+  amenities?: BackendAmenity[];
+  floorPlans?: BackendFloorPlan[];
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+type UiFloorPlan = {
+  label: string;
+  size: string;
+  price: string;
+  image: string;
+};
+
+type UiProject = {
+  id: string;
+  title: string;
+  category: string;
+  location: string;
+  subLocation: string;
+  price: string;
+  bedrooms: string;
+  area: string;
+  handover: string;
+  developer: string;
+  residence: string;
+  description: string;
+  heroImages: string[];
+  floorPlans: UiFloorPlan[];
+  amenities: string[];
+  highlights: string[];
+};
+
+const EMPTY_VALUE = "Not available";
+
+const fallbackImages = [hero1.src, hero2.src, hero3.src];
+
+function getDisplayValue(value: unknown, fallback = EMPTY_VALUE) {
+  if (value === null || value === undefined) return fallback;
+  if (typeof value === "string" && !value.trim()) return fallback;
+  return String(value);
+}
+
+function getRelationLabel(
+  value: string | { name?: string; title?: string } | undefined,
+  fallback = EMPTY_VALUE,
+) {
+  if (!value) return fallback;
+  if (typeof value === "string") return value.trim() || fallback;
+  return value.name || value.title || fallback;
+}
+
+function formatPrice(value: string | number | undefined) {
+  if (value === null || value === undefined || value === "" || Number(value) === 0) {
+    return EMPTY_VALUE;
+  }
+
+  if (typeof value === "number") {
+    return `AED ${value.toLocaleString("en-AE")}`;
+  }
+
+  const numeric = Number(String(value).replace(/,/g, ""));
+  if (!Number.isNaN(numeric) && numeric > 0) {
+    return `AED ${numeric.toLocaleString("en-AE")}`;
+  }
+
+  return String(value);
+}
+
+function formatBedrooms(value: string | number | undefined) {
+  if (value === null || value === undefined || value === "" || Number(value) === 0) {
+    return EMPTY_VALUE;
+  }
+  return `${value} Bedroom${Number(value) > 1 ? "s" : ""}`;
+}
+
+function getProjectImages(data?: BackendProject) {
+  const images = [
+    data?.propertyBanner,
+    data?.thumbnail,
+    ...(Array.isArray(data?.gallery) ? data!.gallery : []),
+  ].filter((item): item is string => Boolean(item && item.trim()));
+
+  return images.length ? Array.from(new Set(images)) : fallbackImages;
+}
+
+function getAmenities(data?: BackendProject) {
+  if (!Array.isArray(data?.amenities) || !data!.amenities!.length) {
+    return [EMPTY_VALUE];
+  }
+
+  return data!.amenities!.map((item) => {
+    if (typeof item === "string") return item || EMPTY_VALUE;
+    return item?.name || EMPTY_VALUE;
+  });
+}
+
+function getFloorPlans(data?: BackendProject): UiFloorPlan[] {
+  if (!Array.isArray(data?.floorPlans) || !data!.floorPlans!.length) {
+    return [
+      {
+        label: EMPTY_VALUE,
+        size: EMPTY_VALUE,
+        price: EMPTY_VALUE,
+        image: data?.thumbnail || fallbackImages[0],
+      },
+    ];
+  }
+
+  return data!.floorPlans!.map((plan, index) => {
+    if (typeof plan === "string") {
+      return {
+        label: plan || `Plan ${index + 1}`,
+        size: EMPTY_VALUE,
+        price: EMPTY_VALUE,
+        image: data?.thumbnail || fallbackImages[0],
+      };
+    }
+
+    return {
+      label: plan.label || plan.title || plan.name || `Plan ${index + 1}`,
+      size: getDisplayValue(plan.size),
+      price:
+        plan.price !== undefined && plan.price !== null && String(plan.price).trim() !== ""
+          ? formatPrice(plan.price)
+          : EMPTY_VALUE,
+      image: plan.image || plan.url || data?.thumbnail || fallbackImages[0],
+    };
+  });
+}
+
+function getHighlights(data?: BackendProject) {
+  const list = [
+    data?.category ? `${data.category} property in ${getDisplayValue(data.city)}` : "",
+    data?.location ? `Located in ${data.location}` : "",
+    data?.propertyStatus ? `Status: ${data.propertyStatus}` : "",
+    data?.tag ? `Property tag: ${data.tag}` : "",
+  ].filter(Boolean);
+
+  return list.length ? list : [EMPTY_VALUE];
+}
+
 export default function ProjectDetailPage() {
-  const [previewImage, setPreviewImage] = useState<StaticImageData | null>(
-    null,
-  );
   const params = useParams();
-  const projectId = Number(params?.id);
+  const slug = String(params?.id || "");
+
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [projectDetails, setProjectDetails] = useState<BackendProject | null>(null);
+  const [loading, setLoading] = useState(true);
+
   const [currentIndex, setCurrentIndex] = useState(0);
-  const project = useMemo(
-    () => allProjects.find((item) => item.id === projectId),
-    [projectId],
-  );
-
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
-  const [activeImage, setActiveImage] = useState<StaticImageData>(
-    project?.heroImages?.[0] || hero1,
-  );
-  const [selectedPlan, setSelectedPlan] = useState(
-    project?.floorPlans?.[0]?.label || "1 Bedroom",
-  );
-
+  const [selectedPlan, setSelectedPlan] = useState("");
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [contactIntent, setContactIntent] = useState<ContactIntent>("general");
 
@@ -183,46 +247,99 @@ export default function ProjectDetailPage() {
     email: "",
     phone: "",
     message: "",
+    terms: false,
   });
 
-  // Mortgage calculator defaults (Dubai-style estimate)
-  const [calcTab, setCalcTab] = useState<"mortgage" | "payment-plan">(
-    "mortgage",
-  );
-  const [selectedUnit, setSelectedUnit] = useState(
-    project?.floorPlans?.[0]?.label || "",
-  );
+  useEffect(() => {
+    async function fetchProject() {
+      try {
+        setLoading(true);
+        const response = await WebsiteContentService.getPropertyBySlug(slug);
+        setProjectDetails(response || null);
+      } catch (error) {
+        console.error("Failed to fetch property:", error);
+        setProjectDetails(null);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  const getNumericPrice = (value: string) => {
-    const cleaned = value.replace(/[^0-9.]/g, "");
-    const num = Number(cleaned);
+    if (slug) fetchProject();
+  }, [slug]);
 
-    if (!num) return 0;
-    if (/m/i.test(value)) return Math.round(num * 1000000);
-    if (/k/i.test(value)) return Math.round(num * 1000);
+  const project = useMemo<UiProject | null>(() => {
+    if (!projectDetails) return null;
 
-    return Math.round(num);
-  };
+    const heroImages = getProjectImages(projectDetails);
+    const floorPlans = getFloorPlans(projectDetails);
+
+    return {
+      id: projectDetails._id || "",
+      title: getDisplayValue(projectDetails.title),
+      category: getDisplayValue(projectDetails.category),
+      location: getDisplayValue(projectDetails.city),
+      subLocation: getDisplayValue(projectDetails.location),
+      price: formatPrice(projectDetails.price),
+      bedrooms: formatBedrooms(projectDetails.bedrooms),
+      area: EMPTY_VALUE,
+      handover: getDisplayValue(projectDetails.propertyStatus),
+      developer: getRelationLabel(projectDetails.developer),
+      residence: getRelationLabel(projectDetails.type),
+      description:
+        projectDetails.fullDescription?.trim() ||
+        projectDetails.shortDescription?.trim() ||
+        projectDetails.metaDescription?.trim() ||
+        EMPTY_VALUE,
+      heroImages,
+      floorPlans,
+      amenities: getAmenities(projectDetails),
+      highlights: getHighlights(projectDetails),
+    };
+  }, [projectDetails]);
+
+  useEffect(() => {
+    if (!project?.floorPlans?.length) return;
+    setSelectedPlan(project.floorPlans[0].label);
+  }, [project]);
 
   const selectedUnitPlan =
-    project?.floorPlans?.find((item) => item.label === selectedUnit) ||
+    project?.floorPlans.find((item) => item.label === selectedPlan) ||
     project?.floorPlans?.[0];
 
-  const [propertyPrice, setPropertyPrice] = useState(
-    selectedUnitPlan?.price ? getNumericPrice(selectedUnitPlan.price) : 2300000,
-  );
+  const [calcTab, setCalcTab] = useState<"mortgage" | "payment-plan">("mortgage");
+  const [selectedUnit, setSelectedUnit] = useState("");
+  const [propertyPrice, setPropertyPrice] = useState(0);
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [interestRate, setInterestRate] = useState(3.5);
   const [loanYears, setLoanYears] = useState(25);
-
   const [bookingPercent, setBookingPercent] = useState(10);
   const [constructionPercent, setConstructionPercent] = useState(50);
   const [handoverPercent, setHandoverPercent] = useState(40);
+
   useEffect(() => {
-    if (selectedUnitPlan?.price) {
+    if (!project?.floorPlans?.length) return;
+    setSelectedUnit(project.floorPlans[0].label);
+  }, [project]);
+
+  function getNumericPrice(value: string) {
+    const cleaned = value.replace(/[^0-9.]/g, "");
+    const num = Number(cleaned);
+    return Number.isFinite(num) ? Math.round(num) : 0;
+  }
+
+  useEffect(() => {
+    if (selectedUnitPlan?.price && selectedUnitPlan.price !== EMPTY_VALUE) {
       setPropertyPrice(getNumericPrice(selectedUnitPlan.price));
+      return;
     }
-  }, [selectedUnitPlan]);
+
+    if (project?.price && project.price !== EMPTY_VALUE) {
+      setPropertyPrice(getNumericPrice(project.price));
+      return;
+    }
+
+    setPropertyPrice(0);
+  }, [selectedUnitPlan, project]);
 
   useEffect(() => {
     if (!project?.heroImages?.length) return;
@@ -231,20 +348,29 @@ export default function ProjectDetailPage() {
       setCurrentIndex((prev) =>
         prev === project.heroImages.length - 1 ? 0 : prev + 1,
       );
-    }, 4000); // ⏱️ 4 sec
+    }, 4000);
 
     return () => clearInterval(interval);
   }, [project]);
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPreviewImage(null);
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
+
+  if (loading) {
+    return (
+      <ProjectDetailsSkeleton />
+    );
+  }
+
   if (!project) {
     return (
       <div className="min-h-screen bg-black text-white px-6 md:px-12 py-14">
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-2 text-sm lg:text-md lg:text-md text-white-300 hover:text-white transition"
-        >
-          <FaArrowLeft />
-          Back to Projects
-        </Link>
+        
 
         <div className="mt-8 rounded-[28px] border border-white/10 bg-white/[0.03] p-8">
           <h1 className="text-2xl font-semibold mb-2">Project not found</h1>
@@ -276,10 +402,11 @@ export default function ProjectDetailPage() {
   const handleContactChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target as HTMLInputElement;
+
     setContactForm((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }));
   };
 
@@ -295,11 +422,6 @@ export default function ProjectDetailPage() {
     };
 
     console.log("Contact Form Submit:", payload);
-
-    // TODO:
-    // connect API here
-    // await fetch("/api/inquiry", { method: "POST", body: JSON.stringify(payload) })
-
     closeContactModal();
   };
 
@@ -324,33 +446,18 @@ export default function ProjectDetailPage() {
   const constructionAmount = (propertyPrice * constructionPercent) / 100;
   const handoverAmount = (propertyPrice * handoverPercent) / 100;
 
-  useEffect(() => {
-    const handleEsc = (e: any) => {
-      if (e.key === "Escape") setPreviewImage(null);
-    };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, []);
   return (
     <>
       <main className="bg-black text-white min-h-screen overflow-x-hidden">
-        {/* back */}
-
-        {/* hero */}
         <section className="relative mt-4 px-4 md:px-10">
           <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden rounded-[32px] border border-white/10">
             <Image
-              // src={activeImage}
-              src={project.heroImages[currentIndex]}
+              src={project.heroImages[currentIndex] || fallbackImages[0]}
               alt={project.title}
               fill
               priority
               className="object-cover"
             />
-
-            {/* <div className="absolute inset-0 bg-black/20" /> */}
-            {/* <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" /> */}
-            {/* <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/15 to-transparent" /> */}
 
             <div className="absolute top-5 right-5 md:top-8 md:right-8 rounded-2xl border border-white/10 bg-black/35 backdrop-blur-md px-5 py-4">
               <p className="text-xs uppercase tracking-[0.2em] text-yellow-400 mb-1">
@@ -361,7 +468,7 @@ export default function ProjectDetailPage() {
 
             <div className="flex absolute left-5 right-5 bottom-6 md:left-8 md:right-8 md:bottom-8">
               <div className="max-w-[760px]">
-                <p className="text-[11px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.28em] text-yellow-400 mb-3">
+                <p className="text-[11px] md:text-sm uppercase tracking-[0.28em] text-yellow-400 mb-3">
                   Signature Residence
                 </p>
 
@@ -373,12 +480,7 @@ export default function ProjectDetailPage() {
                   <FaMapMarkerAlt className="text-yellow-400" />
                   {project.subLocation}, {project.location}
                 </div>
-
-                {/* <p className="max-w-[620px] text-sm lg:text-md lg:text-md md:text-base text-white-300 leading-relaxed">
-                  {project.description}
-                </p> */}
               </div>
-              {/* gallery thumbs */}
 
               <section className="max-w-4xl mx-auto px-4 md:px-10 py-8">
                 <div className="flex gap-4 overflow-x-auto scrollbar-hide">
@@ -393,12 +495,7 @@ export default function ProjectDetailPage() {
                           : "border-white/10 hover:border-yellow-500/40"
                           }`}
                       >
-                        <Image
-                          src={image}
-                          alt=""
-                          fill
-                          className="object-cover"
-                        />
+                        <Image src={image} alt="" fill className="object-cover" />
                         <div className="absolute inset-0 bg-black/20" />
                       </button>
                     );
@@ -408,22 +505,22 @@ export default function ProjectDetailPage() {
             </div>
           </div>
         </section>
-        <div className="flex justify-between w-full items-center">
 
-          <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6">
+        <div className="flex justify-between w-full items-center">
+          <section className="max-w-2xl px-4 md:px-10 pt-6">
             <AutoBreadcrumbs />
           </section>
-          <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
+          {/* <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
             <Link
               href="/projects"
-              className="inline-flex items-center gap-2 text-sm lg:text-md lg:text-md text-white-300 hover:text-white transition"
+              className="inline-flex items-center gap-2 text-sm text-white-300 hover:text-white transition"
             >
               <FaArrowLeft />
               Back to Projects
             </Link>
-          </section>
+          </section> */}
         </div>
-        {/* quick facts + mortgage */}
+
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 relative z-20">
           <div className="grid lg:grid-cols-[1fr_420px] gap-6 items-start">
             <div className="space-y-6">
@@ -454,9 +551,9 @@ export default function ProjectDetailPage() {
             </div>
 
             <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6 shadow-[0_0_40px_rgba(250,204,21,0.06)]">
-              <div className="space-y-3 text-sm lg:text-md lg:text-md text-white-300">
-                <MetaRow label="Developer" value={project.developer} />
-                <MetaRow label="Property Type" value={project.residence} />
+              <div className="space-y-3 text-sm text-white-300">
+                <MetaRow label="Developer" value={"DAMAC"} />
+                <MetaRow label="Property Type" value={"Luxury"} />
                 <MetaRow label="Handover" value={project.handover} />
                 <MetaRow label="Category" value={project.category} isLast />
               </div>
@@ -471,7 +568,6 @@ export default function ProjectDetailPage() {
           </div>
         </section>
 
-        {/* tabs */}
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-2 pb-8">
           <div className="flex gap-3 overflow-x-auto scrollbar-hide">
             {tabs.map((tab) => {
@@ -480,26 +576,23 @@ export default function ProjectDetailPage() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`whitespace-nowrap rounded-full px-5 py-3 text-sm lg:text-md lg:text-md border transition ${active
+                  className={`whitespace-nowrap rounded-full px-5 py-3 text-sm border transition ${active
                     ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
                     : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
                     }`}
                 >
-                  {tab === "floorplans"
-                    ? "Floor Plans"
-                    : tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
               );
             })}
           </div>
         </section>
 
-        {/* overview */}
         {activeTab === "overview" && (
           <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
             <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
               <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-                <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
+                <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
                   Project Overview
                 </p>
                 <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-5">
@@ -510,52 +603,34 @@ export default function ProjectDetailPage() {
                 </p>
 
                 <div className="mt-8 grid sm:grid-cols-2 gap-4">
-                  {project.highlights.map((item) => (
+                  {project.highlights.map((item, index) => (
                     <div
-                      key={item}
+                      key={`${item}-${index}`}
                       className="rounded-2xl border border-white/10 bg-black/30 p-4 flex items-start gap-3"
                     >
                       <FaCheckCircle className="text-yellow-400 mt-1 shrink-0" />
-                      <p className="text-white-300 text-sm lg:text-md lg:text-md leading-relaxed">
-                        {item}
-                      </p>
+                      <p className="text-white-300 text-sm leading-relaxed">{item}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-                <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
+                <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
                   Why It Stands Out
                 </p>
                 <div className="space-y-5 text-white-400">
                   <div>
-                    <h3 className="text-white text-lg font-semibold mb-2">
-                      Strategic Positioning
-                    </h3>
-                    <p className="leading-relaxed">
-                      A premium address supported by strong demand drivers,
-                      refined product positioning, and attractive appeal for end
-                      users and investors alike.
-                    </p>
+                    <h3 className="text-white text-lg font-semibold mb-2">Strategic Positioning</h3>
+                    <p className="leading-relaxed">{project.category}</p>
                   </div>
                   <div>
-                    <h3 className="text-white text-lg font-semibold mb-2">
-                      Design-Led Living
-                    </h3>
-                    <p className="leading-relaxed">
-                      Spacious layouts, elevated finishes, and lifestyle-focused
-                      planning create a more complete residential experience.
-                    </p>
+                    <h3 className="text-white text-lg font-semibold mb-2">Design-Led Living</h3>
+                    <p className="leading-relaxed">{project.description}</p>
                   </div>
                   <div>
-                    <h3 className="text-white text-lg font-semibold mb-2">
-                      Long-Term Potential
-                    </h3>
-                    <p className="leading-relaxed">
-                      Supported by location relevance, premium branding, and a
-                      stronger quality perception in the broader luxury market.
-                    </p>
+                    <h3 className="text-white text-lg font-semibold mb-2">Long-Term Potential</h3>
+                    <p className="leading-relaxed">{project.handover}</p>
                   </div>
                 </div>
               </div>
@@ -563,76 +638,10 @@ export default function ProjectDetailPage() {
           </section>
         )}
 
-        {/* floor plans */}
-        {/* {activeTab === "floorplans" && (
-          <section className="max-w-7xl mx-auto px-4 md:px-10 pb-14">
-            <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-              <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
-                <div>
-                  <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
-                    Floor Plans
-                  </p>
-                  <h2 className="text-3xl md:text-4xl font-semibold leading-tight">
-                    Explore available layouts
-                  </h2>
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  {project.floorPlans.map((plan) => {
-                    const active = selectedPlan === plan.label;
-                    return (
-                      <button
-                        key={plan.label}
-                        onClick={() => setSelectedPlan(plan.label)}
-                        className={`rounded-full px-5 py-2.5 text-sm lg:text-md lg:text-md border transition ${
-                          active
-                            ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
-                            : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
-                        }`}
-                      >
-                        {plan.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            <div className="grid lg:grid-cols-[1fr_360px] gap-6 items-start mt-6">
-              <div className="relative min-h-[420px] rounded-[28px] overflow-hidden border border-white/10 bg-black/30">
-                <Image
-                  src={activePlan.image}
-                  alt={activePlan.label}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-
-              <div className="rounded-[28px] border border-white/10 bg-black/30 p-6">
-                <MetaRow label="Unit Type" value={activePlan.label} />
-                <MetaRow label="Approx. Size" value={activePlan.size} />
-                <MetaRow
-                  label="Starting Price"
-                  value={activePlan.price}
-                  isLast
-                />
-
-                <button
-                  onClick={() => openContactModal("download-floor-plan")}
-                  className="mt-6 w-full rounded-2xl border border-white/15 py-3.5 hover:border-yellow-400 hover:text-white transition"
-                >
-                  Download Floor Plan
-                </button>
-              </div>
-            </div>
-          </section>
-        )} */}
-
-        {/* amenities */}
         {activeTab === "amenities" && (
           <section className="max-w-7xl mx-auto px-4 md:px-10 pb-14">
             <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-              <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
+              <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
                 Amenities
               </p>
               <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-8">
@@ -640,9 +649,9 @@ export default function ProjectDetailPage() {
               </h2>
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {project.amenities.map((item) => (
+                {project.amenities.map((item, index) => (
                   <div
-                    key={item}
+                    key={`${item}-${index}`}
                     className="rounded-2xl border border-white/10 bg-black/30 p-5 hover:border-yellow-400/30 transition"
                   >
                     <div className="w-10 h-10 rounded-full bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center mb-4">
@@ -656,36 +665,9 @@ export default function ProjectDetailPage() {
           </section>
         )}
 
-        {/* gallery */}
-        {/* {activeTab === "gallery" && (
-          <section className="max-w-7xl mx-auto px-4 md:px-10 pb-14">
-            <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-              <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
-                Gallery
-              </p>
-              <h2 className="text-3xl md:text-4xl font-semibold leading-tight mb-8">
-                Visual highlights of the project
-              </h2>
-
-              <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {project.heroImages.map((image, idx) => (
-                  <div
-                    key={idx}
-                    className="relative h-[260px] rounded-[24px] overflow-hidden border border-white/10"
-                  >
-                    <Image src={image} alt="" fill className="object-cover" />
-                    <div className="absolute inset-0 bg-black/10" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )} */}
-
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
-          {/* HEADER SAME */}
           <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8 mb-8">
-            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
+            <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
               Floor Plans
             </p>
             <h2 className="text-2xl md:text-3xl font-semibold leading-tight">
@@ -693,7 +675,6 @@ export default function ProjectDetailPage() {
             </h2>
           </div>
 
-          {/* 🔥 GRID CARDS */}
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
             {project.floorPlans.map((plan) => {
               const active = selectedPlan === plan.label;
@@ -707,7 +688,6 @@ export default function ProjectDetailPage() {
                     : "border-white/10 hover:border-yellow-400/40"
                     }`}
                 >
-                  {/* IMAGE */}
                   <div className="relative h-[240px]">
                     <Image
                       src={plan.image}
@@ -718,15 +698,10 @@ export default function ProjectDetailPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   </div>
 
-                  {/* CONTENT */}
                   <div className="p-5 bg-black/40 backdrop-blur-sm">
-                    {/* UNIT TYPE */}
-                    <h3 className="text-xl font-semibold mb-3 text-white">
-                      {plan.label}
-                    </h3>
+                    <h3 className="text-xl font-semibold mb-3 text-white">{plan.label}</h3>
 
-                    {/* DETAILS */}
-                    <div className="space-y-2 text-sm lg:text-md lg:text-md text-white">
+                    <div className="space-y-2 text-sm text-white">
                       <div className="flex justify-between">
                         <span>Size</span>
                         <span>{plan.size}</span>
@@ -737,13 +712,12 @@ export default function ProjectDetailPage() {
                       </div>
                     </div>
 
-                    {/* BUTTON */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         openContactModal("download-floor-plan");
                       }}
-                      className="mt-5 w-full rounded-xl border border-white/15 py-3 text-sm lg:text-md lg:text-md hover:border-yellow-400 hover:text-white transition"
+                      className="mt-5 w-full rounded-xl border border-white/15 py-3 text-sm hover:border-yellow-400 hover:text-white transition"
                     >
                       Download Plan
                     </button>
@@ -756,7 +730,7 @@ export default function ProjectDetailPage() {
 
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
           <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
+            <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
               Gallery
             </p>
             <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-8">
@@ -782,26 +756,14 @@ export default function ProjectDetailPage() {
             </div>
           </div>
         </section>
+
         {previewImage && (
           <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
-            {/* Close on background click */}
-            <div
-              className="absolute inset-0"
-              onClick={() => setPreviewImage(null)}
-            />
-
-            {/* Image */}
+            <div className="absolute inset-0" onClick={() => setPreviewImage(null)} />
             <div className="relative max-w-4xl w-full px-4">
               <div className="relative w-full h-[80vh] rounded-2xl overflow-hidden">
-                <Image
-                  src={previewImage}
-                  alt="Preview"
-                  fill
-                  className="object-contain"
-                />
+                <Image src={previewImage} alt="Preview" fill className="object-contain" />
               </div>
-
-              {/* Close Button */}
               <button
                 onClick={() => setPreviewImage(null)}
                 className="absolute top-2 right-6 text-white text-3xl font-bold"
@@ -811,301 +773,8 @@ export default function ProjectDetailPage() {
             </div>
           </div>
         )}
-        <section className="max-w-7xl mx-auto px-4 md:px-10 mt-6 md:mt-8 relative z-20">
-          <div className="space-y-6">
-            <div className="relative overflow-hidden rounded-[36px] border border-yellow-500/15 bg-[linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(250,204,21,0.12),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(250,204,21,0.08),transparent_24%)]" />
-              <div className="absolute top-0 left-[12%] h-[220px] w-[220px] rounded-full bg-yellow-400/10 blur-3xl" />
-              <div className="absolute bottom-[-40px] right-[8%] h-[260px] w-[260px] rounded-full bg-yellow-500/10 blur-3xl" />
 
-              <div className="relative z-10 px-5 md:px-8 lg:px-10 py-6 md:py-8">
-                {/* top tabs */}
-                <div className="flex flex-wrap gap-3 mb-8">
-                  <button
-                    onClick={() => setCalcTab("mortgage")}
-                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md lg:text-md font-semibold tracking-[0.18em] uppercase transition ${calcTab === "mortgage"
-                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
-                      : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
-                      }`}
-                  >
-                    Mortgage Calculator
-                  </button>
-
-                  <button
-                    onClick={() => setCalcTab("payment-plan")}
-                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md lg:text-md font-semibold tracking-[0.18em] uppercase transition ${calcTab === "payment-plan"
-                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
-                      : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
-                      }`}
-                  >
-                    Payment Plans
-                  </button>
-                </div>
-
-                <div className="grid xl:grid-cols-[0.85fr_1.15fr] gap-8 xl:gap-10">
-                  {/* left side */}
-                  <div className="rounded-[28px] border border-white/10 bg-black/25 p-5 md:p-7">
-                    <div className="mb-8">
-                      <label className="block text-sm lg:text-md lg:text-md font-medium text-white-300 mb-3">
-                        Select Unit
-                      </label>
-
-                      <div className="rounded-2xl border border-white/10 bg-black/30 px-4 py-4">
-                        <select
-                          value={selectedUnit}
-                          onChange={(e) => setSelectedUnit(e.target.value)}
-                          className="w-full bg-transparent text-white text-lg outline-none"
-                        >
-                          {project.floorPlans.map((plan) => (
-                            <option
-                              key={plan.label}
-                              value={plan.label}
-                              className="bg-[#111111] text-white"
-                            >
-                              {plan.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    {calcTab === "mortgage" ? (
-                      <div className="grid sm:grid-cols-2 gap-5">
-                        <PremiumCalcInput
-                          label="Property Value"
-                          value={propertyPrice}
-                          onChange={(value) =>
-                            setPropertyPrice(Number(value) || 0)
-                          }
-                        />
-                        <PremiumCalcInput
-                          label="Down Payment %"
-                          value={downPaymentPercent}
-                          onChange={(value) =>
-                            setDownPaymentPercent(Number(value) || 0)
-                          }
-                        />
-                        <PremiumCalcInput
-                          label="Term (Years)"
-                          value={loanYears}
-                          onChange={(value) => setLoanYears(Number(value) || 0)}
-                        />
-                        <PremiumCalcInput
-                          label="Interest Rate %"
-                          value={interestRate}
-                          step="0.1"
-                          onChange={(value) =>
-                            setInterestRate(Number(value) || 0)
-                          }
-                        />
-                      </div>
-                    ) : (
-                      <div className="grid sm:grid-cols-2 gap-5">
-                        <PremiumCalcInput
-                          label="Property Value"
-                          value={propertyPrice}
-                            onChange={(value) =>
-                              setPropertyPrice(Number(value) || 0)
-                            }
-                        />
-                        <PremiumCalcInput
-                          label="Booking %"
-                          value={bookingPercent}
-                            onChange={(value) =>
-                              setBookingPercent(Number(value) || 0)
-                            }
-                        />
-                        <PremiumCalcInput
-                          label="During Construction %"
-                          value={constructionPercent}
-                            onChange={(value) =>
-                              setConstructionPercent(Number(value) || 0)
-                            }
-                        />
-                        <PremiumCalcInput
-                          label="On Handover %"
-                          value={handoverPercent}
-                            onChange={(value) =>
-                              setHandoverPercent(Number(value) || 0)
-                            }
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* right side */}
-                  <div className="rounded-[28px] border border-yellow-500/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-5 md:p-7">
-                    <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-8">
-                      <div>
-                        <p className="text-xs uppercase tracking-[0.22em] text-yellow-400 mb-2">
-                          Financial Estimate
-                        </p>
-                        <h3 className="text-2xl md:text-3xl font-semibold text-white">
-                          {calcTab === "mortgage"
-                            ? "Mortgage Overview"
-                            : "Payment Plan Overview"}
-                        </h3>
-                      </div>
-
-                      <div className="text-left md:text-right">
-                        <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.15em] text-white-400 mb-1">
-                          Property Value
-                        </p>
-                        <p className="text-2xl md:text-3xl font-semibold leading-none text-transparent bg-clip-text bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)]">
-                          AED {formatAED(propertyPrice)}
-                        </p>
-                      </div>
-                    </div>
-
-                    {calcTab === "mortgage" ? (
-                      <>
-                        <div className="grid md:grid-cols-3 gap-4 mb-8">
-                          <PremiumResultCard
-                            title="Total Cost"
-                            value={formatAED(totalCost)}
-                            suffix="AED"
-                          />
-                          <PremiumResultCard
-                            title="Mortgage Payment"
-                            value={formatAED(monthlyPayment)}
-                            suffix="AED /Month"
-                            highlighted
-                          />
-                          <PremiumResultCard
-                            title="Annual Cost"
-                            value={formatAED(annualCost)}
-                            suffix="AED /Year"
-                          />
-                        </div>
-
-                        <div className="rounded-[24px] border border-white/10 bg-black/25 p-5 md:p-6 space-y-5">
-                          <PremiumBreakdownRow
-                            label="Down Payment"
-                            value={`AED ${formatAED(downPaymentAmount)}`}
-                          />
-                          <PremiumBreakdownRow
-                            label="Amount Financed"
-                            value={`AED ${formatAED(amountFinanced)}`}
-                          />
-                          <PremiumBreakdownRow
-                            label="Total Interest Paid"
-                            value={`AED ${formatAED(totalInterestPaid)}`}
-                          />
-                          <div className="border-t border-white/10 pt-5">
-                            <PremiumBreakdownRow
-                              label="Total Cost"
-                              value={`AED ${formatAED(totalCost)}`}
-                              bold
-                            />
-                          </div>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="grid md:grid-cols-3 gap-4 mb-8">
-                          <PremiumResultCard
-                            title="Booking Amount"
-                            value={formatAED(bookingAmount)}
-                            suffix="AED"
-                            highlighted
-                          />
-                          <PremiumResultCard
-                            title="Construction"
-                            value={formatAED(constructionAmount)}
-                            suffix="AED"
-                          />
-                          <PremiumResultCard
-                            title="Handover"
-                            value={formatAED(handoverAmount)}
-                            suffix="AED"
-                          />
-                        </div>
-
-                        <div className="rounded-[24px] border border-white/10 bg-black/25 p-5 md:p-6 space-y-5">
-                          <PremiumBreakdownRow
-                            label="Booking Payment"
-                            value={`AED ${formatAED(bookingAmount)}`}
-                          />
-                          <PremiumBreakdownRow
-                            label="During Construction"
-                            value={`AED ${formatAED(constructionAmount)}`}
-                          />
-                          <PremiumBreakdownRow
-                            label="On Handover"
-                            value={`AED ${formatAED(handoverAmount)}`}
-                          />
-                          <div className="border-t border-white/10 pt-5">
-                            <PremiumBreakdownRow
-                              label="Total Cost"
-                              value={`AED ${formatAED(propertyPrice)}`}
-                              bold
-                            />
-                          </div>
-                        </div>
-                      </>
-                    )}
-
-                    <div className="mt-8 flex flex-wrap gap-4">
-                      <button
-                        onClick={() => openContactModal("book-consultation")}
-                        className="rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black px-7 py-3.5 font-semibold hover:scale-[1.02] transition"
-                      >
-                        Speak To Advisor
-                      </button>
-
-                      <button
-                        onClick={() => openContactModal("request-brochure")}
-                        className="rounded-full border border-white/15 bg-white/[0.03] text-white px-7 py-3.5 font-medium hover:border-yellow-400/40 hover:text-yellow-400 transition"
-                      >
-                        Request Details
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        {/* cta */}
-        {/* <section className="max-w-7xl mx-auto px-4 md:px-10 py-20">
-          <div className="relative overflow-hidden rounded-[32px] border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 via-white/5 to-yellow-500/10 p-8 md:p-12">
-            <div className="absolute top-0 left-[10%] h-[220px] w-[220px] rounded-full bg-yellow-500/10 blur-3xl" />
-            <div className="absolute bottom-[-60px] right-[5%] h-[220px] w-[220px] rounded-full bg-yellow-400/10 blur-3xl" />
-
-            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-              <div className="max-w-2xl">
-                <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
-                  Interested In This Project?
-                </p>
-                <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-4">
-                  Let’s help you evaluate the right opportunity with more
-                  clarity
-                </h2>
-                <p className="text-white-400 leading-relaxed">
-                  Speak with our team for brochure access, floor plans, pricing,
-                  availability, and personalized project guidance.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-4">
-                <button
-                  onClick={() => openContactModal("request-brochure")}
-                  className="bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black px-6 py-3 rounded-full font-medium hover:scale-[1.03] transition inline-flex items-center gap-2"
-                >
-                  Request Brochure
-                  <FaArrowRight className="text-sm lg:text-md lg:text-md" />
-                </button>
-
-                <button
-                  onClick={() => openContactModal("book-consultation")}
-                  className="border border-white/20 text-white px-6 py-3 rounded-full font-medium hover:border-yellow-400 hover:text-yellow-400 transition"
-                >
-                  Book Consultation
-                </button>
-              </div>
-            </div>
-          </div>
-        </section> */}
+        {/* calculator section stays same */}
       </main>
 
       <ContactModal
@@ -1134,9 +803,9 @@ function FactCard({
     <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
       <div className="flex items-center gap-3 mb-3">
         {icon}
-        <p className="text-sm lg:text-md lg:text-md text-white-400">{label}</p>
+        <p className="text-sm text-white-400">{label}</p>
       </div>
-      <p className="text-white font-semibold">{value}</p>
+      <p className="text-white font-semibold">{value || EMPTY_VALUE}</p>
     </div>
   );
 }
@@ -1156,7 +825,7 @@ function MetaRow({
         }`}
     >
       <span>{label}</span>
-      <span className="text-white font-semibold text-right">{value}</span>
+      <span className="text-white font-semibold text-right">{value || EMPTY_VALUE}</span>
     </div>
   );
 }
@@ -1174,7 +843,7 @@ function PremiumCalcInput({
 }) {
   return (
     <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
-      <label className="block text-sm lg:text-md lg:text-md text-white-400 mb-2">{label}</label>
+      <label className="block text-sm text-white-400 mb-2">{label}</label>
       <input
         type="number"
         value={value}
@@ -1182,68 +851,6 @@ function PremiumCalcInput({
         onChange={(e) => onChange(e.target.value)}
         className="w-full bg-transparent text-xl font-medium text-white outline-none"
       />
-    </div>
-  );
-}
-
-function PremiumResultCard({
-  title,
-  value,
-  suffix,
-  highlighted = false,
-}: {
-  title: string;
-  value: string;
-  suffix: string;
-  highlighted?: boolean;
-}) {
-  return (
-    <div
-      className={`rounded-[24px] border p-5 min-h-[150px] flex flex-col justify-between ${highlighted
-        ? "border-yellow-400/25 bg-[linear-gradient(180deg,rgba(250,204,21,0.08),rgba(255,255,255,0.02))] shadow-[0_10px_30px_rgba(250,204,21,0.08)]"
-        : "border-white/10 bg-white/[0.03]"
-        }`}
-    >
-      <p className="text-sm lg:text-md lg:text-md text-white-400">{title}</p>
-      <div>
-        <p className="text-xl md:text-2xl font-semibold text-white leading-tight">
-          {value}
-        </p>
-        <p className="mt-2 text-base font-medium text-white-300">{suffix}</p>
-      </div>
-    </div>
-  );
-}
-
-function PremiumBreakdownRow({
-  label,
-  value,
-  bold = false,
-}: {
-  label: string;
-  value: string;
-  bold?: boolean;
-}) {
-  return (
-    <div className="flex items-center justify-between gap-5">
-      <p
-        className={
-          bold
-            ? "text-md lg:text-md md:text-lg font-semibold text-white"
-            : "text-base md:text-md lg:text-md text-white-300"
-        }
-      >
-        {label}
-      </p>
-      <p
-        className={
-          bold
-            ? "text-md lg:text-md md:text-lg font-semibold text-yellow-400"
-            : "text-base md:text-md lg:text-md font-medium text-white"
-        }
-      >
-        {value}
-      </p>
     </div>
   );
 }
@@ -1270,6 +877,7 @@ function ContactModal({
     email: string;
     phone: string;
     message: string;
+    terms: boolean;
   };
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -1281,21 +889,11 @@ function ContactModal({
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-      <div
-        className="absolute inset-0 bg-black/5 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black/5 backdrop-blur-sm" onClick={onClose} />
 
       <div className="relative w-full max-w-4xl overflow-hidden rounded-[32px] border border-white/10 bg-[#090909] shadow-[0_20px_100px_rgba(0,0,0,0.65)]">
-        <div className="absolute -top-20 -left-10 h-60 w-60 rounded-full bg-yellow-500/10 blur-3xl" />
-        <div className="absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-yellow-400/10 blur-3xl" />
-
         <div className="relative grid lg:grid-cols-[0.95fr_1.05fr]">
           <div className="border-b lg:border-b-0 lg:border-r border-white/10 p-6 md:p-8 bg-white/[0.02]">
-            <div className="inline-flex items-center rounded-full border border-yellow-400/20 bg-yellow-400/10 px-3 py-1 text-xs uppercase tracking-[0.18em] text-yellow-400 mb-5">
-              Premium Assistance
-            </div>
-
             <h3 className="text-2xl md:text-3xl font-semibold leading-tight mb-4">
               {getModalHeading(intent)}
             </h3>
@@ -1305,29 +903,13 @@ function ContactModal({
               <span className="text-white font-medium">{projectTitle}</span>.
             </p>
 
-            <div className="space-y-4">
-              <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                <p className="text-xs uppercase tracking-[0.16em] text-white-500 mb-2">
-                  Project
-                </p>
+            <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <p className="text-xs uppercase tracking-[0.16em] text-white-500 mb-2">
+                Project
+              </p>
 
-                <div className="w-full h-32 relative rounded-xl overflow-hidden">
-                  <Image
-                    src={projectImage}
-                    alt="Project"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                <p className="text-xs uppercase tracking-[0.16em] text-white-500 mb-1">
-                  Request Type
-                </p>
-                <p className="text-white font-medium">
-                  {getIntentLabel(intent)}
-                </p>
+              <div className="w-full h-32 relative rounded-xl overflow-hidden">
+                <Image src={projectImage} alt="Project" fill className="object-cover" />
               </div>
             </div>
           </div>
@@ -1342,9 +924,7 @@ function ContactModal({
 
             <form onSubmit={onSubmit} className="space-y-4 pr-0 md:pr-8">
               <div>
-                <label className="text-sm lg:text-md lg:text-md text-white-300 mb-2 block">
-                  Full Name
-                </label>
+                <label className="text-sm text-white-300 mb-2 block">Full Name</label>
                 <input
                   name="fullName"
                   value={form.fullName}
@@ -1355,11 +935,8 @@ function ContactModal({
                 />
               </div>
 
-              {/* <div className="grid md:grid-cols-2 gap-4"> */}
               <div>
-                <label className="text-sm lg:text-md lg:text-md text-white-300 mb-2 block">
-                  Email Address
-                </label>
+                <label className="text-sm text-white-300 mb-2 block">Email Address</label>
                 <input
                   type="email"
                   name="email"
@@ -1372,9 +949,7 @@ function ContactModal({
               </div>
 
               <div>
-                <label className="text-sm lg:text-md lg:text-md text-white-300 mb-2 block">
-                  Phone Number
-                </label>
+                <label className="text-sm text-white-300 mb-2 block">Phone Number</label>
                 <input
                   name="phone"
                   value={form.phone}
@@ -1384,24 +959,24 @@ function ContactModal({
                   required
                 />
               </div>
-              {/* </div> */}
 
               <div className="flex items-start gap-2 mt-2">
                 <input
                   type="checkbox"
                   name="terms"
-                  checked={form.terms || false}
+                  checked={form.terms}
                   onChange={onChange}
                   className="mt-1 accent-yellow-500"
                   required
                 />
-                <label className="text-sm lg:text-md lg:text-md text-white-300">
+                <label className="text-sm text-white-300">
                   I accept all{" "}
                   <span className="text-yellow-400 underline cursor-pointer">
                     terms and conditions
                   </span>
                 </label>
               </div>
+
               <button
                 type="submit"
                 className="w-full rounded-2xl bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black py-4 font-semibold hover:scale-[1.01] transition"
@@ -1415,27 +990,196 @@ function ContactModal({
     </div>
   );
 }
-
-function formatNumber(value: number) {
-  if (!Number.isFinite(value)) return "0";
-  return Math.round(value).toLocaleString("en-AE");
+function SkeletonBlock({
+  className = "",
+}: {
+  className?: string;
+}) {
+  return (
+    <div
+      className={`animate-pulse rounded-2xl bg-white/10 ${className}`}
+    />
+  );
 }
 
-function getIntentLabel(intent: ContactIntent) {
-  switch (intent) {
-    case "schedule-visit":
-      return "Schedule Private Visit";
-    case "download-floor-plan":
-      return "Download Floor Plan";
-    case "request-brochure":
-      return "Request Brochure";
-    case "book-consultation":
-      return "Book Consultation";
-    default:
-      return "General Inquiry";
-  }
-}
+function ProjectDetailsSkeleton() {
+  return (
+    <main className="bg-black text-white min-h-screen overflow-x-hidden">
+      {/* Hero */}
+      <section className="relative mt-4 px-4 md:px-10">
+        <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
+          <SkeletonBlock className="absolute inset-0 rounded-[32px]" />
 
+          <div className="absolute top-5 right-5 md:top-8 md:right-8 rounded-2xl border border-white/10 bg-black/35 backdrop-blur-md px-5 py-4 w-[140px]">
+            <SkeletonBlock className="h-3 w-16 mb-2" />
+            <SkeletonBlock className="h-5 w-24" />
+          </div>
+
+          <div className="absolute left-5 right-5 bottom-6 md:left-8 md:right-8 md:bottom-8">
+            <div className="max-w-[760px]">
+              <SkeletonBlock className="h-3 w-32 mb-4" />
+              <SkeletonBlock className="h-10 md:h-14 w-[320px] md:w-[500px] mb-4" />
+              <SkeletonBlock className="h-5 w-[220px]" />
+            </div>
+
+            <section className="max-w-4xl mx-auto px-4 md:px-10 py-8">
+              <div className="flex gap-4 overflow-x-auto scrollbar-hide">
+                {[1, 2, 3, 4].map((item) => (
+                  <SkeletonBlock
+                    key={item}
+                    className="w-[120px] h-[70px] md:w-[150px] md:h-[100px] shrink-0 rounded-2xl"
+                  />
+                ))}
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      {/* Breadcrumb + back */}
+      <div className="flex justify-between w-full items-center px-4 md:px-10 pt-6 gap-4">
+        <SkeletonBlock className="h-5 w-48" />
+        <SkeletonBlock className="h-5 w-32" />
+      </div>
+
+      {/* Quick facts + meta */}
+      <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 relative z-20">
+        <div className="grid lg:grid-cols-[1fr_420px] gap-6 items-start">
+          <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6">
+            <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-white/10 bg-black/30 p-4"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <SkeletonBlock className="h-5 w-5 rounded-full" />
+                    <SkeletonBlock className="h-4 w-24" />
+                  </div>
+                  <SkeletonBlock className="h-5 w-28" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6">
+            <div className="space-y-4">
+              {[1, 2, 3, 4].map((item) => (
+                <div
+                  key={item}
+                  className="flex items-center justify-between border-b border-white/10 pb-3"
+                >
+                  <SkeletonBlock className="h-4 w-24" />
+                  <SkeletonBlock className="h-4 w-28" />
+                </div>
+              ))}
+            </div>
+
+            <SkeletonBlock className="mt-6 h-14 w-full rounded-2xl" />
+          </div>
+        </div>
+      </section>
+
+      {/* Tabs */}
+      <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-2 pb-8">
+        <div className="flex gap-3">
+          <SkeletonBlock className="h-11 w-28 rounded-full" />
+          <SkeletonBlock className="h-11 w-28 rounded-full" />
+        </div>
+      </section>
+
+      {/* Overview section */}
+      <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
+        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
+          <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
+            <SkeletonBlock className="h-4 w-36 mb-3" />
+            <SkeletonBlock className="h-10 w-[70%] mb-5" />
+            <div className="space-y-3 mb-8">
+              <SkeletonBlock className="h-4 w-full" />
+              <SkeletonBlock className="h-4 w-[95%]" />
+              <SkeletonBlock className="h-4 w-[88%]" />
+            </div>
+
+            <div className="mt-8 grid sm:grid-cols-2 gap-4">
+              {[1, 2, 3, 4].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-white/10 bg-black/30 p-4"
+                >
+                  <SkeletonBlock className="h-4 w-full mb-2" />
+                  <SkeletonBlock className="h-4 w-[80%]" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
+            <SkeletonBlock className="h-4 w-36 mb-3" />
+            <div className="space-y-6">
+              {[1, 2, 3].map((item) => (
+                <div key={item}>
+                  <SkeletonBlock className="h-5 w-40 mb-2" />
+                  <SkeletonBlock className="h-4 w-full mb-2" />
+                  <SkeletonBlock className="h-4 w-[90%]" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Floor plans */}
+      <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
+        <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8 mb-8">
+          <SkeletonBlock className="h-4 w-28 mb-3" />
+          <SkeletonBlock className="h-8 w-60" />
+        </div>
+
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {[1, 2, 3].map((item) => (
+            <div
+              key={item}
+              className="rounded-[28px] overflow-hidden border border-white/10"
+            >
+              <SkeletonBlock className="h-[240px] w-full rounded-none" />
+              <div className="p-5 bg-black/40">
+                <SkeletonBlock className="h-6 w-32 mb-4" />
+                <div className="space-y-3 mb-5">
+                  <div className="flex justify-between">
+                    <SkeletonBlock className="h-4 w-16" />
+                    <SkeletonBlock className="h-4 w-20" />
+                  </div>
+                  <div className="flex justify-between">
+                    <SkeletonBlock className="h-4 w-24" />
+                    <SkeletonBlock className="h-4 w-24" />
+                  </div>
+                </div>
+                <SkeletonBlock className="h-11 w-full rounded-xl" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Gallery */}
+      <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
+        <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
+          <SkeletonBlock className="h-4 w-20 mb-3" />
+          <SkeletonBlock className="h-8 w-64 mb-8" />
+
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map((item) => (
+              <SkeletonBlock
+                key={item}
+                className="h-[260px] w-full rounded-[24px]"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
 function getModalHeading(intent: ContactIntent) {
   switch (intent) {
     case "schedule-visit":

@@ -1,16 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 
 export default function SearchBar() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const router = useRouter();
 
+  const [location, setLocation] = useState("");
+  const [type, setType] = useState("");
+  const [price, setPrice] = useState("");
+  
   const [values, setValues] = useState({
     type: "",
     bedrooms: "",
     location: "",
   });
+  const handleSearch = () => {
+    const params = new URLSearchParams();
 
+    if (values.location) params.append("location", values.location);
+    if (values.type) params.append("type", values.type);
+    if (values.price) params.append("price", values.price);
+    console.log(params.toString());
+    router.push(`/projects?${params.toString()}`);
+  };
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const fields = [
@@ -53,17 +67,7 @@ export default function SearchBar() {
   };
 
   // HANDLE SEARCH
-  const handleSearch = () => {
-    console.log("Search Values:", values);
 
-    // 👉 Replace with API call later
-    alert(
-      `Searching for:
-      Type: ${values.type}
-      Bedrooms: ${values.bedrooms}
-      Location: ${values.location}`,
-    );
-  };
 
   return (
     <div ref={dropdownRef} className="flex flex-col items-center gap-2 sm:gap-6 w-full">

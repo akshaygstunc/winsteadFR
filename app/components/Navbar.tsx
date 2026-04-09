@@ -5,7 +5,7 @@ import gsap from "gsap";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import winstead from "../../public/win-logo.png";
+import winstead from "../../public/logodetaile.png";
 import star from "../../public/hugeicons_star.png";
 import { FcGoogle } from "react-icons/fc";
 import FollowUsIcons from "./SocialMedia";
@@ -20,7 +20,7 @@ const navLinks = [
       { name: "Offplan", href: "/projects" },
       { name: "Commercial", href: "/projects" },
       { name: "Residencial", href: "/projects" },
-      { name: "Plot", href: "/projects" },
+      // { name: "Plot", href: "/projects" },
     ],
   },
   { name: "Our Services", href: "/our-services" },
@@ -30,7 +30,7 @@ const navLinks = [
     dropdown: [
       { name: "Blogs", href: "/blogs" },
       { name: "Gallery", href: "/gallery" },
-      { name: "Awards", href: "/awards" },
+      // { name: "Awards", href: "/awards" },
       { name: "Contact Us", href: "/contact-us" },
     ],
   },
@@ -87,7 +87,7 @@ export default function Navbar() {
             src={winstead}
             alt="Winstead Logo"
             width={80}
-            height={30}
+            height={50}
             priority
             className="cursor-pointer"
           />

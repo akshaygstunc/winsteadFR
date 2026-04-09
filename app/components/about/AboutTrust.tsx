@@ -22,7 +22,7 @@ export default function AboutTrust() {
         <section className="py-20 px-6 md:px-10 border-t border-white/10">
             <div className="max-w-7xl mx-auto grid lg:grid-cols-[2fr_3fr] gap-10 items-start">
                 <div>
-                    <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                    <p className="text-sm lg:text-xl lg:text-xl uppercase tracking-[0.25em] text-yellow-400 mb-3">
                         Why Clients Trust Us
                     </p>
                     <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
@@ -43,7 +43,7 @@ export default function AboutTrust() {
                             <h3 className="text-lg font-semibold text-white mb-2">
                                 {item.title}
                             </h3>
-                            <p className="text-white-400 leading-relaxed text-sm md:text-base">
+                            <p className="text-white-400 leading-relaxed text-sm lg:text-xl lg:text-xl md:text-base">
                                 {item.description}
                             </p>
                         </div>

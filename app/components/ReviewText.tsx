@@ -14,10 +14,10 @@ export default function ReviewText({ text }: { text: string }) {
                 {text}
             </p>
 
-            {text.length > 120 && (
+            {text.length > 80 && (
                 <button
                     onClick={() => setExpanded(!expanded)}
-                    className="mt-2 text-yellow-400 text-sm font-medium hover:underline transition"
+                    className="mt-2 text-yellow-400 text-sm lg:text-xl lg:text-xl font-medium hover:underline transition"
                 >
                     {expanded ? "Read Less" : "Read More"}
                 </button>

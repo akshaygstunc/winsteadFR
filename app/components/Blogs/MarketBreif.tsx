@@ -29,7 +29,7 @@ export default function MarketBrief() {
                             {item.label}
                         </p>
                         <h3 className="text-2xl font-semibold mb-2">{item.value}</h3>
-                        <p className="text-sm text-white-400 leading-relaxed">{item.desc}</p>
+                        <p className="text-sm lg:text-xl lg:text-xl text-white-400 leading-relaxed">{item.desc}</p>
                     </div>
                 ))}
             </div>

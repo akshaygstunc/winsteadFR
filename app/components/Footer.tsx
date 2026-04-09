@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import logo from "../../public/winstead.png";
+import logo from "../../public/logodetaile.png";
 import {
   FaFacebookF,
   FaInstagram,
@@ -11,6 +11,7 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 import ContactModal from "./ContactModal";
+import { FaPinterest } from "react-icons/fa6";
 type ContactIntent =
   | "schedule-visit"
   | "download-floor-plan"
@@ -82,7 +83,7 @@ export default function Footer() {
     closeContactModal();
   };
   return (
-    <footer className="relative bg-[#0b0b0b] text-white overflow-hidden border-t border-white/10">
+    <footer className="relative bg-[#000] text-white overflow-hidden border-t border-white/10">
       {/* top glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-[1px] bg-gradient-to-r from-transparent via-[#F1DC7F] to-transparent" />
 
@@ -97,7 +98,7 @@ export default function Footer() {
               Let’s help you find your next
               <span className="text-[#F1DC7F]"> premium property</span>
             </h2>
-            <p className="text-sm md:text-base text-white mt-3 max-w-2xl">
+            <p className="text-sm lg:text-xl lg:text-xl md:text-base text-white mt-3 max-w-2xl">
               Explore curated opportunities across Dubai’s most desirable
               communities with expert guidance from our team.
             </p>
@@ -127,8 +128,8 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <Image src={logo} alt="Winstead" width={74} className="mb-5" />
-            {/* <p className="text-white leading-relaxed text-sm md:text-base max-w-sm">
+            <Image src={logo} alt="Winstead" width={150} className="mb-5" />
+            {/* <p className="text-white leading-relaxed text-sm lg:text-xl lg:text-xl md:text-base max-w-sm">
               Winstead delivers access to refined living and high-potential real
               estate opportunities through a tailored, investor-first approach.
             </p> */}
@@ -144,7 +145,7 @@ export default function Footer() {
                   link: "https://x.com/winsteadglobal",  
                 },
                 {
-                  icon: FaLinkedinIn,
+                  icon: FaPinterest,
                   link: "https://in.pinterest.com/winsteadglobal/",  
                 },
                 {
@@ -262,7 +263,7 @@ export default function Footer() {
           {/* Contact */}
           <div>
             <h3 className="text-white text-lg mb-5">Contact</h3>
-            <div className="space-y-4 text-white text-sm md:text-base">
+            <div className="space-y-4 text-white text-sm lg:text-xl lg:text-xl md:text-base">
               <p>
                 2601, Iris Bay, Business Bay, Dubai
                 <br />
@@ -273,19 +274,19 @@ export default function Footer() {
               <p>Mon - Sat : 9:00 AM - 7:00 PM</p>
             </div>
 
-            <div className="mt-6 p-4 rounded-2xl border border-white/10 bg-white/[0.03]">
-              <p className="text-sm text-white mb-2">Stay updated</p>
+            {/* <div className="mt-6 p-4 rounded-2xl border border-white/10 bg-white/[0.03]">
+              <p className="text-sm lg:text-xl lg:text-xl text-white mb-2">Stay updated</p>
               <div className="flex gap-2">
                 <input
                   type="email"
                   placeholder="Your email"
-                  className="flex-1 bg-transparent border border-white/10 rounded-full px-4 py-2 text-sm outline-none focus:border-[#F1DC7F]"
+                  className="flex-1 bg-transparent border border-white/10 rounded-full px-4 py-2 text-sm lg:text-xl lg:text-xl outline-none focus:border-[#F1DC7F]"
                 />
-                <button className="px-4 py-2 rounded-full bg-[#F1DC7F] text-black text-sm font-medium">
+                <button className="px-4 py-2 rounded-full bg-[#F1DC7F] text-black text-sm lg:text-xl lg:text-xl font-medium">
                   Join
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -308,7 +309,7 @@ export default function Footer() {
 
       {/* bottom strip */}
       <div className="px-6 md:px-12 lg:px-20 py-5 border-t border-white/10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs md:text-sm text-white">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs md:text-sm lg:text-xl lg:text-xl text-white">
           <p>© 2026 Winstead Global Real Estate LLC</p>
 
           <div className="flex items-center gap-4">

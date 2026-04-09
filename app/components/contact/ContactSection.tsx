@@ -8,7 +8,7 @@ export default function ContactSection({ contactPoints }: { contactPoints: strin
                 {/* LEFT SIDE */}
                 <div className="space-y-8">
                     <div>
-                        <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                        <p className="text-sm lg:text-xl lg:text-xl uppercase tracking-[0.25em] text-yellow-400 mb-3">
                             Get In Touch
                         </p>
                         <h2 className="text-3xl md:text-4xl font-semibold leading-tight mb-4">
@@ -56,7 +56,7 @@ Dubai, UAE"
                 {/* RIGHT SIDE FORM */}
                 <div className="rounded-[32px] border border-yellow-500/20 bg-white/5 backdrop-blur-sm p-6 md:p-8 shadow-[0_0_40px_rgba(250,204,21,0.08)]">
                     <div className="mb-8">
-                        <p className="text-sm uppercase tracking-[0.22em] text-white-400 mb-2">
+                        <p className="text-sm lg:text-xl lg:text-xl uppercase tracking-[0.22em] text-white-400 mb-2">
                             Inquiry Form
                         </p>
                         <h3 className="text-2xl md:text-3xl font-semibold leading-tight">
@@ -68,7 +68,7 @@ Dubai, UAE"
                     <form className="space-y-5">
                         {/* FULL NAME */}
                         <div>
-                            <label className="text-sm mb-2 block text-white-300">Full Name</label>
+                            <label className="text-sm lg:text-xl lg:text-xl mb-2 block text-white-300">Full Name</label>
                             <input
                                 placeholder="Enter your full name"
                                 className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white-500 focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition"
@@ -78,7 +78,7 @@ Dubai, UAE"
                         {/* PHONE + EMAIL */}
                         {/* <div className="grid md:grid-cols-2 gap-4"> */}
                             <div>
-                                <label className="text-sm mb-2 block text-white-300">Phone</label>
+                                <label className="text-sm lg:text-xl lg:text-xl mb-2 block text-white-300">Phone</label>
                                 <div className="flex items-center bg-black/40 border border-white/10 rounded-2xl px-4 py-4 focus-within:border-yellow-400 focus-within:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition">
                                     <div className="w-6 h-4 mr-2 rounded-sm bg-[linear-gradient(to_bottom,#00732f_33%,#fff_33%,#fff_66%,#000_66%)]" />
                                     <span className="text-white-300 mr-3">+971</span>
@@ -90,7 +90,7 @@ Dubai, UAE"
                             </div>
 
                             <div>
-                                <label className="text-sm mb-2 block text-white-300">Email</label>
+                                <label className="text-sm lg:text-xl lg:text-xl mb-2 block text-white-300">Email</label>
                                 <input
                                     placeholder="Enter your email"
                                     className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white-500 focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition"
@@ -101,7 +101,7 @@ Dubai, UAE"
                         {/* SELECTS */}
                         {/* <div className="grid md:grid-cols-2 gap-4">
                             <div>
-                                <label className="text-sm mb-2 block text-white-300">Project Type</label>
+                                <label className="text-sm lg:text-xl lg:text-xl mb-2 block text-white-300">Project Type</label>
                                 <select className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition">
                                     <option>Apartment</option>
                                     <option>Villa</option>
@@ -110,7 +110,7 @@ Dubai, UAE"
                             </div>
 
                             <div>
-                                <label className="text-sm mb-2 block text-white-300">Bedrooms</label>
+                                <label className="text-sm lg:text-xl lg:text-xl mb-2 block text-white-300">Bedrooms</label>
                                 <select className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)] transition">
                                     <option>1 Bedroom</option>
                                     <option>2 Bedrooms</option>
@@ -122,7 +122,7 @@ Dubai, UAE"
 
                         {/* MESSAGE */}
                         {/* <div>
-                            <label className="text-sm mb-2 block text-white-300">Message</label>
+                            <label className="text-sm lg:text-xl lg:text-xl mb-2 block text-white-300">Message</label>
                             <textarea
                                 rows={5}
                                 placeholder="Tell us what kind of property or opportunity you are looking for"
@@ -135,7 +135,7 @@ Dubai, UAE"
                             className="w-full mt-2 py-4 rounded-2xl bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black text-lg font-semibold hover:scale-[1.01] hover:shadow-[0_0_25px_rgba(241,220,127,0.22)] transition-all duration-300 inline-flex items-center justify-center gap-2"
                         >
                             Submit Inquiry
-                            <FaArrowRight className="text-sm" />
+                            <FaArrowRight className="text-sm lg:text-xl lg:text-xl" />
                         </button>
 
                         {/* FOOTER TEXT */}

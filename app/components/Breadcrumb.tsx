@@ -12,7 +12,7 @@ export default function Breadcrumb() {
 
   return (
     <div className="w-full border-b border-white/10 bg-black">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 py-3 text-sm text-gray-400 flex flex-wrap items-center gap-2">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 py-3 text-sm lg:text-xl lg:text-xl text-gray-400 flex flex-wrap items-center gap-2">
         
         {/* HOME */}
         <Link href="/" className="hover:text-yellow-400 transition">

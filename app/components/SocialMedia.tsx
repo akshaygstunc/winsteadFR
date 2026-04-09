@@ -7,6 +7,7 @@ import {
   FaFacebookF,
   FaPinterest,
   FaWhatsapp,
+  FaTiktok,
 } from "react-icons/fa6";
 
 export default function FollowUsIcons() {
@@ -19,7 +20,7 @@ export default function FollowUsIcons() {
     {
       name: "Instagram",
       icon: <FaInstagram />,
-      link: "https://x.com/winsteadglobal",
+      link: "https://www.instagram.com/winsteadglobal/",
     },
     {
       name: "Twitter (X)",
@@ -37,9 +38,9 @@ export default function FollowUsIcons() {
       link: "https://www.youtube.com/@WinsteadGlobal",
     },
     {
-      name: "Linkedin",
-      icon: <FaLinkedinIn />,
-      link: "https://in.pinterest.com/winsteadglobal/",
+      name: "TikTok",
+      icon: <FaTiktok />,
+      link: "https://www.tiktok.com/@winsteadglobal",
     },
   ];
 

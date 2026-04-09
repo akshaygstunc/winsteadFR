@@ -114,7 +114,7 @@ export default function Stats() {
               {/* glow */}
               <div className="stat-glow absolute inset-0 blur-2xl opacity-40 bg-yellow-400/20 rounded-full"></div>
 
-              <h3 className="text-3xl md:text-5xl font-extrabold relative">
+              <h3 className="text-3xl md:text-5xl  relative">
                 <span
                   className="counter bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(241,220,127,0.6)]"
                   data-value={parseFloat(stat.value)}

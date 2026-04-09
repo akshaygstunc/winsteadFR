@@ -17,7 +17,7 @@ export default function ContactHero() {
 
         //     <div className="relative max-w-7xl mx-auto px-6 md:px-12 py-24 md:py-28">
         //         <div className="max-w-4xl">
-        //             <p className="text-sm uppercase tracking-[0.28em] text-yellow-400 mb-4">
+        //             <p className="text-sm lg:text-xl lg:text-xl uppercase tracking-[0.28em] text-yellow-400 mb-4">
         //                 Contact Us
         //             </p>
 
@@ -36,7 +36,7 @@ export default function ContactHero() {
         //                 {["Private Consultation", "Investment Inquiry", "Luxury Properties"].map((item) => (
         //                     <span
         //                         key={item}
-        //                         className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-white-200 backdrop-blur-sm"
+        //                         className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm lg:text-xl lg:text-xl text-white-200 backdrop-blur-sm"
         //                     >
         //                         {item}
         //                     </span>
