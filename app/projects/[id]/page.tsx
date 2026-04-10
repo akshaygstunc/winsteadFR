@@ -22,6 +22,7 @@ import WebsiteContentService from "@/app/services/websitecontent.service";
 import ContactModal from "@/app/components/ContactModal";
 import MortgageCalculator from "@/app/components/MortrageForm";
 import LuxuryFAQ from "@/app/components/FAQ";
+import ProjectHeroSlider from "@/app/components/ProjectSlider";
 
 const tabs = ["overview", "amenities", "FAQ"] as const;
 type TabKey = (typeof tabs)[number];
@@ -452,61 +453,8 @@ export default function ProjectDetailPage() {
   return (
     <>
       <main className="bg-black text-white min-h-screen overflow-x-hidden">
-        <section className="relative mt-4 px-4 md:px-10">
-          <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden rounded-[32px] border border-white/10">
-            <Image
-              src={project.heroImages[currentIndex] || fallbackImages[0]}
-              alt={project.title}
-              fill
-              priority
-              className="object-cover"
-            />
-
-            <div className="absolute top-5 right-5 md:top-8 md:right-8 rounded-2xl border border-white/10 bg-black/35 backdrop-blur-md px-5 py-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-yellow-400 mb-1">
-                Category
-              </p>
-              <p className="text-white font-medium">{project.category}</p>
-            </div>
-
-            <div className="flex absolute left-5 right-5 bottom-6 md:left-8 md:right-8 md:bottom-8">
-              <div className="max-w-[760px]">
-                <p className="text-[11px] md:text-sm uppercase tracking-[0.28em] text-yellow-400 mb-3">
-                  Signature Residence
-                </p>
-
-                <h1 className="text-4xl md:text-6xl xl:text-4xl font-semibold leading-[1.02] mb-4">
-                  {project.title}
-                </h1>
-
-                <div className="flex items-center gap-2 text-base md:text-lg text-white-200 mb-4">
-                  <FaMapMarkerAlt className="text-yellow-400" />
-                  {project.subLocation}, {project.location}
-                </div>
-              </div>
-
-              <section className="max-w-4xl mx-auto px-4 md:px-10 py-8">
-                <div className="flex gap-4 overflow-x-auto scrollbar-hide">
-                  {project.heroImages.map((image, index) => {
-                    const active = currentIndex === index;
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentIndex(index)}
-                        className={`relative w-[120px] h-[70px] md:w-[150px] md:h-[100px] rounded-2xl overflow-hidden border transition shrink-0 ${active
-                          ? "border-yellow-400 shadow-[0_0_20px_rgba(241,220,127,0.18)]"
-                          : "border-white/10 hover:border-yellow-500/40"
-                          }`}
-                      >
-                        <Image src={image} alt="" fill className="object-cover" />
-                        <div className="absolute inset-0 bg-black/20" />
-                      </button>
-                    );
-                  })}
-                </div>
-              </section>
-            </div>
-          </div>
+        <section className="relative">
+          <ProjectHeroSlider project={project} fallbackImages={fallbackImages} />
         </section>
 
         <div className="flex justify-between w-full items-center">
@@ -958,52 +906,76 @@ export default function ProjectDetailPage() {
                             : "Payment Plan Overview"}
                         </h3>
                       </div>
-
-                      <div className="text-left md:text-right">
-                        <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.15em] text-white-400 mb-1">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.22em] text-white-400 mb-2">
                           Property Value
                         </p>
-                        <p className="text-md md:text-md font-semibold leading-none text-transparent bg-clip-text bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)]">
+                        <h3 className="text-md md:text-md text-transparent font-semibold bg-clip-text bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)]">
                           AED {formatAED(propertyPrice)}
-                        </p>
+                        </h3>
                       </div>
+
                     </div>
 
                     {calcTab === "mortgage" ? (
                       <>
-                        <div className="grid md:grid-cols-3 gap-4 mb-1">
-                          <PremiumResultCard
-                            title="Total Cost"
-                            value={formatAED(totalCost)}
-                            suffix="AED"
-                          />
-                          <PremiumResultCard
-                            title="Mortgage Payment"
-                            value={formatAED(monthlyPayment)}
-                            suffix="AED /Month"
-                            highlighted
-                          />
-                          <PremiumResultCard
-                            title="Annual Cost"
-                            value={formatAED(annualCost)}
-                            suffix="AED /Year"
-                          />
+                        <div className="grid md:grid-cols-3 ml-4  gap-6 md:gap-0 mb-1 items-stretch">
+
+                          <div className="flex items-center">
+                            <PremiumResultCard
+                              title="Total Cost"
+                              value={formatAED(totalCost)}
+                              suffix="AED"
+                            />
+
+                            {/* Divider */}
+                            <div className="hidden md:block h-[60%] w-[1px] mx-6 bg-gradient-to-b from-transparent via-yellow-400/60 to-transparent" />
+                          </div>
+
+                          <div className="flex items-center">
+                            <PremiumResultCard
+                              title="Mortgage Payment"
+                              value={formatAED(monthlyPayment)}
+                              suffix="AED /Month"
+                              highlighted
+                            />
+
+                            {/* Divider */}
+                            <div className="hidden md:block h-[60%] w-[1px] mx-6 bg-gradient-to-b from-transparent via-yellow-400/60 to-transparent" />
+                          </div>
+
+                          <div>
+                            <PremiumResultCard
+                              title="Annual Cost"
+                              value={formatAED(annualCost)}
+                              suffix="AED /Year"
+                            />
+                          </div>
+
                         </div>
 
-                        <div className="rounded-[24px] border border-white/10 bg-black/25  md:p-2 space-y-4">
+                        <div className="rounded-[24px] border border-white/10 bg-black/25 md:p-2 space-y-4">
                           <PremiumBreakdownRow
                             label="Down Payment"
                             value={`AED ${formatAED(downPaymentAmount)}`}
                           />
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+
                           <PremiumBreakdownRow
                             label="Amount Financed"
                             value={`AED ${formatAED(amountFinanced)}`}
                           />
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+
                           <PremiumBreakdownRow
                             label="Total Interest Paid"
                             value={`AED ${formatAED(totalInterestPaid)}`}
                           />
-                          <div className="border-t border-white/10 pt-5">
+
+                          {/* 🔥 Golden subtle divider */}
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+
+                          <div className="pt-3">
                             <PremiumBreakdownRow
                               label="Total Cost"
                               value={`AED ${formatAED(totalCost)}`}
@@ -1021,6 +993,7 @@ export default function ProjectDetailPage() {
                             suffix="AED"
                             highlighted
                           />
+                          
                           <PremiumResultCard
                             title="Construction"
                             value={formatAED(constructionAmount)}
@@ -1038,15 +1011,18 @@ export default function ProjectDetailPage() {
                             label="Booking Payment"
                             value={`AED ${formatAED(bookingAmount)}`}
                           />
+                            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
                           <PremiumBreakdownRow
                             label="During Construction"
                             value={`AED ${formatAED(constructionAmount)}`}
                           />
+                            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
                           <PremiumBreakdownRow
                             label="On Handover"
                             value={`AED ${formatAED(handoverAmount)}`}
                           />
-                          <div className="border-t border-white/10 pt-5">
+                            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+                          <div className=" ">
                             <PremiumBreakdownRow
                               label="Total Cost"
                               value={`AED ${formatAED(propertyPrice)}`}
