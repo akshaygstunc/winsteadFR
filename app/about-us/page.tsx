@@ -273,7 +273,7 @@ export default function AboutUs() {
 
                     </div>
                     <div>
-                    <h3 className="text-lg font-light mb-1">{item.title}</h3>
+                    <h3 className="text-xl font-bold mb-1">{item.title}</h3>
                     <p className="text-white leading-7">{item.description}</p>
                     </div>
                   </div>
@@ -285,7 +285,7 @@ export default function AboutUs() {
               <Image
                 src={img4}
                 alt="Why choose us"
-                className="w-full h-[320px] md:h-[690px] object-cover"
+                className="w-full h-[320px] md:h-[745px] object-cover"
               />
             </div>
           </div>

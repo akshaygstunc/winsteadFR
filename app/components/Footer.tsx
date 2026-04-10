@@ -263,7 +263,7 @@ export default function Footer() {
           {/* Contact */}
           <div>
             <h3 className="text-white text-lg mb-5">Contact</h3>
-            <div className="space-y-4 text-white text-sm lg:text-xl lg:text-xl md:text-base">
+            <div className="space-y-4 text-white text-sm  md:text-base">
               <p>
                 2601, Iris Bay, Business Bay, Dubai
                 <br />

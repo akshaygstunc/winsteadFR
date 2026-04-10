@@ -20,8 +20,10 @@ import projectImage from "../../../public/hero1.jpg";
 import AutoBreadcrumbs from "@/app/components/BreadCrumbs";
 import WebsiteContentService from "@/app/services/websitecontent.service";
 import ContactModal from "@/app/components/ContactModal";
+import MortgageCalculator from "@/app/components/MortrageForm";
+import LuxuryFAQ from "@/app/components/FAQ";
 
-const tabs = ["overview", "amenities"] as const;
+const tabs = ["overview", "amenities", "FAQ"] as const;
 type TabKey = (typeof tabs)[number];
 
 type ContactIntent =
@@ -102,7 +104,6 @@ type UiFloorPlan = {
 };
 
 type UiProject = {
-  gallery: any;
   id: string;
   title: string;
   category: string;
@@ -175,16 +176,13 @@ function getProjectImages(data?: BackendProject) {
 }
 
 function getAmenities(data?: BackendProject) {
-  // if (!Array.isArray(data?.amenities) || !data!.amenities!.length) {
-  //   return [EMPTY_VALUE];
-  // }
+  if (!Array.isArray(data?.amenities) || !data!.amenities!.length) {
+    return [EMPTY_VALUE];
+  }
 
   return data!.amenities!.map((item) => {
     if (typeof item === "string") return item || EMPTY_VALUE;
-    return {
-      name: item.title,
-      icon: item.icon,
-    };
+    return item?.name || EMPTY_VALUE;
   });
 }
 
@@ -375,7 +373,7 @@ export default function ProjectDetailPage() {
   if (!project) {
     return (
       <div className="min-h-screen bg-black text-white px-6 md:px-12 py-14">
-        
+
 
         <div className="mt-8 rounded-[28px] border border-white/10 bg-white/[0.03] p-8">
           <h1 className="text-2xl font-semibold mb-2">Project not found</h1>
@@ -454,8 +452,8 @@ export default function ProjectDetailPage() {
   return (
     <>
       <main className="bg-black text-white min-h-screen overflow-x-hidden">
-        <section className="relative  ">
-          <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden  border border-white/10">
+        <section className="relative mt-4 px-4 md:px-10">
+          <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden rounded-[32px] border border-white/10">
             <Image
               src={project.heroImages[currentIndex] || fallbackImages[0]}
               alt={project.title}
@@ -488,43 +486,23 @@ export default function ProjectDetailPage() {
               </div>
 
               <section className="max-w-4xl mx-auto px-4 md:px-10 py-8">
-                {/* Thumbnail Grid (Bottom Right) */}
-                <div className="absolute bottom-2 right-2 md:bottom-[-30px] md:right-2 z-10">
-                  <div className="grid grid-cols-4 gap-2 md:gap-3">
-                    {project?.gallery?.length > 0 ? project?.gallery?.slice(0, 8).map((image, index) => {
-                      const active = currentIndex === index;
-
-                      return (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentIndex(index)}
-                          className={`relative w-[70px] h-[50px] md:w-[90px] md:h-[65px] rounded-xl overflow-hidden border transition ${active
-                            ? "border-yellow-400 shadow-[0_0_15px_rgba(241,220,127,0.25)]"
-                            : "border-white/20 hover:border-yellow-400/60"
-                            }`}
-                        >
-                          <Image src={image} alt="" fill className="object-cover" />
-                          <div className="absolute inset-0 bg-black/20" />
-                        </button>
-                      );
-                    }) : project.heroImages.slice(0, 8).map((image, index) => {
-                      const active = currentIndex === index;
-
-                      return (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentIndex(index)}
-                          className={`relative w-[70px] h-[50px] md:w-[90px] md:h-[65px] rounded-xl overflow-hidden border transition ${active
-                            ? "border-yellow-400 shadow-[0_0_15px_rgba(241,220,127,0.25)]"
-                            : "border-white/20 hover:border-yellow-400/60"
-                            }`}
-                        >
-                          <Image src={image} alt="" fill className="object-cover" />
-                          <div className="absolute inset-0 bg-black/20" />
-                        </button>
-                      );
-                    })}
-                  </div>
+                <div className="flex gap-4 overflow-x-auto scrollbar-hide">
+                  {project.heroImages.map((image, index) => {
+                    const active = currentIndex === index;
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentIndex(index)}
+                        className={`relative w-[120px] h-[70px] md:w-[150px] md:h-[100px] rounded-2xl overflow-hidden border transition shrink-0 ${active
+                          ? "border-yellow-400 shadow-[0_0_20px_rgba(241,220,127,0.18)]"
+                          : "border-white/10 hover:border-yellow-500/40"
+                          }`}
+                      >
+                        <Image src={image} alt="" fill className="object-cover" />
+                        <div className="absolute inset-0 bg-black/20" />
+                      </button>
+                    );
+                  })}
                 </div>
               </section>
             </div>
@@ -554,7 +532,7 @@ export default function ProjectDetailPage() {
                   <FactCard
                     icon={<FaDollarSign className="text-yellow-400" />}
                     label="Starting Price"
-                    value={project?.price}
+                    value={project.price}
                   />
                   <FactCard
                     icon={<FaBed className="text-yellow-400" />}
@@ -672,6 +650,7 @@ export default function ProjectDetailPage() {
               <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-8">
                 Elevated lifestyle experiences
               </h2>
+
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {project.amenities.map((item, index) => (
                   <div
@@ -679,19 +658,16 @@ export default function ProjectDetailPage() {
                     className="rounded-2xl border border-white/10 bg-black/30 p-5 hover:border-yellow-400/30 transition"
                   >
                     <div className="w-10 h-10 rounded-full bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center mb-4">
-                      {item?.icon !== "" ? (
-                        <img src={item?.icon} alt={item.name} className="w-full h-full object-contain" />
-                      ) : (
-                        <FaCheckCircle className="text-yellow-400" />
-                      )}
+                      <FaCheckCircle className="text-yellow-400" />
                     </div>
-                    <p className="text-white font-medium">{item.name}</p>
+                    <p className="text-white font-medium">{item}</p>
                   </div>
                 ))}
               </div>
             </div>
           </section>
         )}
+        {activeTab === "FAQ" && <LuxuryFAQ />}
 
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
           <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8 mb-8">
@@ -711,44 +687,90 @@ export default function ProjectDetailPage() {
                 <div
                   key={plan.label}
                   onClick={() => setSelectedPlan(plan.label)}
-                  className={`group cursor-pointer rounded-[28px] overflow-hidden border transition duration-300 ${active
-                    ? "border-yellow-400 shadow-[0_0_30px_rgba(241,220,127,0.1)]"
-                    : "border-white/10 hover:border-yellow-400/40"
+                  className={`group relative cursor-pointer overflow-hidden rounded-[30px] border transition-all duration-500 ${active
+                      ? "border-yellow-400/50 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] shadow-[0_20px_60px_rgba(241,220,127,0.12)]"
+                      : "border-white/10 bg-white/[0.03] hover:border-yellow-400/30 hover:shadow-[0_16px_50px_rgba(241,220,127,0.08)]"
                     }`}
                 >
-                  <div className="relative h-[240px]">
+                  {/* glow */}
+                  <div className="absolute -top-16 left-[-20px] h-40 w-40 rounded-full bg-yellow-400/10 blur-3xl opacity-0 transition duration-500 group-hover:opacity-100" />
+                  <div className="absolute bottom-[-30px] right-[-10px] h-44 w-44 rounded-full bg-yellow-500/10 blur-3xl opacity-0 transition duration-500 group-hover:opacity-100" />
+
+                  {/* top gold line */}
+                  <div
+                    className={`absolute top-0 left-0 h-[2px] w-full bg-[linear-gradient(90deg,#7C5700,#F1DC7F,#B9A650)] transition-all duration-500 ${active ? "opacity-100" : "opacity-0 group-hover:opacity-80"
+                      }`}
+                  />
+
+                  {/* image */}
+                  <div className="relative h-[260px] overflow-hidden">
                     <Image
                       src={plan.image}
                       alt={plan.label}
                       fill
-                      className="object-cover group-hover:scale-105 transition duration-500"
+                      className="object-cover transition duration-700 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent,rgba(0,0,0,0.45))]" />
+
+                    {/* floating badge */}
+                    <div className="absolute top-5 left-5 rounded-full border border-yellow-400/20 bg-black/40 backdrop-blur-md px-4 py-2">
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-yellow-400">
+                        Floor Plan
+                      </p>
+                    </div>
+
+                    {/* title over image */}
+                    <div className="absolute bottom-5 left-5 right-5">
+                      <h3 className="text-2xl font-semibold text-white leading-tight">
+                        {plan.label}
+                      </h3>
+                    </div>
                   </div>
 
-                  <div className="p-5 bg-black/40 backdrop-blur-sm">
-                    <h3 className="text-xl font-semibold mb-3 text-white">{plan.label}</h3>
-
-                    <div className="space-y-2 text-sm text-white">
-                      <div className="flex justify-between">
-                        <span>Size</span>
-                        <span>{plan.size}</span>
+                  {/* content */}
+                  <div className="relative p-6 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] backdrop-blur-xl">
+                    <div className="mb-5 grid grid-cols-2 gap-4">
+                      <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 mb-2">
+                          Size
+                        </p>
+                        <p className="text-white font-medium text-base">{plan.size}</p>
                       </div>
-                      <div className="flex justify-between">
-                        <span>Starting Price</span>
-                        <span>{plan.price}</span>
+
+                      <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 mb-2">
+                          Starting Price
+                        </p>
+                        <p className="text-white font-medium text-base">{plan.price}</p>
                       </div>
                     </div>
 
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openContactModal("download-floor-plan");
-                      }}
-                      className="mt-5 w-full rounded-xl border border-white/15 py-3 text-sm hover:border-yellow-400 hover:text-white transition"
-                    >
-                      Download Plan
-                    </button>
+                    {/* bottom row */}
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-yellow-400 mb-1">
+                          Premium Layout
+                        </p>
+                        <p className="text-sm text-white/65">
+                          Crafted for luxury living
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openContactModal("download-floor-plan");
+                        }}
+                        className={`rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 ${active
+                            ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_10px_30px_rgba(241,220,127,0.18)]"
+                            : "border border-white/15 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-yellow-400"
+                          }`}
+                      >
+                        Download Plan
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -801,7 +823,246 @@ export default function ProjectDetailPage() {
             </div>
           </div>
         )}
+        <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 mb-2 relative z-20">
+          <div className="space-y-6">
+            <div className="relative overflow-hidden rounded-[36px] border border-yellow-500/15 bg-[linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(250,204,21,0.12),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(250,204,21,0.08),transparent_24%)]" />
+              <div className="absolute top-0 left-[12%] h-[220px] w-[220px] rounded-full bg-yellow-400/10 blur-3xl" />
+              <div className="absolute bottom-[-40px] right-[8%] h-[260px] w-[260px] rounded-full bg-yellow-500/10 blur-3xl" />
 
+              <div className="relative z-10 px-5 md:px-8 lg:px-10 py-6 md:py-8">
+                {/* top tabs */}
+                <div className="flex flex-wrap gap-3 mb-8">
+                  <button
+                    onClick={() => setCalcTab("mortgage")}
+                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md lg:text-md font-semibold tracking-[0.18em] uppercase transition ${calcTab === "mortgage"
+                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
+                      : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
+                      }`}
+                  >
+                    Mortgage Calculator
+                  </button>
+
+                  <button
+                    onClick={() => setCalcTab("payment-plan")}
+                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md lg:text-md font-semibold tracking-[0.18em] uppercase transition ${calcTab === "payment-plan"
+                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
+                      : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
+                      }`}
+                  >
+                    Payment Plans
+                  </button>
+                </div>
+
+                <div className="grid xl:grid-cols-[0.85fr_1.15fr] gap-8 xl:gap-10">
+                  {/* left side */}
+                  <div className="rounded-[28px] border border-white/10 bg-black/25 p-5 md:p-7">
+                    <div className="mb-8">
+                      <label className="block text-sm lg:text-md lg:text-md font-medium text-white-300 mb-3">
+                        Select Unit
+                      </label>
+
+                      <div className="rounded-2xl border border-white/10 bg-black/30 px-4 py-4">
+                        <select
+                          value={selectedUnit}
+                          onChange={(e) => setSelectedUnit(e.target.value)}
+                          className="w-full bg-transparent text-white text-lg outline-none"
+                        >
+                          {project.floorPlans.map((plan) => (
+                            <option
+                              key={plan.label}
+                              value={plan.label}
+                              className="bg-[#111111] text-white"
+                            >
+                              {plan.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    {calcTab === "mortgage" ? (
+                      <div className="grid sm:grid-cols-2 gap-5">
+                        <PremiumCalcInput
+                          label="Property Value"
+                          value={propertyPrice}
+                          onChange={(value) =>
+                            setPropertyPrice(Number(value) || 0)
+                          }
+                        />
+                        <PremiumCalcInput
+                          label="Down Payment %"
+                          value={downPaymentPercent}
+                          onChange={(value) =>
+                            setDownPaymentPercent(Number(value) || 0)
+                          }
+                        />
+                        <PremiumCalcInput
+                          label="Term (Years)"
+                          value={loanYears}
+                          onChange={(value) => setLoanYears(Number(value) || 0)}
+                        />
+                        <PremiumCalcInput
+                          label="Interest Rate %"
+                          value={interestRate}
+                          step="0.1"
+                          onChange={(value) =>
+                            setInterestRate(Number(value) || 0)
+                          }
+                        />
+                      </div>
+                    ) : (
+                      <div className="grid sm:grid-cols-2 gap-5">
+                        <PremiumCalcInput
+                          label="Property Value"
+                          value={propertyPrice}
+                          onChange={(value) =>
+                            setPropertyPrice(Number(value) || 0)
+                          }
+                        />
+                        <PremiumCalcInput
+                          label="Booking %"
+                          value={bookingPercent}
+                          onChange={(value) =>
+                            setBookingPercent(Number(value) || 0)
+                          }
+                        />
+                        <PremiumCalcInput
+                          label="During Construction %"
+                          value={constructionPercent}
+                          onChange={(value) =>
+                            setConstructionPercent(Number(value) || 0)
+                          }
+                        />
+                        <PremiumCalcInput
+                          label="On Handover %"
+                          value={handoverPercent}
+                          onChange={(value) =>
+                            setHandoverPercent(Number(value) || 0)
+                          }
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* right side */}
+                  <div className="rounded-[28px] border border-yellow-500/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-5 md:p-7">
+                    <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-8">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.22em] text-yellow-400 mb-2">
+                          Financial Estimate
+                        </p>
+                        <h3 className="text-md md:text-md font-semibold text-white">
+                          {calcTab === "mortgage"
+                            ? "Mortgage Overview"
+                            : "Payment Plan Overview"}
+                        </h3>
+                      </div>
+
+                      <div className="text-left md:text-right">
+                        <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.15em] text-white-400 mb-1">
+                          Property Value
+                        </p>
+                        <p className="text-md md:text-md font-semibold leading-none text-transparent bg-clip-text bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)]">
+                          AED {formatAED(propertyPrice)}
+                        </p>
+                      </div>
+                    </div>
+
+                    {calcTab === "mortgage" ? (
+                      <>
+                        <div className="grid md:grid-cols-3 gap-4 mb-1">
+                          <PremiumResultCard
+                            title="Total Cost"
+                            value={formatAED(totalCost)}
+                            suffix="AED"
+                          />
+                          <PremiumResultCard
+                            title="Mortgage Payment"
+                            value={formatAED(monthlyPayment)}
+                            suffix="AED /Month"
+                            highlighted
+                          />
+                          <PremiumResultCard
+                            title="Annual Cost"
+                            value={formatAED(annualCost)}
+                            suffix="AED /Year"
+                          />
+                        </div>
+
+                        <div className="rounded-[24px] border border-white/10 bg-black/25  md:p-2 space-y-4">
+                          <PremiumBreakdownRow
+                            label="Down Payment"
+                            value={`AED ${formatAED(downPaymentAmount)}`}
+                          />
+                          <PremiumBreakdownRow
+                            label="Amount Financed"
+                            value={`AED ${formatAED(amountFinanced)}`}
+                          />
+                          <PremiumBreakdownRow
+                            label="Total Interest Paid"
+                            value={`AED ${formatAED(totalInterestPaid)}`}
+                          />
+                          <div className="border-t border-white/10 pt-5">
+                            <PremiumBreakdownRow
+                              label="Total Cost"
+                              value={`AED ${formatAED(totalCost)}`}
+                              bold
+                            />
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="grid md:grid-cols-3 gap-4 mb-8">
+                          <PremiumResultCard
+                            title="Booking Amount"
+                            value={formatAED(bookingAmount)}
+                            suffix="AED"
+                            highlighted
+                          />
+                          <PremiumResultCard
+                            title="Construction"
+                            value={formatAED(constructionAmount)}
+                            suffix="AED"
+                          />
+                          <PremiumResultCard
+                            title="Handover"
+                            value={formatAED(handoverAmount)}
+                            suffix="AED"
+                          />
+                        </div>
+
+                        <div className="rounded-[24px] border border-white/10 bg-black/25 p-5 md:p-6 space-y-5">
+                          <PremiumBreakdownRow
+                            label="Booking Payment"
+                            value={`AED ${formatAED(bookingAmount)}`}
+                          />
+                          <PremiumBreakdownRow
+                            label="During Construction"
+                            value={`AED ${formatAED(constructionAmount)}`}
+                          />
+                          <PremiumBreakdownRow
+                            label="On Handover"
+                            value={`AED ${formatAED(handoverAmount)}`}
+                          />
+                          <div className="border-t border-white/10 pt-5">
+                            <PremiumBreakdownRow
+                              label="Total Cost"
+                              value={`AED ${formatAED(propertyPrice)}`}
+                              bold
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
         {/* calculator section stays same */}
       </main>
 
@@ -858,166 +1119,13 @@ function MetaRow({
   );
 }
 
-function PremiumCalcInput({
-  label,
-  value,
-  onChange,
-  step,
-}: {
-  label: string;
-  value: string | number;
-  onChange: (value: string) => void;
-  step?: string;
-}) {
-  return (
-    <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
-      <label className="block text-sm text-white-400 mb-2">{label}</label>
-      <input
-        type="number"
-        value={value}
-        step={step}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent text-xl font-medium text-white outline-none"
-      />
-    </div>
-  );
-}
+
 
 function formatAED(value: number) {
   if (!Number.isFinite(value)) return "0";
   return Math.round(value).toLocaleString("en-AE");
 }
 
-// function ContactModal({
-//   isOpen,
-//   onClose,
-//   onSubmit,
-//   form,
-//   onChange,
-//   projectTitle,
-//   intent,
-// }: {
-//   isOpen: boolean;
-//   onClose: () => void;
-//   onSubmit: (e: React.FormEvent) => void;
-//   form: {
-//     fullName: string;
-//     email: string;
-//     phone: string;
-//     message: string;
-//     terms: boolean;
-//   };
-//   onChange: (
-//     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-//   ) => void;
-//   projectTitle: string;
-//   intent: ContactIntent;
-// }) {
-//   if (!isOpen) return null;
-
-//   return (
-//     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-//       <div className="absolute inset-0 bg-black/5 backdrop-blur-sm" onClick={onClose} />
-
-//       <div className="relative w-full max-w-4xl overflow-hidden rounded-[32px] border border-white/10 bg-[#090909] shadow-[0_20px_100px_rgba(0,0,0,0.65)]">
-//         <div className="relative grid lg:grid-cols-[0.95fr_1.05fr]">
-//           <div className="border-b lg:border-b-0 lg:border-r border-white/10 p-6 md:p-8 bg-white/[0.02]">
-//             <h3 className="text-2xl md:text-3xl font-semibold leading-tight mb-4">
-//               {getModalHeading(intent)}
-//             </h3>
-
-//             <p className="text-white-400 leading-relaxed mb-6">
-//               Share your details and our team will connect with you regarding{" "}
-//               <span className="text-white font-medium">{projectTitle}</span>.
-//             </p>
-
-//             <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-//               <p className="text-xs uppercase tracking-[0.16em] text-white-500 mb-2">
-//                 Project
-//               </p>
-
-//               <div className="w-full h-32 relative rounded-xl overflow-hidden">
-//                 <Image src={projectImage} alt="Project" fill className="object-cover" />
-//               </div>
-//             </div>
-//           </div>
-
-//           <div className="relative p-6 md:p-8">
-//             <button
-//               onClick={onClose}
-//               className="absolute top-5 right-5 w-10 h-10 rounded-full border border-white/10 bg-white/[0.04] flex items-center justify-center hover:border-yellow-400/40 transition"
-//             >
-//               <FaTimes />
-//             </button>
-
-//             <form onSubmit={onSubmit} className="space-y-4 pr-0 md:pr-8">
-//               <div>
-//                 <label className="text-sm text-white-300 mb-2 block">Full Name</label>
-//                 <input
-//                   name="fullName"
-//                   value={form.fullName}
-//                   onChange={onChange}
-//                   placeholder="Enter your full name"
-//                   className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-yellow-400/50"
-//                   required
-//                 />
-//               </div>
-
-//               <div>
-//                 <label className="text-sm text-white-300 mb-2 block">Email Address</label>
-//                 <input
-//                   type="email"
-//                   name="email"
-//                   value={form.email}
-//                   onChange={onChange}
-//                   placeholder="Enter your email"
-//                   className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-yellow-400/50"
-//                   required
-//                 />
-//               </div>
-
-//               <div>
-//                 <label className="text-sm text-white-300 mb-2 block">Phone Number</label>
-//                 <input
-//                   name="phone"
-//                   value={form.phone}
-//                   onChange={onChange}
-//                   placeholder="Enter your phone number"
-//                   className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-yellow-400/50"
-//                   required
-//                 />
-//               </div>
-
-//               <div className="flex items-start gap-2 mt-2">
-//                 <input
-//                   type="checkbox"
-//                   name="terms"
-//                   checked={form.terms}
-//                   onChange={onChange}
-//                   className="mt-1 accent-yellow-500"
-//                   required
-//                 />
-//                 <label className="text-sm text-white-300">
-//                   I accept all{" "}
-//                   <span className="text-yellow-400 underline cursor-pointer">
-//                     terms and conditions
-//                   </span>
-//                 </label>
-//               </div>
-
-//               <button
-//                 type="submit"
-//                 className="w-full rounded-2xl bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black py-4 font-semibold hover:scale-[1.01] transition"
-//               >
-//                 Submit Inquiry
-//               </button>
-//             </form>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
 function SkeletonBlock({
   className = "",
 }: {
@@ -1205,6 +1313,7 @@ function ProjectDetailsSkeleton() {
           </div>
         </div>
       </section>
+
     </main>
   );
 }
@@ -1241,4 +1350,91 @@ function getDefaultMessage(
     default:
       return `I am interested in ${projectTitle}. Please contact me with more details.`;
   }
+}
+
+function PremiumCalcInput({
+  label,
+  value,
+  onChange,
+  step,
+}: {
+  label: string;
+  value: string | number;
+  onChange: (value: string) => void;
+  step?: string;
+}) {
+  return (
+    <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
+      <label className="block text-sm text-white-400 mb-2">{label}</label>
+      <input
+        type="number"
+        value={value}
+        step={step}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full bg-transparent text-xl font-medium text-white outline-none"
+      />
+    </div>
+  );
+}
+
+function PremiumResultCard({
+  title,
+  value,
+  suffix,
+  highlighted = false,
+}: {
+  title: string;
+  value: string;
+  suffix: string;
+  highlighted?: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-[24px]  p-5 min-h-[80px] flex flex-col justify-between ${highlighted
+        ? "border-yellow-400/25"
+        : ""
+        }`}
+    >
+      <p className="text-sm text-white-400">{title}</p>
+      <div>
+        <p className="text-md md:text-md font-semibold text-white leading-tight mt-1">
+          {value}
+        </p>
+        <p className="mt-2 text-base font-medium text-white-300">{suffix}</p>
+      </div>
+    </div>
+  );
+}
+
+function PremiumBreakdownRow({
+  label,
+  value,
+  bold = false,
+}: {
+  label: string;
+  value: string;
+  bold?: boolean;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-5">
+      <p
+        className={
+          bold
+            ? "text-md md:text-lg font-semibold text-white"
+            : "text-base text-white-300"
+        }
+      >
+        {label}
+      </p>
+      <p
+        className={
+          bold
+            ? "text-md md:text-lg font-semibold text-yellow-400"
+            : "text-base font-medium text-white"
+        }
+      >
+        {value}
+      </p>
+    </div>
+  );
 }

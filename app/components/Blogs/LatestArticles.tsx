@@ -39,7 +39,7 @@ export default function LatestArticles() {
     }, []);
 
     return (
-        <section className="py-20 px-6 md:px-6 border-b border-white/10">
+        <section className="py-1 mb-2 px-6 md:px-6 border-b border-white/10">
             <div className="max-w-[85rem] mx-auto">
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
                     <div>

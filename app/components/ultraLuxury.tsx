@@ -64,7 +64,7 @@ export default function UltraLuxury() {
               <Image
                 src={activeImage}
                 alt="project"
-                className="w-full h-[250px] md:h-[400px] object-cover"
+                className="w-full h-[250px] md:h-[325px] object-cover"
               />
             </div>
 

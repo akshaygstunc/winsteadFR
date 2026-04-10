@@ -89,7 +89,7 @@ function FeaturedProjects({
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
+    <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-1">
       <div>
         <h2 className="text-2xl md:text-3xl font-semibold">
           Featured Projects
