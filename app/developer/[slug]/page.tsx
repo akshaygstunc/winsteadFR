@@ -14,6 +14,7 @@ import {
     FaBuilding,
     FaClock,
 } from "react-icons/fa";
+import bannerImg from "../../../public/hero1.jpg"
 import AutoBreadcrumbs from "@/app/components/BreadCrumbs";
 import memberImg from "@/public/logoo4.webp";
 import memberImg2 from "@/public/logoo2.webp";
@@ -225,100 +226,56 @@ export default function DeveloperDetailsPage() {
     return (
         <main className="bg-black text-white">
             <section className="relative overflow-hidden border-b border-white/10">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(241,220,127,0.14),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(185,166,80,0.10),transparent_25%)]" />
-                <div className="max-w-7xl mx-auto px-4 md:px-10 pt-6 relative z-10">
-                    <AutoBreadcrumbs />
-                </div>
+                {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(241,220,127,0.14),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(185,166,80,0.10),transparent_25%)]" /> */}
+               
 
-                <div className="max-w-7xl mx-auto px-6 md:px-10 py-14 md:py-20 relative z-10">
-                    <div className="grid lg:grid-cols-[420px_1fr] gap-10 items-center">
-                        <div className="relative rounded-[32px] border border-white/10 bg-white/[0.03] p-8 min-h-[420px] flex items-center justify-center overflow-hidden">
-                            <div className="absolute top-0 left-0 h-44 w-44 rounded-full bg-yellow-500/10 blur-3xl" />
-                            <Image
-                                src={developer.image}
-                                alt={developer.name}
-                                className="object-contain max-h-[300px] w-auto filter brightness-10 invert relative z-10"
-                            />
+                <div className="relative h-[65vh] min-h-[420px] overflow-hidden ">
+                    {/* Background Image */}
+                    <Image
+                        src={bannerImg || developer.image}
+                        alt={developer.name}
+                        fill
+                        priority
+                        className="object-cover"
+                    />
+
+                    {/* Dark overlays for luxury feel */}
+                    {/* <div className="absolute inset-0 bg-black/45" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/20" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(250,204,21,0.10),transparent_28%)]" /> */}
+
+                    {/* Content */}
+                    <div className="  h-full max-w-[80rem] mx-auto   mt-[80px]">
+                        <div className="flex h-full items-end md:items-center">
+                            <div className="flex flex-col items-center gap-5 md:gap-7 rounded-[28px] bg-black/25 backdrop-blur-xl px-3   md:py-3 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+                                {/* Logo */}
+                                <div className=" h-[50px] w-[50px] md:h-[110px] md:w-[110px] shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-3">
+                                    <Image
+                                        src={developer.image}
+                                        alt={developer.name}
+                                        fill
+                                        className="object-contain p-6 filter brightness-0 invert"
+                                    />
+                                </div>
+                                {/* <h6 className="text-sm  leading-tight text-white">
+                                    {developer.name}
+                                </h6> */}
+                                {/* Name only */}
+                                
+                            </div>
                         </div>
-
                         <div>
-                            <div className="flex flex-wrap gap-3 mb-5">
-                                <span className="px-4 py-2 rounded-full border border-yellow-500/20 bg-yellow-500/10 text-yellow-400 text-xs uppercase tracking-[0.22em]">
-                                    {developer.category}
-                                </span>
-                                <span className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] text-white text-xs uppercase tracking-[0.22em]">
-                                    {developer.type}
-                                </span>
-                            </div>
-
-                            <h1 className="text-4xl md:text-6xl font-semibold leading-tight">
-                                {developer.name}
-                            </h1>
-
-                            <p className="mt-5 max-w-3xl text-white text-base md:text-lg leading-relaxed">
-                                {developer.about}
-                            </p>
-
-                            <div className="grid sm:grid-cols-3 gap-4 mt-8">
-                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                                    <div className="flex items-center gap-2 text-yellow-400 text-sm lg:text-md lg:text-md mb-2">
-                                        <FaClock />
-                                        <span>Experience</span>
-                                    </div>
-                                    <p className="text-lg font-medium">{developer.experience}</p>
+                                   
+                                    
                                 </div>
-
-                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                                    <div className="flex items-center gap-2 text-yellow-400 text-sm lg:text-md lg:text-md mb-2">
-                                        <FaMapMarkerAlt />
-                                        <span>Headquarters</span>
-                                    </div>
-                                    <p className="text-lg font-medium">{developer.headquarters}</p>
-                                </div>
-
-                                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                                    <div className="flex items-center gap-2 text-yellow-400 text-sm lg:text-md lg:text-md mb-2">
-                                        <FaBuilding />
-                                        <span>Portfolio</span>
-                                    </div>
-                                    <p className="text-lg font-medium">{developer.projects}</p>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-wrap gap-3 mt-8">
-                                <Link
-                                    href="#properties"
-                                    className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black px-6 py-3 font-medium"
-                                >
-                                    View Projectre Projects
-                                    <FaArrowRight className="text-sm lg:text-md lg:text-md" />
-                                </Link>
-
-                                <Link
-                                    href="/contact-us"
-                                    className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 font-medium text-white hover:border-yellow-400 hover:text-yellow-400 transition"
-                                >
-                                    Contact Us
-                                </Link>
-                            </div>
-
-                            {/* <div className="flex gap-3 mt-8">
-                                {socialIcons.map((Icon, i) => (
-                                    <a
-                                        key={i}
-                                        href="#"
-                                        className="w-11 h-11 rounded-full border border-yellow-500/40 flex items-center justify-center text-yellow-400 hover:bg-yellow-500 hover:text-black transition"
-                                    >
-                                        <Icon />
-                                    </a>
-                                ))}
-                            </div> */}
-                        </div>
                     </div>
                 </div>
             </section>
 
             <section className="px-6 md:px-10 py-16 md:py-20">
+                <div className="max-w-7xl mx-auto px-4 md:px-10 py-2  relative z-10">
+                    <AutoBreadcrumbs />
+                </div>
                 <div className="max-w-7xl mx-auto grid lg:grid-cols-[1.3fr_0.7fr] gap-8">
                     <div className="rounded-[30px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
                         <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
