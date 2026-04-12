@@ -101,13 +101,13 @@ export default function AboutUs() {
                 <Image
                   src={image2}
                   alt="About"
-                  className="w-full h-[100px] md:h-[180px] object-cover rounded-xl"
+                  className="w-full h-[150px] md:h-[300px] object-cover rounded-xl"
                 />
               </div>
 
               {/* RIGHT TEXT */}
               <div className="max-w-[85rem]">
-                <h3 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
+                <h3 className="text-3xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
                   About Winstead
                 </h3>
 
@@ -137,7 +137,7 @@ export default function AboutUs() {
               <p className="text-[12px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
                 Small Introduction
               </p>
-              <h2 className="text-3xl md:text-5xl font-light leading-tight mb-6">
+              <h2 className="text-3xl md:text-3xl font-light leading-tight mb-6">
                 We don’t just present properties — we present confidence.
               </h2>
               <p className="text-white leading-8 text-base md:text-lg mb-5">
@@ -163,7 +163,7 @@ export default function AboutUs() {
               <p className="text-[12px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
                 Stats
               </p>
-              <h2 className="text-3xl md:text-5xl font-light leading-tight mb-6">
+              <h2 className="text-3xl md:text-3xl font-light leading-tight mb-6">
                 Numbers that reflect trust, growth, and premium service.
               </h2>
               <p className="text-white leading-8 text-base md:text-lg mb-8">
@@ -219,7 +219,7 @@ export default function AboutUs() {
                 <p className="text-[12px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
                   Word From CEO
                 </p>
-                <h2 className="text-3xl md:text-5xl font-light leading-tight mb-6">
+                <h2 className="text-3xl md:text-3xl font-light leading-tight mb-6">
                   Our vision is to make every real estate decision feel more informed,
                   elevated, and secure.
                 </h2>
@@ -254,7 +254,7 @@ export default function AboutUs() {
               <p className="text-[12px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
                 Why Us
               </p>
-              <h2 className="text-3xl md:text-5xl font-light leading-tight mb-5">
+              <h2 className="text-3xl md:text-3xl font-light leading-tight mb-5">
                 Why clients choose us for premium property guidance
               </h2>
               <p className="text-white leading-8 text-base md:text-lg mb-8">
@@ -308,7 +308,7 @@ export default function AboutUs() {
               <p className="text-[12px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
                 How We Can Help
               </p>
-              <h2 className="text-3xl md:text-5xl font-light leading-tight mb-6">
+              <h2 className="text-3xl md:text-3xl font-light leading-tight mb-6">
                 Helping you move from interest to the right opportunity
               </h2>
               <p className="text-white leading-8 text-base md:text-lg mb-8">
@@ -370,7 +370,7 @@ export default function AboutUs() {
               <p className="text-[12px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
                 Gallery
               </p>
-              <h2 className="text-3xl md:text-5xl font-light leading-tight mb-4">
+              <h2 className="text-3xl md:text-3xl font-light leading-tight mb-4">
                 A visual glimpse into the premium world we represent
               </h2>
               <p className="text-white leading-8 text-base md:text-lg">

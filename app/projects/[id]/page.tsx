@@ -23,6 +23,8 @@ import ContactModal from "@/app/components/ContactModal";
 import MortgageCalculator from "@/app/components/MortrageForm";
 import LuxuryFAQ from "@/app/components/FAQ";
 import ProjectHeroSlider from "@/app/components/ProjectSlider";
+import FloorPlan from "../../../public/floorplan.webp";
+import ReadMoreSlider from "@/app/components/ReadMoreSlider";
 
 const tabs = ["overview", "amenities", "FAQ"] as const;
 type TabKey = (typeof tabs)[number];
@@ -549,9 +551,7 @@ export default function ProjectDetailPage() {
                 <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-5">
                   Premium living shaped by design, location, and long-term value
                 </h2>
-                <p className="text-white-400 leading-relaxed text-base md:text-lg">
-                  {project.description}
-                </p>
+                <ReadMoreSlider project={project} heading="Project Description" />
 
                 <div className="mt-8 grid sm:grid-cols-2 gap-4">
                   {project.highlights.map((item, index) => (
@@ -651,12 +651,12 @@ export default function ProjectDetailPage() {
                   />
 
                   {/* image */}
-                  <div className="relative h-[260px] overflow-hidden">
+                  <div className="relative h-[260px] overflow-hidden blur-sm">
                     <Image
-                      src={plan.image}
+                      src={FloorPlan}
                       alt={plan.label}
                       fill
-                      className="object-cover transition duration-700 group-hover:scale-110"
+                      className="object-contain transition duration-700 group-hover:scale-110 bg-white "
                     />
 
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
@@ -681,14 +681,14 @@ export default function ProjectDetailPage() {
                   <div className="relative p-6 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] backdrop-blur-xl">
                     <div className="mb-5 grid grid-cols-2 gap-4">
                       <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                        <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 mb-2">
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-white mb-2">
                           Size
                         </p>
                         <p className="text-white font-medium text-base">{plan.size}</p>
                       </div>
 
                       <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                        <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 mb-2">
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-white mb-2">
                           Starting Price
                         </p>
                         <p className="text-white font-medium text-base">{plan.price}</p>
@@ -701,7 +701,7 @@ export default function ProjectDetailPage() {
                         <p className="text-[11px] uppercase tracking-[0.18em] text-yellow-400 mb-1">
                           Premium Layout
                         </p>
-                        <p className="text-sm text-white/65">
+                        <p className="text-sm text-white">
                           Crafted for luxury living
                         </p>
                       </div>
@@ -1046,6 +1046,7 @@ export default function ProjectDetailPage() {
         isOpen={isContactModalOpen}
         onClose={closeContactModal}
         onSubmit={handleContactSubmit}
+        projectImage={project.heroImages[0] || project.thumbnail || ""}
         form={contactForm}
         onChange={handleContactChange}
         projectTitle={project.title}

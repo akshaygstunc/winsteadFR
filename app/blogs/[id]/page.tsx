@@ -227,11 +227,11 @@ export default function BlogDetailPage() {
 
       {/* ARTICLE CONTENT */}
       <section className="max-w-[88rem] mx-auto px-6 pb-16">
-        <p className="text-xl md:text-2xl text-white/85 leading-relaxed mb-10">
+        <p className="text-xl md:text-2xl text-white leading-relaxed mb-10">
           {blog.desc}
         </p>
 
-        <div className="space-y-8 text-white/75 leading-8 text-base md:text-lg">
+        <div className="space-y-8 text-white leading-8 text-base md:text-lg">
           <p>{blog.fullDesc}</p>
 
           <h2 className="text-2xl md:text-3xl font-semibold text-white pt-4">

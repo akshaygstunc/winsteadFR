@@ -140,7 +140,7 @@ export default function Reel() {
               <p className="font-semibold text-white text-sm lg:text-xl">
                 Winstead_properties
               </p>
-              <p className="text-xs text-white/60">Latest On Our Social</p>
+              <p className="text-xs text-white">Latest On Our Social</p>
             </div>
           </div>
 

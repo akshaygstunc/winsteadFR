@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaCheckCircle, FaTimes } from "react-icons/fa";
 import WebsiteContentService from "../services/websitecontent.service";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 type ContactIntent =
     | "schedule-visit"
@@ -35,12 +36,15 @@ export default function ContactModal({
     onClose,
     projectTitle,
     intent,
+    projectImage
 }: {
     isOpen: boolean;
     onClose: () => void;
     projectTitle?: string;
     intent: ContactIntent;
+        projectImage: string
 }) {
+    const route = useRouter()
     function getModalHeading(intent: ContactIntent) {
         switch (intent) {
             case "schedule-visit":
@@ -205,14 +209,7 @@ export default function ContactModal({
                 terms: false,
             });
 
-            toast.success("Inquiry submitted successfully!");
-
-            setTimeout(() => {
-                onClose();
-                setIsSubmitted(false);
-                setLocationStatus("idle");
-                setBrowserLocation(null);
-            }, 2500);
+            route.push("/thank-you");
         } catch (error) {
             toast.error("Failed to submit inquiry. Please try again later.");
             console.error("Failed to submit inquiry:", error);
@@ -226,11 +223,11 @@ export default function ContactModal({
     return (
         <div className="fixed inset-0 z-[200]">
             <div
-                className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+                className="absolute inset-0  backdrop-blur-sm/10"
                 onClick={onClose}
             />
 
-            <div className="relative z-[201] flex min-h-screen items-start justify-center overflow-y-auto px-3 py-4 sm:px-4 sm:py-6">
+            <div className="relative z-[201] flex min-h-screen items-center justify-center overflow-y-auto px-3 py-4 sm:px-4 sm:py-6">
                 <div className="relative w-full max-w-4xl overflow-hidden rounded-[24px] sm:rounded-[32px] border border-white/10 bg-[#090909] shadow-[0_20px_100px_rgba(0,0,0,0.65)] max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)]">
                     <div className="absolute -top-20 -left-10 h-60 w-60 rounded-full bg-yellow-500/10 blur-3xl" />
                     <div className="absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-yellow-400/10 blur-3xl" />
@@ -245,7 +242,7 @@ export default function ContactModal({
                                 {isSubmitted ? "Thank you for your inquiry" : getModalHeading(intent)}
                             </h3>
 
-                            <p className="text-white/70 leading-relaxed mb-6 text-sm sm:text-base">
+                            <p className="text-white leading-relaxed mb-6 text-sm sm:text-base">
                                 {isSubmitted ? (
                                     <>
                                         We’ve received your request for{" "}
@@ -262,26 +259,24 @@ export default function ContactModal({
 
                             <div className="space-y-4">
                                 <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                    <p className="text-xs uppercase tracking-[0.16em] text-white/50 mb-1">
+                                    <p className="text-xs uppercase tracking-[0.16em] text-white mb-1">
                                         Project
                                     </p>
-                                    <p className="text-white font-medium text-sm sm:text-base">
-                                        {projectTitle || "N/A"}
-                                    </p>
+                                    <img src={projectImage} alt="Project Image" className="w-full h-auto rounded-lg" />
                                 </div>
 
-                                <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                    <p className="text-xs uppercase tracking-[0.16em] text-white/50 mb-1">
+                                {/* <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                                    <p className="text-xs uppercase tracking-[0.16em] text-white mb-1">
                                         Request Type
                                     </p>
                                     <p className="text-white font-medium text-sm sm:text-base">
                                         {getIntentLabel(intent)}
                                     </p>
-                                </div>
+                                </div> */}
 
                                 {/* {!isSubmitted && (
                                     <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                        <p className="text-xs uppercase tracking-[0.16em] text-white/50 mb-1">
+                                        <p className="text-xs uppercase tracking-[0.16em] text-white mb-1">
                                             Location Access
                                         </p>
                                         <p className="text-white font-medium text-sm sm:text-base">
@@ -313,22 +308,24 @@ export default function ContactModal({
                                     <h4 className="text-xl sm:text-2xl font-semibold text-white mb-3">
                                         Inquiry Submitted Successfully
                                     </h4>
-                                    <p className="text-white/70 max-w-md text-sm sm:text-base">
+                                    <p className="text-white max-w-md text-sm sm:text-base">
                                         Thank you. Our team will review your request and contact you soon.
                                     </p>
                                 </div>
                             ) : (
                                 <form onSubmit={handleContactSubmit} className="space-y-4 pt-8 sm:pt-4">
                                     <div>
-                                        <label className="text-sm text-white/80 mb-2 block">Full Name</label>
+                                            <label className="text-sm text-white mb-2 block">Full Name</label>
                                         <input
                                             name="fullName"
                                             value={contactForm.fullName}
                                             onChange={handleContactChange}
                                             placeholder="Enter your full name"
                                             className={`w-full rounded-2xl border bg-black/30 px-4 py-3 text-white outline-none ${errors.fullName
-                                                    ? "border-red-500"
-                                                    : "border-white/10 focus:border-yellow-400/50"
+                                                ? "border-red-500"
+                                                : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
+                                    }
+  focus:outline-none
                                                 }`}
                                         />
                                         {errors.fullName && (
@@ -337,7 +334,7 @@ export default function ContactModal({
                                     </div>
 
                                     <div>
-                                        <label className="text-sm text-white/80 mb-2 block">Email Address</label>
+                                            <label className="text-sm text-white mb-2 block">Email Address</label>
                                         <input
                                             type="email"
                                             name="email"
@@ -345,8 +342,10 @@ export default function ContactModal({
                                             onChange={handleContactChange}
                                             placeholder="Enter your email"
                                             className={`w-full rounded-2xl border bg-black/30 px-4 py-3 text-white outline-none ${errors.email
-                                                    ? "border-red-500"
-                                                    : "border-white/10 focus:border-yellow-400/50"
+                                                ? "border-red-500"
+                                                : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
+                                    }
+  focus:outline-none
                                                 }`}
                                         />
                                         {errors.email && (
@@ -355,7 +354,7 @@ export default function ContactModal({
                                     </div>
 
                                     <div>
-                                        <label className="text-sm text-white/80 mb-2 block">Phone Number</label>
+                                            <label className="text-sm text-white mb-2 block">Phone Number</label>
 
                                         <div className="grid grid-cols-1 sm:grid-cols-[130px_1fr] gap-3">
                                             <select
@@ -381,9 +380,10 @@ export default function ContactModal({
                                                 onChange={handleContactChange}
                                                 placeholder="Enter phone number"
                                                 className={`w-full rounded-2xl border bg-black/30 px-4 py-3 text-white outline-none ${errors.phone
-                                                        ? "border-red-500"
-                                                        : "border-white/10 focus:border-yellow-400/50"
-                                                    }`}
+                                                    ? "border-red-500"
+                                                    : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
+                                                    }
+  focus:outline-none     }`}
                                             />
                                         </div>
 
@@ -400,7 +400,7 @@ export default function ContactModal({
                                             onChange={handleContactChange}
                                             className="mt-1 accent-yellow-500"
                                         />
-                                        <label className="text-sm text-white/70">
+                                            <label className="text-sm text-white">
                                             I accept all{" "}
                                             <span className="text-yellow-400 underline cursor-pointer">
                                                 terms and conditions

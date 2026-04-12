@@ -175,7 +175,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white text-lg mb-5">Quick Links</h3>
+            <h3 className="text-white text-lg mb-5 font-bold">Quick Links</h3>
             <ul className="space-y-3 text-white">
               <li>
                 <Link
@@ -214,7 +214,7 @@ export default function Footer() {
                   href="/news-media"
                   className="hover:text-[#F1DC7F] transition"
                 >
-                  News & Media
+                  News
                 </Link>
               </li>
               <li>
@@ -230,7 +230,7 @@ export default function Footer() {
 
           {/* Explore */}
           <div>
-            <h3 className="text-white text-lg mb-5">Explore</h3>
+            <h3 className="text-white text-lg mb-5 font-bold">Explore</h3>
             <ul className="space-y-3 text-white">
               <li>
                 <a href="#" className="hover:text-[#F1DC7F] transition">
@@ -262,7 +262,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="text-white text-lg mb-5">Contact</h3>
+            <h3 className="text-white text-lg mb-5 font-bold">Contact</h3>
             <div className="space-y-4 text-white text-sm  md:text-base">
               <p>
                 2601, Iris Bay, Business Bay, Dubai

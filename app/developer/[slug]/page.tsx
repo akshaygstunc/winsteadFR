@@ -22,6 +22,7 @@ import memberImg3 from "@/public/hero1.jpg";
 import memberImg4 from "@/public/hero2.png";
 import memberImg5 from "@/public/logoo3.png";
 import { useParams } from "next/navigation";
+import ReadMoreSlider from "@/app/components/ReadMoreSlider";
 
 type DeveloperCategory =
     | "Luxury"
@@ -42,7 +43,7 @@ type Developer = {
     specializations: string[];
     tags: string[];
     slug: string;
-    about: string;
+    description: string;
 };
 
 type Property = {
@@ -69,7 +70,7 @@ const developers: Developer[] = [
         specializations: ["Luxury Communities", "Waterfront Towers", "Branded Residences"],
         tags: ["Premium Developer", "High ROI", "Trusted Builder"],
         slug: "emaar-developments",
-        about:
+        description:
             "Emaar Developments is known for delivering premium communities, landmark residences, and high-value investment opportunities across prime locations. Their portfolio reflects strong design standards, brand trust, and consistent end-user and investor demand.",
     },
     {
@@ -84,7 +85,7 @@ const developers: Developer[] = [
         specializations: ["Golf Communities", "Luxury Apartments", "Villas"],
         tags: ["Investor Choice", "Luxury Living", "Prime Locations"],
         slug: "damac-properties",
-        about:
+        description:
             "Damac Properties focuses on luxury living, branded residences, and high-end urban communities. The brand is widely recognized for premium developments designed for both lifestyle buyers and investors.",
     },
     {
@@ -99,7 +100,7 @@ const developers: Developer[] = [
         specializations: ["Apartments", "Family Communities", "Quality Construction"],
         tags: ["Premium Finish", "Residential Focus", "End User Friendly"],
         slug: "omniyat",
-        about:
+        description:
             "Omniyat is positioned as a premium residential-focused developer with a strong emphasis on quality construction, elegant architecture, and long-term community value.",
     },
     {
@@ -114,7 +115,7 @@ const developers: Developer[] = [
         specializations: ["Communities", "Retail", "Waterfront Developments"],
         tags: ["Community Builder", "Iconic Projects", "Dubai Landmarks"],
         slug: "aldar-properties",
-        about:
+        description:
             "Aldar Properties develops mixed-use destinations that combine residential, lifestyle, and commercial value. Their projects are often positioned around community living and urban convenience.",
     },
     {
@@ -129,7 +130,7 @@ const developers: Developer[] = [
         specializations: ["Urban Destinations", "Retail Spaces", "Lifestyle Communities"],
         tags: ["Lifestyle Focus", "Commercial Spaces", "Modern Design"],
         slug: "meraas",
-        about:
+        description:
             "Meraas is known for creating modern destinations that blend residential, commercial, and lifestyle elements into strong city-driven developments.",
     },
 ];
@@ -285,7 +286,7 @@ export default function DeveloperDetailsPage() {
                             About {developer.name}
                         </h2>
                         <p className="text-white leading-relaxed text-base md:text-lg">
-                            {developer.about}
+                            <ReadMoreSlider project={developer} heading="About" />
                         </p>
 
                         <div className="mt-8">
@@ -396,7 +397,7 @@ export default function DeveloperDetailsPage() {
                                             src={property.image}
                                             alt={property.title}
                                             fill
-                                            className="object-cover transition duration-700 group-hover:scale-105"
+                                            className="object-contain transition duration-700 group-hover:scale-105 brightness-90 filter bg-white"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
                                         <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-black/60 border border-white/10 text-xs text-yellow-400">

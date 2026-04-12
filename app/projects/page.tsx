@@ -265,7 +265,7 @@ function ProjectsContent() {
             ) : (
               <div className="col-span-full rounded-3xl border border-white/10 bg-white/5 p-10 text-center">
                 <h3 className="text-2xl font-semibold mb-3">No matching properties found</h3>
-                    <p className="text-white/70">
+                    <p className="text-white">
                   Try adjusting your filters to explore more curated opportunities.
                 </p>
               </div>
@@ -403,7 +403,7 @@ function ResultsBar({ count, filters, clearAllFilters }: any) {
             {active.map((item: string) => (
               <span
                 key={item}
-                className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-sm text-white/80"
+                className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-sm text-white"
               >
                 {item}
               </span>
@@ -419,7 +419,7 @@ function ResultsBar({ count, filters, clearAllFilters }: any) {
         )}
       </div>
 
-      <button className="border border-white/10 text-white/80 px-5 py-3 rounded-full hover:border-yellow-500 hover:text-white transition w-fit">
+      <button className="border border-white/10 text-white px-5 py-3 rounded-full hover:border-yellow-500 hover:text-white transition w-fit">
         Sort by Featured
       </button>
     </div>
@@ -469,8 +469,8 @@ function Sidebar({ filters, updateFilter, categories }: any) {
       </Section>
 
       <div className="mb-7">
-        <p className="text-sm uppercase tracking-[0.14em] text-white/70 mb-3">Size</p>
-        <div className="flex justify-between text-xs mb-3 text-white/70">
+        <p className="text-sm uppercase tracking-[0.14em] text-white mb-3">Size</p>
+        <div className="flex justify-between text-xs mb-3 text-white">
           <span>{filters.minSize.toLocaleString()} sq. ft.</span>
           <span>{filters.maxSize.toLocaleString()} sq. ft.</span>
         </div>
@@ -498,8 +498,8 @@ function Sidebar({ filters, updateFilter, categories }: any) {
       </div>
 
       <div className="mb-7">
-        <p className="text-sm uppercase tracking-[0.14em] text-white/70 mb-3">Price Range</p>
-        <div className="flex justify-between text-xs mb-3 text-white/70">
+        <p className="text-sm uppercase tracking-[0.14em] text-white mb-3">Price Range</p>
+        <div className="flex justify-between text-xs mb-3 text-white">
           <span>{filters.minPrice.toLocaleString()} AED</span>
           <span>{filters.maxPrice.toLocaleString()} AED</span>
         </div>
@@ -559,7 +559,7 @@ function Sidebar({ filters, updateFilter, categories }: any) {
 function Section({ title, children }: any) {
   return (
     <div className="mb-7">
-      <p className="text-sm uppercase tracking-[0.14em] text-white/70 mb-3">{title}</p>
+      <p className="text-sm uppercase tracking-[0.14em] text-white mb-3">{title}</p>
       <div className="space-y-2">{children}</div>
     </div>
   );
@@ -582,7 +582,7 @@ function Check({
         checked={checked}
         onChange={onChange}
       />
-      <span className="group-hover:text-white text-white/80 transition">{label}</span>
+      <span className="group-hover:text-white text-white transition">{label}</span>
     </label>
   );
 }
@@ -591,7 +591,7 @@ function Collapsible({ title, children, open, toggle }: any) {
   return (
     <div className="mb-7 border-t border-white/10 pt-5">
       <div className="flex justify-between items-center cursor-pointer mb-3" onClick={toggle}>
-        <p className="text-sm uppercase tracking-[0.14em] text-white/70">{title}</p>
+        <p className="text-sm uppercase tracking-[0.14em] text-white">{title}</p>
         <ChevronDown size={16} className={`transition ${open ? "rotate-180" : ""}`} />
       </div>
       {open && <div className="space-y-2">{children}</div>}
@@ -623,7 +623,7 @@ function ProjectCard({ data }: any) {
           <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-5">
             <h2 className="text-xl font-semibold mb-3">{data.title}</h2>
 
-            <div className="space-y-2 text-sm text-white/80">
+            <div className="space-y-2 text-sm text-white">
               <div className="flex items-center gap-2">
                 <FaBed className="text-yellow-400 text-xs" />
                 {data.bedrooms}

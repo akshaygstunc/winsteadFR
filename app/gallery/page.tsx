@@ -3,21 +3,18 @@
 import Image, { StaticImageData } from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import {
-    FaArrowRight,
-    FaCamera,
-    FaImage,
-    FaPlay,
-    FaSearchPlus,
     FaTimes,
     FaChevronLeft,
     FaChevronRight,
+    FaPlay,
+    FaSearchPlus,
 } from "react-icons/fa";
 
 import galleryImg1 from "../../public/hero1.jpg";
 import galleryImg2 from "../../public/hero2.png";
-import galleryImg5 from "../../public/hero3.jpg";
-import galleryImg6 from "../../public/hero4.png";
-import galleryImg7 from "../../public/hero5.png";
+import galleryImg3 from "../../public/hero3.jpg";
+import galleryImg4 from "../../public/hero4.png";
+import galleryImg5 from "../../public/hero5.png";
 import AutoBreadcrumbs from "../components/BreadCrumbs";
 
 type GalleryCategory =
@@ -28,15 +25,24 @@ type GalleryCategory =
     | "Commercial"
     | "Lifestyle";
 
-type GalleryItem = {
+type EventMedia = {
+    id: number;
+    type: "image" | "video";
+    src: StaticImageData | string;
+    thumbnail?: StaticImageData | string;
+    title?: string;
+    videoUrl?: string;
+};
+
+type GalleryEvent = {
     id: number;
     title: string;
     category: Exclude<GalleryCategory, "All">;
-    image: StaticImageData;
+    coverImage: StaticImageData | string;
     location: string;
-    type: "image" | "video";
-    size: "small" | "medium" | "large";
-    videoUrl?: string;
+    eventDate: string;
+    description?: string;
+    media: EventMedia[];
 };
 
 const tabs: GalleryCategory[] = [
@@ -48,175 +54,216 @@ const tabs: GalleryCategory[] = [
     "Lifestyle",
 ];
 
-const galleryItems: GalleryItem[] = [
+const galleryEvents: GalleryEvent[] = [
     {
         id: 1,
-        title: "Palm Waterfront Villa",
+        title: "Palm Jumeirah Open House",
         category: "Luxury Villas",
-        image: galleryImg1,
+        coverImage: galleryImg1,
         location: "Palm Jumeirah",
-        type: "image",
-        size: "large",
+        eventDate: "12 Apr 2026",
+        description:
+            "An exclusive showcase of waterfront villas with curated walkthroughs and premium lifestyle experiences.",
+        media: [
+            {
+                id: 11,
+                type: "image",
+                src: galleryImg1,
+                title: "Main Villa View",
+            },
+            {
+                id: 12,
+                type: "image",
+                src: galleryImg2,
+                title: "Luxury Interior",
+            },
+            {
+                id: 13,
+                type: "video",
+                src: galleryImg3,
+                videoUrl: "/videos/sample1.mp4",
+                title: "Walkthrough Video",
+            },
+        ],
     },
     {
         id: 2,
-        title: "Modern Skyline Apartment",
+        title: "Downtown Investor Meet",
         category: "Apartments",
-        image: galleryImg2,
+        coverImage: galleryImg2,
         location: "Downtown Dubai",
-        type: "image",
-        size: "medium",
+        eventDate: "18 Apr 2026",
+        description:
+            "A premium investor event featuring high-rise residences, skyline views, and curated presentations.",
+        media: [
+            {
+                id: 21,
+                type: "image",
+                src: galleryImg2,
+                title: "Investor Lounge",
+            },
+            {
+                id: 22,
+                type: "image",
+                src: galleryImg4,
+                title: "Presentation Space",
+            },
+            {
+                id: 23,
+                type: "image",
+                src: galleryImg5,
+                title: "Project Preview",
+            },
+        ],
     },
     {
         id: 3,
-        title: "Elegant Living Interior",
+        title: "Designer Interior Showcase",
         category: "Interiors",
-        image: galleryImg5,
+        coverImage: galleryImg3,
         location: "Dubai Marina",
-        type: "image",
-        size: "small",
+        eventDate: "25 Apr 2026",
+        description:
+            "A refined interior design event focused on curated aesthetics, luxury finishes, and premium layouts.",
+        media: [
+            {
+                id: 31,
+                type: "image",
+                src: galleryImg3,
+                title: "Living Space",
+            },
+            {
+                id: 32,
+                type: "image",
+                src: galleryImg4,
+                title: "Bedroom Styling",
+            },
+            {
+                id: 33,
+                type: "image",
+                src: galleryImg5,
+                title: "Dining Area",
+            },
+        ],
     },
     {
         id: 4,
-        title: "Commercial Business Tower",
+        title: "Business Bay Commercial Launch",
         category: "Commercial",
-        image: galleryImg5,
+        coverImage: galleryImg4,
         location: "Business Bay",
-        type: "video",
-        size: "medium",
-        videoUrl: "/videos/sample1.mp4",
+        eventDate: "30 Apr 2026",
+        description:
+            "A launch event focused on premium office spaces, commercial floors, and strategic investment opportunities.",
+        media: [
+            {
+                id: 41,
+                type: "image",
+                src: galleryImg4,
+                title: "Tower Exterior",
+            },
+            {
+                id: 42,
+                type: "video",
+                src: galleryImg1,
+                videoUrl: "/videos/sample2.mp4",
+                title: "Commercial Walkthrough",
+            },
+        ],
     },
     {
         id: 5,
-        title: "Luxury Poolside Experience",
+        title: "Luxury Lifestyle Gathering",
         category: "Lifestyle",
-        image: galleryImg5,
+        coverImage: galleryImg5,
         location: "JBR",
-        type: "image",
-        size: "small",
-    },
-    {
-        id: 6,
-        title: "Premium Penthouse Tour",
-        category: "Apartments",
-        image: galleryImg6,
-        location: "Dubai Hills",
-        type: "video",
-        size: "large",
-        videoUrl: "/videos/sample2.mp4",
-    },
-    {
-        id: 7,
-        title: "Designer Bedroom Interior",
-        category: "Interiors",
-        image: galleryImg7,
-        location: "Bluewaters",
-        type: "image",
-        size: "medium",
+        eventDate: "05 May 2026",
+        description:
+            "An experience-led luxury event highlighting leisure, amenities, social spaces, and curated living.",
+        media: [
+            {
+                id: 51,
+                type: "image",
+                src: galleryImg5,
+                title: "Poolside Experience",
+            },
+            {
+                id: 52,
+                type: "image",
+                src: galleryImg1,
+                title: "Sunset Lounge",
+            },
+        ],
     },
 ];
 
 function GalleryHero() {
     return (
         <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
-       
-                   {/* IMAGE */}
-                   <div className="absolute inset-0">
-                       <Image
-                           src={galleryImg1}
-                           alt="News Banner"
-                           fill
-                           priority
-                           className="object-cover object-center"
-                       />
-                   </div>
-       
-                   {/* OVERLAY (only for readability, not full dark) */}
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-                   <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
-       
-                   {/* CONTENT (BOTTOM LEFT ONLY) */}
-                   <div className="relative z-10 h-full flex items-end justify-center">
-                <div className="w-full max-w-[85rem]  px-6 md:px-12 pb-14 md:pb-20">
-       
-                           <div className="max-w-xl text-left ">
-       
-                               <p className="mb-3 text-[11px] uppercase tracking-[0.35em] text-[#F1DC7F]">
-                            Our Gallery
-                               </p>
-       
-                               <h1 className="text-xl md:text-2xl xl:text-5xl font-semibold leading-[1.05] max-w-[520px]">
-                            Explore our visual world of
-                                   <span className="block bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
-                                luxury properties
-                                   </span>
-                               </h1>
-       
-       
-       
-                           </div>
-       
-                       </div>
-                   </div>
-       
-                   {/* BOTTOM GOLD LINE */}
-                   <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] opacity-80" />
-       
-               </section>
-    );
-}
-
-function GalleryStats() {
-    const stats = [
-        { label: "Photos & Media", value: "500+" },
-        { label: "Luxury Projects", value: "80+" },
-        { label: "Communities Covered", value: "25+" },
-        { label: "Video Walkthroughs", value: "40+" },
-    ];
-
-    return (
-        <section className="bg-black px-6 md:px-12 py-6">
-            <div className="max-w-[85rem] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4">
-                {stats.map((item) => (
-                    <div
-                        key={item.label}
-                        className="rounded-[24px] border border-white/10 bg-white/[0.03] px-5 py-6 text-center"
-                    >
-                        <p className="text-2xl md:text-3xl font-semibold text-yellow-400">
-                            {item.value}
-                        </p>
-                        <p className="mt-2 text-sm lg:text-md lg:text-md text-white">{item.label}</p>
-                    </div>
-                ))}
+            <div className="absolute inset-0">
+                <Image
+                    src={galleryImg1}
+                    alt="Gallery Banner"
+                    fill
+                    priority
+                    className="object-cover object-center"
+                />
             </div>
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
+
+            <div className="relative z-10 h-full flex items-end justify-center">
+                <div className="w-full max-w-[85rem] px-6 md:px-12 pb-14 md:pb-20">
+                    <div className="max-w-xl text-left">
+                        <p className="mb-3 text-[11px] uppercase tracking-[0.35em] text-[#F1DC7F]">
+                            Our Gallery
+                        </p>
+
+                        <h1 className="text-xl md:text-2xl xl:text-5xl font-semibold leading-[1.05] max-w-[520px]">
+                            Explore our visual world of
+                            <span className="block bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
+                                luxury properties
+                            </span>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] opacity-80" />
         </section>
     );
 }
 
-function GalleryModal({
-    items,
-    activeIndex,
+function EventGalleryModal({
+    events,
+    activeEventIndex,
+    activeMediaIndex,
     isOpen,
     onClose,
-    onPrev,
-    onNext,
+    onPrevMedia,
+    onNextMedia,
+    onSelectMedia,
 }: {
-    items: GalleryItem[];
-    activeIndex: number;
+        events: GalleryEvent[];
+        activeEventIndex: number;
+        activeMediaIndex: number;
     isOpen: boolean;
     onClose: () => void;
-    onPrev: () => void;
-    onNext: () => void;
+        onPrevMedia: () => void;
+        onNextMedia: () => void;
+        onSelectMedia: (index: number) => void;
 }) {
-    const activeItem = items[activeIndex];
+    const activeEvent = events[activeEventIndex];
+    const activeMedia = activeEvent?.media?.[activeMediaIndex];
 
     useEffect(() => {
         if (!isOpen) return;
 
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") onClose();
-            if (e.key === "ArrowLeft") onPrev();
-            if (e.key === "ArrowRight") onNext();
+            if (e.key === "ArrowLeft") onPrevMedia();
+            if (e.key === "ArrowRight") onNextMedia();
         };
 
         document.body.style.overflow = "hidden";
@@ -226,31 +273,31 @@ function GalleryModal({
             document.body.style.overflow = "auto";
             window.removeEventListener("keydown", onKeyDown);
         };
-    }, [isOpen, onClose, onPrev, onNext]);
+    }, [isOpen, onClose, onPrevMedia, onNextMedia]);
 
-    if (!isOpen || !activeItem) return null;
+    if (!isOpen || !activeEvent || !activeMedia) return null;
 
     return (
         <div className="fixed inset-0 z-[999] bg-black/95 backdrop-blur-sm">
             <button
                 onClick={onClose}
-                className="absolute right-5 top-5 z-20 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:border-yellow-400 hover:text-yellow-400"
+                className="absolute right-5 top-5 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:border-yellow-400 hover:text-yellow-400"
             >
                 <FaTimes />
             </button>
 
-            {items.length > 1 && (
+            {activeEvent.media.length > 1 && (
                 <>
                     <button
-                        onClick={onPrev}
-                        className="absolute left-4 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:border-yellow-400 hover:text-yellow-400"
+                        onClick={onPrevMedia}
+                        className="absolute left-4 top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:border-yellow-400 hover:text-yellow-400"
                     >
                         <FaChevronLeft />
                     </button>
 
                     <button
-                        onClick={onNext}
-                        className="absolute right-4 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:border-yellow-400 hover:text-yellow-400"
+                        onClick={onNextMedia}
+                        className="absolute right-4 top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:border-yellow-400 hover:text-yellow-400"
                     >
                         <FaChevronRight />
                     </button>
@@ -258,13 +305,13 @@ function GalleryModal({
             )}
 
             <div className="flex h-full w-full items-center justify-center px-4 py-16">
-                <div className="w-full max-w-6xl">
+                <div className="w-full max-w-7xl">
                     <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-black">
-                        {activeItem.type === "image" ? (
-                            <div className="relative h-[70vh] w-full">
+                        {activeMedia.type === "image" ? (
+                            <div className="relative h-[65vh] w-full">
                                 <Image
-                                    src={activeItem.image}
-                                    alt={activeItem.title}
+                                    src={activeMedia.src}
+                                    alt={activeMedia.title || activeEvent.title}
                                     fill
                                     className="object-contain"
                                 />
@@ -272,30 +319,81 @@ function GalleryModal({
                         ) : (
                             <div className="relative w-full bg-black">
                                 <video
-                                    src={activeItem.videoUrl}
+                                        src={activeMedia.videoUrl}
                                     controls
                                     autoPlay
                                     playsInline
-                                    className="h-[70vh] w-full object-contain bg-black"
+                                        className="h-[65vh] w-full object-contain bg-black"
                                 />
                             </div>
                         )}
                     </div>
 
-                    <div className="mt-5 flex flex-col gap-2 text-center">
+                    <div className="mt-5 text-center">
+                        <p className="text-xs uppercase tracking-[0.22em] text-yellow-400 mb-2">
+                            {activeEvent.eventDate}
+                        </p>
+
                         <h3 className="text-2xl md:text-3xl font-semibold text-white">
-                            {activeItem.title}
+                            {activeEvent.title}
                         </h3>
-                        <p className="text-white">{activeItem.location}</p>
-                        <div className="flex items-center justify-center gap-3">
+
+                        <p className="mt-2 text-white">{activeEvent.location}</p>
+
+                        {activeEvent.description && (
+                            <p className="mt-3 max-w-3xl mx-auto text-sm md:text-base text-white leading-relaxed">
+                                {activeEvent.description}
+                            </p>
+                        )}
+
+                        <div className="mt-4 flex items-center justify-center gap-3 flex-wrap">
                             <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs uppercase tracking-[0.18em] text-yellow-400">
-                                {activeItem.category}
+                                {activeEvent.category}
                             </span>
                             <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs uppercase tracking-[0.18em] text-white">
-                                {activeItem.type}
+                                {activeMedia.type}
+                            </span>
+                            <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs uppercase tracking-[0.18em] text-white">
+                                {activeMediaIndex + 1} / {activeEvent.media.length}
                             </span>
                         </div>
                     </div>
+
+                    {activeEvent.media.length > 1 && (
+                        <div className="mt-6 flex gap-3 overflow-x-auto pb-2">
+                            {activeEvent.media.map((media, index) => {
+                                const isActive = index === activeMediaIndex;
+
+                                return (
+                                    <button
+                                        key={media.id}
+                                        onClick={() => onSelectMedia(index)}
+                                        className={`relative h-20 w-28 shrink-0 overflow-hidden rounded-2xl border transition ${isActive
+                                            ? "border-yellow-400"
+                                            : "border-white/10 hover:border-yellow-400/40"
+                                            }`}
+                                    >
+                                        <Image
+                                            src={typeof media.thumbnail !== "undefined" ? media.thumbnail : media.src}
+                                            alt={media.title || `Media ${index + 1}`}
+                                            fill
+                                            className="object-cover"
+                                        />
+
+                                        <div className="absolute inset-0 bg-black/20" />
+
+                                        {media.type === "video" && (
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white">
+                                                    <FaPlay className="text-xs ml-0.5" />
+                                                </span>
+                                            </div>
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
@@ -304,67 +402,65 @@ function GalleryModal({
 
 function GalleryGrid() {
     const [activeTab, setActiveTab] = useState<GalleryCategory>("All");
-    const [selectedIndex, setSelectedIndex] = useState<number>(0);
+    const [selectedEventIndex, setSelectedEventIndex] = useState(0);
+    const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const filteredItems = useMemo(() => {
-        if (activeTab === "All") return galleryItems;
-        return galleryItems.filter((item) => item.category === activeTab);
+    const filteredEvents = useMemo(() => {
+        if (activeTab === "All") return galleryEvents;
+        return galleryEvents.filter((event) => event.category === activeTab);
     }, [activeTab]);
 
-    const getSpanClass = (size: GalleryItem["size"]) => {
-        switch (size) {
-            case "large":
-                return "md:col-span-2 md:row-span-2";
-            case "medium":
-                return "md:col-span-1 md:row-span-1";
-            default:
-                return "md:col-span-1 md:row-span-1";
-        }
-    };
-
-    const openModal = (index: number) => {
-        setSelectedIndex(index);
+    const openEventModal = (eventIndex: number) => {
+        setSelectedEventIndex(eventIndex);
+        setSelectedMediaIndex(0);
         setIsModalOpen(true);
     };
 
     const closeModal = () => setIsModalOpen(false);
 
-    const goPrev = () => {
-        setSelectedIndex((prev) =>
-            prev === 0 ? filteredItems.length - 1 : prev - 1
+    const goPrevMedia = () => {
+        const activeEvent = filteredEvents[selectedEventIndex];
+        if (!activeEvent) return;
+
+        setSelectedMediaIndex((prev) =>
+            prev === 0 ? activeEvent.media.length - 1 : prev - 1
         );
     };
 
-    const goNext = () => {
-        setSelectedIndex((prev) =>
-            prev === filteredItems.length - 1 ? 0 : prev + 1
+    const goNextMedia = () => {
+        const activeEvent = filteredEvents[selectedEventIndex];
+        if (!activeEvent) return;
+
+        setSelectedMediaIndex((prev) =>
+            prev === activeEvent.media.length - 1 ? 0 : prev + 1
         );
     };
 
     useEffect(() => {
-        setSelectedIndex(0);
+        setSelectedEventIndex(0);
+        setSelectedMediaIndex(0);
         setIsModalOpen(false);
     }, [activeTab]);
 
     return (
         <>
-            <section className="bg-black px-6 md:px-12  md:py-8 text-white">
+            <section className="bg-black px-6 md:px-12 md:py-8 text-white">
                 <div className="max-w-[85rem] mx-auto">
                     <div className="mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
                         <div className="max-w-2xl">
-                            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
-                                Curated Collections
+                            <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                                Curated Events
                             </p>
                             <h2 className="text-3xl md:text-5xl font-semibold leading-tight">
                                 Browse by
-                                <span className="text-yellow-400"> category</span>
+                                <span className="text-yellow-400"> event category</span>
                             </h2>
                         </div>
 
-                        <p className="max-w-xl text-sm lg:text-md lg:text-md md:text-base leading-relaxed text-white">
-                            From premium villas and apartments to sophisticated interiors and
-                            commercial developments, explore every visual detail in one place.
+                        <p className="max-w-xl text-sm md:text-base leading-relaxed text-white">
+                            Explore premium real estate events, launches, showcases, walkthroughs,
+                            and curated experiences through a visual event-driven gallery.
                         </p>
                     </div>
 
@@ -376,7 +472,7 @@ function GalleryGrid() {
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
-                                    className={`whitespace-nowrap rounded-full px-5 py-2.5 text-sm lg:text-md lg:text-md border transition ${isActive
+                                    className={`whitespace-nowrap rounded-full px-5 py-2.5 text-sm border transition ${isActive
                                         ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
                                         : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40"
                                         }`}
@@ -387,41 +483,29 @@ function GalleryGrid() {
                         })}
                     </div>
 
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 auto-rows-[240px] gap-6">
-                        {filteredItems.map((item, index) => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        {filteredEvents.map((event, index) => (
                             <article
-                                key={item.id}
-                                className={`group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] ${getSpanClass(
-                                    item.size
-                                )}`}
+                                key={event.id}
+                                className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03]"
                             >
-                                {item.image?.src?.includes("mp4") ? (
-                                    <video
-                                        src={item.image}
-                                        alt={item.title}
-                                        fill
-                                        className="object-cover transition duration-700 group-hover:scale-105"
-                                        controls
-                                    />
-                                ) : (
+                                <div className="relative h-[320px] md:h-[360px]">
                                     <Image
-                                        src={item.image}
-                                        alt={item.title}
+                                        src={event.coverImage}
+                                        alt={event.title}
                                         fill
                                         className="object-cover transition duration-700 group-hover:scale-105"
                                     />
-                                )}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                                </div>
 
-                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
-                                <div className="absolute left-4 top-4 flex items-center gap-2">
+                                <div className="absolute left-4 top-4 flex items-center gap-2 flex-wrap">
                                     <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-yellow-400 backdrop-blur-sm">
-                                        {item.category}
+                                        {event.category}
                                     </span>
 
                                     <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white backdrop-blur-sm">
-                                        {item.type === "video" ? "Video" : "Photo"}
+                                        {event.media.length} Media
                                     </span>
                                 </div>
 
@@ -429,24 +513,27 @@ function GalleryGrid() {
 
                                 <div className="absolute right-4 top-4 opacity-0 transition duration-300 group-hover:opacity-100">
                                     <button
-                                        onClick={() => openModal(index)}
+                                        onClick={() => openEventModal(index)}
                                         className="flex h-11 w-11 items-center justify-center rounded-full border border-yellow-500/40 bg-black/60 text-yellow-400 backdrop-blur-sm transition hover:bg-yellow-500 hover:text-black"
                                     >
-                                        {item.type === "video" ? <FaPlay /> : <FaSearchPlus />}
+                                        <FaSearchPlus />
                                     </button>
                                 </div>
 
                                 <button
-                                    onClick={() => openModal(index)}
+                                    onClick={() => openEventModal(index)}
                                     className="absolute inset-0 z-10 cursor-pointer"
-                                    aria-label={`Open ${item.title}`}
+                                    aria-label={`Open ${event.title}`}
                                 />
 
                                 <div className="absolute bottom-0 left-0 right-0 z-20 p-5 md:p-6 pointer-events-none">
+                                    <p className="text-[11px] uppercase tracking-[0.22em] text-yellow-400 mb-2">
+                                        {event.eventDate}
+                                    </p>
                                     <h3 className="text-xl md:text-2xl font-semibold leading-tight">
-                                        {item.title}
+                                        {event.title}
                                     </h3>
-                                    <p className="mt-2 text-sm lg:text-md lg:text-md text-white">{item.location}</p>
+                                    <p className="mt-2 text-sm text-white">{event.location}</p>
                                 </div>
                             </article>
                         ))}
@@ -454,55 +541,17 @@ function GalleryGrid() {
                 </div>
             </section>
 
-            <GalleryModal
-                items={filteredItems}
-                activeIndex={selectedIndex}
+            <EventGalleryModal
+                events={filteredEvents}
+                activeEventIndex={selectedEventIndex}
+                activeMediaIndex={selectedMediaIndex}
                 isOpen={isModalOpen}
                 onClose={closeModal}
-                onPrev={goPrev}
-                onNext={goNext}
+                onPrevMedia={goPrevMedia}
+                onNextMedia={goNextMedia}
+                onSelectMedia={setSelectedMediaIndex}
             />
         </>
-    );
-}
-
-function GalleryCTA() {
-    return (
-        <section className="bg-black px-6 md:px-12 pb-20 md:pb-24 text-white">
-            <div className="max-w-7xl mx-auto">
-                <div className="relative overflow-hidden rounded-[32px] border border-yellow-500/20 bg-white/[0.03] px-6 md:px-10 py-10 md:py-14">
-                    <div className="absolute top-0 left-[10%] h-[220px] w-[220px] rounded-full bg-yellow-500/10 blur-3xl" />
-                    <div className="absolute bottom-[-60px] right-[5%] h-[220px] w-[220px] rounded-full bg-yellow-400/10 blur-3xl" />
-
-                    <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-                        <div className="max-w-2xl">
-                            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
-                                Need More Details?
-                            </p>
-                            <h3 className="text-3xl md:text-4xl font-semibold leading-tight">
-                                Let us help you explore the right property visually and strategically
-                            </h3>
-                            <p className="mt-4 text-base md:text-lg leading-relaxed text-white">
-                                From image galleries to project walkthroughs, our team can guide
-                                you through the finest real estate opportunities tailored to your
-                                lifestyle and investment goals.
-                            </p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-4">
-                            <button className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-6 py-3 font-medium text-black transition hover:scale-[1.03]">
-                                Contact Us
-                                <FaArrowRight className="text-sm lg:text-md lg:text-md" />
-                            </button>
-
-                            <button className="rounded-full border border-white/20 px-6 py-3 font-medium text-white transition hover:border-yellow-400 hover:text-yellow-400">
-                                Explore Projects
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
     );
 }
 
@@ -511,11 +560,9 @@ export default function GalleryPage() {
         <main className="bg-black text-white">
             <GalleryHero />
             <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
-                                        <AutoBreadcrumbs />
-                                      </section>
-            {/* <GalleryStats /> */}
+                <AutoBreadcrumbs />
+            </section>
             <GalleryGrid />
-            {/* <GalleryCTA /> */}
         </main>
     );
 }

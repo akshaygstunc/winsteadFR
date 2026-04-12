@@ -102,7 +102,7 @@ export default function LatestArticles() {
                                 </div>
 
                                 <div className="p-5 space-y-4">
-                                    <p className="text-xs uppercase tracking-[0.18em] text-white/70">
+                                    <p className="text-xs uppercase tracking-[0.18em] text-white">
                                         {item.date || "Recent Article"}
                                     </p>
 
@@ -110,7 +110,7 @@ export default function LatestArticles() {
                                         {item.title}
                                     </h3>
 
-                                    <p className="text-sm lg:text-md text-white/70 leading-relaxed">
+                                    <p className="text-sm lg:text-md text-white leading-relaxed">
                                         {item?.description?.slice(0, 100)}....
                                     </p>
 

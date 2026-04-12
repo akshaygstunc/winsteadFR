@@ -11,7 +11,7 @@ import { IoMdCheckboxOutline } from "react-icons/io";
 import { toast } from "react-toastify";
 import InfoCard from "./InfoCard";
 import WebsiteContentService from "@/app/services/websitecontent.service";
-
+import { useRouter } from "next/navigation";
 type ContactSectionProps = {
     contactPoints: string[];
 };
@@ -28,7 +28,8 @@ type FormErrors = {
     email?: string;
 };
 
-export default function ContactSection({ contactPoints }: ContactSectionProps) {
+export default function ContactSection({ contactPoints, contactInfo }: ContactSectionProps) {
+    const route = useRouter()
     const [formData, setFormData] = useState({
         fullName: "",
         phone: "",
@@ -138,15 +139,7 @@ export default function ContactSection({ contactPoints }: ContactSectionProps) {
 
             await WebsiteContentService.createContactQuery(payload);
 
-            toast.success("Inquiry submitted successfully.");
-
-            setFormData({
-                fullName: "",
-                phone: "",
-                email: "",
-            });
-
-            setErrors({});
+            route.push("/thank-you");
         } catch (error) {
             console.error("Failed to submit inquiry:", error);
             toast.error("Failed to submit inquiry. Please try again.");
@@ -157,50 +150,101 @@ export default function ContactSection({ contactPoints }: ContactSectionProps) {
 
     return (
         <section className="py-8 px-6 md:px-12">
-            <div className="max-w-[85rem] mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-10 items-start">
-                <div className="space-y-8">
+            <div className="max-w-[85rem] mx-auto grid lg:grid-cols-[1.3fr_0.7fr] gap-10 items-start">
+                <div className="space-y-6 lg:space-y-8">
                     <div>
-                        <p className="text-sm lg:text-xl uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                        <p className="text-sm lg:text-base uppercase tracking-[0.25em] text-yellow-400 mb-3">
                             Get In Touch
                         </p>
-                        <h2 className="text-3xl md:text-4xl font-semibold leading-tight mb-4">
+
+                        <h2 className="text-3xl md:text-4xl font-semibold leading-tight mb-4 max-w-2xl">
                             Register your interest with a more premium experience.
                         </h2>
-                        <p className="text-white-400 leading-relaxed max-w-xl">
+
+                        <p className="text-white leading-relaxed max-w-2xl text-sm md:text-base">
                             Share your preferences and our team will connect with relevant
                             options, next steps, and a more personalized property discussion.
                         </p>
                     </div>
 
-                    <div className="space-y-4">
-                        {contactPoints.map((point, index) => (
-                            <div
-                                key={index}
-                                className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4"
-                            >
-                                <IoMdCheckboxOutline className="text-yellow-400 w-6 h-6 mt-0.5 shrink-0" />
-                                <p className="text-white-300 leading-relaxed">{point}</p>
-                            </div>
-                        ))}
-                    </div>
+                    {!!contactPoints?.length && (
+                        <div className="grid gap-3">
+                            {contactPoints.map((point, index) => (
+                                <div
+                                    key={index}
+                                    className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
+                                >
+                                    <IoMdCheckboxOutline className="text-yellow-400 w-5 h-5 mt-0.5 shrink-0" />
+                                    <p className="text-white leading-relaxed text-sm md:text-base">
+                                        {point}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
 
-                    <div className="grid sm:grid-cols-3 gap-4 pt-2">
-                        <InfoCard
-                            icon={<FaPhoneAlt />}
-                            label="Phone"
-                            value="+971 54 755 8866"
-                        />
-                        <InfoCard
-                            icon={<FaEnvelope />}
-                            label="Email"
-                            value="info@winsteadglobal.com"
-                        />
-                        <InfoCard
-                            icon={<FaMapMarkerAlt />}
-                            label="Location"
-                            value={`2601, Iris Bay, Business Bay, Dubai
-Dubai, UAE`}
-                        />
+                    <div className="grid md:grid-cols-3 gap-4">
+                        {!!contactInfo?.phones?.length && (
+                            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                <div className="flex items-center gap-2 mb-3 text-yellow-400">
+                                    <FaPhoneAlt className="shrink-0" />
+                                    <p className="text-md font-medium text-white">Phone</p>
+                                </div>
+
+                                <div className="space-y-2">
+                                    {contactInfo.phones.map((phone, index) => (
+                                        <a
+                                            key={index}
+                                            href={`tel:${phone.replace(/\s/g, "")}`}
+                                            className="block text-md text-white hover:text-yellow-400 transition"
+                                        >
+                                            {phone}
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {!!contactInfo?.emails?.length && (
+                            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                <div className="flex items-center gap-2 mb-3 text-yellow-400">
+                                    <FaEnvelope className="shrink-0" />
+                                    <p className="text-md font-medium text-white">Email</p>
+                                </div>
+
+                                <div className="space-y-2 break-words">
+                                    {contactInfo.emails.map((email, index) => (
+                                        <a
+                                            key={index}
+                                            href={`mailto:${email}`}
+                                            className="block text-md text-white hover:text-yellow-400 transition"
+                                        >
+                                            {email}
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {!!contactInfo?.locations?.length && (
+                            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                <div className="flex items-center gap-2 mb-3 text-yellow-400">
+                                    <FaMapMarkerAlt className="shrink-0" />
+                                    <p className="text-md font-medium text-white">Locations</p>
+                                </div>
+
+                                <div className="space-y-3">
+                                    {contactInfo.locations.map((location, index) => (
+                                        <p
+                                            key={index}
+                                            className="text-md text-white leading-relaxed whitespace-pre-line"
+                                        >
+                                            {location}
+                                        </p>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -210,8 +254,8 @@ Dubai, UAE`}
                             Inquiry Form
                         </p>
                         <h3 className="text-2xl md:text-3xl font-semibold leading-tight">
-                            Register Your Interest in{" "}
-                            <span className="text-yellow-400">Aurelia Heights</span>
+                            Register Your Interest
+                            {/* <span className="text-yellow-400">Aurelia Heights</span> */}
                         </h3>
                     </div>
 
@@ -224,10 +268,12 @@ Dubai, UAE`}
                                 value={formData.fullName}
                                 onChange={(e) => handleChange("fullName", e.target.value)}
                                 placeholder="Enter your full name"
-                                className={`w-full bg-black/40 border rounded-2xl px-5 py-4 text-white placeholder:text-white-500 focus:outline-none transition ${errors.fullName
+                                className={`w-full bg-black/40 border rounded-2xl px-5 py-4 text-white placeholder:text-white transition
+  ${errors.fullName
                                         ? "border-red-500"
-                                        : "border-white/10 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)]"
-                                    }`}
+                                        : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
+                                    }
+  focus:outline-none`}
                             />
                             {errors.fullName && (
                                 <p className="mt-2 text-sm text-red-400">{errors.fullName}</p>
@@ -263,9 +309,10 @@ Dubai, UAE`}
                                     placeholder="Enter phone number"
                                     maxLength={15}
                                     className={`w-full bg-black/40 border rounded-2xl px-4 py-4 text-white placeholder:text-white-500 outline-none ${errors.phone
-                                            ? "border-red-500"
-                                            : "border-white/10 focus:border-yellow-400"
-                                        }`}
+                                        ? "border-red-500"
+                                        : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
+                                        }
+  focus:outline-none                                        }`}
                                 />
                             </div>
 
@@ -283,15 +330,30 @@ Dubai, UAE`}
                                 onChange={(e) => handleChange("email", e.target.value)}
                                 placeholder="Enter your email"
                                 className={`w-full bg-black/40 border rounded-2xl px-5 py-4 text-white placeholder:text-white-500 focus:outline-none transition ${errors.email
-                                        ? "border-red-500"
-                                        : "border-white/10 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.12)]"
-                                    }`}
+                                    ? "border-red-500"
+                                    : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
+                                    }
+  focus:outline-none}`}
                             />
                             {errors.email && (
                                 <p className="mt-2 text-sm text-red-400">{errors.email}</p>
                             )}
                         </div>
-
+                        <div className="flex items-start gap-2 mt-2">
+                            <input
+                                type="checkbox"
+                                name="terms"
+                                // checked={contactForm.terms}
+                                // onChange={handleContactChange}
+                                className="mt-1 accent-yellow-500"
+                            />
+                            <label className="text-sm text-white">
+                                I accept all{" "}
+                                <span className="text-yellow-400 underline cursor-pointer">
+                                    terms and conditions
+                                </span>
+                            </label>
+                        </div>
                         <button
                             type="submit"
                             disabled={isSubmitting}

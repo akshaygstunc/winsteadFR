@@ -7,6 +7,7 @@ import image1 from "../../public/image_7.png";
 import image2 from "../../public/image_5.png";
 import image3 from "../../public/image_6.png";
 import WebsiteContentService from "../services/websitecontent.service";
+import Link from "next/link";
 
 const images = [image1, image2, image1, image2, image3, image1, image2];
 
@@ -94,7 +95,7 @@ function FeaturedProjects({
         <h2 className="text-2xl md:text-3xl font-semibold">
           Featured Projects
         </h2>
-        <p className="text-lg text-white/70 text-[.95rem] mt-2 max-w-xl">
+        <p className="text-lg text-white text-[.95rem] mt-5 mb-5 max-w-xl">
           Discover exceptional properties with Winstead in premium locations worldwide.
         </p>
       </div>
@@ -256,7 +257,7 @@ export default function Projects({ projects = [] }: { projects?: ProjectItem[] }
                 <Image
                   src={image2}
                   alt="About"
-                  className="w-full h-[150px] md:h-[200px] object-cover rounded-xl"
+                    className="w-full h-[150px] md:h-[300px] object-cover rounded-xl"
                 />
               </div>
 
@@ -313,11 +314,12 @@ export default function Projects({ projects = [] }: { projects?: ProjectItem[] }
                 title={project.title}
                 location={project.location || project.data?.location}
                 price={project.price || project.data?.price}
+                slug={project?.slug}
               />
             </div>
           ))
           ) : (
-            <div className="col-span-1 md:col-span-3 rounded-2xl border border-white/10 bg-white/[0.03] p-10 text-center text-white/70">
+              <div className="col-span-1 md:col-span-3 rounded-2xl border border-white/10 bg-white/[0.03] p-10 text-center text-white">
               No projects found for this filter.
             </div>
         )}
@@ -331,11 +333,13 @@ function Card({
   title,
   location,
   price,
+  slug
 }: {
   image?: string;
   title?: string;
   location?: string;
   price?: string | number;
+    slug: string
 }) {
   return (
     <div className="relative w-full h-full rounded-2xl overflow-hidden group cursor-pointer transition-all duration-500 hover:-translate-y-2">
@@ -358,9 +362,9 @@ function Card({
           <p className="text-[1.05rem]">{location}</p>
         </div>
 
-        <button className="mt-3 text-xs md:text-sm lg:text-md border border-yellow-500 px-4 py-1.5 rounded-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500">
+        <Link href={`/projects/${slug}`} className="mt-3 text-xs md:text-sm lg:text-md border border-yellow-500 px-4 py-1.5 rounded-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500">
           Check Details
-        </button>
+        </Link>
       </div>
     </div>
   );

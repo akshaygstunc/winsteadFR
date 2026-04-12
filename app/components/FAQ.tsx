@@ -104,7 +104,7 @@ export default function LuxuryFAQ() {
                                     <div className="overflow-hidden">
                                         <div className="px-6 md:px-8 pb-6 md:pb-8">
                                             <div className="ml-14 md:ml-[60px] border-l border-yellow-400/15 pl-5 md:pl-6">
-                                                <p className="text-white/70 text-sm md:text-base leading-relaxed">
+                                                <p className="text-white text-sm md:text-base leading-relaxed">
                                                     {faq.answer}
                                                 </p>
                                             </div>

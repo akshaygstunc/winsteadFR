@@ -29,7 +29,7 @@ const navLinks = [
     name: "Media",
     dropdown: [
       { name: "Blogs", href: "/blogs" },
-      { name: "Gallery", href: "/gallery" },
+      { name: "Events", href: "/gallery" },
       // { name: "Awards", href: "/awards" },
       { name: "Contact Us", href: "/contact-us" },
     ],
