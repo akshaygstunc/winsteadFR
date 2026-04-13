@@ -23,6 +23,7 @@ import memberImg4 from "@/public/hero2.png";
 import memberImg5 from "@/public/logoo3.png";
 import { useParams } from "next/navigation";
 import ReadMoreSlider from "@/app/components/ReadMoreSlider";
+import { useEffect, useState } from "react";
 
 type DeveloperCategory =
     | "Luxury"
@@ -198,9 +199,57 @@ const socialIcons = [
 ];
 
 export default function DeveloperDetailsPage() {
-    const params = useParams()
-    const developer = developers.find((item) => item.slug === params.slug);
+    const params = useParams();
+    const [developer, setDeveloper] = useState<any>(null);
+    const [projects, setProjects] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
 
+
+
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            const res = await fetch("/api/communities");
+            const data = await res.json();
+
+            setProjects(data); // 👈 DIRECT set (no filter)
+        };
+
+        fetchProjects();
+    }, []);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await fetch("/api/developer-community");
+            const data = await res.json();
+
+            const found = data.find(
+                (item: any) => item.slug === params.slug
+            );
+
+            // 🔥 MAP API → UI FORMAT
+            const mapped = found
+                ? {
+                    name: found.title,
+                    image: found.image || "/logoo4.webp",
+                    category: "Luxury",
+                    type: "Developer",
+                    headquarters: found.data?.city || "Dubai",
+                    projects: "50+ Projects",
+                    specializations: ["Real Estate"],
+                    tags: ["Trusted Builder"],
+                    slug: found.slug,
+                    description: found.description || "No description available",
+                }
+                : null;
+
+            setDeveloper(mapped);
+            setLoading(false);
+        };
+
+        fetchData();
+    }, [params.slug]);
     if (!developer) {
         return (
             <main className="min-h-screen bg-black text-white flex items-center justify-center px-6">
@@ -228,7 +277,7 @@ export default function DeveloperDetailsPage() {
         <main className="bg-black text-white">
             <section className="relative overflow-hidden border-b border-white/10">
                 {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(241,220,127,0.14),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(185,166,80,0.10),transparent_25%)]" /> */}
-               
+
 
                 <div className="relative h-[65vh] min-h-[420px] overflow-hidden ">
                     {/* Background Image */}
@@ -262,13 +311,13 @@ export default function DeveloperDetailsPage() {
                                     {developer.name}
                                 </h6> */}
                                 {/* Name only */}
-                                
+
                             </div>
                         </div>
                         <div>
-                                   
-                                    
-                                </div>
+
+
+                        </div>
                     </div>
                 </div>
             </section>
@@ -385,11 +434,11 @@ export default function DeveloperDetailsPage() {
                         </p>
                     </div>
 
-                    {developerProperties.length > 0 ? (
+                    {projects.length > 0 ? (
                         <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                            {developerProperties.map((property) => (
+                            {projects.map((property) => (
                                 <article
-                                    key={property.id}
+                                    key={property._id}
                                     className="group overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] transition hover:border-yellow-400/30"
                                 >
                                     <div className="relative h-[260px] overflow-hidden">
@@ -408,7 +457,9 @@ export default function DeveloperDetailsPage() {
                                     <div className="p-5 md:p-6">
                                         <h3 className="text-2xl font-semibold">{property.title}</h3>
                                         <p className="text-white mt-2">{property.location}</p>
-
+<p className="text-white mt-2">
+  {property.data?.city || "Dubai"}
+</p>
                                         <div className="mt-5 flex items-center justify-between gap-3">
                                             <div>
                                                 <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
@@ -434,7 +485,7 @@ export default function DeveloperDetailsPage() {
                     ) : (
                         <div className="rounded-[28px] border border-dashed border-white/10 bg-white/[0.02] px-6 py-14 text-center">
                             <h3 className="text-2xl font-semibold mb-2">No properties added yet</h3>
-                                <p className="text-white">
+                            <p className="text-white">
                                 Once properties are mapped with this developer, they can be shown here.
                             </p>
                         </div>

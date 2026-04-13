@@ -16,9 +16,10 @@ import memberImg2 from "../../public/logoo2.webp";
 import memberImg3 from "../../public/logoo5.png";
 import memberImg4 from "../../public/logoo1.webp";
 import memberImg5 from "../../public/logoo3.png";
+import memberImg6 from "../../public/female2.png";
 import TeamHero from "../components/teams/TeamHero";
 import AutoBreadcrumbs from "../components/BreadCrumbs";
-
+import Link from "next/link";
 type DeveloperCategory =
     | "All"
     | "Luxury"
@@ -26,34 +27,6 @@ type DeveloperCategory =
     | "Commercial"
     | "Mixed Use"
     | "International";
-
-type PropertyType =
-    | "Apartment"
-    | "Villa"
-    | "Townhouse"
-    | "Penthouse"
-    | "Commercial";
-
-type CityFilter =
-    | "Dubai"
-    | "Abu Dhabi"
-    | "Sharjah"
-    | "Ras Al Khaimah";
-
-type StatusFilter = "Ready" | "Off Plan" | "New Launch";
-
-type DeveloperTypeFilter =
-    | "Master Developer"
-    | "Luxury Builder"
-    | "Residential Developer"
-    | "Mixed Use Developer"
-    | "Commercial Builder";
-
-type PriceRangeFilter =
-    | "Under AED 1M"
-    | "AED 1M - 3M"
-    | "AED 3M - 5M"
-    | "AED 5M+";
 
 type Developer = {
     id: number;
@@ -67,13 +40,6 @@ type Developer = {
     specializations: string[];
     tags: string[];
     slug: string;
-    propertyTypes: PropertyType[];
-    cities: CityFilter[];
-    status: StatusFilter;
-    developerType: DeveloperTypeFilter;
-    priceRange: PriceRangeFilter;
-    rating: number;
-    reviews: string;
 };
 
 const tabs: DeveloperCategory[] = [
@@ -85,171 +51,199 @@ const tabs: DeveloperCategory[] = [
     "International",
 ];
 function SkeletonCard() {
-  return (
-    <div className="animate-pulse rounded-[28px] bg-white/5 h-[400px]" />
-  );
+    return (
+        <div className="animate-pulse rounded-[28px] bg-white/5 h-[400px]" />
+    );
 }
 
 function DevelopersTabsAndGrid() {
     const [activeTab, setActiveTab] = useState<DeveloperCategory>("All");
-const [developers, setDevelopers] = useState<any[]>([]);
-const [loading, setLoading] = useState(true);
+    const [developers, setDevelopers] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const res = await fetch("/api/developer-community");
-      const data = await res.json();
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await fetch("/api/developer-community");
+                const data = await res.json();
 
-      const mapped = data.map((item: any, index: number) => ({
-        id: index + 1,
-        name: item.title,
-        type: "Developer",
-        category: "Luxury",
-        image: item.image || "/logoo4.webp",
-        experience: "10+ Years",
-        headquarters: item.data?.city || "Dubai",
-        projects: "50+ Projects",
-        specializations: ["Real Estate"],
-        tags: ["Trusted Builder"],
-        slug: item.slug,
-      }));
+                const mapped = data.map((item: any, index: number) => ({
+                    id: index + 1,
+                    name: item.title,
+                    type: "Developer",
+                    category: "Luxury",
+                    image: item.image || "/logoo4.webp",
+                    experience: "10+ Years",
+                    headquarters: item.data?.city || "Dubai",
+                    projects: "50+ Projects",
+                    specializations: ["Real Estate"],
+                    tags: ["Trusted Builder"],
+                    slug: item.slug,
+                }));
 
-      setDevelopers(mapped);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+                setDevelopers(mapped);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-  fetchData();
-}, []);
-  const filteredDevelopers = useMemo(() => {
-  if (activeTab === "All") return developers;
-  return developers.filter((d) => d.category === activeTab);
-}, [activeTab, developers]);
+        fetchData();
+    }, []);
+    const filteredDevelopers = useMemo(() => {
+        if (activeTab === "All") return developers;
+        return developers.filter((d) => d.category === activeTab);
+    }, [activeTab, developers]);
     return (
-        <section className="px-4 md:px-8 xl:px-10 pb-16 mt-10">
-            <div className="mx-auto max-w-7xl">
-                <div className="mb-6 flex flex-col gap-4">
-                    <div className="flex flex-wrap gap-3">
-                        {tabs.map((tab) => {
-                            const active = activeTab === tab;
-                            return (
-                                <button
-                                    key={tab}
-                                    onClick={() => setActiveTab(tab)}
-                                    className={`rounded-full px-4 py-2 text-sm lg:text-md lg:text-md font-medium transition ${active
-                                            ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black"
-                                        : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-500/30 hover:text-white"
-                                        }`}
-                                >
-                                    {tab}
-                                </button>
-                            );
-                        })}
+        <section className="bg-black text-white px-6 md:px-12 py-16 md:py-20">
+            <div className="max-w-7xl mx-auto">
+                <div className="mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+                    <div className="max-w-2xl">
+                        <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                            Explore Developers & Builders
+                        </p>
+                        <h2 className="text-3xl md:text-5xl font-semibold leading-tight">
+                            Discover trusted
+                            <span className="text-yellow-400"> developers and builders</span>
+                        </h2>
                     </div>
 
-                    <div className="relative max-w-md">
-                        <FaSearch className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm lg:text-md lg:text-md text-white" />
-                        <input
-                            type="text"
-                            placeholder="Search developers here"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            className="w-full rounded-full border border-white/10 bg-white/[0.03] py-3 pl-11 pr-5 text-sm lg:text-md lg:text-md text-white placeholder:text-white outline-none focus:border-yellow-500/30"
-                        />
-                    </div>
+                    <p className="text-white/60 text-sm md:text-base max-w-xl leading-relaxed">
+                        Browse leading real estate developers, builders, and project creators
+                        by category to find the right development partner, brand strength,
+                        and project portfolio.
+                    </p>
+                </div>
+
+                <div className="flex gap-3 overflow-x-auto pb-3 mb-10 scrollbar-hide">
+                    {tabs.map((tab) => {
+                        const isActive = activeTab === tab;
+
+                        return (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab)}
+                                className={`whitespace-nowrap rounded-full px-5 py-2.5 text-sm border transition ${isActive
+                                    ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
+                                    : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
+                                    }`}
+                            >
+                                {tab}
+                            </button>
+                        );
+                    })}
+                </div>
+
+                <div className="mb-8 text-sm text-white/60">
+                    Showing{" "}
+                    <span className="text-yellow-400 font-medium">
+                        {filteredDevelopers.length}
+                    </span>{" "}
+                    developer{filteredDevelopers.length !== 1 ? "s" : ""}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-{loading
-  ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
-  : filteredDevelopers.map((developer) => (                        <article
-                            key={developer.id}
-                            className="group rounded-[28px] overflow-hidden border border-white/10 bg-white/[0.03] hover:border-yellow-400/30 hover:shadow-[0_0_40px_rgba(241,220,127,0.08)] transition duration-300"
-                        >
-                            <div className="relative h-[360px] overflow-hidden">
-                                <Image
-                                    src={developer.image}
-                                    alt={developer.name}
-                                    fill
-                                    className="object-contain transition duration-700 group-hover:scale-105 filter brightness-10 invert"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
+                    {loading
+                        ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
+                        : filteredDevelopers.map((developer) => (
 
-                                <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full border border-white/10 bg-black/60 backdrop-blur-sm text-[11px] uppercase tracking-[0.18em] text-yellow-400">
-                                    {developer.category}
-                                </div>
+                            <Link href={`/developer/${developer.slug}`}>
 
-                                <div className="absolute bottom-4 left-4 right-4">
-                                    <p className="inline-block px-3 py-1.5 rounded-full bg-black/65 border border-white/10 text-xs text-white backdrop-blur-sm">
-                                        {developer.experience}
-                                    </p>
-                                </div>
-                            </div>
+                                <article
+                                    key={developer.id}
+                                    className="group rounded-[28px] overflow-hidden border border-white/10 bg-white/[0.03] hover:border-yellow-400/30 hover:shadow-[0_0_40px_rgba(241,220,127,0.08)] transition duration-300"
+                                >
+                                    <div className="relative h-[360px] overflow-hidden">
+                                        <Image
+                                            src={developer.image}
+                                            alt={developer.name}
+                                            fill
+                                            className="object-contain transition duration-700 group-hover:scale-105 filter brightness-10 invert"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
 
-                                    <div className="mt-5 text-center">
-                                        <a
-                                            href={`/developer/${developer.slug}`}
-                                            className="line-clamp-2 text-2xl font-semibold text-white transition group-hover:text-yellow-300"
-                                        >
+                                        <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full border border-white/10 bg-black/60 backdrop-blur-sm text-[11px] uppercase tracking-[0.18em] text-yellow-400">
+                                            {developer.category}
+                                        </div>
+
+                                        <div className="absolute bottom-4 left-4 right-4">
+                                            <p className="inline-block px-3 py-1.5 rounded-full bg-black/65 border border-white/10 text-xs text-white backdrop-blur-sm">
+                                                {developer.experience}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-5 md:p-6">
+                                        <h3 className="text-2xl font-semibold leading-tight">
                                             {developer.name}
-                                        </a>
+                                        </h3>
 
-                                        {/* <div className="mt-3 flex items-center justify-center gap-2 text-sm lg:text-md lg:text-md text-white">
-                                            <span className="text-yellow-400">★ {developer.rating.toFixed(1)}</span>
-                                            <span>|</span>
-                                            <span>{developer.reviews}</span>
+                                        {/* <div className="flex gap-3 mt-6">
+                                            {[FaFacebookF, FaInstagram, FaTiktok, FaLinkedinIn, FaWhatsapp, FaYoutube].map(
+                                                (Icon, i) => (
+                                                    <a
+                                                        key={i}
+                                                        href="#"
+                                                        className="w-10 h-10 rounded-full border border-yellow-500/60 flex items-center justify-center text-yellow-400 text-xl hover:bg-yellow-500 hover:text-black transition duration-300"
+                                                    >
+                                                        <Icon />
+                                                    </a>
+                                                )
+                                            )}
                                         </div> */}
+
+                                        <p className="text-white/55 mt-2 text-sm md:text-base">
+                                            {developer.type}
+                                        </p>
+
+                                        <div className="mt-5 grid grid-cols-1 gap-3 text-sm">
+                                            <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
+                                                <span className="block text-white/40 text-xs uppercase tracking-[0.18em] mb-1">
+                                                    Headquarters
+                                                </span>
+                                                <span className="text-white">{developer.headquarters}</span>
+                                            </div>
+
+                                            <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
+                                                <span className="block text-white/40 text-xs uppercase tracking-[0.18em] mb-1">
+                                                    Portfolio
+                                                </span>
+                                                <span className="text-white">{developer.projects}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-5">
+                                            <p className="text-xs uppercase tracking-[0.18em] text-white/35 mb-3">
+                                                Specializations
+                                            </p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {developer.specializations.map((item) => (
+                                                    <span
+                                                        key={item}
+                                                        className="px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-xs text-white"
+                                                    >
+                                                        {item}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div className="flex flex-wrap gap-2 mt-5">
+                                            {developer.tags.map((tag) => (
+                                                <span
+                                                    key={tag}
+                                                    className="px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-xs text-white"
+                                                >
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
                                     </div>
-
-                                    {/* <div className="mt-4 flex flex-wrap justify-center gap-2">
-                                        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white">
-                                            {developer.developerType}
-                                        </span>
-                                        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white">
-                                            {developer.status}
-                                        </span>
-                                        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white">
-                                            {developer.priceRange}
-                                        </span>
-                                    </div> */}
-
-                                    {/* <div className="mt-5 space-y-2 text-center text-sm lg:text-md lg:text-md text-white">
-                                        <p>{developer.headquarters}</p>
-                                        <p>{developer.projects}</p>
-                                        <p>{developer.experience}</p>
-                                    </div> */}
-
-                                    <div className="mt-5 flex flex-wrap justify-center gap-2">
-                                        {developer.tags.slice(0, 2).map((tag) => (
-                                            <span
-                                                key={tag}
-                                                className="rounded-full border border-yellow-500/15 bg-yellow-500/10 px-3 py-1 text-xs text-yellow-300"
-                                            >
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
-
-                                    <a
-                                        href={`/developer/${developer.slug}`}
-                                        className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-4 py-3 text-sm lg:text-md lg:text-md font-medium text-black transition hover:scale-[1.02]"
-                                    >
-                                        View Details
-                                    </a>
                                 </article>
-                            ))}
 
-                            {!filteredDevelopers.length && (
-                                <div className="col-span-full rounded-[28px] border border-dashed border-white/10 bg-white/[0.02] p-10 text-center text-white">
-                                    No developers found for the selected filters.
-                                </div>
-                            </div>
-                        </article>
-                     ))}
+                            </Link>
+                        ))}
                 </div>
             </div>
         </section>
@@ -300,10 +294,11 @@ export default function DeveloperPage() {
     return (
         <main className="bg-black text-white">
             <TeamHero />
-            <section className="mx-auto max-w-7xl px-4 pt-6 md:px-10">
+            <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
                 <AutoBreadcrumbs />
             </section>
-            <DeveloperListingSection />
+            <DevelopersTabsAndGrid />
+            {/* <DeveloperCTA /> */}
         </main>
     );
 }
