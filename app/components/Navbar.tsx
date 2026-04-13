@@ -115,7 +115,7 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
-          {parentMenu.map((item) => {
+          {parentMenu.reverse().map((item) => {
             const children = getChildren(item._id);
 
             // ✅ WITH DROPDOWN (SAME STYLE)
@@ -144,7 +144,7 @@ export default function Navbar() {
                       ref={dropdownRef}
                       className="absolute top-full left-0 mt-4 w-48 bg-[#111] border border-white/10 rounded-xl shadow-xl py-2 z-50"
                     >
-                      {children.map((child) => (
+                      {children.reverse().map((child) => (
                         <Link
                           key={child._id}
                           href={child.subtitle || "#"}
