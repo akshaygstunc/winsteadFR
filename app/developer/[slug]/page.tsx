@@ -286,7 +286,7 @@ export default function DeveloperDetailsPage() {
                             About {developer.name}
                         </h2>
                         <p className="text-white leading-relaxed text-base md:text-lg">
-                            <ReadMoreSlider project={developer} heading="About" />
+                            <ReadMoreSlider description={developer.about} heading="About" />
                         </p>
 
                         <div className="mt-8">

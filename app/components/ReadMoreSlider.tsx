@@ -9,10 +9,10 @@ type Props = {
     };
 };
 
-export default function ReadMoreSlider({ project, heading }: Props) {
+export default function ReadMoreSlider({ description, heading }: Props) {
     const [open, setOpen] = useState(false);
 
-    const fullText = project.description || "No description available.";
+    const fullText = description || "No description available.";
     const shortText =
         fullText.length > 80 ? `${fullText.slice(0, 140)}...` : fullText;
 

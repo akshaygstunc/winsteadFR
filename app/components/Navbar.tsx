@@ -84,9 +84,9 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="nav-item flex items-center">
           <Image
-            src={winstead}
+            src={"./Winsteadlogo.png"}
             alt="Winstead Logo"
-            width={80}
+            width={120}
             height={50}
             priority
             className="cursor-pointer"

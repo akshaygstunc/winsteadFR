@@ -128,7 +128,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <Image src={logo} alt="Winstead" width={150} className="mb-5" />
+            <Image src={"./Winsteadlogo.png"} alt="Winstead" width={180} height={180} className="mb-5" />
             {/* <p className="text-white leading-relaxed text-sm lg:text-xl lg:text-xl md:text-base max-w-sm">
               Winstead delivers access to refined living and high-potential real
               estate opportunities through a tailored, investor-first approach.
@@ -176,52 +176,34 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h3 className="text-white text-lg mb-5 font-bold">Quick Links</h3>
-            <ul className="space-y-3 text-white">
+            <ul className="grid grid-cols-2 md:grid-cols-1 gap-y-3 gap-x-6 text-white">
               <li>
-                <Link
-                  href="/about-us"
-                  className="hover:text-[#F1DC7F] transition"
-                >
+                <Link href="/about-us" className="hover:text-[#F1DC7F] transition">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/projects"
-                  className="hover:text-[#F1DC7F] transition"
-                >
+                <Link href="/projects" className="hover:text-[#F1DC7F] transition">
                   Projects
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/our-services"
-                  className="hover:text-[#F1DC7F] transition"
-                >
+                <Link href="/our-services" className="hover:text-[#F1DC7F] transition">
                   Services
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/our-team"
-                  className="hover:text-[#F1DC7F] transition"
-                >
+                <Link href="/our-team" className="hover:text-[#F1DC7F] transition">
                   Our Team
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/news-media"
-                  className="hover:text-[#F1DC7F] transition"
-                >
+                <Link href="/news-media" className="hover:text-[#F1DC7F] transition">
                   News
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/career"
-                  className="hover:text-[#F1DC7F] transition"
-                >
+                <Link href="/career" className="hover:text-[#F1DC7F] transition">
                   Career
                 </Link>
               </li>
@@ -231,7 +213,7 @@ export default function Footer() {
           {/* Explore */}
           <div>
             <h3 className="text-white text-lg mb-5 font-bold">Explore</h3>
-            <ul className="space-y-3 text-white">
+            <ul className="grid grid-cols-2 md:grid-cols-1 gap-y-3 gap-x-6 text-white">
               <li>
                 <a href="#" className="hover:text-[#F1DC7F] transition">
                   Luxury Apartments

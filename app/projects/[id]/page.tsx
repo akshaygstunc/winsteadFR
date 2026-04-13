@@ -551,7 +551,7 @@ export default function ProjectDetailPage() {
                 <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-5">
                   Premium living shaped by design, location, and long-term value
                 </h2>
-                <ReadMoreSlider project={project} heading="Project Description" />
+                <ReadMoreSlider description={project.description} heading="Project Description" />
 
                 <div className="mt-8 grid sm:grid-cols-2 gap-4">
                   {project.highlights.map((item, index) => (
@@ -577,7 +577,7 @@ export default function ProjectDetailPage() {
                   </div>
                   <div>
                     <h3 className="text-white text-lg font-semibold mb-2">Design-Led Living</h3>
-                    <p className="leading-relaxed">{project.description}</p>
+                    <p className="leading-relaxed"><ReadMoreSlider description={project.description} heading="Project Description" /></p>
                   </div>
                   <div>
                     <h3 className="text-white text-lg font-semibold mb-2">Long-Term Potential</h3>
