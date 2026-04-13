@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { StaticImageData } from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     FaArrowRight,
     FaFacebookF,
@@ -50,83 +50,51 @@ const tabs: DeveloperCategory[] = [
     "Mixed Use",
     "International",
 ];
-
-const developers: Developer[] = [
-    {
-        id: 1,
-        name: "Emaar Developments",
-        type: "Master Developer",
-        category: "Luxury",
-        image: memberImg,
-        experience: "15+ Years in Market",
-        headquarters: "Dubai, UAE",
-        projects: "120+ Projects",
-        specializations: ["Luxury Communities", "Waterfront Towers", "Branded Residences"],
-        tags: ["Premium Developer", "High ROI", "Trusted Builder"],
-        slug: "emaar-developments",
-    },
-    {
-        id: 2,
-        name: "Damac Properties",
-        type: "Luxury Builder",
-        category: "Luxury",
-        image: memberImg2,
-        experience: "20+ Years in Market",
-        headquarters: "Dubai, UAE",
-        projects: "90+ Projects",
-        specializations: ["Golf Communities", "Luxury Apartments", "Villas"],
-        tags: ["Investor Choice", "Luxury Living", "Prime Locations"],
-        slug: "damac-properties",
-    },
-    {
-        id: 3,
-        name: "Omniyat",
-        type: "Residential Developer",
-        category: "Residential",
-        image: memberImg3,
-        experience: "18+ Years in Market",
-        headquarters: "Dubai, UAE",
-        projects: "70+ Projects",
-        specializations: ["Apartments", "Family Communities", "Quality Construction"],
-        tags: ["Premium Finish", "Residential Focus", "End User Friendly"],
-        slug: "sobha-realty",
-    },
-    {
-        id: 4,
-        name: "Aldar Properties",
-        type: "Mixed Use Developer",
-        category: "Mixed Use",
-        image: memberImg4,
-        experience: "22+ Years in Market",
-        headquarters: "Dubai, UAE",
-        projects: "60+ Projects",
-        specializations: ["Communities", "Retail", "Waterfront Developments"],
-        tags: ["Community Builder", "Iconic Projects", "Dubai Landmarks"],
-        slug: "nakheel",
-    },
-    {
-        id: 5,
-        name: "Meraas",
-        type: "Commercial & Residential Builder",
-        category: "Commercial",
-        image: memberImg5,
-        experience: "12+ Years in Market",
-        headquarters: "Dubai, UAE",
-        projects: "45+ Projects",
-        specializations: ["Urban Destinations", "Retail Spaces", "Lifestyle Communities"],
-        tags: ["Lifestyle Focus", "Commercial Spaces", "Modern Design"],
-        slug: "meraas",
-    },
-];
+function SkeletonCard() {
+  return (
+    <div className="animate-pulse rounded-[28px] bg-white/5 h-[400px]" />
+  );
+}
 
 function DevelopersTabsAndGrid() {
     const [activeTab, setActiveTab] = useState<DeveloperCategory>("All");
+const [developers, setDevelopers] = useState<any[]>([]);
+const [loading, setLoading] = useState(true);
 
-    const filteredDevelopers = useMemo(() => {
-        if (activeTab === "All") return developers;
-        return developers.filter((developer) => developer.category === activeTab);
-    }, [activeTab]);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const res = await fetch("/api/developer-community");
+      const data = await res.json();
 
+      const mapped = data.map((item: any, index: number) => ({
+        id: index + 1,
+        name: item.title,
+        type: "Developer",
+        category: "Luxury",
+        image: item.image || "/logoo4.webp",
+        experience: "10+ Years",
+        headquarters: item.data?.city || "Dubai",
+        projects: "50+ Projects",
+        specializations: ["Real Estate"],
+        tags: ["Trusted Builder"],
+        slug: item.slug,
+      }));
+
+      setDevelopers(mapped);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, []);
+  const filteredDevelopers = useMemo(() => {
+  if (activeTab === "All") return developers;
+  return developers.filter((d) => d.category === activeTab);
+}, [activeTab, developers]);
     return (
         <section className="bg-black text-white px-6 md:px-12 py-16 md:py-20">
             <div className="max-w-7xl mx-auto">
@@ -176,8 +144,9 @@ function DevelopersTabsAndGrid() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {filteredDevelopers.map((developer) => (
-                        <article
+{loading
+  ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
+  : filteredDevelopers.map((developer) => (                        <article
                             key={developer.id}
                             className="group rounded-[28px] overflow-hidden border border-white/10 bg-white/[0.03] hover:border-yellow-400/30 hover:shadow-[0_0_40px_rgba(241,220,127,0.08)] transition duration-300"
                         >
@@ -268,7 +237,7 @@ function DevelopersTabsAndGrid() {
                                 </div>
                             </div>
                         </article>
-                    ))}
+                     ))}
                 </div>
             </div>
         </section>
