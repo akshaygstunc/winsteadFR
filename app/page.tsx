@@ -1,3 +1,4 @@
+"use client";
 import Hero from "./components/Hero";
 import Projects from "./components/Projects";
 import Stats from "./components/Stats";
@@ -10,7 +11,29 @@ import img1 from "../public/hero1.jpg";
 import img2 from "../public/hero2.png";
 import img3 from "../public/hero3.jpg";
 import img4 from "../public/hero4.png";
+import UltraLuxury from "./components/ultraLuxury";
+import { useEffect, useState } from "react";
+import WebsiteContentService from "./services/websitecontent.service";
 export default function Home() {
+  const [homePage, setHomePage] = useState({});
+  const [projects, setProjects] = useState([]);
+  const [testimonialsdata, settestimonials] = useState([]);
+  useEffect(() => {
+    async function fetchHomePage() {
+      try {
+        const response = await WebsiteContentService.getHomePageContent({ slug: "home" });
+        const projects = await WebsiteContentService.getProperties();
+        const testimonials = await WebsiteContentService.getTestimonials()
+        settestimonials(testimonials)
+        setHomePage(response[0]); // Assuming the API returns an array and we want the first item
+        setProjects(projects)
+      } catch (error) {
+        console.error("Error fetching homepage content:", error);
+      }
+    }
+
+    fetchHomePage();
+  }, []);
   const news = [
     {
       id: 1,
@@ -45,15 +68,42 @@ export default function Home() {
       category: "Luxury Trends",
     },
   ];
+  useEffect(() => {
+     const requestBrowserLocation = () => {
+            if (typeof window === "undefined" || !navigator.geolocation) {
+                // setLocationStatus("unavailable");
+                return;
+            }
+    
+            // setLocationStatus("fetching");
+    
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                   localStorage.setItem("long",position.longitude)
+                   localStroage.setItem("lat", postion.latitude)
+                },
+                () => {
+                   
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0,
+                },
+            );
+        };
+        requestBrowserLocation()
+  })
   return (
     <div className="bg-black text-white">
       {/* <Navbar /> */}
-      <Hero />
-      <Projects />
-      <Stats />
-      <Testimonials />
-      <Reel/>
+      <Hero asset={homePage?.data?.herovideo} />
+      <Projects projects={projects} />
       <Logos />
+      <UltraLuxury />
+      <Testimonials testimonialsdata={testimonialsdata}/>
+      <Reel/>
+      <Stats />
       <LatestArticles news={news} />
     </div>
   );

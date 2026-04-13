@@ -55,14 +55,14 @@ export default function Newsletter() {
  {/* CENTER */}
           <div>
             <h3 className="text-lg mb-4">Address</h3>
-          <p className="text-sm text-white-300 leading-relaxed">
+          <p className="text-sm lg:text-xl lg:text-xl text-white-300 leading-relaxed">
               Dubai Hills Estate Business Park 4th, Office 204no <br />
               Dubai - UAE, PO Box No: 453881
             </p>
 
             <div className="border-t border-white/10 my-6"></div>
 
-            <div className="grid grid-cols-2 gap-10 text-sm">
+            <div className="grid grid-cols-2 gap-10 text-sm lg:text-xl lg:text-xl">
               <div>
                 <h4 className="mb-3 text-white">Company Info</h4>
               <ul className="space-y-2 text-white-300">
@@ -87,12 +87,12 @@ export default function Newsletter() {
           <div className="flex flex-col justify-between">
             
             <div className="flex justify-end">
-              <button className="border border-white/50 px-6 py-3 text-sm hover:bg-white hover:text-black transition">
+              <button className="border border-white/50 px-6 py-3 text-sm lg:text-xl lg:text-xl hover:bg-white hover:text-black transition">
                 Get Expert Help
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-10 text-sm mt-10">
+            <div className="grid grid-cols-2 gap-10 text-sm lg:text-xl lg:text-xl mt-10">
               <div>
                 <h4 className="mb-3">Our Portfolio</h4>
               <ul className="space-y-2 text-white-300">
@@ -111,7 +111,7 @@ export default function Newsletter() {
             </div>
           </div>
         {/* RIGHT */}
-        {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-10 text-sm">
+        {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-10 text-sm lg:text-xl lg:text-xl">
           
           <div>
             <h4 className="text-white-400 mb-4">Company Info</h4>

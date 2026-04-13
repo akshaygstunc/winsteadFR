@@ -10,7 +10,7 @@ export default function AutoBreadcrumbs() {
 
     return (
         <nav>
-            <ol className="flex flex-wrap items-center gap-2 text-md mt-4  text-white">
+            <ol className="flex flex-wrap items-center gap-2 text-md lg:text-md mt-4 ml-4 text-white">
                 <li>
                     <Link href="/">Home</Link>
                 </li>
@@ -24,7 +24,7 @@ export default function AutoBreadcrumbs() {
 
                     return (
                         <li key={href} className="flex items-center gap-2">
-                            <span>{">"}</span>
+                            <span>{"/"}</span>
                             {isLast ? (
                                 <span className="text-yellow-400">{label}</span>
                             ) : (

@@ -7,7 +7,7 @@ export default function ContactMap() {
                 <p className="text-xs uppercase tracking-[0.2em] text-yellow-400 mb-1">
                     Our Location
                 </p>
-                <p className="text-sm text-white-300">
+                <p className="text-sm lg:text-xl lg:text-xl text-white-300">
                     Dubai, United Arab Emirates
                 </p>
             </div>

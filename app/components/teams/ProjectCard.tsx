@@ -23,7 +23,7 @@ export default function ProjectCard({ img }: { img: any }) {
             <div className="absolute bottom-0 p-5 w-full">
                 <h3 className="text-xl font-semibold mb-2">Aurelia Heights</h3>
 
-                <div className="space-y-1 text-sm text-white-300">
+                <div className="space-y-1 text-sm lg:text-xl lg:text-xl text-white-300">
                     <div className="flex items-center gap-2">
                         <FaBed className="text-yellow-400 text-xs" />
                         2-8 Bedrooms
@@ -42,7 +42,7 @@ export default function ProjectCard({ img }: { img: any }) {
                     </div>
                 </div>
 
-                <button className="mt-4 w-full py-3 border border-white/20 rounded-xl text-sm hover:border-yellow-400 transition">
+                <button className="mt-4 w-full py-3 border border-white/20 rounded-xl text-sm lg:text-xl lg:text-xl hover:border-yellow-400 transition">
                     Check Details
                 </button>
             </div>

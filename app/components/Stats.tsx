@@ -102,11 +102,11 @@ export default function Stats() {
   return (
     <section
       ref={sectionRef}
-      className="bg-black text-white py-0 px-6 md:px-16"
+      className="  bg-black text-white py-0 px-6 md:px-16"
     >
         <div className="mb-16 h-[1px] w-full bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] bg-[length:200%_100%] animate-[shimmer_3s_linear_infinite]"></div>
 
-      <div className="mx-auto">
+      <div className="max-w-[85rem] mx-auto">
         {/* TOP STATS */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center mb-20">
           {stats.map((stat, i) => (
@@ -114,9 +114,9 @@ export default function Stats() {
               {/* glow */}
               <div className="stat-glow absolute inset-0 blur-2xl opacity-40 bg-yellow-400/20 rounded-full"></div>
 
-              <h3 className="text-3xl md:text-5xl font-extrabold relative">
+              <h3 className="text-3xl md:text-5xl  relative">
                 <span
-                  className="counter bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-300 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(241,220,127,0.6)]"
+                  className="counter bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(241,220,127,0.6)]"
                   data-value={parseFloat(stat.value)}
                   data-suffix={stat.value.replace(/[0-9.]/g, "")}
                 >

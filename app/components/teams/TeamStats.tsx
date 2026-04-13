@@ -15,7 +15,7 @@ export default function TeamStats() {
                         className="rounded-2xl border border-white/10 bg-white/5 p-8 hover:border-yellow-500/40 transition"
                     >
                         <h3 className="text-xl font-semibold mb-2 text-white">{item.title}</h3>
-                        <p className="text-white-400 text-sm leading-relaxed">{item.desc}</p>
+                        <p className="text-white-400 text-sm lg:text-xl lg:text-xl leading-relaxed">{item.desc}</p>
                     </div>
                 ))}
             </div>

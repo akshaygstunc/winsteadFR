@@ -4,7 +4,7 @@ import banner from "../../../public/hero3.jpg";
 
 export default function NewsHero() {
     return (
-        <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden bg-black text-white">
+        <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
 
             {/* IMAGE */}
             <div className="absolute inset-0">

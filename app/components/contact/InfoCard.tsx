@@ -5,7 +5,7 @@ export default function InfoCard({ icon, label, value }: { icon: React.ReactNode
             <p className="text-xs uppercase tracking-[0.18em] text-white-500 mb-1">
                 {label}
             </p>
-            <p className="text-sm text-white-300 leading-relaxed">{value}</p>
+            <p className="text-sm lg:text-sm text-white-300 leading-relaxed break-words">{value}</p>
         </div>
     );
 }

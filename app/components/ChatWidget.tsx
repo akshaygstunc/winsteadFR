@@ -41,7 +41,7 @@ export default function ChatWidget() {
       >
         <Image src={person} alt="person" className="w-10 h-10 rounded-full" />
         <div>
-          <p className="text-sm font-semibold">Sophie</p>
+          <p className="text-sm lg:text-md lg:text-md font-semibold">Sophie</p>
           <p className="text-xs">Sales Dept</p>
         </div>
       </div>

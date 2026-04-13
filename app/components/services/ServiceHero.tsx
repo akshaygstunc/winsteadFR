@@ -6,7 +6,7 @@ import { FaArrowRight } from "react-icons/fa";
 
 export default function ServicesHero() {
     return (
-        <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden bg-black text-white">
+        <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
 
             {/* IMAGE */}
             <div className="absolute inset-0">
@@ -20,7 +20,7 @@ export default function ServicesHero() {
             </div>
 
             {/* OVERLAY (only for readability, not full dark) */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+            {/* <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" /> */}
             <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
 
             {/* CONTENT (BOTTOM LEFT ONLY) */}

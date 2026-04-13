@@ -2,7 +2,7 @@ export default function TeamCTA({ teamPerson }: { teamPerson: string }) {
     return (
         <section className="py-20 px-6 md:px-12">
             <div className="max-w-5xl mx-auto rounded-3xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 via-white/5 to-yellow-500/10 p-10 md:p-14 text-center">
-                <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                <p className="text-sm lg:text-xl lg:text-xl uppercase tracking-[0.25em] text-yellow-400 mb-3">
                     Start The Conversation
                 </p>
                 <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-5">

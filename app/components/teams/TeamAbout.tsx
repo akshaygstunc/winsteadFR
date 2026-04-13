@@ -3,7 +3,7 @@ export default function TeamAbout({ teamPerson }: { teamPerson: string }) {
         <section className="py-20 px-6 md:px-12 border-b border-white/10">
             <div className="max-w-7xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-start">
                 <div>
-                    <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                    <p className="text-sm lg:text-xl lg:text-xl uppercase tracking-[0.25em] text-yellow-400 mb-3">
                         About {teamPerson.split(" ")[0]}
                     </p>
                     <h2 className="text-3xl md:text-4xl font-semibold mb-4">

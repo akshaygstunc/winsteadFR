@@ -5,7 +5,7 @@ import gsap from "gsap";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import winstead from "../../public/win-logo.png";
+import winstead from "../../public/logodetaile.png";
 import star from "../../public/hugeicons_star.png";
 import { FcGoogle } from "react-icons/fc";
 import FollowUsIcons from "./SocialMedia";
@@ -13,24 +13,35 @@ import { IoMdArrowDropdown } from "react-icons/io";
 
 const navLinks = [
   { name: "About Us", href: "/about-us" },
-  { name: "Projects", href: "/projects" },
+  // { name: "Projects", href: "/projects" },
+  {
+    name: "Projects",
+    dropdown: [
+      { name: "Off-Plan", href: "/projects" },
+      { name: "Ready to Move In", href: "/projects" },
+      { name: "Commercial", href: "/projects" },
+      // { name: "Plot", href: "/projects" },
+    ],
+  },
   { name: "Our Services", href: "/our-services" },
   { name: "Our Team", href: "/our-team" },
   {
     name: "Media",
     dropdown: [
       { name: "Blogs", href: "/blogs" },
-      { name: "Gallery", href: "/gallery" },
+      { name: "Events", href: "/gallery" },
       // { name: "Awards", href: "/awards" },
       { name: "Contact Us", href: "/contact-us" },
     ],
   },
   { name: "Developer", href: "/developer" },
+  // { name: "Media", href: "/news-media" },
+  // { name: "Contact Us", href: "/contact-us" },
 ];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     gsap.from(".nav-item", {
@@ -42,7 +53,7 @@ export default function Navbar() {
     });
   }, []);
   useEffect(() => {
-    if (showDropdown) {
+    if (activeDropdown) {
       gsap.fromTo(
         ".dropdown-item",
         { y: 20, opacity: 0 },
@@ -55,11 +66,11 @@ export default function Navbar() {
         },
       );
     }
-  }, [showDropdown]);
+  }, [activeDropdown]);
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
+        setActiveDropdown(false);
       }
     };
 
@@ -69,20 +80,19 @@ export default function Navbar() {
   const timeoutRef = useRef<any>(null);
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black border-b border-white/10">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 py-4">
+      <div className="flex items-center justify-between px-6 md:px-10 py-4">
         {/* Logo */}
         <Link href="/" className="nav-item flex items-center">
           <Image
-            src={winstead}
+            src={"./Winsteadlogo.png"}
             alt="Winstead Logo"
-            width={80}
-            height={30}
+            width={120}
+            height={50}
             priority
             className="cursor-pointer"
           />
         </Link>
 
-        {/* Desktop Menu */}
         <nav className="hidden lg:flex items-center gap-8">
           {navLinks.map((link, index) => {
             // ✅ WITH DROPDOWN
@@ -93,20 +103,20 @@ export default function Navbar() {
                   className="relative nav-item"
                   onMouseEnter={() => {
                     clearTimeout(timeoutRef.current);
-                    setShowDropdown(true);
+                    setActiveDropdown(link.name); // 👈 track which dropdown
                   }}
                   onMouseLeave={() => {
                     timeoutRef.current = setTimeout(() => {
-                      setShowDropdown(false);
-                    }, 150); // small delay fixes flicker
+                      setActiveDropdown(null);
+                    }, 150);
                   }}
                 >
-                  <span className="cursor-pointer text-white text-sm flex items-center gap-1">
+                  <span className="cursor-pointer text-white text-sm lg:text-md lg:text-md flex items-center gap-1">
                     {link.name} <IoMdArrowDropdown />
                   </span>
 
                   {/* DROPDOWN */}
-                  {showDropdown && (
+                  {activeDropdown === link.name && (
                     <div
                       ref={dropdownRef}
                       className="absolute top-full left-0 mt-4 w-48 bg-[#111] border border-white/10 rounded-xl shadow-xl py-2 z-50"
@@ -115,7 +125,7 @@ export default function Navbar() {
                         <Link
                           key={i}
                           href={item.href}
-                          className="dropdown-item block px-4 py-2 text-sm text-white hover:bg-yellow-500/10 hover:text-yellow-400 transition"
+                          className="dropdown-item block px-4 py-2 text-sm lg:text-md lg:text-md text-white hover:bg-yellow-500/10 hover:text-yellow-400 transition"
                         >
                           {item.name}
                         </Link>
@@ -131,7 +141,7 @@ export default function Navbar() {
               <Link
                 key={index}
                 href={link.href}
-                className="text-[1.01rem] nav-item relative text-white text-sm font-normal group"
+                className="text-[1.01rem] nav-item relative text-white text-sm lg:text-md  font-normal group"
               >
                 {link.name}
                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
@@ -139,7 +149,6 @@ export default function Navbar() {
             );
           })}
         </nav>
-
         {/* Right Section */}
         <div className="hidden lg:flex items-center gap-6 nav-item">
           {/* Follow Us */}
@@ -158,7 +167,7 @@ export default function Navbar() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-2xs font-semibold text-white">4.8</span>
-                <span className="text-yellow-500 text-sm">★★★★★</span>
+                <span className="text-yellow-500 text-sm lg:text-md lg:text-md">★★★★★</span>
               </div>
               <p className="text-white-400 text-xs">
                 Rated by&nbsp; 200+ clients
@@ -184,16 +193,48 @@ export default function Navbar() {
       >
         <div className="flex flex-col px-6 py-4 space-y-4">
           {/* NAV LINKS */}
-          {navLinks.map((link, index) => (
+          {/* {navLinks.map((link, index) => (
             <a
               key={index}
               href={link.href}
-              className="text-white text-sm border-b border-white/10 pb-2 hover:text-yellow-400 transition"
+              className="text-white text-sm lg:text-md lg:text-md border-b border-white/10 pb-2 hover:text-yellow-400 transition"
             >
               {link.name}
             </a>
-          ))}
+          ))} */}
+          {navLinks.map((link, index) => {
+            if (link.dropdown) {
+              return (
+                <div key={index}>
+                  <p className="text-white text-sm lg:text-md lg:text-md font-semibold">
+                    {link.name}
+                  </p>
 
+                  <div className="ml-3 mt-2 space-y-2">
+                    {link.dropdown.map((item, i) => (
+                      <Link
+                        key={i}
+                        href={item.href}
+                        className="block text-gray-300 text-sm lg:text-md lg:text-md hover:text-yellow-400"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={index}
+                href={link.href}
+                className="text-white text-sm lg:text-md lg:text-md border-b border-white/10 pb-2 hover:text-yellow-400 transition"
+              >
+                {link.name}
+              </Link>
+            );
+          })}
           {/* FOLLOW US (MOBILE DROPDOWN) */}
           <div className="mt-4">
             <FollowUsIcons />
@@ -210,7 +251,7 @@ export default function Navbar() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-2xs font-semibold text-white">4.8</span>
-                <span className="text-yellow-500 text-sm">★★★★★</span>
+                <span className="text-yellow-500 text-sm lg:text-md lg:text-md">★★★★★</span>
               </div>
               <p className="text-white-400 text-xs">
                 Rated by&nbsp; 200+ clients

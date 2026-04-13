@@ -124,14 +124,14 @@ function TeamTabsAndGrid() {
   }, [activeTab]);
 
   return (
-    <section className="bg-black text-white px-6 md:px-12 py-16 md:py-20">
-       <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
-                <AutoBreadcrumbs />
-              </section>
-      <div className="max-w-7xl mx-auto">
+    <section className="bg-black text-white px-6 md:px-12 ">
+        <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6 py-8">
+                       <AutoBreadcrumbs />
+                     </section>
+      <div className="max-w-[85rem] mx-auto">
         <div className="mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="max-w-2xl">
-            <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
               Explore Our Team
             </p>
             <h2 className="text-3xl md:text-5xl font-semibold leading-tight">
@@ -140,7 +140,7 @@ function TeamTabsAndGrid() {
             </h2>
           </div>
 
-          <p className="text-white-400 text-sm md:text-base max-w-xl leading-relaxed">
+          <p className="text-white-400 text-sm lg:text-md lg:text-md md:text-base max-w-xl leading-relaxed">
             Browse our specialists by function and discover the expertise that
             supports every stage of your buying, leasing, or investment journey.
           </p>
@@ -154,7 +154,7 @@ function TeamTabsAndGrid() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`whitespace-nowrap rounded-full px-5 py-2.5 text-sm border transition ${isActive
+                className={`whitespace-nowrap rounded-full px-5 py-2.5 text-sm lg:text-md lg:text-md border transition ${isActive
                   ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
                   : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
                   }`}
@@ -165,13 +165,13 @@ function TeamTabsAndGrid() {
           })}
         </div>
 
-        <div className="mb-8 text-sm text-white-400">
+        {/* <div className="mb-8 text-sm lg:text-md lg:text-md text-white-400">
           Showing{" "}
           <span className="text-yellow-400 font-medium">
             {filteredMembers.length}
           </span>{" "}
           team member{filteredMembers.length !== 1 ? "s" : ""}
-        </div>
+        </div> */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredMembers.map((member) => (
@@ -204,7 +204,7 @@ function TeamTabsAndGrid() {
                   {member.name}
                 </h3>
 
-                <p className="text-white/55 mt-2 text-sm md:text-base">
+                <p className="text-white mt-2 text-sm lg:text-md lg:text-md md:text-base">
                   {member.role}
                 </p>
                 <div className="flex gap-3 mt-6">
@@ -221,7 +221,7 @@ function TeamTabsAndGrid() {
                   )}
                 </div>
                 <div className="mt-5">
-                  <p className="text-xs uppercase tracking-[0.18em] text-white/35 mb-3">
+                  <p className="text-xs uppercase tracking-[0.18em] text-white mb-3">
                     Languages
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -266,7 +266,7 @@ function TeamCTA() {
 
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
             <div className="max-w-2xl">
-              <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+              <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
                 Let’s Connect
               </p>
               <h3 className="text-3xl md:text-4xl font-semibold leading-tight">
@@ -282,7 +282,7 @@ function TeamCTA() {
             <div className="flex flex-wrap gap-4">
               <button className="bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black px-6 py-3 rounded-full font-medium hover:scale-[1.03] transition inline-flex items-center gap-2">
                 Book Consultation
-                <FaArrowRight className="text-sm" />
+                <FaArrowRight className="text-sm lg:text-md lg:text-md" />
               </button>
 
               <button className="border border-white/20 text-white px-6 py-3 rounded-full font-medium hover:border-yellow-400 hover:text-yellow-400 transition">
@@ -301,7 +301,7 @@ export default function TeamPage() {
     <main className="bg-black text-white">
       <TeamHero />
       <TeamTabsAndGrid />
-      <TeamCTA />
+      {/* <TeamCTA /> */}
     </main>
   );
 }

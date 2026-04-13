@@ -7,7 +7,7 @@ import subtractImage from "../../public/Subtract.png";
 import { FaCircleNotch } from "react-icons/fa";
 // import videoSrc from "../../public/video.mp4";
 
-export default function Hero() {
+export default function Hero({ asset }) {
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
@@ -37,14 +37,14 @@ export default function Hero() {
         // >
          
         // </div>
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black">
+        <div className="absolute inset-0 z-20 flex items-center justify-center ">
           <div className="flex flex-col items-center gap-4">
 
             {/* LOADER */}
             <FaCircleNotch className="animate-spin text-yellow-400 text-3xl" />
 
             {/* OPTIONAL TEXT */}
-            <p className="text-sm text-white-400 tracking-wide">
+            <p className="text-sm lg:text-xl lg:text-xl text-white-400 tracking-wide">
               Loading experience...
             </p>
           </div>
@@ -53,10 +53,10 @@ export default function Hero() {
 
       {/* VIDEO */}
       <video
-        className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 ${
+        className={`absolute  w-full h-full object-cover object-top transition-opacity duration-700 ${
           videoLoaded ? "opacity-100" : "opacity-0"
         }`}
-       src="/video.mp4"
+        src={"/videoabout.mp4"}
         autoPlay
         muted
         loop
@@ -64,12 +64,12 @@ export default function Hero() {
         onLoadedData={() => setVideoLoaded(true)}
       />
       {/* DARK GRADIENT OVERLAY */}
-      <div className="absolute inset-0" />
+      {/* <div className="absolute inset-0" /> */}
 
       {/* CONTENT */}
       <div className="hero-content absolute bottom-[-80px] sm:bottom-[-120px] w-full flex justify-center z-30">
         <div className="hero-box w-[90%] max-w-5xl bg-black/80 backdrop-blur-2xl rounded-3xl p-4 sm:p-8 border border-yellow-500/20 shadow-[0_0_60px_rgba(201,162,74,0.15)]">
-          <h1 className=" text-sm sm:text-2xl text-center mb-4 leading-snug">
+          <h1 className=" text-sm lg:text-xl lg:text-xl sm:text-2xl text-center mb-4 leading-snug">
             Find Curated Properties Across the Globe
           </h1>
 

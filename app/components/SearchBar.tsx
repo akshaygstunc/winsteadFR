@@ -1,16 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 
 export default function SearchBar() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const router = useRouter();
 
+  const [location, setLocation] = useState("");
+  const [type, setType] = useState("");
+  const [price, setPrice] = useState("");
+  
   const [values, setValues] = useState({
     type: "",
     bedrooms: "",
     location: "",
   });
+  const handleSearch = () => {
+    const params = new URLSearchParams();
 
+    if (values.location) params.append("location", values.location);
+    if (values.type) params.append("type", values.type);
+    if (values.price) params.append("price", values.price);
+    console.log(params.toString());
+    router.push(`/projects?${params.toString()}`);
+  };
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const fields = [
@@ -53,17 +67,7 @@ export default function SearchBar() {
   };
 
   // HANDLE SEARCH
-  const handleSearch = () => {
-    console.log("Search Values:", values);
 
-    // 👉 Replace with API call later
-    alert(
-      `Searching for:
-      Type: ${values.type}
-      Bedrooms: ${values.bedrooms}
-      Location: ${values.location}`,
-    );
-  };
 
   return (
     <div ref={dropdownRef} className="flex flex-col items-center gap-2 sm:gap-6 w-full">
@@ -83,7 +87,7 @@ export default function SearchBar() {
                   className="w-6 h-6 sm:w-10 sm:h-10 rounded-full border border-yellow-500/30 shadow-[0_0_15px_rgba(201,162,74,0.3)]"
                 />
 
-                <div className="text-[1.05rem] sm:text-md text-[#F5F5F5] font-semibold flex justify-between w-full">
+                <div className="text-[1.05rem] sm:text-md lg:text-md text-[#F5F5F5] font-semibold flex justify-between w-full">
                  <span> {values[item.key as keyof typeof values] || item.label}</span>
                   <div
                     className={`transition ${openIndex === i ? "rotate-180" : ""}`}
@@ -103,7 +107,7 @@ export default function SearchBar() {
                   <div
                     key={idx}
                     onClick={() => handleSelect(item.key, opt)}
-                    className="text-[1.05rem] px-4 py-3 hover:bg-yellow-500/10 cursor-pointer text-sm"
+                    className="text-[1.05rem] px-4 py-3 hover:bg-yellow-500/10 cursor-pointer text-sm lg:text-md lg:text-md"
                   >
                     {opt}
                   </div>
@@ -114,7 +118,7 @@ export default function SearchBar() {
         ))}
       <button
         onClick={handleSearch}
-        className="text-[1.05rem] bg-gradient-to-r from-yellow-300 to-yellow-600 text-sm sm:text-md px-2
+          className="text-[1.05rem] bg-gradient-to-r from-yellow-300 to-yellow-600 text-sm lg:text-md lg:text-md sm:text-md lg:text-md px-2
          sm:px-10 py-3 w-full sm:w-auto rounded-xl text-black font-semibold
           hover:scale-105 transition shadow-[0_0_20px_rgba(201,162,74,0.4)]"
       >
