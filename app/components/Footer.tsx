@@ -129,7 +129,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <Image src={"./Winsteadlogo.png"} alt="Winstead" width={180} height={180} className="mb-5" />
+            <Image src={"https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/Winsteadlogo.png"} alt="Winstead" width={180} height={180} className="mb-5" />
             {/* <p className="text-white leading-relaxed text-sm lg:text-xl lg:text-xl md:text-base max-w-sm">
               Winstead delivers access to refined living and high-potential real
               estate opportunities through a tailored, investor-first approach.

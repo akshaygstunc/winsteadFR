@@ -84,7 +84,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="nav-item flex items-center">
           <Image
-            src={"./Winsteadlogo.png"}
+            src={"https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/Winsteadlogo.png"}
             alt="Winstead Logo"
             width={120}
             height={50}
