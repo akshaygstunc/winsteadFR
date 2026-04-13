@@ -11,38 +11,53 @@ import { FcGoogle } from "react-icons/fc";
 import FollowUsIcons from "./SocialMedia";
 import { IoMdArrowDropdown } from "react-icons/io";
 
-const navLinks = [
-  { name: "About Us", href: "/about-us" },
-  // { name: "Projects", href: "/projects" },
-  {
-    name: "Projects",
-    dropdown: [
-      { name: "Off-Plan", href: "/projects" },
-      { name: "Ready to Move In", href: "/projects" },
-      { name: "Commercial", href: "/projects" },
-      // { name: "Plot", href: "/projects" },
-    ],
-  },
-  { name: "Our Services", href: "/our-services" },
-  { name: "Our Team", href: "/our-team" },
-  {
-    name: "Media",
-    dropdown: [
-      { name: "Blogs", href: "/blogs" },
-      { name: "Events", href: "/gallery" },
-      // { name: "Awards", href: "/awards" },
-      { name: "Contact Us", href: "/contact-us" },
-    ],
-  },
-  { name: "Developer", href: "/developer" },
-  // { name: "Media", href: "/news-media" },
-  // { name: "Contact Us", href: "/contact-us" },
-];
+// const navLinks = [
+//   { name: "About Us", href: "/about-us" },
+//   // { name: "Projects", href: "/projects" },
+//   {
+//     name: "Projects",
+//     dropdown: [
+//       { name: "Off-Plan", href: "/projects" },
+//       { name: "Ready to Move In", href: "/projects" },
+//       { name: "Commercial", href: "/projects" },
+//       // { name: "Plot", href: "/projects" },
+//     ],
+//   },
+//   { name: "Our Services", href: "/our-services" },
+//   { name: "Our Team", href: "/our-team" },
+//   {
+//     name: "Media",
+//     dropdown: [
+//       { name: "Blogs", href: "/blogs" },
+//       { name: "Events", href: "/gallery" },
+//       // { name: "Awards", href: "/awards" },
+//       { name: "Contact Us", href: "/contact-us" },
+//     ],
+//   },
+//   { name: "Developer", href: "/developer" },
+//   // { name: "Media", href: "/news-media" },
+//   // { name: "Contact Us", href: "/contact-us" },
+// ];
 
 export default function Navbar() {
+  const [menu, setMenu] = useState<any[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      const res = await fetch("/api/top-menu");
+      const data = await res.json();
+
+      setMenu(data);
+    };
+
+    fetchMenu();
+  }, []);
+
   useEffect(() => {
     gsap.from(".nav-item", {
       y: -50,
@@ -78,6 +93,12 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
   const timeoutRef = useRef<any>(null);
+
+
+  const parentMenu = menu.filter((item) => !item.data?.parentId);
+
+  const getChildren = (id: string) =>
+    menu.filter((item) => item.data?.parentId === id);
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black border-b border-white/10">
       <div className="flex items-center justify-between px-6 md:px-10 py-4">
@@ -94,16 +115,18 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link, index) => {
-            // ✅ WITH DROPDOWN
-            if (link.dropdown) {
+          {parentMenu.map((item) => {
+            const children = getChildren(item._id);
+
+            // ✅ WITH DROPDOWN (SAME STYLE)
+            if (children.length > 0) {
               return (
                 <div
-                  key={index}
+                  key={item._id}
                   className="relative nav-item"
                   onMouseEnter={() => {
                     clearTimeout(timeoutRef.current);
-                    setActiveDropdown(link.name); // 👈 track which dropdown
+                    setActiveDropdown(item._id);
                   }}
                   onMouseLeave={() => {
                     timeoutRef.current = setTimeout(() => {
@@ -111,23 +134,23 @@ export default function Navbar() {
                     }, 150);
                   }}
                 >
-                  <span className="cursor-pointer text-white text-sm lg:text-md lg:text-md flex items-center gap-1">
-                    {link.name} <IoMdArrowDropdown />
+                  <span className="cursor-pointer text-white text-sm lg:text-md flex items-center gap-1">
+                    {item.title} <IoMdArrowDropdown />
                   </span>
 
                   {/* DROPDOWN */}
-                  {activeDropdown === link.name && (
+                  {activeDropdown === item._id && (
                     <div
                       ref={dropdownRef}
                       className="absolute top-full left-0 mt-4 w-48 bg-[#111] border border-white/10 rounded-xl shadow-xl py-2 z-50"
                     >
-                      {link.dropdown.map((item, i) => (
+                      {children.map((child) => (
                         <Link
-                          key={i}
-                          href={item.href}
-                          className="dropdown-item block px-4 py-2 text-sm lg:text-md lg:text-md text-white hover:bg-yellow-500/10 hover:text-yellow-400 transition"
+                          key={child._id}
+                          href={child.subtitle || "#"}
+                          className="dropdown-item block px-4 py-2 text-sm lg:text-md text-white hover:bg-yellow-500/10 hover:text-yellow-400 transition"
                         >
-                          {item.name}
+                          {child.title}
                         </Link>
                       ))}
                     </div>
@@ -136,14 +159,14 @@ export default function Navbar() {
               );
             }
 
-            // ✅ NORMAL LINK
+            // ✅ NORMAL LINK (SAME STYLE)
             return (
               <Link
-                key={index}
-                href={link.href}
-                className="text-[1.01rem] nav-item relative text-white text-sm lg:text-md  font-normal group"
+                key={item._id}
+                href={item.subtitle || "#"}
+                className="text-[1.01rem] nav-item relative text-white text-sm lg:text-md font-normal group"
               >
-                {link.name}
+                {item.title}
                 <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
               </Link>
             );
@@ -187,9 +210,8 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden bg-black/95 backdrop-blur-lg transition-all duration-500 overflow-hidden ${
-          isOpen ? "max-h-[600px]" : "max-h-0"
-        }`}
+        className={`lg:hidden bg-black/95 backdrop-blur-lg transition-all duration-500 overflow-hidden ${isOpen ? "max-h-[600px]" : "max-h-0"
+          }`}
       >
         <div className="flex flex-col px-6 py-4 space-y-4">
           {/* NAV LINKS */}
@@ -202,39 +224,41 @@ export default function Navbar() {
               {link.name}
             </a>
           ))} */}
-          {navLinks.map((link, index) => {
-            if (link.dropdown) {
-              return (
-                <div key={index}>
-                  <p className="text-white text-sm lg:text-md lg:text-md font-semibold">
-                    {link.name}
-                  </p>
+        {parentMenu.map((item, index) => {
+  const children = getChildren(item._id);
 
-                  <div className="ml-3 mt-2 space-y-2">
-                    {link.dropdown.map((item, i) => (
-                      <Link
-                        key={i}
-                        href={item.href}
-                        className="block text-gray-300 text-sm lg:text-md lg:text-md hover:text-yellow-400"
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              );
-            }
+  if (children.length > 0) {
+    return (
+      <div key={index}>
+        <p className="text-white text-sm lg:text-md lg:text-md font-semibold">
+          {item.title}
+        </p>
 
-            return (
-              <Link
-                key={index}
-                href={link.href}
-                className="text-white text-sm lg:text-md lg:text-md border-b border-white/10 pb-2 hover:text-yellow-400 transition"
-              >
-                {link.name}
-              </Link>
-            );
-          })}
+        <div className="ml-3 mt-2 space-y-2">
+          {children.map((child, i) => (
+            <Link
+              key={i}
+              href={child.subtitle || "#"}
+              className="block text-gray-300 text-sm lg:text-md lg:text-md hover:text-yellow-400"
+            >
+              {child.title}
+            </Link>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      key={index}
+      href={item.subtitle || "#"}
+      className="text-white text-sm lg:text-md lg:text-md border-b border-white/10 pb-2 hover:text-yellow-400 transition"
+    >
+      {item.title}
+    </Link>
+  );
+})}
           {/* FOLLOW US (MOBILE DROPDOWN) */}
           <div className="mt-4">
             <FollowUsIcons />

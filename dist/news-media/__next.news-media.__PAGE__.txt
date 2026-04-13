@@ -1,5 +1,0 @@
-1:"$Sreact.fragment"
-2:I[97367,["/_next/static/chunks/0zbpa63q7vajy.js","/_next/static/chunks/0d3shmwh5_nmn.js","/_next/static/chunks/180st0ge3m6g8.js","/_next/static/chunks/01hbry877la_j.js","/_next/static/chunks/0g1yhtylkp5a6.js"],"OutletBoundary"]
-3:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","div",null,{"children":[["$","h1",null,{"children":"News & Media"}],["$","p",null,{"children":"Welcome to the News & Media page!"}]]}],null,["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"NTwfap2cyc7GlyBon5MvE"}
-4:null

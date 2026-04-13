@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../../public/logodetaile.png";
@@ -22,7 +22,8 @@ type ContactIntent =
 export default function Footer() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [contactIntent, setContactIntent] = useState<ContactIntent>("general");
-
+  const [footerLinks, setFooterLinks] = useState<any[]>([]);
+  const [exploreLinks, setExploreLinks] = useState<any[]>([]);
   const [contactForm, setContactForm] = useState({
     fullName: "",
     email: "",
@@ -83,6 +84,35 @@ export default function Footer() {
 
     closeContactModal();
   };
+
+
+
+  useEffect(() => {
+    const fetchFooter = async () => {
+      const res = await fetch("/api/footer-menu");
+      const data = await res.json();
+     console.log("Footer Menu Data:", data);
+      // only published (IMPORTANT)
+      const filtered = data.filter((item: any) => item.status === "published");
+
+      setFooterLinks(data);
+    };
+
+    fetchFooter();
+  }, []);
+useEffect(() => {
+  const fetchExplore = async () => {
+    const res = await fetch("/api/footer-menu-2");
+    const data = await res.json();
+
+    console.log("Explore Menu:", data);
+
+    setExploreLinks(data); // no filter अभी
+  };
+
+  fetchExplore();
+}, []);
+
   return (
     <footer className="relative bg-[#000] text-white overflow-hidden border-t border-white/10">
       {/* top glow */}
@@ -143,11 +173,11 @@ export default function Footer() {
                 },
                 {
                   icon: FaInstagram,
-                  link: "https://x.com/winsteadglobal",  
+                  link: "https://x.com/winsteadglobal",
                 },
                 {
                   icon: FaPinterest,
-                  link: "https://in.pinterest.com/winsteadglobal/",  
+                  link: "https://in.pinterest.com/winsteadglobal/",
                 },
                 {
                   icon: FaWhatsapp,
@@ -181,72 +211,37 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h3 className="text-white text-lg mb-5 font-bold">Quick Links</h3>
+
             <ul className="grid grid-cols-2 md:grid-cols-1 gap-y-3 gap-x-6 text-white">
-              <li>
-                <Link href="/about-us" className="hover:text-[#F1DC7F] transition">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/projects" className="hover:text-[#F1DC7F] transition">
-                  Projects
-                </Link>
-              </li>
-              <li>
-                <Link href="/our-services" className="hover:text-[#F1DC7F] transition">
-                  Services
-                </Link>
-              </li>
-              <li>
-                <Link href="/our-team" className="hover:text-[#F1DC7F] transition">
-                  Our Team
-                </Link>
-              </li>
-              <li>
-                <Link href="/news-media" className="hover:text-[#F1DC7F] transition">
-                  News
-                </Link>
-              </li>
-              <li>
-                <Link href="/career" className="hover:text-[#F1DC7F] transition">
-                  Career
-                </Link>
-              </li>
+              {footerLinks.map((item, index) => (
+                <li key={index}>
+                  <Link
+                    href={item.subtitle || "#"}
+                    className="hover:text-[#F1DC7F] transition"
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
-
           {/* Explore */}
-          <div>
-            <h3 className="text-white text-lg mb-5 font-bold">Explore</h3>
-            <ul className="grid grid-cols-2 md:grid-cols-1 gap-y-3 gap-x-6 text-white">
-              <li>
-                <a href="#" className="hover:text-[#F1DC7F] transition">
-                  Luxury Apartments
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-[#F1DC7F] transition">
-                  Villas & Townhouses
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-[#F1DC7F] transition">
-                  Waterfront Homes
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-[#F1DC7F] transition">
-                  Investment Opportunities
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-[#F1DC7F] transition">
-                  Prime Communities
-                </a>
-              </li>
-            </ul>
-          </div>
+        <div>
+  <h3 className="text-white text-lg mb-5 font-bold">Explore</h3>
 
+  <ul className="grid grid-cols-2 md:grid-cols-1 gap-y-3 gap-x-6 text-white">
+    {exploreLinks.map((item, index) => (
+      <li key={index}>
+        <Link
+          href={item.subtitle || "#"}
+          className="hover:text-[#F1DC7F] transition"
+        >
+          {item.title}
+        </Link>
+      </li>
+    ))}
+  </ul>
+</div>
           {/* Contact */}
           <div>
             <h3 className="text-white text-lg mb-5 font-bold">Contact</h3>

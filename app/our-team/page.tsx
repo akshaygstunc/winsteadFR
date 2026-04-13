@@ -2,7 +2,7 @@
 
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaArrowRight, FaFacebookF, FaInstagram, FaLinkedinIn, FaTiktok, FaWhatsapp, FaYoutube } from "react-icons/fa";
 import heroImg from "../../public/blog3.png";
 import memberImg from "../../public/female.png";
@@ -117,17 +117,58 @@ const teamMembers: TeamMember[] = [
 
 function TeamTabsAndGrid() {
   const [activeTab, setActiveTab] = useState<TeamCategory>("All");
+  const [members, setMembers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      const res = await fetch("/api/relationship-manager");
+      const data = await res.json();
+
+      setMembers(data);
+      setLoading(false);
+    };
+
+    fetchMembers();
+  }, []);
 
   const filteredMembers = useMemo(() => {
-    if (activeTab === "All") return teamMembers;
-    return teamMembers.filter((member) => member.category === activeTab);
-  }, [activeTab]);
+    if (activeTab === "All") return members;
 
+    return members.filter((member: any) => {
+      // optional: category mapping later
+      return true;
+    });
+  }, [activeTab, members]);
+
+function SkeletonCard() {
+  return (
+    <div className="animate-pulse rounded-[28px] overflow-hidden border border-white/10 bg-white/[0.03]">
+      <div className="h-[360px] bg-white/10" />
+      <div className="p-5 space-y-3">
+        <div className="h-6 w-2/3 bg-white/10 rounded" />
+        <div className="h-4 w-1/2 bg-white/10 rounded" />
+
+        <div className="flex gap-2 mt-4">
+          <div className="w-8 h-8 rounded-full bg-white/10" />
+          <div className="w-8 h-8 rounded-full bg-white/10" />
+          <div className="w-8 h-8 rounded-full bg-white/10" />
+        </div>
+
+        <div className="mt-4 flex gap-2 flex-wrap">
+          <div className="h-6 w-16 bg-white/10 rounded-full" />
+          <div className="h-6 w-20 bg-white/10 rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
   return (
     <section className="bg-black text-white px-6 md:px-12 ">
-        <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6 py-8">
-                       <AutoBreadcrumbs />
-                     </section>
+      <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6 py-8">
+        <AutoBreadcrumbs />
+      </section>
       <div className="max-w-[85rem] mx-auto">
         <div className="mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="max-w-2xl">
@@ -172,85 +213,110 @@ function TeamTabsAndGrid() {
           </span>{" "}
           team member{filteredMembers.length !== 1 ? "s" : ""}
         </div> */}
+       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+  {loading
+    ? Array.from({ length: 6 }).map((_, i) => (
+        <div
+          key={i}
+          className="animate-pulse rounded-[28px] overflow-hidden border border-white/10 bg-white/[0.03]"
+        >
+          <div className="h-[360px] bg-white/10" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filteredMembers.map((member) => (
-            <article
-              key={member.id}
-              className="group rounded-[28px] overflow-hidden border border-white/10 bg-white/[0.03] hover:border-yellow-400/30 hover:shadow-[0_0_40px_rgba(241,220,127,0.08)] transition duration-300"
-            >
-              <div className="relative h-[360px] overflow-hidden">
-                <Image
-                  src={member.image}
-                  alt={member.name}
-                  fill
-                  className="object-contain transition duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
+          <div className="p-5 md:p-6 space-y-4">
+            <div className="h-6 w-2/3 bg-white/10 rounded" />
+            <div className="h-4 w-1/2 bg-white/10 rounded" />
 
-                <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full border border-white/10 bg-black/60 backdrop-blur-sm text-[11px] uppercase tracking-[0.18em] text-yellow-400">
-                  {member.category}
-                </div>
+            <div className="flex gap-3 mt-4">
+              <div className="w-10 h-10 rounded-full bg-white/10" />
+              <div className="w-10 h-10 rounded-full bg-white/10" />
+              <div className="w-10 h-10 rounded-full bg-white/10" />
+            </div>
 
-                <div className="absolute bottom-4 left-4 right-4">
-                  <p className="inline-block px-3 py-1.5 rounded-full bg-black/65 border border-white/10 text-xs text-white backdrop-blur-sm">
-                    {member.experience}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-5 md:p-6">
-                <h3 className="text-2xl font-semibold leading-tight">
-                  {member.name}
-                </h3>
-
-                <p className="text-white mt-2 text-sm lg:text-md lg:text-md md:text-base">
-                  {member.role}
-                </p>
-                <div className="flex gap-3 mt-6">
-                  {[FaFacebookF, FaInstagram, FaTiktok, FaLinkedinIn, FaWhatsapp, FaYoutube].map(
-                    (Icon, i) => (
-                      <a
-                        key={i}
-                        href="#"
-                        className="w-10 h-10 rounded-full border border-yellow-500/60 flex items-center justify-center text-yellow-400 text-xl hover:bg-yellow-500 hover:text-black transition duration-300"
-                      >
-                        <Icon />
-                      </a>
-                    )
-                  )}
-                </div>
-                <div className="mt-5">
-                  <p className="text-xs uppercase tracking-[0.18em] text-white mb-3">
-                    Languages
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {member.languages.map((language) => (
-                      <span
-                        key={language}
-                        className="px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-xs text-white"
-                      >
-                        {language}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mt-5">
-                  {member.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-xs text-white"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-              </div>
-            </article>
-          ))}
+            <div className="flex gap-2 flex-wrap mt-4">
+              <div className="h-6 w-16 bg-white/10 rounded-full" />
+              <div className="h-6 w-20 bg-white/10 rounded-full" />
+            </div>
+          </div>
         </div>
+      ))
+    : filteredMembers.map((member: any) => (
+        <article
+          key={member._id}
+          className="group rounded-[28px] overflow-hidden border border-white/10 bg-white/[0.03] hover:border-yellow-400/30 hover:shadow-[0_0_40px_rgba(241,220,127,0.08)] transition duration-300"
+        >
+          <div className="relative h-[360px] overflow-hidden">
+            <Image
+              src={member.image || "/female.png"}
+              alt={member.title}
+              fill
+              className="object-contain transition duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
+
+            <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full border border-white/10 bg-black/60 backdrop-blur-sm text-[11px] uppercase tracking-[0.18em] text-yellow-400">
+              Advisor
+            </div>
+
+            <div className="absolute bottom-4 left-4 right-4">
+              <p className="inline-block px-3 py-1.5 rounded-full bg-black/65 border border-white/10 text-xs text-white backdrop-blur-sm">
+                5+ Years Experience
+              </p>
+            </div>
+          </div>
+
+          <div className="p-5 md:p-6">
+            <h3 className="text-2xl font-semibold leading-tight">
+              {member.title}
+            </h3>
+
+            <p className="text-white mt-2 text-sm lg:text-md md:text-base">
+              Relationship Manager
+            </p>
+
+            <div className="flex gap-3 mt-6">
+              {[FaFacebookF, FaInstagram, FaTiktok, FaLinkedinIn, FaWhatsapp, FaYoutube].map(
+                (Icon, i) => (
+                  <a
+                    key={i}
+                    href="#"
+                    className="w-10 h-10 rounded-full border border-yellow-500/60 flex items-center justify-center text-yellow-400 text-xl hover:bg-yellow-500 hover:text-black transition duration-300"
+                  >
+                    <Icon />
+                  </a>
+                )
+              )}
+            </div>
+
+            <div className="mt-5">
+              <p className="text-xs uppercase tracking-[0.18em] text-white mb-3">
+                Languages
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {(member.data?.languages || []).map((language: string) => (
+                  <span
+                    key={language}
+                    className="px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-xs text-white"
+                  >
+                    {language}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 mt-5">
+              {(member.data?.specialization || []).map((tag: string) => (
+                <span
+                  key={tag}
+                  className="px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-xs text-white"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>  
+          </div>
+        </article>
+      ))}
+</div>
       </div>
     </section>
   );
