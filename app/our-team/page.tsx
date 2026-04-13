@@ -312,7 +312,7 @@ function SkeletonCard() {
                   {tag}
                 </span>
               ))}
-            </div>
+            </div>  
           </div>
         </article>
       ))}
