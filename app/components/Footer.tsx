@@ -9,7 +9,8 @@ import {
   FaLinkedinIn,
   FaWhatsapp,
   FaYoutube,
-} from "react-icons/fa";
+  FaTiktok,
+} from "react-icons/fa6";
 import ContactModal from "./ContactModal";
 import { FaPinterest } from "react-icons/fa6";
 type ContactIntent =
@@ -155,6 +156,10 @@ export default function Footer() {
                 {
                   icon: FaYoutube,
                   link: "https://www.youtube.com/@WinsteadGlobal",
+                },
+                {
+                  icon: FaTiktok,
+                  link: "https://www.tiktok.com/@winsteadglobal",
                 },
               ].map((item, i) => {
                 const Icon = item.icon;
