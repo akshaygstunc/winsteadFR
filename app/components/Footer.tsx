@@ -273,20 +273,13 @@ useEffect(() => {
         </div>
 
         {/* giant wordmark */}
-        <div className="relative">
-          <div
-            className="absolute inset-0 blur-3xl opacity-20 
-    bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700]"
-          />
+     <div className="relative">
+  <div className="absolute inset-0 blur-3xl opacity-20 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700]" />
 
-          <h6
-            className="relative text-[15vw] leading-none text-center font-bold whitespace-nowrap 
-    bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] 
-    bg-clip-text text-transparent opacity-80 mt-20"
-          >
-            WINSTEAD
-          </h6>
-        </div>
+  <h6 className="relative text-[15vw] leading-none text-center font-bold whitespace-nowrap bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent opacity-80 mt-20">
+    WINSTEAD
+  </h6>
+</div>
       </div>
 
       {/* bottom strip */}

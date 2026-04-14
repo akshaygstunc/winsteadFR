@@ -98,4 +98,20 @@ export default class WebsiteContentService {
       throw error;
     }
   }
+
+
+  static async getHomePageContent1() {
+  try {
+    const response = await api.get(`/content/home-page/singleton`);
+    return response?.data;   // ✅ direct object return
+  } catch (error) {
+    console.error("Error fetching homepage content:", error);
+    throw error;
+  }
+  }
+  
+  static async getAboutPage() {
+  const response = await api.get("/content/about-page/singleton");
+  return response?.data;
+}
 }

@@ -40,8 +40,7 @@ const reels = [
   },
 ];
 
-export default function Reel() {
-  const trackRef = useRef<HTMLDivElement | null>(null);
+export default function Reel({ data }: any) {  const trackRef = useRef<HTMLDivElement | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [hovered, setHovered] = useState<number | null>(null);
 
@@ -138,20 +137,21 @@ export default function Reel() {
 
             <div>
               <p className="font-semibold text-white text-sm lg:text-xl">
-                Winstead_properties
+  {data?.socialHandle || "Winstead_properties"}
               </p>
-              <p className="text-xs text-white">Latest On Our Social</p>
+              <p className="text-xs text-white">  {data?.socialSectionTitle || "Latest On Our Social"}
+</p>
             </div>
           </div>
 
-          <a
-            href="https://www.instagram.com/winstead_properties/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-5 py-1.5 text-sm lg:text-base rounded-full font-medium text-black bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] hover:scale-105 transition"
-          >
-            Follow
-          </a>
+         <a
+  href={data?.socialButtonUrl || "https://www.instagram.com/winstead_properties/"}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="px-5 py-1.5 text-sm lg:text-base rounded-full font-medium text-black bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] hover:scale-105 transition"
+>
+  {data?.socialButtonText || "Follow"}
+</a>
         </div>
 
         <div className="overflow-hidden">

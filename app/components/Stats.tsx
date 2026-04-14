@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-export default function Stats() {
+export default function Stats({ data }: any) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -56,34 +56,33 @@ export default function Stats() {
       });
 
       // circle animation
-     gsap.fromTo(
-  ".help-card",
-  { scale: 0.8, opacity: 0 },
-  {
-    scale: 1,
-    opacity: 1,
-    duration: 1,
-    stagger: 0.2,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: sectionRef.current,
-      start: "top 85%",
-      once: true, // 👈 IMPORTANT
-    },
-  }
-);
+      gsap.fromTo(
+        ".help-card",
+        { scale: 0.8, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 85%",
+            once: true, // 👈 IMPORTANT
+          },
+        }
+      );
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
-  const stats = [
-    { value: "50K+", label: "Satisfied Customers" },
-    { value: "2.5B+", label: "Property Listed" },
-    { value: "300+", label: "Premium Developers" },
-    { value: "60+", label: "Locations" },
-  ];
-
+ const stats = [
+  { value: data?.satisfiedCustomersCount || 0, label: "Satisfied Customers" },
+  { value: data?.propertyListedCount || 0, label: "Property Listed" },
+  { value: data?.premiumDevelopersCount || 0, label: "Premium Developers" },
+  { value: data?.locationsCount || 0, label: "Locations" },
+];
   const help = [
     {
       title: "Discover",
@@ -104,7 +103,7 @@ export default function Stats() {
       ref={sectionRef}
       className="  bg-black text-white py-0 px-6 md:px-16"
     >
-        <div className="mb-16 h-[1px] w-full bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] bg-[length:200%_100%] animate-[shimmer_3s_linear_infinite]"></div>
+      <div className="mb-16 h-[1px] w-full bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] bg-[length:200%_100%] animate-[shimmer_3s_linear_infinite]"></div>
 
       <div className="max-w-[85rem] mx-auto">
         {/* TOP STATS */}
@@ -118,7 +117,8 @@ export default function Stats() {
                 <span
                   className="counter bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(241,220,127,0.6)]"
                   data-value={parseFloat(stat.value)}
-                  data-suffix={stat.value.replace(/[0-9.]/g, "")}
+                  data-value={Number(stat.value)}
+data-suffix="+"
                 >
                   0
                 </span>

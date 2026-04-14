@@ -53,7 +53,7 @@ function FeaturedProjects({
   const [vendors, setVendors] = useState<string[]>([]);
   const [categories, setCategories] = useState<CategoryItem[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
-  const [selectedVendorname, setSelectedVendorname] = useState(""); 
+  const [selectedVendorname, setSelectedVendorname] = useState("");
   useEffect(() => {
     async function fetchCategories() {
       try {
@@ -165,7 +165,7 @@ function FeaturedProjects({
   );
 }
 
-export default function Projects({ projects = [] }: { projects?: ProjectItem[] }) {
+export default function Projects({ projects = [], homePage }: any) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -254,29 +254,35 @@ export default function Projects({ projects = [] }: { projects?: ProjectItem[] }
           ) : (
             <>
               <div>
-                <Image
-                  src={image2}
-                  alt="About"
-                    className="w-full h-[150px] md:h-[300px] object-cover rounded-xl"
-                />
+               <Image
+    src={
+      homePage?.data?.aboutWinsteadImage ||
+      image2
+    }
+    alt="About"
+    width={600}
+    height={400}
+    className="w-full h-[150px] md:h-[300px] object-cover rounded-xl"
+  />
+
               </div>
 
-                <div className="max-w-7xl">
-                  <h3 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
-                    About Winstead
-                  </h3>
+              <div className="max-w-7xl">
+                <h3 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
+    {homePage?.data?.aboutWinsteadTitle || "About Winstead"}
+                </h3>
 
-                  <p className="text-lg text-gray-300 leading-relaxed">
-                    Our extensive portfolio features an array of premium villas,
-                    apartments, and townhouses designed to offer unmatched comfort
-                    and elegance.
-                  </p>
+                <p className="text-lg text-gray-300 leading-relaxed">
+                     {homePage?.data?.aboutWinsteadButtonText ||
+      "Our extensive portfolio features an array of premium villas, apartments, and townhouses designed to offer unmatched comfort and elegance."}
 
-                  <p className="text-gray-300 mt-4 leading-relaxed">
-                    Our team of experienced professionals is dedicated to helping
-                    you find the perfect home that exceeds your expectations.
-                  </p>
-                </div>
+                </p>
+
+                {/* <p className="text-gray-300 mt-4 leading-relaxed">
+                  Our team of experienced professionals is dedicated to helping
+                  you find the perfect home that exceeds your expectations.
+                </p> */}
+              </div>
             </>
           )}
         </div>
@@ -318,10 +324,10 @@ export default function Projects({ projects = [] }: { projects?: ProjectItem[] }
               />
             </div>
           ))
-          ) : (
-              <div className="col-span-1 md:col-span-3 rounded-2xl border border-white/10 bg-white/[0.03] p-10 text-center text-white">
-              No projects found for this filter.
-            </div>
+        ) : (
+          <div className="col-span-1 md:col-span-3 rounded-2xl border border-white/10 bg-white/[0.03] p-10 text-center text-white">
+            No projects found for this filter.
+          </div>
         )}
       </div>
     </section>
@@ -339,7 +345,7 @@ function Card({
   title?: string;
   location?: string;
   price?: string | number;
-    slug: string
+  slug: string
 }) {
   return (
     <div className="relative w-full h-full rounded-2xl overflow-hidden group cursor-pointer transition-all duration-500 hover:-translate-y-2">

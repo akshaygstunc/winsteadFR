@@ -21,11 +21,12 @@ export default function Home() {
   useEffect(() => {
     async function fetchHomePage() {
       try {
-        const response = await WebsiteContentService.getHomePageContent({ slug: "home" });
+        const response = await WebsiteContentService.getHomePageContent1(); // ✅ correct
+
         const projects = await WebsiteContentService.getProperties();
         const testimonials = await WebsiteContentService.getTestimonials()
         settestimonials(testimonials)
-        setHomePage(response[0]); // Assuming the API returns an array and we want the first item
+        setHomePage(response); // ✅ direct object
         setProjects(projects)
       } catch (error) {
         console.error("Error fetching homepage content:", error);
@@ -40,15 +41,15 @@ export default function Home() {
       title: "Dubai Real Estate Market Hits New Highs",
       desc: "Luxury properties continue to dominate with increasing global demand.",
       date: "March 2026",
-      img: img1, 
-           category: "Market Update",
+      img: img1,
+      category: "Market Update",
     },
     {
       id: 2,
       title: "Top Investment Hotspots in UAE",
       desc: "Explore emerging areas offering strong ROI and growth potential.",
       date: "Feb 2026",
-      img:img2,
+      img: img2,
       category: "Investment",
     },
     {
@@ -64,47 +65,45 @@ export default function Home() {
       title: "Luxury Living Redefined",
       desc: "A new wave of ultra-premium developments reshaping skylines.",
       date: "Dec 2025",
-      img: img4, 
+      img: img4,
       category: "Luxury Trends",
     },
   ];
   useEffect(() => {
-     const requestBrowserLocation = () => {
-            if (typeof window === "undefined" || !navigator.geolocation) {
-                // setLocationStatus("unavailable");
-                return;
-            }
-    
-            // setLocationStatus("fetching");
-    
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                   localStorage.setItem("long",position.longitude)
-                   localStroage.setItem("lat", postion.latitude)
-                },
-                () => {
-                   
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0,
-                },
-            );
-        };
-        requestBrowserLocation()
+    const requestBrowserLocation = () => {
+      if (typeof window === "undefined" || !navigator.geolocation) {
+        // setLocationStatus("unavailable");
+        return;
+      }
+
+      // setLocationStatus("fetching");
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          localStorage.setItem("long", position.longitude)
+          localStroage.setItem("lat", postion.latitude)
+        },
+        () => {
+
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        },
+      );
+    };
+    requestBrowserLocation()
   })
   return (
     <div className="bg-black text-white">
       {/* <Navbar /> */}
-      <Hero asset={homePage?.data?.herovideo} />
-      <Projects projects={projects} />
+      <Hero asset={homePage?.data} />      <Projects projects={projects} homePage={homePage} />
       <Logos />
       <UltraLuxury />
-      <Testimonials testimonialsdata={testimonialsdata}/>
-      <Reel/>
-      <Stats />
-      <LatestArticles news={news} />
+      <Testimonials testimonialsdata={testimonialsdata} />
+      <Reel data={homePage?.data} />
+      <Stats data={homePage?.data} />      <LatestArticles news={news} />
     </div>
   );
 }
