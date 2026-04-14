@@ -209,7 +209,7 @@ console.log("PROJECT:", projects);
 
     useEffect(() => {
         const fetchProjects = async () => {
-            const res = await fetch("/api/communities");
+            const res = await fetch("/backend/communities");
             const data = await res.json();
 
             setProjects(data); // 👈 DIRECT set (no filter)
@@ -221,7 +221,7 @@ console.log("PROJECT:", projects);
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await fetch("/api/developer-community");
+            const res = await fetch("/backend/developer-community");
             const data = await res.json();
 
             const found = data.find(

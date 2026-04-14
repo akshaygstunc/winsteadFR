@@ -89,7 +89,7 @@ export default function Footer() {
 
   useEffect(() => {
     const fetchFooter = async () => {
-      const res = await fetch("/api/footer-menu");
+      const res = await fetch("/backend/footer-menu");
       const data = await res.json();
      console.log("Footer Menu Data:", data);
       // only published (IMPORTANT)
@@ -102,7 +102,7 @@ export default function Footer() {
   }, []);
 useEffect(() => {
   const fetchExplore = async () => {
-    const res = await fetch("/api/footer-menu-2");
+    const res = await fetch("/backend/footer-menu-2");
     const data = await res.json();
 
     console.log("Explore Menu:", data);
