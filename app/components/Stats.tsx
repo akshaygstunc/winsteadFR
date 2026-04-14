@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function Stats({ data }: any) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
-
+  //test
 useEffect(() => {
   if (!data) return;
 
