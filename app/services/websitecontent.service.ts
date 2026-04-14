@@ -144,4 +144,13 @@ export default class WebsiteContentService {
       throw error;
     }
   }
+  static async getDeveloperPage() {
+    try {
+      const response = await api.get("/content/developer-page/singleton");
+      return response?.data;
+    } catch (error) {
+      console.error("Error fetching developer page content:", error);
+      throw error;
+    }
+  }
 }
