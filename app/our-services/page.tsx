@@ -1,3 +1,4 @@
+"use client";
 import ServicesHero from "../components/services/ServiceHero";
 import ServicesOverview from "../components/services/ServiceOverview";
 import Testimonials from "../components/Testimonials";
@@ -7,6 +8,8 @@ import ServicesCTA from "../components/services/ServicesCTA";
 
 import DetailedServices from "../components/services/DetailService";
 import AutoBreadcrumbs from "../components/BreadCrumbs";
+import { use, useEffect, useState } from "react";
+import WebsiteContentService from "../services/websitecontent.service";
 
 const services = [
   {
@@ -71,16 +74,34 @@ const trustPoints = [
 ];
 
 export default function OurServices() {
+  const [servicesData, setServicesData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const data = await WebsiteContentService.servicePage();
+        console.log("Service Page Content:", data);
+        setServicesData(data);
+        setLoading(false);
+      }
+      catch (error) {
+        console.error("Error fetching service page content:", error);
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
   return (
     <div className="bg-black text-white">
-      <ServicesHero />
+      <ServicesHero servicesData={servicesData} loading={loading} />
        <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6">
                 <AutoBreadcrumbs />
               </section>
-      <ServicesOverview services={services} />
-      <DetailedServices services={services} />
-      <HowItWork processSteps={processSteps} />
-      <WhyChooseWinstead trustPoints={trustPoints} />
+      <ServicesOverview servicesData={servicesData} loading={loading} />
+      <DetailedServices servicesData={servicesData} loading={loading} />
+      <HowItWork servicesData={servicesData} loading={loading} />
+      <WhyChooseWinstead servicesData={servicesData} loading={loading} />
       {/* <ServicesCTA /> */}
       <Testimonials />
     </div>

@@ -13,6 +13,7 @@ import memberImg5 from "../../public/male2.png";
 import memberImg6 from "../../public/female2.png";
 import TeamHero from "../components/teams/TeamHero";
 import AutoBreadcrumbs from "../components/BreadCrumbs";
+import WebsiteContentService from "../services/websitecontent.service";
 
 type TeamCategory =
   | "All"
@@ -115,12 +116,12 @@ const teamMembers: TeamMember[] = [
 
 
 
-function TeamTabsAndGrid() {
+function TeamTabsAndGrid({ teamData }: { teamData: any }) {
   const [activeTab, setActiveTab] = useState<TeamCategory>("All");
   const [members, setMembers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-
+  // const [teamData, setTeamData] = useState<any>(null);
   useEffect(() => {
     const fetchMembers = async () => {
       const res = await fetch("/api/relationship-manager");
@@ -170,20 +171,27 @@ function SkeletonCard() {
         <AutoBreadcrumbs />
       </section>
       <div className="max-w-[85rem] mx-auto">
+        
         <div className="mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="max-w-2xl">
-            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
-              Explore Our Team
+            <p className="text-sm lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
+              {teamData?.data?.bannerEyebrow || "Explore Our Team"}
             </p>
+
             <h2 className="text-3xl md:text-5xl font-semibold leading-tight">
-              A boutique team with a
-              <span className="text-yellow-400"> global perspective</span>
+              {teamData?.data?.teamIntroTitle
+                ?.split("global perspective")[0] || "A boutique team with a "}
+              <span className="text-yellow-400">
+                {teamData?.data?.teamIntroTitle?.includes("global perspective")
+                  ? "global perspective"
+                  : "global perspective"}
+              </span>
             </h2>
           </div>
 
-          <p className="text-white-400 text-sm lg:text-md lg:text-md md:text-base max-w-xl leading-relaxed">
-            Browse our specialists by function and discover the expertise that
-            supports every stage of your buying, leasing, or investment journey.
+          <p className="text-white-400 text-sm lg:text-md md:text-base max-w-xl leading-relaxed">
+            {teamData?.data?.teamIntroDescription ||
+              "Browse our specialists by function and discover the expertise that supports every stage of your buying, leasing, or investment journey."}
           </p>
         </div>
 
@@ -363,10 +371,28 @@ function TeamCTA() {
 }
 
 export default function TeamPage() {
+  const [teamData, setTeamData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    async function fetchTeamData() {
+      try {
+        const data = await WebsiteContentService.TeamPage();
+        console.log("Team Page Content:", data);
+        
+        setTeamData(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching team page content:", error);
+        setLoading(false);
+      }
+    }
+
+    fetchTeamData();
+  }, []);
   return (
     <main className="bg-black text-white">
-      <TeamHero />
-      <TeamTabsAndGrid />
+      <TeamHero teamData={teamData} loading={loading} />
+      <TeamTabsAndGrid teamData={teamData} />
       {/* <TeamCTA /> */}
     </main>
   );

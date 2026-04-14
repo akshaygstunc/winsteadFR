@@ -20,6 +20,7 @@ import memberImg6 from "../../public/female2.png";
 import TeamHero from "../components/teams/TeamHero";
 import AutoBreadcrumbs from "../components/BreadCrumbs";
 import Link from "next/link";
+import WebsiteContentService from "../services/websitecontent.service";
 type DeveloperCategory =
     | "All"
     | "Luxury"
@@ -291,9 +292,28 @@ function DeveloperCTA() {
 }
 
 export default function DeveloperPage() {
+    const [developersData, setDevelopersData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await WebsiteContentService.getDeveloperPage();
+                console.log(res)
+                setDevelopersData(res);
+                setLoading(false);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
     return (
         <main className="bg-black text-white">
-            <TeamHero />
+            <TeamHero teamData={developersData} />
             <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
                 <AutoBreadcrumbs />
             </section>

@@ -1,94 +1,72 @@
 import Image from "next/image";
-import banner from "../../../public/hero1.jpg";
-export default function ContactHero() {
+
+type ContactHeroProps = {
+    contactData?: any;
+    loading?: boolean;
+};
+
+export default function ContactHero({
+    contactData,
+    loading = false,
+}: ContactHeroProps) {
+    const bannerTitle = contactData?.data?.bannerTitle || "Contact Us";
+    const bannerSubtitle =
+        contactData?.data?.bannerSubtitle || "Let’s start your next\nconversation.";
+    const bannerImage =
+        contactData?.data?.bannerImage ||
+        "https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/projects/gallery/1776154954306-hero1.jpg";
+
+    const subtitleLines = bannerSubtitle.split("\n");
+
     return (
-        // <section className="relative overflow-hidden border-b border-white/10">
-        //     <div className="absolute inset-0">
-        //         <Image
-        //             src={banner}
-        //             alt="Contact Banner"
-        //             fill
-        //             className="object-cover"
-        //             priority
-        //         />
-        //         <div className="absolute inset-0 bg-black/70" />
-        //         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/30" />
-        //     </div>
-
-        //     <div className="relative max-w-7xl mx-auto px-6 md:px-12 py-24 md:py-28">
-        //         <div className="max-w-4xl">
-        //             <p className="text-sm lg:text-xl lg:text-xl uppercase tracking-[0.28em] text-yellow-400 mb-4">
-        //                 Contact Us
-        //             </p>
-
-        //             <h1 className="text-4xl md:text-6xl xl:text-7xl font-semibold leading-[1.05] max-w-5xl">
-        //                 Let’s start your next
-        //                 <span className="text-yellow-400"> real estate conversation.</span>
-        //             </h1>
-
-        //             <p className="text-white-300 text-base md:text-lg mt-6 max-w-2xl leading-relaxed">
-        //                 Whether you are exploring premium residences, evaluating investment
-        //                 opportunities, or registering interest in a featured property, our
-        //                 team is here to guide you with clarity and discretion.
-        //             </p>
-
-        //             <div className="flex flex-wrap gap-3 mt-8">
-        //                 {["Private Consultation", "Investment Inquiry", "Luxury Properties"].map((item) => (
-        //                     <span
-        //                         key={item}
-        //                         className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm lg:text-xl lg:text-xl text-white-200 backdrop-blur-sm"
-        //                     >
-        //                         {item}
-        //                     </span>
-        //                 ))}
-        //             </div>
-        //         </div>
-        //     </div>
-        // </section>
         <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
-
-            {/* IMAGE */}
             <div className="absolute inset-0">
-                <Image
-                    src={banner}
-                    alt="News Banner"
-                    fill
-                    priority
-                    className="object-cover object-center"
-                />
+                {loading ? (
+                    <div className="h-full w-full animate-pulse bg-white/10" />
+                ) : (
+                        <Image
+                            src={bannerImage}
+                            alt={bannerTitle}
+                            fill
+                            priority
+                            className="object-cover object-center"
+                        />
+                )}
             </div>
 
-            {/* OVERLAY (only for readability, not full dark) */}
-            {/* <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" /> */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
 
-            {/* CONTENT (BOTTOM LEFT ONLY) */}
-            <div className="relative z-10 h-full flex items-end justify-center">
-                <div className="w-full max-w-7xl  px-6 md:px-12 pb-14 md:pb-20">
+            <div className="relative z-10 flex h-full items-end justify-center">
+                <div className="w-full max-w-7xl px-6 pb-14 md:px-12 md:pb-20">
+                    <div className="max-w-xl text-left">
+                        {loading ? (
+                            <>
+                                <div className="mb-3 h-3 w-24 rounded bg-white/10 animate-pulse" />
+                                <div className="h-8 w-72 rounded bg-white/10 animate-pulse md:h-10 xl:h-14" />
+                                <div className="mt-3 h-8 w-56 rounded bg-white/10 animate-pulse md:h-10 xl:h-14" />
+                            </>
+                        ) : (
+                            <>
+                                <p className="mb-3 text-[11px] uppercase tracking-[0.35em] text-[#F1DC7F]">
+                                        {bannerTitle}
+                                    </p>
 
-                    <div className="max-w-xl text-left ">
-
-                        <p className="mb-3 text-[11px] uppercase tracking-[0.35em] text-[#F1DC7F]">
-                            Contact Us
-                        </p>
-
-                        <h1 className="text-xl md:text-2xl xl:text-5xl font-semibold leading-[1.05] max-w-[520px]">
-                            Let’s start your next
-                            <span className="block bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
-                                conversation.
-                            </span>
-                        </h1>
-
-
-
+                                    <h1 className="text-xl md:text-2xl xl:text-5xl font-semibold leading-[1.05] max-w-[520px]">
+                                        {subtitleLines[0]}
+                                        {subtitleLines[1] && (
+                                            <span className="block bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
+                                                {subtitleLines[1]}
+                                            </span>
+                                        )}
+                                    </h1>
+                            </>
+                        )}
                     </div>
-
                 </div>
             </div>
 
-            {/* BOTTOM GOLD LINE */}
             <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] opacity-80" />
-
         </section>
     );
 }

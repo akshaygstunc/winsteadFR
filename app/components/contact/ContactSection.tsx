@@ -9,17 +9,13 @@ import {
 } from "react-icons/fa";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import { toast } from "react-toastify";
-import InfoCard from "./InfoCard";
 import WebsiteContentService from "@/app/services/websitecontent.service";
 import { useRouter } from "next/navigation";
-type ContactSectionProps = {
-    contactPoints: string[];
-};
 
-type FormData = {
-    fullName: string;
-    phone: string;
-    email: string;
+type ContactSectionProps = {
+    contactPoints?: string[];
+    contactInfo?: any;
+    loading?: boolean;
 };
 
 type FormErrors = {
@@ -28,14 +24,19 @@ type FormErrors = {
     email?: string;
 };
 
-export default function ContactSection({ contactPoints, contactInfo }: ContactSectionProps) {
-    const route = useRouter()
+export default function ContactSection({
+    contactInfo,
+    loading = false,
+}: ContactSectionProps) {
+    const route = useRouter();
+
     const [formData, setFormData] = useState({
         fullName: "",
         phone: "",
         email: "",
         countryCode: "+971",
     });
+
     const countryCodes = [
         { code: "+971", label: "UAE (+971)" },
         { code: "+91", label: "India (+91)" },
@@ -48,6 +49,7 @@ export default function ContactSection({ contactPoints, contactInfo }: ContactSe
         { code: "+973", label: "Bahrain (+973)" },
         { code: "+965", label: "Kuwait (+965)" },
     ];
+
     const [errors, setErrors] = useState<FormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -100,10 +102,7 @@ export default function ContactSection({ contactPoints, contactInfo }: ContactSe
         e.preventDefault();
 
         const isValid = validateForm();
-
-        if (!isValid) {
-            return;
-        }
+        if (!isValid) return;
 
         try {
             setIsSubmitting(true);
@@ -112,7 +111,7 @@ export default function ContactSection({ contactPoints, contactInfo }: ContactSe
                 contact: {
                     fullName: formData.fullName.trim(),
                     email: formData.email.trim(),
-                    phone: `+971${formData.phone.trim()}`,
+                    phone: `${formData.countryCode}${formData.phone.trim()}`,
                     location: "",
                 },
                 sourcePage: typeof window !== "undefined" ? window.location.href : "",
@@ -138,7 +137,6 @@ export default function ContactSection({ contactPoints, contactInfo }: ContactSe
             };
 
             await WebsiteContentService.createContactQuery(payload);
-
             route.push("/thank-you");
         } catch (error) {
             console.error("Failed to submit inquiry:", error);
@@ -148,104 +146,189 @@ export default function ContactSection({ contactPoints, contactInfo }: ContactSe
         }
     };
 
+    console.log(contactInfo, "pagedata")
+    const pageData = contactInfo?.data || {};
+    const getInTouchEyebrow = pageData.getInTouchEyebrow || "Get In Touch";
+    const getInTouchTitle =
+        pageData.getInTouchTitle ||
+        "Register your interest with a more premium experience.";
+    const getInTouchDescription =
+        pageData.getInTouchDescription ||
+        "Share your preferences and our team will connect with relevant options, next steps, and a more personalized property discussion.";
+
+    const points = [
+        pageData.highlightPoint1Title,
+        pageData.highlightPoint2Title,
+        pageData.highlightPoint3Title,
+    ]
+    console.log("Contact Page Points:", points);
+    const phoneTitle = pageData.phoneTitle || "Phone";
+    const emailTitle = pageData.emailTitle || "Email";
+    const locationTitle = pageData.locationTitle || "Locations";
+
+    const phones = (pageData.phoneNumbers || "")
+        .split("\n")
+        .map((item: string) => item.trim())
+        .filter(Boolean);
+
+    const emails = (pageData.emailAddresses || "")
+        .split("\n")
+        .map((item: string) => item.trim())
+        .filter(Boolean);
+
+    const locations = (pageData.locationAddresses || "")
+        .split("\n\n")
+        .map((item: string) => item.trim())
+        .filter(Boolean);
+
+    const ShimmerBox = ({ className = "" }: { className?: string }) => (
+        <div className={`animate-pulse rounded-2xl bg-white/10 ${className}`} />
+    );
+
     return (
         <section className="py-8 px-6 md:px-12">
             <div className="max-w-[85rem] mx-auto grid lg:grid-cols-[1.3fr_0.7fr] gap-10 items-start">
                 <div className="space-y-6 lg:space-y-8">
                     <div>
-                        <p className="text-sm lg:text-base uppercase tracking-[0.25em] text-yellow-400 mb-3">
-                            Get In Touch
-                        </p>
+                        {loading ? (
+                            <>
+                                <ShimmerBox className="h-4 w-28 mb-3" />
+                                <ShimmerBox className="h-10 w-full max-w-[540px] mb-4" />
+                                <ShimmerBox className="h-4 w-full max-w-[620px] mb-2" />
+                                <ShimmerBox className="h-4 w-full max-w-[520px]" />
+                            </>
+                        ) : (
+                            <>
+                                    <p className="text-sm lg:text-base uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                                        {getInTouchEyebrow}
+                                    </p>
 
-                        <h2 className="text-3xl md:text-4xl font-semibold leading-tight mb-4 max-w-2xl">
-                            Register your interest with a more premium experience.
-                        </h2>
+                                    <h2 className="text-3xl md:text-4xl font-semibold leading-tight mb-4 max-w-2xl">
+                                        {getInTouchTitle}
+                                    </h2>
 
-                        <p className="text-white leading-relaxed max-w-2xl text-sm md:text-base">
-                            Share your preferences and our team will connect with relevant
-                            options, next steps, and a more personalized property discussion.
-                        </p>
+                                    <p className="text-white leading-relaxed max-w-2xl text-sm md:text-base whitespace-pre-line">
+                                        {getInTouchDescription}
+                                    </p>
+                            </>
+                        )}
                     </div>
 
-                    {!!contactPoints?.length && (
+                    {loading ? (
                         <div className="grid gap-3">
-                            {contactPoints.map((point, index) => (
+                            {[1, 2, 3].map((item) => (
                                 <div
-                                    key={index}
-                                    className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
+                                    key={item}
+                                    className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-4"
                                 >
-                                    <IoMdCheckboxOutline className="text-yellow-400 w-5 h-5 mt-0.5 shrink-0" />
-                                    <p className="text-white leading-relaxed text-sm md:text-base">
-                                        {point}
-                                    </p>
+                                    <ShimmerBox className="h-5 w-5 rounded-md mt-0.5 shrink-0" />
+                                    <div className="flex-1">
+                                        <ShimmerBox className="h-4 w-full mb-2" />
+                                        <ShimmerBox className="h-4 w-3/4" />
+                                    </div>
                                 </div>
                             ))}
                         </div>
+                    ) : (
+                        !!points?.length && (
+                            <div className="grid gap-3">
+                                {points?.map((point, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
+                                    >
+
+                                        <IoMdCheckboxOutline className="text-yellow-400 w-5 h-5 mt-0.5 shrink-0" />
+                                        <p className="text-white leading-relaxed text-sm md:text-base">
+                                            {point}
+                                        </p>
+                                    </div>
+                                ))}
+                                </div>
+                            )
                     )}
 
-                    <div className="grid md:grid-cols-3 gap-4">
-                        {!!contactInfo?.phones?.length && (
-                            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                                <div className="flex items-center gap-2 mb-3 text-yellow-400">
-                                    <FaPhoneAlt className="shrink-0" />
-                                    <p className="text-md font-medium text-white">Phone</p>
+                    {loading ? (
+                        <div className="grid md:grid-cols-3 gap-4">
+                            {[1, 2, 3].map((item) => (
+                                <div
+                                    key={item}
+                                    className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                                >
+                                    <ShimmerBox className="h-5 w-24 mb-4" />
+                                    <ShimmerBox className="h-4 w-full mb-2" />
+                                    <ShimmerBox className="h-4 w-5/6 mb-2" />
+                                    <ShimmerBox className="h-4 w-2/3" />
                                 </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="grid md:grid-cols-3 gap-4">
+                            {!!phones.length && (
+                                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                    <div className="flex items-center gap-2 mb-3 text-yellow-400">
+                                        <FaPhoneAlt className="shrink-0" />
+                                            <p className="text-md font-medium text-white">{phoneTitle}</p>
+                                        </div>
 
-                                <div className="space-y-2">
-                                    {contactInfo.phones.map((phone, index) => (
-                                        <a
-                                            key={index}
-                                            href={`tel:${phone.replace(/\s/g, "")}`}
-                                            className="block text-md text-white hover:text-yellow-400 transition"
-                                        >
-                                            {phone}
-                                        </a>
-                                    ))}
-                                </div>
+                                        <div className="space-y-2">
+                                            {phones.map((phone: string, index: number) => (
+                                                <a
+                                                    key={index}
+                                                    href={`tel:${phone.replace(/\s/g, "")}`}
+                                                    className="block text-md text-white hover:text-yellow-400 transition"
+                                                >
+                                                    {phone}
+                                                </a>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {!!emails.length && (
+                                    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                        <div className="flex items-center gap-2 mb-3 text-yellow-400">
+                                            <FaEnvelope className="shrink-0" />
+                                            <p className="text-md font-medium text-white">{emailTitle}</p>
+                                        </div>
+
+                                        <div className="space-y-2 break-words">
+                                            {emails.map((email: string, index: number) => (
+                                                <a
+                                                    key={index}
+                                                    href={`mailto:${email}`}
+                                                    className="block text-md text-white hover:text-yellow-400 transition"
+                                                >
+                                                    {email}
+                                                </a>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {!!locations.length && (
+                                    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                        <div className="flex items-center gap-2 mb-3 text-yellow-400">
+                                            <FaMapMarkerAlt className="shrink-0" />
+                                            <p className="text-md font-medium text-white">
+                                                {locationTitle}
+                                            </p>
+                                        </div>
+
+                                        <div className="space-y-3">
+                                            {locations.map((location: string, index: number) => (
+                                                <p
+                                                    key={index}
+                                                    className="text-md text-white leading-relaxed whitespace-pre-line"
+                                                >
+                                                    {location}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                        )}
-
-                        {!!contactInfo?.emails?.length && (
-                            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                                <div className="flex items-center gap-2 mb-3 text-yellow-400">
-                                    <FaEnvelope className="shrink-0" />
-                                    <p className="text-md font-medium text-white">Email</p>
-                                </div>
-
-                                <div className="space-y-2 break-words">
-                                    {contactInfo.emails.map((email, index) => (
-                                        <a
-                                            key={index}
-                                            href={`mailto:${email}`}
-                                            className="block text-md text-white hover:text-yellow-400 transition"
-                                        >
-                                            {email}
-                                        </a>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {!!contactInfo?.locations?.length && (
-                            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                                <div className="flex items-center gap-2 mb-3 text-yellow-400">
-                                    <FaMapMarkerAlt className="shrink-0" />
-                                    <p className="text-md font-medium text-white">Locations</p>
-                                </div>
-
-                                <div className="space-y-3">
-                                    {contactInfo.locations.map((location, index) => (
-                                        <p
-                                            key={index}
-                                            className="text-md text-white leading-relaxed whitespace-pre-line"
-                                        >
-                                            {location}
-                                        </p>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    )}
                 </div>
 
                 <div className="rounded-[32px] border border-yellow-500/20 bg-white/5 backdrop-blur-sm p-6 md:p-8 shadow-[0_0_40px_rgba(250,204,21,0.08)]">
@@ -255,7 +338,6 @@ export default function ContactSection({ contactPoints, contactInfo }: ContactSe
                         </p>
                         <h3 className="text-2xl md:text-3xl font-semibold leading-tight">
                             Register Your Interest
-                            {/* <span className="text-yellow-400">Aurelia Heights</span> */}
                         </h3>
                     </div>
 
@@ -268,12 +350,10 @@ export default function ContactSection({ contactPoints, contactInfo }: ContactSe
                                 value={formData.fullName}
                                 onChange={(e) => handleChange("fullName", e.target.value)}
                                 placeholder="Enter your full name"
-                                className={`w-full bg-black/40 border rounded-2xl px-5 py-4 text-white placeholder:text-white transition
-  ${errors.fullName
+                                className={`w-full bg-black/40 border rounded-2xl px-5 py-4 text-white placeholder:text-white transition ${errors.fullName
                                         ? "border-red-500"
                                         : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
-                                    }
-  focus:outline-none`}
+                                    } focus:outline-none`}
                             />
                             {errors.fullName && (
                                 <p className="mt-2 text-sm text-red-400">{errors.fullName}</p>
@@ -286,21 +366,22 @@ export default function ContactSection({ contactPoints, contactInfo }: ContactSe
                             </label>
 
                             <div className="grid grid-cols-[130px_1fr] gap-3">
-
-                                {/* Country Code Dropdown */}
                                 <select
                                     value={formData.countryCode}
                                     onChange={(e) => handleChange("countryCode", e.target.value)}
                                     className="rounded-2xl border border-white/10 bg-black/40 px-3 py-4 text-white outline-none focus:border-yellow-400"
                                 >
                                     {countryCodes.map((item) => (
-                                        <option key={item.code} value={item.code} className="bg-[#111]">
+                                        <option
+                                            key={item.code}
+                                            value={item.code}
+                                            className="bg-[#111]"
+                                        >
                                             {item.label}
                                         </option>
                                     ))}
                                 </select>
 
-                                {/* Phone Input */}
                                 <input
                                     value={formData.phone}
                                     onChange={(e) =>
@@ -311,8 +392,7 @@ export default function ContactSection({ contactPoints, contactInfo }: ContactSe
                                     className={`w-full bg-black/40 border rounded-2xl px-4 py-4 text-white placeholder:text-white-500 outline-none ${errors.phone
                                         ? "border-red-500"
                                         : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
-                                        }
-  focus:outline-none                                        }`}
+                                        } focus:outline-none`}
                                 />
                             </div>
 
@@ -332,19 +412,17 @@ export default function ContactSection({ contactPoints, contactInfo }: ContactSe
                                 className={`w-full bg-black/40 border rounded-2xl px-5 py-4 text-white placeholder:text-white-500 focus:outline-none transition ${errors.email
                                     ? "border-red-500"
                                     : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
-                                    }
-  focus:outline-none}`}
+                                    } focus:outline-none`}
                             />
                             {errors.email && (
                                 <p className="mt-2 text-sm text-red-400">{errors.email}</p>
                             )}
                         </div>
+
                         <div className="flex items-start gap-2 mt-2">
                             <input
                                 type="checkbox"
                                 name="terms"
-                                // checked={contactForm.terms}
-                                // onChange={handleContactChange}
                                 className="mt-1 accent-yellow-500"
                             />
                             <label className="text-sm text-white">
@@ -354,6 +432,7 @@ export default function ContactSection({ contactPoints, contactInfo }: ContactSe
                                 </span>
                             </label>
                         </div>
+
                         <button
                             type="submit"
                             disabled={isSubmitting}
