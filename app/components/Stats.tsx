@@ -7,82 +7,37 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 export default function Stats({ data }: any) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+useEffect(() => {
+  if (!data) return;
 
-    const ctx = gsap.context(() => {
-      // top stats animation
-      gsap.from(".stat-item", {
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.2,
+  gsap.registerPlugin(ScrollTrigger);
+
+  const ctx = gsap.context(() => {
+    document.querySelectorAll(".counter").forEach((el: any) => {
+      const target = Number(el.getAttribute("data-value"));
+      const suffix = el.getAttribute("data-suffix") || "";
+
+      let obj = { val: 0 };
+
+      gsap.to(obj, {
+        val: target,
+        duration: 2,
         ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
+        onUpdate: () => {
+          el.innerText = Math.floor(obj.val).toLocaleString() + suffix;
         },
       });
+    });
+  }, sectionRef);
 
-      // COUNTER ANIMATION
-      document.querySelectorAll(".counter").forEach((el: any) => {
-        const target = Number(el.getAttribute("data-value"));
-        const suffix = el.getAttribute("data-suffix");
-
-        let obj = { val: 0 };
-
-        gsap.to(obj, {
-          val: target,
-          duration: 2,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 90%",
-          },
-          onUpdate: () => {
-            el.innerText = Math.floor(obj.val).toLocaleString() + suffix;
-          },
-        });
-      });
-
-      // glow pulse
-      gsap.to(".stat-glow", {
-        opacity: 0.8,
-        scale: 1.1,
-        repeat: -1,
-        yoyo: true,
-        duration: 1.5,
-        ease: "power1.inOut",
-      });
-
-      // circle animation
-      gsap.fromTo(
-        ".help-card",
-        { scale: 0.8, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 85%",
-            once: true, // 👈 IMPORTANT
-          },
-        }
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
- const stats = [
-  { value: data?.satisfiedCustomersCount || 0, label: "Satisfied Customers" },
-  { value: data?.propertyListedCount || 0, label: "Property Listed" },
-  { value: data?.premiumDevelopersCount || 0, label: "Premium Developers" },
-  { value: data?.locationsCount || 0, label: "Locations" },
-];
+  return () => ctx.revert();
+}, [data]);
+  const stats = [
+    { value: data?.satisfiedCustomersCount || 0, label: "Satisfied Customers" },
+    { value: data?.propertyListedCount || 0, label: "Property Listed" },
+    { value: data?.premiumDevelopersCount || 0, label: "Premium Developers" },
+    { value: data?.locationsCount || 0, label: "Locations" },
+  ];
   const help = [
     {
       title: "Discover",
@@ -116,9 +71,9 @@ export default function Stats({ data }: any) {
               <h3 className="text-3xl md:text-5xl  relative">
                 <span
                   className="counter bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(241,220,127,0.6)]"
-                  data-value={parseFloat(stat.value)}
-                  data-value={Number(stat.value)}
-data-suffix="+"
+                    data-value={Number(stat.value)}
+  data-suffix="+"
+
                 >
                   0
                 </span>
