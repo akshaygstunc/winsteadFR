@@ -205,7 +205,7 @@ export default function DeveloperDetailsPage() {
     const [loading, setLoading] = useState(true);
 
 
-
+console.log("PROJECT:", projects);
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -471,8 +471,7 @@ export default function DeveloperDetailsPage() {
                                             </div>
 
                                             <Link
-                                                href={`/projects/${property.slug}`}
-                                                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-5 py-2.5 text-sm lg:text-md lg:text-md font-medium text-black"
+ href={`/projects/${developer.slug}/${property.slug}`}                                                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-5 py-2.5 text-sm lg:text-md lg:text-md font-medium text-black"
                                             >
                                                 View Project
                                                 <FaArrowRight className="text-xs" />

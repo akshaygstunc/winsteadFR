@@ -311,6 +311,8 @@ export default function DeveloperPage() {
 
         fetchData();
     }, []);
+
+    
     return (
         <main className="bg-black text-white">
             <TeamHero teamData={developersData} />
