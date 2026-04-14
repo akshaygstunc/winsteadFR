@@ -49,7 +49,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const fetchMenu = async () => {
-      const res = await fetch("/api/top-menu");
+      const res = await fetch("/backend/top-menu");
       const data = await res.json();
 
       setMenu(data);

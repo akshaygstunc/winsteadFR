@@ -124,7 +124,7 @@ function TeamTabsAndGrid({ teamData }: { teamData: any }) {
   // const [teamData, setTeamData] = useState<any>(null);
   useEffect(() => {
     const fetchMembers = async () => {
-      const res = await fetch("/api/relationship-manager");
+      const res = await fetch("/backend/relationship-manager");
       const data = await res.json();
 
       setMembers(data);

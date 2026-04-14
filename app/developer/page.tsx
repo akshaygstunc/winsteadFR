@@ -65,7 +65,7 @@ function DevelopersTabsAndGrid() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("/api/developer-community");
+                const res = await fetch("/backend/developer-community");
                 const data = await res.json();
 
                 const mapped = data.map((item: any, index: number) => ({
