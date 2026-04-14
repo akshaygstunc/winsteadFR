@@ -236,7 +236,8 @@ function getHighlights(data?: BackendProject) {
 
 export default function ProjectDetailPage() {
   const params = useParams();
-const slug = String(params?.slug || "");
+  const slug = String(params?.id || "");
+
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [projectDetails, setProjectDetails] = useState<BackendProject | null>(null);
   const [loading, setLoading] = useState(true);

@@ -1,8 +1,11 @@
 "use client";
 
 import AutoBreadcrumbs from "@/app/components/BreadCrumbs";
+import { Fallback } from "next/dist/client/components/segment-cache/cache-map";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type Property = {
     id: number;
@@ -182,14 +185,45 @@ function SectionHeading({
 }
 
 export default function CommunityPage() {
-    return (
+
+    const params = useParams();
+const communitySlug = params?.communitySlug || params?.communities;
+
+const [community, setCommunity] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+  const fetchCommunity = async () => {
+    try {
+      const res = await fetch("/backend/communities");
+      const json = await res.json();
+
+      const found = json.find(
+        (item: any) => item.slug === communitySlug
+      );
+
+      setCommunity(found);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (communitySlug) fetchCommunity();
+    }, [communitySlug]);
+    
+const data = {
+  ...communityData,         // fallback हमेशा रहेगा
+  ...(community?.data || {}) // API overwrite करेगा
+};    return (
         <main className="text-white">
             {/* Hero */}
             <section className="relative h-[65vh] min-h-[420px] overflow-hidden">
                 <div className="absolute inset-0">
                     <Image
-                        src={communityData.heroImage}
-                        alt={communityData.title}
+                        src={data.heroImage || "/fallback.jpg"}
+                        alt={data.title}
                         fill
                         priority
                         className="object-cover object-center"
@@ -198,44 +232,37 @@ export default function CommunityPage() {
                     <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black" />
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(200,164,93,0.22),transparent_26%),radial-gradient(circle_at_bottom_left,rgba(200,164,93,0.14),transparent_22%)]" />
                 </div>
-                <div className="relative z-10 flex h-full items-end justify-center">
-                    <div className="w-full max-w-7xl px-6 pb-14 md:px-12 md:pb-20">
-                        <div className="max-w-xl text-left">
-                            {/* {loading ? (
-                                <>
-                                    <div className="mb-3 h-3 w-24 rounded bg-white/10 animate-pulse" />
-                                    <div className="h-8 w-72 rounded bg-white/10 animate-pulse md:h-10 xl:h-14" />
-                                    <div className="mt-3 h-8 w-56 rounded bg-white/10 animate-pulse md:h-10 xl:h-14" />
-                                </> */}
-                            ) : (
-                                <>
-                                    <p className="mb-3 text-[11px] uppercase tracking-[0.35em] text-[#F1DC7F]">
-                                            <p className="mb-4 text-xs sm:text-sm uppercase tracking-[0.45em] text-[#C8A45D]">
-                                                {communityData.eyebrow}
-                                            </p>
-                                            <h1 className="max-w-4xl text-4xl sm:text-6xl lg:text-7xl font-light leading-[0.95]">
-                                                {communityData.title}
-                                            </h1>
-                                    </p>
+              <div className="relative z-10 flex h-full items-end justify-center">
+  <div className="w-full max-w-7xl px-6 pb-14 md:px-12 md:pb-20">
+    <div className="max-w-xl text-left">
+      <>
+        <div className="mb-3 text-[11px] uppercase tracking-[0.35em] text-[#F1DC7F]">
+          <p className="mb-4 text-xs sm:text-sm uppercase tracking-[0.45em] text-[#C8A45D]">
+            {data.eyebrow}
+          </p>
 
-                                <h1 className="max-w-4xl text-2xl sm:text-2xl lg:text-xl font-light leading-[0.95]">
-                                    {communityData.title}
-                                </h1>
-                                </>
-                            {/* )} */}
-                        </div>
-                    </div>
-                </div>
+          <h1 className="max-w-4xl text-4xl sm:text-6xl lg:text-7xl font-light leading-[0.95]">
+            {data.title}
+          </h1>
+        </div>
+
+        <h2 className="max-w-4xl text-2xl sm:text-2xl lg:text-xl font-light leading-[0.95]">
+          {data.title}
+        </h2>
+      </>
+    </div>
+  </div>
+</div>
                 <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl items-end px-4 sm:px-6 lg:px-8  sm:pb-20">
                     <div className="max-w-4xl">
                         <p className="mb-4 text-xs sm:text-sm uppercase tracking-[0.45em] text-[#C8A45D]">
-                            {communityData.eyebrow}
+                            {data.eyebrow}
                         </p>
                         <h1 className="max-w-4xl text-4xl sm:text-6xl lg:text-7xl font-light leading-[0.95]">
-                            {communityData.title}
+                            {data.title}
                         </h1>
                         <p className="mt-6 max-w-2xl text-sm sm:text-base lg:text-lg leading-7 text-white/75">
-                            {communityData.subtitle}
+                            {data.subtitle}
                         </p>
 
                         <div className="mt-8 flex flex-wrap gap-4">
@@ -269,24 +296,24 @@ export default function CommunityPage() {
                 <div className="relative z-10 mx-auto grid max-w-9xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
                     <SectionHeading
                         eyebrow="Community Overview"
-                        title={communityData.overviewTitle}
-                        description={communityData.overviewText}
+                        title={data.overviewTitle}
+                        description={data.overviewText}
                     />
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-1">
-                        {communityData.stats.map((stat) => (
-                            <div
-                                key={stat.label}
-                                className="rounded-[28px] border border-[#C8A45D]/20 bg-[#0B0B0B] py-2 px-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]"
-                            >
-                                <div className="text-2xl sm:text-xl font-light text-[#C8A45D]">
-                                    {stat.value}
-                                </div>
-                                <div className="mt-2 text-sm uppercase tracking-[0.2em] text-white/60">
-                                    {stat.label}
-                                </div>
-                            </div>
-                        ))}
+                       {data?.stats?.map((stat: any, index: number) => (
+  <div
+    key={stat?.label || index}
+    className="rounded-[28px] border border-[#C8A45D]/20 bg-[#0B0B0B] py-2 px-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]"
+  >
+    <div className="text-2xl sm:text-xl font-light text-[#C8A45D]">
+      {stat?.value || ""}
+    </div>
+    <div className="mt-2 text-sm uppercase tracking-[0.2em] text-white/60">
+      {stat?.label || ""}
+    </div>
+  </div>
+))}
                     </div>
                 </div>
             </section>
@@ -301,15 +328,15 @@ export default function CommunityPage() {
                     />
 
                     <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-                        {communityData.features.map((item) => (
+{data?.stats?.map((stat: any, index: number) => (
                             <div
-                                key={item.title}
+                                key={stat?.label || index}
                                 className="group rounded-[30px] border border-white/10 bg-white/[0.03] p-6 transition duration-300 hover:border-[#C8A45D]/50 hover:bg-white/[0.05]"
                             >
                                 <div className="mb-5 h-[1px] w-12 bg-[#C8A45D] transition-all duration-300 group-hover:w-20" />
-                                <h3 className="text-xl font-light text-white">{item.title}</h3>
+                                <h3 className="text-xl font-light text-white">{stat?.label || ""}</h3>
                                 <p className="mt-4 text-sm leading-7 text-white/65">
-                                    {item.description}
+                                    {stat?.description || ""}
                                 </p>
                             </div>
                         ))}
@@ -339,9 +366,9 @@ export default function CommunityPage() {
                     </div>
 
                     <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
-                        {communityData.properties.map((property) => (
+                        {data?.properties?.map((property: any) => (
                             <div
-                                key={property.id}
+                                key={property?.id || Math.random()}
                                 className="group overflow-hidden rounded-[32px] border border-white/10 bg-black"
                             >
                                 <div className="relative h-[320px] overflow-hidden">
@@ -400,9 +427,9 @@ export default function CommunityPage() {
                         />
 
                         <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            {communityData.nearbyPlaces.map((item) => (
+                            {data?.nearbyPlaces?.map((item: any) => (
                                 <div
-                                    key={item.label}
+                                    key={item?.label || Math.random()}
                                     className="rounded-[24px] border border-white/10 bg-white/[0.03] p-5"
                                 >
                                     <p className="text-sm uppercase tracking-[0.25em] text-[#C8A45D]">
@@ -416,7 +443,7 @@ export default function CommunityPage() {
 
                     <div className="relative min-h-[420px] overflow-hidden rounded-[36px] border border-[#C8A45D]/20">
                         <Image
-                            src={communityData.mapImage}
+                            src={data.mapImage}
                             alt="Community location map"
                             fill
                             className="object-cover"
@@ -446,9 +473,9 @@ export default function CommunityPage() {
                     />
 
                     <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-                        {communityData.nearbyCommunities.map((item) => (
+                        {data?.nearbyCommunities?.map((item: any) => (
                             <div
-                                key={item.id}
+                                key={item?.id || Math.random()}
                                 className="group overflow-hidden rounded-[30px] border border-white/10 bg-black"
                             >
                                 <div className="relative h-[300px]">
@@ -488,7 +515,7 @@ export default function CommunityPage() {
                     />
 
                     <div className="mt-12 space-y-4">
-                        {communityData.faqs.map((faq, index) => (
+                        {data.faqs.map((faq, index) => (
                             <details
                                 key={index}
                                 className="group rounded-[24px] border border-white/10 bg-white/[0.03] p-6"
