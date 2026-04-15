@@ -101,7 +101,7 @@ export default function Navbar() {
     menu.filter((item) => item.data?.parentId === id);
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black border-b border-white/10">
-      <div className="flex items-center justify-between px-6 md:px-10 py-4">
+      <div className="flex items-center justify-between px-6 md:px-10 py-2">
         {/* Logo */}
         <Link href="/" className="nav-item flex items-center">
           <Image
