@@ -105,9 +105,9 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="nav-item flex items-center">
           <Image
-            src={"https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/Winsteadlogo.png"}
+            src={"https://storage.googleapis.com/winstead-global-assets/projects/gallery/1776246712700-winlogo.png"}
             alt="Winstead Logo"
-            width={120}
+            width={75}
             height={50}
             priority
             className="cursor-pointer"

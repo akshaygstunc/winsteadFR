@@ -158,8 +158,8 @@ useEffect(() => {
       <div className="relative px-6 md:px-12 lg:px-20 py-14">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
-          <div>
-            <Image src={"https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/Winsteadlogo.png"} alt="Winstead" width={180} height={180} className="mb-5" />
+          <div >
+            <Image src={"https://storage.googleapis.com/winstead-global-assets/projects/gallery/1776246712700-winlogo.png"} alt="Winstead" width={180} height={180} className="mb-5" />
             {/* <p className="text-white leading-relaxed text-sm lg:text-xl lg:text-xl md:text-base max-w-sm">
               Winstead delivers access to refined living and high-potential real
               estate opportunities through a tailored, investor-first approach.
