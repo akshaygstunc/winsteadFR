@@ -98,7 +98,7 @@ export default function Home() {
   return (
     <div className="bg-black text-white">
       {/* <Navbar /> */}
-      <Hero asset={homePage?.data} />      <Projects projects={projects} homePage={homePage} />
+      <Hero asset={homePage} />      <Projects projects={projects} homePage={homePage} />
       <Logos />
       <UltraLuxury />
       <Testimonials testimonialsdata={testimonialsdata} />

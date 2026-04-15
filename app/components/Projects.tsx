@@ -103,7 +103,7 @@ function FeaturedProjects({
       <div className="flex flex-wrap gap-2 relative">
         <button
           onClick={() => handleMainFilter("All")}
-          className={`text-[1.05rem] px-4 py-2 text-sm lg:text-md rounded-lg border transition ${activeFilter === "All"
+          className={`text-[1.05rem] px-4 py-2 text-sm mb-2 lg:text-md rounded-lg border transition ${activeFilter === "All"
             ? "bg-yellow-500 text-black border-yellow-500"
             : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
             }`}
@@ -122,7 +122,7 @@ function FeaturedProjects({
             <button
               key={category._id}
               onClick={() => handleMainFilter(category._id)}
-              className={`text-[1.05rem] px-4 py-2 text-sm lg:text-md rounded-lg border transition ${activeFilter === category._id
+              className={`text-[1.05rem] mb-2 px-4 py-2 text-sm lg:text-md rounded-lg border transition ${activeFilter === category._id
                 ? "bg-yellow-500 text-black border-yellow-500"
                 : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
                 }`}
@@ -137,7 +137,7 @@ function FeaturedProjects({
               setVendorOpen((prev) => !prev);
               // setActiveFilter("Vendor");
             }}
-            className={`text-[1.05rem] px-4 py-2 text-sm lg:text-md rounded-lg border transition flex items-center gap-2 ${activeFilter === "Vendor"
+            className={`text-[1.05rem] mb-2 px-4 py-2 text-sm lg:text-md rounded-lg border transition flex items-center gap-2 ${activeFilter === "Vendor"
               ? "bg-yellow-500 text-black border-yellow-500"
               : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
               }`}
@@ -355,7 +355,7 @@ function Card({
         className="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-[1.06]"
       />
 
-      {/* <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" /> */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/15 to-transparent" />
       <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-transparent group-hover:border-yellow-400/40 transition duration-500" />
       <div className="absolute top-0 left-0 w-0 h-[2px] bg-gradient-to-r from-transparent via-yellow-400 to-transparent transition-all duration-500 group-hover:w-full" />
       <div className="absolute bottom-0 right-0 w-0 h-[2px] bg-gradient-to-l from-transparent via-yellow-400 to-transparent transition-all duration-500 group-hover:w-full" />

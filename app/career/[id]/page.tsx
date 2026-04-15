@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaBriefcase, FaClock, FaFacebookF, FaInstagram, FaTiktok, FaTwitter, FaYoutube } from "react-icons/fa6";
 import serviceImg from "../../../public/hero1.jpg";
 import Image from "next/image";
+import WebsiteContentService from "@/app/services/websitecontent.service";
 const openings = [
   {
     id: "property-consultant",
@@ -82,19 +83,30 @@ const openings = [
   },
 ];
 
-export default function CareerDetailPage({ params }: any) {
-  const resolvedParams = use(params); // ✅ FIX
-
-  const job = openings.find((j) => j.id === resolvedParams.id);
+export default function CareerDetailPage() {
+  const [jobData, setJobData] = useState<any>({});
+  const [loading, setLoading] = useState(true);
   const [selectedJob, setSelectedJob] = useState<any>(null);
-  if (!job) return notFound();
+  const params = useParams();
   useEffect(() => {
-    if (selectedJob) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [selectedJob]);
+    const fetchCareers = async () => {
+      try {
+        const res = await WebsiteContentService.GetCareers();
+        console.log(res)
+
+        const job = res?.filter((item: any) => item.slug === params.id);
+        console.log(job[0])
+        setJobData(job[0]);
+      } catch (error) {
+        console.log("Career fetch error", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCareers();
+  }, []);
+  console.log(jobData)
   return (
     <div className="min-h-screen bg-black text-white">
 
@@ -159,43 +171,26 @@ export default function CareerDetailPage({ params }: any) {
           {/* LEFT SIDE */}
           <div>
             <span className="text-2xl mb-10 block bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
-              {job.title}
+              {jobData?.title}
             </span>
             {/* Overview */}
             <div className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4">Overview</h2>
-              <p className="text-gray-300 leading-relaxed">
-                {job.description}
-              </p>
+              {/* <h2 className="text-2xl font-semibold mb-4">Overview</h2> */}
+              <div
+                className="
+        prose prose-invert max-w-none
+        prose-p:text-gray-300
+        prose-p:leading-relaxed
+        prose-headings:text-white
+        prose-headings:font-semibold
+        prose-strong:text-yellow-400
+        prose-a:text-yellow-400
+        prose-li:text-gray-300
+      "
+                dangerouslySetInnerHTML={{ __html: jobData?.description || "" }}
+              />
             </div>
 
-            {/* Responsibilities */}
-            <div className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4">
-                Key Responsibilities
-              </h2>
-              <ul className="space-y-3">
-                {job.responsibilities.map((item, i) => (
-                  <li key={i} className="text-gray-300 flex gap-2">
-                    <span className="text-yellow-400">•</span> {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Requirements */}
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">
-                Requirements
-              </h2>
-              <ul className="space-y-3">
-                {job.requirements.map((item, i) => (
-                  <li key={i} className="text-gray-300 flex gap-2">
-                    <span className="text-yellow-400">•</span> {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
 
           {/* RIGHT SIDE (SIDEBAR) */}
@@ -207,28 +202,28 @@ export default function CareerDetailPage({ params }: any) {
 
               <div className="flex items-center gap-3">
                 <FaBriefcase className="text-yellow-400" />
-                {job.department}
+                {jobData?.data?.department}
               </div>
 
               <div className="flex items-center gap-3">
                 <FaClock className="text-yellow-400" />
-                {job.type}
+                {jobData?.data?.employmentType}
               </div>
 
               <div className="flex items-center gap-3">
                 <FaMapMarkerAlt className="text-yellow-400" />
-                {job.location}
+                {jobData?.data?.location}
               </div>
 
-              <div>
+              {/* <div>
                 <span className="text-yellow-400">Experience:</span>{" "}
-                {job.experience}
-              </div>
+                {jobData?.data?.experience}
+              </div> */}
             </div>
 
             {/* CTA */}
             <button
-              onClick={() => setSelectedJob(job)}
+              onClick={() => setSelectedJob(jobData)}
               className="mt-8 w-full inline-flex items-center justify-center rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-6 py-3 font-semibold text-black hover:scale-[1.02] transition"
             >
               Apply Now

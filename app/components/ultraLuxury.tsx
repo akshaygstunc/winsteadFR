@@ -84,58 +84,58 @@ export default function UltraLuxury() {
         </Link>
       </div>
 
-      {/* WHOLE SECTION SLIDER */}
-      <div className="overflow-hidden rounded-xl">
-        <div ref={sliderRef} className="flex w-full">
-          {slides.map((slide, index) => (
-            <div
-              key={index}
-              className="min-w-full grid md:grid-cols-[60%_40%] gap-8 items-start"
-            >
-              {/* LEFT IMAGE */}
-              <div className="overflow-hidden rounded-xl">
+      {/* SINGLE PROPERTY SHOWCASE */}
+      <div className="grid md:grid-cols-[60%_40%] gap-8 items-start">
+        {/* LEFT IMAGE SLIDER ONLY */}
+        <div className="overflow-hidden rounded-xl relative">
+          <div ref={sliderRef} className="flex">
+            {slides.map((slide, index) => (
+              <div key={index} className="min-w-full">
                 <Image
                   src={slide.image}
                   alt={slide.title}
                   className="w-full h-[250px] md:h-[325px] object-cover rounded-xl"
                 />
               </div>
+            ))}
+          </div>
 
-              {/* RIGHT CONTENT */}
-              <div className="flex flex-col justify-between h-full">
-                <div>
-                  <h2 className="text-2xl md:text-3xl text-yellow-400 mb-4">
-                    {slide.title}
-                  </h2>
+          {/* Dots */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`h-2 rounded-full transition-all duration-300 ${activeIndex === index
+                    ? "w-8 bg-yellow-400"
+                    : "w-2 bg-white/50"
+                  }`}
+              />
+            ))}
+          </div>
+        </div>
 
-                  <p className="text-gray-300 leading-relaxed">
-                    {slide.description1}
-                  </p>
+        {/* FIXED RIGHT CONTENT */}
+        <div className="flex flex-col justify-between h-full">
+          <div>
+            <h2 className="text-2xl md:text-3xl text-yellow-400 mb-4">
+              {slides[activeIndex].title}
+            </h2>
 
-                  <p className="text-gray-300 mt-4 leading-relaxed">
-                    {slide.description2}
-                  </p>
-                </div>
+            <p className="text-gray-300 leading-relaxed">
+              {slides[activeIndex].description1}
+            </p>
 
-                {/* BUTTONS IN PLACE OF BOTTOM IMAGES */}
-                <div className="flex items-center gap-3 mt-8">
-                  <a
-                    className="px-6 py-3 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black font-medium hover:scale-[1.02] transition"
-                  // onClick={() => openContactModal("book-consultation")}
-                  >
-                    Read More
-                  </a>
+            <p className="text-gray-300 mt-4 leading-relaxed">
+              {slides[activeIndex].description2}
+            </p>
+          </div>
 
-                  {/* <button
-                    onClick={nextSlide}
-                    className="px-5 py-2 rounded-full border border-[#F1DC7F]/40 text-sm hover:bg-yellow-400 hover:text-black transition"
-                  >
-                    Next
-                  </button> */}
-                </div>
-              </div>
-            </div>
-          ))}
+          <div className="flex items-center gap-3 mt-8">
+            <button className="px-6 py-3 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black font-medium hover:scale-[1.02] transition">
+              Read More
+            </button>
+          </div>
         </div>
       </div>
     </section>

@@ -1341,14 +1341,17 @@ function PremiumCalcInput({
   step?: string;
 }) {
   return (
-    <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
-      <label className="block text-sm text-white-400 mb-2">{label}</label>
+    <div className="rounded-[22px] border border-[#F1DC7F]/35 bg-white/[0.03] p-4 transition-all duration-300 focus-within:border-[#F1DC7F] focus-within:shadow-[0_0_0_1px_rgba(241,220,127,0.45),0_0_20px_rgba(241,220,127,0.12)]">
+      <label className="block text-sm text-[#F1DC7F] mb-2">
+        {label}
+      </label>
+
       <input
         type="number"
         value={value}
         step={step}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent text-xl font-medium text-white outline-none"
+        className="w-full bg-transparent text-xl px-2 font-medium text-white outline-none border border-[#F1DC7F]/35 rounded-[22px]"
       />
     </div>
   );

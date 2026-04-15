@@ -35,14 +35,14 @@ export default function ReadMoreSlider({ description, heading }: Props) {
 
             {/* Overlay */}
             <div
-                className={`fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+                className={`fixed inset-0 z-50 bg-black/50  transition-opacity duration-300 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
                     }`}
                 onClick={() => setOpen(false)}
             />
 
             {/* Right Slider */}
             <div
-                className={`fixed top-0 right-0 z-50 h-full w-full sm:w-[85%] md:w-[60%] lg:w-[45%] bg-[#0b0b0b] border-l border-white/10 shadow-2xl transform transition-transform duration-500 ease-in-out ${open ? "translate-x-0" : "translate-x-full"
+                className={`fixed top-0 right-0 z-50 h-full w-48 sm:w-[85%] md:w-[300px] lg:w-[30%] bg-[#0b0b0b] border-l border-white/10  transform transition-transform duration-500 ease-in-out ${open ? "translate-x-0" : "translate-x-full"
                     }`}
             >
                 <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">

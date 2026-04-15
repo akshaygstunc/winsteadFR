@@ -15,8 +15,9 @@ import {
 import Image from "next/image";
 import banner from "../../public/hero1.jpg";
 import AutoBreadcrumbs from "../components/BreadCrumbs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaFacebookF, FaInstagram, FaTiktok, FaTwitter, FaYoutube } from "react-icons/fa6";
+import WebsiteContentService from "../services/websitecontent.service";
 const openings = [
   {
     id: "property-consultant",
@@ -102,9 +103,46 @@ const benefits = [
     text: "Work with ambitious professionals who care about service, speed, execution, and long-term brand value.",
   },
 ];
+function JobSkeleton() {
+  return (
+    <div className="rounded-[30px] border border-white/10 bg-white/[0.03] p-6 md:p-8 animate-pulse">
+      <div className="flex flex-wrap gap-3 mb-4">
+        <div className="h-9 w-28 rounded-full bg-white/10" />
+        <div className="h-9 w-24 rounded-full bg-white/10" />
+        <div className="h-9 w-32 rounded-full bg-white/10" />
+      </div>
 
+      <div className="h-8 w-1/2 bg-white/10 rounded mb-4" />
+      <div className="space-y-2 mb-4">
+        <div className="h-4 bg-white/10 rounded" />
+        <div className="h-4 w-5/6 bg-white/10 rounded" />
+      </div>
+
+      <div className="h-4 w-40 bg-white/10 rounded" />
+    </div>
+  );
+}
 export default function CareerPage() {
   const [selectedJob, setSelectedJob] = useState<any>(null);
+  const [careerData, setCareerData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchCareers = async () => {
+      try {
+        const res = await WebsiteContentService.GetCareers();
+        console.log(res)
+
+
+        setCareerData(res);
+      } catch (error) {
+        console.log("Career fetch error", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCareers();
+  }, []);
   return (
     <main className="min-h-screen bg-black text-white overflow-x-hidden">
       <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden bg-black text-white">
@@ -221,55 +259,53 @@ export default function CareerPage() {
         </div>
 
         <div className="grid gap-5">
-          {openings.map((job) => (
-        // <motion.div
-        //     key={job.title}
-        //     initial={{ opacity: 0, y: 18 }}
-        //     whileInView={{ opacity: 1, y: 0 }}
-        //     viewport={{ once: true, amount: 0.2 }}
-        //     transition={{ duration: 0.45 }}
-        //     className="rounded-[30px] border border-white/10 bg-white/[0.03] p-6 md:p-8 hover:border-yellow-400/25 transition"
-        // >
-            <div key={job.id} className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-6">
-              <div className="max-w-3xl">
-                <div className="flex flex-wrap gap-3 mb-4">
-                  <Tag icon={<FaBriefcase />} text={job.department} />
-                  <Tag icon={<FaClock />} text={job.type} />
-                  <Tag icon={<FaMapMarkerAlt />} text={job.location} />
-                </div>
-
-                <h3 className="text-2xl md:text-3xl font-semibold mb-3">
-                  {job.title}
-                </h3>
-                <p className="text-gray-300 leading-relaxed mb-4">
-                  {job.description}
-                </p>
-                <p className="text-sm lg:text-md lg:text-md text-gray-500">
-                  Experience Required: {job.experience}
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row xl:flex-col gap-3 xl:min-w-[200px]">
-                <button
-                  onClick={() => setSelectedJob(job)}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-6 py-3.5 font-semibold text-black hover:scale-[1.02] transition"
-                >
-                  Apply Now
-                  <FaArrowRight className="text-sm lg:text-md lg:text-md" />
-                </button>
-
-                <button className="rounded-full border border-white/15 bg-white/[0.03] px-6 py-3.5 font-medium text-white hover:border-yellow-400/35 hover:text-yellow-300 transition">
-                  <Link
-                    href={`/career/${job.id}`}
-                    className="rounded-full px-6 py-3.5 border-none font-medium text-white hover:border-yellow-400/35 hover:text-yellow-300 transition text-center"
-                  >
-                    View Details
-                  </Link>
-                </button>
-              </div>
+          {loading
+            ? Array.from({ length: 4 }).map((_, i) => <JobSkeleton key={i} />)
+            : careerData.map((job) => (
+              <div
+                key={job.id}
+                className="rounded-[30px] border border-white/10 bg-white/[0.03] p-6 md:p-8 hover:border-yellow-400/25 transition"
+              >
+                <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-6">
+                  <div className="max-w-3xl">
+                    <div className="flex flex-wrap gap-3 mb-4">
+              <Tag icon={<FaBriefcase />} text={job?.data?.department} />
+              <Tag icon={<FaClock />} text={job?.data?.employmentType} />
+              <Tag icon={<FaMapMarkerAlt />} text={job?.data?.location} />
             </div>
-            // </motion.div>
-          ))}
+
+            <h3 className="text-2xl md:text-3xl font-semibold mb-3">
+              {job.title}
+            </h3>
+
+            <p className="text-gray-300 leading-relaxed mb-4">
+              {job.subtitle}
+            </p>
+
+            <p className="text-sm text-gray-500">
+              Experience Required: {job.experience}
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row xl:flex-col gap-3 xl:min-w-[200px]">
+            <button
+              onClick={() => setSelectedJob(job)}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-6 py-3.5 font-semibold text-black hover:scale-[1.02] transition"
+            >
+              Apply Now
+              <FaArrowRight className="text-sm" />
+            </button>
+
+            <Link
+              href={`/career/${job.slug}`}
+              className="rounded-full border border-white/15 bg-white/[0.03] px-6 py-3.5 font-medium text-white hover:border-yellow-400/35 hover:text-yellow-300 transition text-center"
+            >
+              View Details
+            </Link>
+          </div>
+        </div>
+      </div>
+    ))}
         </div>
         {selectedJob && (
           <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
@@ -299,13 +335,13 @@ export default function CareerPage() {
               {/* JOB INFO */}
               <div className="flex flex-wrap gap-3 mb-6 text-sm lg:text-md lg:text-md text-gray-300">
                 <span className="border border-white/10 px-3 py-1 rounded-full">
-                  {selectedJob.department}
+                  {selectedJob?.data?.department}
                 </span>
                 <span className="border border-white/10 px-3 py-1 rounded-full">
-                  {selectedJob.location}
+                  {selectedJob?.data?.location}
                 </span>
                 <span className="border border-white/10 px-3 py-1 rounded-full">
-                  {selectedJob.type}
+                  {selectedJob?.data?.employmentType}
                 </span>
               </div>
 

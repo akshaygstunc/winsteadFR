@@ -153,7 +153,7 @@ export default class WebsiteContentService {
       throw error;
     }
   }
- static async getHomePageContent1() {
+  static async getHomePageContent1() {
     try {
       const response = await api.get(`/content/home-page/singleton`);
       return response?.data;
@@ -168,6 +168,15 @@ export default class WebsiteContentService {
       return response?.data;
     } catch (error) {
       console.error("Error fetching about page:", error);
+      throw error;
+    }
+  }
+  static async GetCareers() {
+    try {
+      const response = await api.get(`/content/careers`);
+      return response?.data;
+    } catch (error) {
+      console.error("Error fetching careers page:", error);
       throw error;
     }
   }

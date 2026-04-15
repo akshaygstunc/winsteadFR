@@ -231,16 +231,16 @@ export default function ContactModal({
                 <div className="relative w-full max-w-4xl overflow-hidden rounded-[24px] sm:rounded-[32px] border border-white/10 bg-[#090909] shadow-[0_20px_100px_rgba(0,0,0,0.65)] max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)]">
                     <div className="absolute -top-20 -left-10 h-60 w-60 rounded-full bg-yellow-500/10 blur-3xl" />
                     <div className="absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-yellow-400/10 blur-3xl" />
-
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-center py-2 leading-tight mb-4">
+                        {isSubmitted ? "Thank you for your inquiry" : getModalHeading(intent)}
+                    </h3>
                     <div className="relative grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)]">
                         <div className="overflow-y-auto border-b lg:border-b-0 lg:border-r border-white/10 p-5 sm:p-6 md:p-8 bg-white/[0.02]">
                             <div className="inline-flex items-center rounded-full border border-yellow-400/20 bg-yellow-400/10 px-3 py-1 text-[10px] sm:text-xs uppercase tracking-[0.18em] text-yellow-400 mb-5">
                                 Premium Assistance
                             </div>
 
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold leading-tight mb-4">
-                                {isSubmitted ? "Thank you for your inquiry" : getModalHeading(intent)}
-                            </h3>
+                           
 
                             <p className="text-white leading-relaxed mb-6 text-sm sm:text-base">
                                 {isSubmitted ? (
