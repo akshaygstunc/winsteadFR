@@ -22,7 +22,20 @@ export default function LuxuryChatbot() {
         email: "",
         phone: "",
     });
+    useEffect(() => {
+        if (typeof window === "undefined") return;
 
+        const savedLeadStatus = localStorage.getItem(
+            "luxury-chatbot-lead-captured"
+        );
+
+        const savedLead = localStorage.getItem("luxury-chatbot-lead");
+
+        if (savedLeadStatus === "true" && savedLead) {
+            setLeadCaptured(true);
+            setLeadForm(JSON.parse(savedLead));
+        }
+    }, []);
     const scrollRef = useRef<HTMLDivElement | null>(null);
 
     const { messages, sendMessage, status, error } = useChat({
@@ -105,7 +118,13 @@ export default function LuxuryChatbot() {
             };
 
             await WebsiteContentService.createContactQuery(payload);
-
+            if (typeof window !== "undefined") {
+                localStorage.setItem("luxury-chatbot-lead-captured", "true");
+                localStorage.setItem(
+                    "luxury-chatbot-lead",
+                    JSON.stringify(leadForm)
+                );
+            }
             setLeadCaptured(true);
         } catch (error) {
             console.error("Failed to submit inquiry:", error);
@@ -139,7 +158,7 @@ export default function LuxuryChatbot() {
                         </div>
 
                         <div className="text-left flex-1">
-                            <p className="text-white font-medium">Sophie</p>
+                            <p className="text-white font-medium">Liz</p>
                             <p className="text-white/90 text-sm">
                                 Property Sales Department
                             </p>
