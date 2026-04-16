@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa6";
 import ContactModal from "./ContactModal";
 import { FaPinterest } from "react-icons/fa6";
+import LuxuryChatbot from "./ChatBot";
 type ContactIntent =
   | "schedule-visit"
   | "download-floor-plan"
@@ -309,6 +310,7 @@ useEffect(() => {
         // projectTitle={project.title}
         intent={contactIntent}
       />
+      <LuxuryChatbot />
     </footer>
   );
 }
