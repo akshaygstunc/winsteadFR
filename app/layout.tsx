@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${jakarta.variable}  h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <main className="bg-black text-white pt-[100px]">
+        <main className="bg-black text-white">
           <Navbar />
           {children}
           <ToastContainer />
