@@ -70,31 +70,54 @@ export default function Home() {
     },
   ];
   useEffect(() => {
-    const requestBrowserLocation = () => {
-      if (typeof window === "undefined" || !navigator.geolocation) {
-        // setLocationStatus("unavailable");
-        return;
-      }
-
-      // setLocationStatus("fetching");
+    const requestBrowserLocation = async () => {
+      if (typeof window === "undefined" || !navigator.geolocation) return;
 
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          localStorage.setItem("long", position.longitude)
-          localStroage.setItem("lat", postion.latitude)
-        },
-        () => {
+        async (position) => {
+          const lat = position.coords.latitude;
+          const long = position.coords.longitude;
 
+          localStorage.setItem("lat", String(lat));
+          localStorage.setItem("long", String(long));
+
+          try {
+            const res = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${long}&accept-language=en`
+            );
+
+            const data = await res.json();
+
+            const city =
+              data.address.city ||
+              data.address.town ||
+              data.address.village ||
+              data.address.state ||
+              "";
+
+            const country = data.address.country || "";
+
+            localStorage.setItem("city", city);
+            localStorage.setItem("country", country);
+
+            console.log({ city, country });
+          } catch (error) {
+            console.error("Reverse geocoding failed", error);
+          }
+        },
+        (error) => {
+          console.error("Location permission denied", error);
         },
         {
           enableHighAccuracy: true,
           timeout: 10000,
           maximumAge: 0,
-        },
+        }
       );
     };
-    requestBrowserLocation()
-  })
+
+    requestBrowserLocation();
+  }, []);
   return (
     <div className="bg-black text-white">
       {/* <Navbar /> */}

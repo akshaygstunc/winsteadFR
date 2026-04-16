@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaTimes } from "react-icons/fa";
 import WebsiteContentService from "../services/websitecontent.service";
 import { toast } from "react-toastify";
@@ -92,10 +92,23 @@ export default function ContactModal({
     >("idle");
 
     const [browserLocation, setBrowserLocation] = useState<{
-        latitude: number | null;
-        longitude: number | null;
+        city: string | null;
+        country: string | null;
     } | null>(null);
+    useEffect(() => {
+        async function fetchLoc() {
+            if (typeof window !== "undefined" && navigator.geolocation) {
+                // Implementation for fetching location
+                setLocationStatus("fetching");
+                setBrowserLocation({
+                    city: localStorage.getItem("city"),
+                    country: localStorage.getItem("country"),
+                })
 
+            }
+        }
+        fetchLoc();
+    }, [])
     const handleContactChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
@@ -171,8 +184,8 @@ export default function ContactModal({
                     email: contactForm.email.trim(),
                     phone: `${contactForm.countryCode}${contactForm.phone}`.replace(/\s+/g, ""),
                     location:
-                        browserLocation?.latitude && browserLocation?.longitude
-                            ? `${browserLocation.latitude}, ${browserLocation.longitude}`
+                        browserLocation?.city && browserLocation?.country
+                            ? `${browserLocation.city}, ${browserLocation.country}`
                             : "",
                 },
                 sourcePage: typeof window !== "undefined" ? window.location.href : "",
@@ -190,8 +203,8 @@ export default function ContactModal({
                     userAgent: typeof navigator !== "undefined" ? navigator.userAgent || "" : "",
                 },
                 browserLocation: {
-                    latitude: browserLocation?.latitude ?? null,
-                    longitude: browserLocation?.longitude ?? null,
+                    city: browserLocation?.city ?? null,
+                    country: browserLocation?.country ?? null,
                 },
             };
 

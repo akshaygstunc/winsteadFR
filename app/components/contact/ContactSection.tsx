@@ -112,7 +112,7 @@ export default function ContactSection({
                     fullName: formData.fullName.trim(),
                     email: formData.email.trim(),
                     phone: `${formData.countryCode}${formData.phone.trim()}`,
-                    location: "",
+                    location: typeof window !== "undefined" ? `${localStorage.getItem("city") / localStorage.getIten("country")}` : "",
                 },
                 sourcePage: typeof window !== "undefined" ? window.location.href : "",
                 referrer: typeof document !== "undefined" ? document.referrer : "",

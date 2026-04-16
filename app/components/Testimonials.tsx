@@ -57,40 +57,38 @@ export default function Testimonials() {
         delay: 0.15,
         ease: "power3.out",
       });
-
-      gsap.from(".review-cta", {
-        y: 20,
-        opacity: 0,
-        duration: 1,
-        delay: 0.25,
-        ease: "power3.out",
-      });
     }, sectionRef);
 
-    let index = 0;
-    const cardWidth = 374;
+    const getSlideWidth = () => {
+      if (window.innerWidth < 768) {
+        return trackRef.current?.children[0]?.clientWidth || window.innerWidth;
+      }
+      return (
+        (trackRef.current?.children[0] as HTMLElement)?.offsetWidth + 24 || 384
+      );
+    };
 
     const animate = () => {
       if (!trackRef.current || loading || testimonialsdata.length <= 1) return;
 
-      index++;
+      const track = trackRef.current;
+      const slideWidth = getSlideWidth();
 
-      gsap.to(trackRef.current, {
-        x: -(cardWidth * index),
-        duration: 1.2,
+      gsap.to(track, {
+        x: -slideWidth,
+        duration: 1,
         ease: "power3.inOut",
-      });
+        onComplete: () => {
+          const firstChild = track.children[0];
+          if (!firstChild) return;
 
-      if (index >= testimonialsdata.length - 1) {
-        setTimeout(() => {
-          if (!trackRef.current) return;
-          gsap.set(trackRef.current, { x: 0 });
-          index = 0;
-        }, 1200);
-      }
+          track.appendChild(firstChild);
+          gsap.set(track, { x: 0 });
+        },
+      });
     };
 
-    const interval = setInterval(animate, 4500);
+    const interval = setInterval(animate, 4000);
 
     return () => {
       clearInterval(interval);
@@ -128,7 +126,7 @@ export default function Testimonials() {
         </div>
 
         <div className="overflow-hidden">
-          <div ref={trackRef} className="flex gap-6 will-change-transform">
+          <div ref={trackRef} className="flex gap-6 will-change-transform" style={{ width: "max-content" }}>
             {loading
               ? Array.from({ length: 4 }).map((_, i) => (
                 <div
