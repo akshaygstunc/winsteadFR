@@ -25,6 +25,7 @@ import LuxuryFAQ from "@/app/components/FAQ";
 import ProjectHeroSlider from "@/app/components/ProjectSlider";
 import FloorPlan from "../../../public/floorplan.webp";
 import ReadMoreSlider from "@/app/components/ReadMoreSlider";
+import PDFViewer from "@/app/components/PdfViewerSlider";
 
 const tabs = ["overview", "amenities", "FAQ"] as const;
 type TabKey = (typeof tabs)[number];
@@ -451,7 +452,7 @@ export default function ProjectDetailPage() {
   const bookingAmount = (propertyPrice * bookingPercent) / 100;
   const constructionAmount = (propertyPrice * constructionPercent) / 100;
   const handoverAmount = (propertyPrice * handoverPercent) / 100;
-
+  console.log(project?.developer)
   return (
     <>
       <main className="bg-black text-white min-h-screen overflow-x-hidden">
@@ -551,7 +552,7 @@ export default function ProjectDetailPage() {
                 <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-5">
                   Premium living shaped by design, location, and long-term value
                 </h2>
-                <ReadMoreSlider description={project.description} heading="Project Description" />
+                <PDFViewer pdfurl={project.propertydoc || "https://storage.googleapis.com/winstead-global-assets/AEON%20AT%20DUBAI%20CREEK%20HARBOUR.pdf"} description={project.description} heading="Project Description" />
 
                 <div className="mt-8 grid sm:grid-cols-2 gap-4">
                   {project.highlights.map((item, index) => (
@@ -568,20 +569,61 @@ export default function ProjectDetailPage() {
 
               <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
                 <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
-                  Why It Stands Out
+                  About Developer
                 </p>
                 <div className="space-y-5 text-white-400">
+                  {/* Developer Section */}
                   <div>
-                    <h3 className="text-white text-lg font-semibold mb-2">Strategic Positioning</h3>
-                    <p className="leading-relaxed">{project.category}</p>
+                    <h3 className="mb-3 text-lg font-semibold text-white">
+                      Developer
+                    </h3>
+
+                    <div className="flex items-start gap-4 rounded-[20px] border border-white/10 bg-white/[0.03] p-4">
+                      {projectDetails?.developer?.image && (
+                        <img
+                          src={projectDetails?.developer.image}
+                          alt={projectDetails?.developer.title}
+                          className="h-14 w-14 rounded-xl object-contain bg-white p-2"
+                        />
+                      )}
+
+                      <div>
+                        <h4 className="text-base font-semibold text-white">
+                          {projectDetails?.developer?.title}
+                        </h4>
+                        <p className="mt-1 leading-relaxed text-white-400">
+                          {projectDetails?.developer?.description || ""}
+                        </p>
+                      </div>
+                    </div>
                   </div>
+
+                  {/* Project Description */}
+                  {/* <div>
+                    <h3 className="mb-2 text-lg font-semibold text-white">
+                      Design-Led Living
+                    </h3>
+                    <div className="leading-relaxed">
+                      {project?.developer?.title}
+                    </div>
+                  </div> */}
+
+                  {/* Communities */}
                   <div>
-                    <h3 className="text-white text-lg font-semibold mb-2">Design-Led Living</h3>
-                    <p className="leading-relaxed"><ReadMoreSlider description={project.description} heading="Project Description" /></p>
-                  </div>
-                  <div>
-                    <h3 className="text-white text-lg font-semibold mb-2">Long-Term Potential</h3>
-                    <p className="leading-relaxed">{project.handover}</p>
+                    <h3 className="mb-3 text-lg font-semibold text-white">
+                      Communities
+                    </h3>
+
+                    <div className="flex flex-wrap gap-2">
+                      {projectDetails?.communities?.map((community: string, index: number) => (
+                        <a href={`/projects/${projectDetails?.slug}/${community?.slug}`}
+                          key={index}
+                          className="rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-4 py-2 text-sm font-medium text-[#D4AF37] backdrop-blur-sm"
+                        >
+                          {community?.title}
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>

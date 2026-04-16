@@ -24,6 +24,7 @@ import memberImg5 from "@/public/logoo3.png";
 import { useParams } from "next/navigation";
 import ReadMoreSlider from "@/app/components/ReadMoreSlider";
 import { useEffect, useState } from "react";
+import WebsiteContentService from "@/app/services/websitecontent.service";
 
 type DeveloperCategory =
     | "Luxury"
@@ -209,10 +210,10 @@ console.log("PROJECT:", projects);
 
     useEffect(() => {
         const fetchProjects = async () => {
-            const res = await fetch("/backend/communities");
-            const data = await res.json();
+            const res = await WebsiteContentService.GetDeveloperCommunities(params.slug);
 
-            setProjects(data); // 👈 DIRECT set (no filter)
+            console.log(res)
+            setProjects(res); // 👈 DIRECT set (no filter)
         };
 
         fetchProjects();
@@ -250,24 +251,49 @@ console.log("PROJECT:", projects);
 
         fetchData();
     }, [params.slug]);
-    if (!developer) {
+    if (loading) {
         return (
-            <main className="min-h-screen bg-black text-white flex items-center justify-center px-6">
-                <div className="text-center">
-                    <h1 className="text-3xl font-semibold mb-3">Developer not found</h1>
-                    <p className="text-white mb-6">
-                        The developer profile you are looking for does not exist.
-                    </p>
-                    <Link
-                        href="/developers"
-                        className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-6 py-3 text-black font-medium"
-                    >
-                        Back to Developers
-                    </Link>
-                </div>
+            <main className="min-h-screen bg-black text-white">
+                <section className="px-6 md:px-10 py-16 md:py-20 animate-pulse">
+                    <div className="mx-auto max-w-7xl">
+                        {/* Breadcrumb shimmer */}
+                        <div className="h-4 w-40 rounded-full bg-white/5" />
+
+                        {/* Heading shimmer */}
+                        <div className="mt-10 max-w-4xl space-y-5">
+                            <div className="h-4 w-44 rounded-full bg-[#D4AF37]/20" />
+                            <div className="h-14 w-[420px] rounded-xl bg-white/10" />
+                            <div className="h-5 w-full max-w-3xl rounded-xl bg-white/5" />
+                            <div className="h-5 w-2/3 rounded-xl bg-white/5" />
+                        </div>
+                    </div>
+                </section>
+
+                <section className="px-6 md:px-10 pb-24">
+                    <div className="mx-auto max-w-7xl grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+                        {[...Array(6)].map((_, i) => (
+                            <div
+                                key={i}
+                                className="overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.03]"
+                            >
+                                {/* image shimmer */}
+                                <div className="h-[300px] bg-white/5" />
+
+                                {/* content shimmer */}
+                                <div className="space-y-4 p-6">
+                                    <div className="h-3 w-24 rounded-full bg-[#D4AF37]/20" />
+                                    <div className="h-8 w-3/4 rounded-xl bg-white/10" />
+                                    <div className="h-4 w-1/2 rounded-xl bg-white/5" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
             </main>
         );
     }
+
+    if (!developer) return null;
 
     const developerProperties = properties.filter(
         (item) => item.developerSlug === developer.slug
@@ -275,218 +301,72 @@ console.log("PROJECT:", projects);
 
     return (
         <main className="bg-black text-white">
-            <section className="relative overflow-hidden border-b border-white/10">
-                {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(241,220,127,0.14),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(185,166,80,0.10),transparent_25%)]" /> */}
-
-
-                <div className="relative h-[65vh] min-h-[420px] overflow-hidden ">
-                    {/* Background Image */}
-                    <Image
-                        src={bannerImg || developer.image}
-                        alt={developer.name}
-                        fill
-                        priority
-                        className="object-cover"
-                    />
-
-                    {/* Dark overlays for luxury feel */}
-                    {/* <div className="absolute inset-0 bg-black/45" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/20" />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(250,204,21,0.10),transparent_28%)]" /> */}
-
-                    {/* Content */}
-                    <div className="  h-full max-w-[80rem] mx-auto   mt-[80px]">
-                        <div className="flex h-full items-end md:items-center">
-                            <div className="flex flex-col items-center gap-5 md:gap-7 rounded-[28px] bg-black/25 backdrop-blur-xl px-3   md:py-3 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-                                {/* Logo */}
-                                <div className=" h-[50px] w-[50px] md:h-[110px] md:w-[110px] shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-3">
-                                    <Image
-                                        src={developer.image}
-                                        alt={developer.name}
-                                        fill
-                                        className="object-contain p-6 filter brightness-0 invert"
-                                    />
-                                </div>
-                                {/* <h6 className="text-sm  leading-tight text-white">
-                                    {developer.name}
-                                </h6> */}
-                                {/* Name only */}
-
-                            </div>
-                        </div>
-                        <div>
-
-
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <section className="px-6 md:px-10 py-16 md:py-20">
-                <div className="max-w-7xl mx-auto px-4 md:px-10 py-2  relative z-10">
+                <div className="mx-auto max-w-7xl">
                     <AutoBreadcrumbs />
-                </div>
-                <div className="max-w-7xl mx-auto grid lg:grid-cols-[1.3fr_0.7fr] gap-8">
-                    <div className="rounded-[30px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-                        <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
-                            Developer Details
-                        </p>
-                        <h2 className="text-3xl md:text-4xl font-semibold mb-6">
-                            About {developer.name}
-                        </h2>
-                        <p className="text-white leading-relaxed text-base md:text-lg">
-                            <ReadMoreSlider description={developer.about} heading="About" />
+
+                    {/* Heading */}
+                    <div className="mt-10 max-w-4xl">
+                        <p className="mb-3 text-sm uppercase tracking-[0.3em] text-[#D4AF37]">
+                            Our Communities
                         </p>
 
-                        <div className="mt-8">
-                            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-white mb-4">
-                                Specializations
-                            </p>
-                            <div className="flex flex-wrap gap-3">
-                                {developer.specializations.map((item) => (
-                                    <span
-                                        key={item}
-                                        className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] text-sm lg:text-md lg:text-md text-white"
-                                    >
-                                        {item}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
+                        <h1 className="text-4xl md:text-6xl font-semibold tracking-tight text-white">
+                            {developer.name}
+                        </h1>
 
-                        <div className="mt-8">
-                            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em]  mb-4">
-                                Highlights
-                            </p>
-                            <div className="flex flex-wrap gap-3">
-                                {developer.tags.map((tag) => (
-                                    <span
-                                        key={tag}
-                                        className="px-4 py-2 rounded-full border border-yellow-500/20 bg-yellow-500/10 text-sm lg:text-md lg:text-md text-yellow-400"
-                                    >
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="rounded-[30px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-                        <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
-                            Quick Info
+                        <p className="mt-5 text-lg leading-relaxed text-white">
+                            Discover master-planned luxury communities crafted by{" "}
+                            {developer.name}, where lifestyle, architecture, and long-term
+                            investment value come together in Dubai’s most desirable locations.
                         </p>
-
-                        <div className="space-y-4">
-                            <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
-                                    Developer Name
-                                </span>
-                                <span className="text-white font-medium">{developer.name}</span>
-                            </div>
-
-                            <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
-                                    Category
-                                </span>
-                                <span className="text-white font-medium">{developer.category}</span>
-                            </div>
-
-                            <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
-                                    Developer Type
-                                </span>
-                                <span className="text-white font-medium">{developer.type}</span>
-                            </div>
-
-                            <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
-                                    Portfolio Size
-                                </span>
-                                <span className="text-white font-medium">{developer.projects}</span>
-                            </div>
-
-                            <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                                <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
-                                    Headquarters
-                                </span>
-                                <span className="text-white font-medium">{developer.headquarters}</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
 
-            <section id="properties" className="px-6 md:px-10 pb-20 md:pb-24">
-                <div className="max-w-7xl mx-auto">
-                    <div className="mb-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-                        <div>
-                            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
-                                Properties
-                            </p>
-                            <h2 className="text-3xl md:text-5xl font-semibold">
-                                Properties by {developer.name}
-                            </h2>
-                        </div>
-
-                        <p className="text-white max-w-2xl">
-                            Explore selected properties associated with this developer, including
-                            residential, luxury, and investment-driven opportunities.
-                        </p>
-                    </div>
-
-                    {projects.length > 0 ? (
-                        <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                            {projects.map((property) => (
-                                <article
+            <section className="px-6 md:px-10 pb-24">
+                <div className="mx-auto max-w-7xl">
+                    {projects?.communities?.length > 0 ? (
+                        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+                            {projects?.communities?.map((property) => (
+                                <Link
                                     key={property._id}
-                                    className="group overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] transition hover:border-yellow-400/30"
+                                    href={`/projects/${developer.slug}/${property.slug}`}
+                                    className="group block overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.03] transition duration-500 hover:border-[#D4AF37]/40 hover:bg-white/[0.05]"
                                 >
-                                    <div className="relative h-[260px] overflow-hidden">
+                                    {/* Image */}
+                                    <div className="relative h-[300px] overflow-hidden">
                                         <Image
                                             src={property.image}
                                             alt={property.title}
                                             fill
-                                            className="object-contain transition duration-700 group-hover:scale-105 brightness-90 filter bg-white"
+                                            className="object-cover transition duration-700 group-hover:scale-105"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
-                                        <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-black/60 border border-white/10 text-xs text-yellow-400">
-                                            {property.type}
+
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+                                        <div className="absolute bottom-5 left-5 right-5">
+                                            <p className="text-xs uppercase tracking-[0.25em] text-[#D4AF37]">
+                                                Community
+                                            </p>
+
+                                            <h3 className="mt-2 text-2xl font-semibold text-white">
+                                                {property.title}
+                                            </h3>
+
+                                            <p className="mt-2 text-sm text-white/75">
+                                                {property.data?.city || property.location || "Dubai"}
+                                            </p>
                                         </div>
                                     </div>
-
-                                    <div className="p-5 md:p-6">
-                                        <h3 className="text-2xl font-semibold">{property.title}</h3>
-                                        <p className="text-white mt-2">{property.location}</p>
-<p className="text-white mt-2">
-  {property.data?.city || "Dubai"}
-</p>
-                                        <div className="mt-5 flex items-center justify-between gap-3">
-                                            <div>
-                                                <span className="block text-xs uppercase tracking-[0.18em] text-white mb-1">
-                                                    Starting From
-                                                </span>
-                                                <span className="text-lg font-medium text-yellow-400">
-                                                    {property.startingPrice}
-                                                </span>
-                                            </div>
-
-                                            <Link
- href={`/projects/${developer.slug}/${property.slug}`}                                                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-5 py-2.5 text-sm lg:text-md lg:text-md font-medium text-black"
-                                            >
-                                                View Project
-                                                <FaArrowRight className="text-xs" />
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </article>
+                                </Link>
                             ))}
                         </div>
                     ) : (
-                        <div className="rounded-[28px] border border-dashed border-white/10 bg-white/[0.02] px-6 py-14 text-center">
-                            <h3 className="text-2xl font-semibold mb-2">No properties added yet</h3>
-                            <p className="text-white">
-                                Once properties are mapped with this developer, they can be shown here.
-                            </p>
+                            <div className="rounded-[30px] border border-dashed border-white/10 bg-white/[0.02] py-20 text-center">
+                                <h3 className="text-2xl font-semibold text-white">
+                                    No communities available
+                                </h3>
                         </div>
                     )}
                 </div>

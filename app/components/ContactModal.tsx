@@ -275,7 +275,7 @@ export default function ContactModal({
                                     <p className="text-xs uppercase tracking-[0.16em] text-white mb-1">
                                         Project
                                     </p>
-                                    <img src={projectImage} alt="Project Image" className="w-full h-auto rounded-lg" />
+                                    <img src={projectImage ? projectImage : "https://uqmdvshcqbuzetgffwjd.supabase.co/storage/v1/object/public/winstead/projects/gallery/1775578940304-chatgpt-image-apr-6-2026-03_29_58-pm.png"} alt="Project Image" className="w-full h-auto rounded-lg" />
                                 </div>
 
                                 {/* <div className="rounded-2xl border border-white/10 bg-black/30 p-4">

@@ -180,4 +180,13 @@ export default class WebsiteContentService {
       throw error;
     }
   }
+  static async GetDeveloperCommunities(slug: string) {
+    try {
+      const response = await api.get(`/content/communities/developer/${slug}`);
+      return response?.data;
+    } catch (error) {
+      console.error("Error fetching developer communities:", error);
+      throw error;
+    }
+  }
 }
