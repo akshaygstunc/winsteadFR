@@ -126,7 +126,7 @@ export default function Testimonials() {
         </div>
 
         <div className="overflow-hidden">
-          <div ref={trackRef} className="flex gap-6 will-change-transform" style={{ width: "max-content" }}>
+          <div ref={trackRef} className="flex gap-6 will-change-transform">
             {loading
               ? Array.from({ length: 4 }).map((_, i) => (
                 <div
