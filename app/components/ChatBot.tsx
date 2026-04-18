@@ -145,7 +145,7 @@ export default function LuxuryChatbot() {
                 <>
                     <button
                         onClick={() => setOpen(true)}
-                        className="fixed bottom-0 left-2 z-50 flex items-center gap-4 rounded-tr-[30px] rounded-tl-[30px]  bg-gradient-to-r from-[#B9A650] to-[#F1DC7F] px-4 py-1 shadow-2xl min-w-[320px]"
+                        className="fixed bottom-5 left-2 z-50 flex items-center gap-4 rounded-tr-[30px] rounded-tl-[30px]  bg-gradient-to-r from-[#B9A650] to-[#F1DC7F] px-4 py-1 shadow-2xl min-w-[320px]"
                     >
                         <div className="relative w-12 h-12 rounded-full overflow-hidden">
                             <Image

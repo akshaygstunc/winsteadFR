@@ -189,4 +189,13 @@ export default class WebsiteContentService {
       throw error;
     }
   }
+
+  static async GetPodcasts() {
+    try {
+      const response = await api.get(`/content/podcast`);
+      return response.data;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

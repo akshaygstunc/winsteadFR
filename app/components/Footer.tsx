@@ -285,7 +285,7 @@ useEffect(() => {
 
       {/* bottom strip */}
       <div className="px-6 md:px-12 lg:px-20 py-5 border-t border-white/10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs md:text-sm lg:text-xl lg:text-xl text-white">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs md:text-sm lg:text-sm  text-white">
           <p>© 2026 Winstead Global Real Estate LLC</p>
 
           <div className="flex items-center gap-4">
