@@ -127,7 +127,7 @@ function DevelopersTabsAndGrid({ teamData }: { teamData: any[] }) {
                 </div>
 
                 {/* Premium Tabs */}
-                <div className="flex gap-3 overflow-x-auto pb-4 mb-12 scrollbar-hide">
+                {/* <div className="flex gap-3 overflow-x-auto pb-4 mb-12 scrollbar-hide">
                     {tabs.map((tab) => {
                         const isActive = activeTab === tab;
 
@@ -144,7 +144,7 @@ function DevelopersTabsAndGrid({ teamData }: { teamData: any[] }) {
                             </button>
                         );
                     })}
-                </div>
+                </div> */}
 
                 {/* Count */}
                 <div className="mb-10 text-sm text-white/60 tracking-wide">
@@ -156,7 +156,7 @@ function DevelopersTabsAndGrid({ teamData }: { teamData: any[] }) {
                 </div>
 
                 {/* Luxury Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {loading
                         ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
                         : filteredDevelopers.map((developer) => (
@@ -165,67 +165,37 @@ function DevelopersTabsAndGrid({ teamData }: { teamData: any[] }) {
                                 href={`/developer/${developer.slug}`}
                                 className="group"
                             >
-                                <article className="relative rounded-[32px] overflow-hidden border border-[#D4AF37]/20 bg-gradient-to-b from-white/[0.04] to-white/[0.02] backdrop-blur-xl hover:border-[#FFD700]/50 hover:shadow-[0_0_50px_rgba(255,215,0,0.15)] transition-all duration-500">
-                                    {/* Gold shimmer top line */}
-                                    <div className="absolute top-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-[#FFD700] to-transparent opacity-60" />
+                                <article className="rounded-3xl border border-[#D4AF37]/20 bg-gradient-to-b from-white/[0.04] to-white/[0.02] backdrop-blur-xl hover:border-[#FFD700]/50 hover:shadow-[0_0_30px_rgba(255,215,0,0.12)] transition-all duration-300 p-6 flex items-center gap-5">
 
-                                    <div className="relative h-[380px] overflow-hidden bg-black">
+                                    {/* Logo */}
+                                    <div className="relative w-20 h-20 min-w-[64px] rounded-2xl overflow-hidden bg-black flex items-center justify-center border border-white/10">
                                         <Image
                                             src={developer.image}
                                             alt={developer.name}
                                             fill
-                                            className="object-contain transition duration-700 group-hover:scale-110 brightness-110 invert"
+                                            className="object-contain p-2 bg-white"
                                         />
+                                    </div>
 
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                                    {/* Content */}
+                                    <div className="flex-1">
+                                        <h3 className="text-xl md:text-2xl font-semibold leading-tight group-hover:text-[#FFD700] transition">
+                                            {developer.name}
+                                        </h3>
 
-                                        <div className="absolute top-5 left-5 px-4 py-2 rounded-full border border-[#D4AF37]/30 bg-black/70 backdrop-blur-md text-[11px] uppercase tracking-[0.2em] text-[#FFD700]">
-                                            {developer.category}
-                                        </div>
+                                        <p className="text-white text-md mt-1">
+                                            {developer.type}
+                                        </p>
 
-                                        <div className="absolute bottom-5 left-5">
-                                            <span className="px-4 py-2 rounded-full bg-black/70 border border-white/10 text-xs text-white backdrop-blur-md">
-                                                {developer.experience}
+                                        {/* Projects */}
+                                        <div className="mt-3 text-md">
+                                            <span className="text-white">Projects: </span>
+                                            <span className="text-white font-medium">
+                                                {developer.projects}
                                             </span>
                                         </div>
                                     </div>
 
-                                    <div className="p-6 md:p-7">
-                                        <h3 className="text-2xl md:text-3xl font-semibold leading-tight mb-2 group-hover:text-[#FFD700] transition">
-                                            {developer.name}
-                                        </h3>
-
-                                        <p className="text-white/50 text-sm tracking-wide">
-                                            {developer.type}
-                                        </p>
-
-                                        <div className="mt-6 grid gap-4">
-                                            <div className="rounded-2xl border border-[#D4AF37]/10 bg-white/[0.02] px-4 py-4">
-                                                <span className="block text-white/40 text-[11px] uppercase tracking-[0.22em] mb-1">
-                                                    Headquarters
-                                                </span>
-                                                <span className="text-white">{developer.headquarters}</span>
-                                            </div>
-
-                                            <div className="rounded-2xl border border-[#D4AF37]/10 bg-white/[0.02] px-4 py-4">
-                                                <span className="block text-white/40 text-[11px] uppercase tracking-[0.22em] mb-1">
-                                                    Portfolio
-                                                </span>
-                                                <span className="text-white">{developer.projects}</span>
-                                            </div>
-                                        </div>
-
-                                        <div className="mt-6 flex flex-wrap gap-2">
-                                            {developer.specializations.map((item) => (
-                                                <span
-                                                    key={item}
-                                                    className="px-3 py-2 rounded-full border border-[#D4AF37]/20 bg-[#D4AF37]/5 text-xs text-[#FFF2B2]"
-                                                >
-                                                    {item}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
                                 </article>
                             </Link>
                         ))}

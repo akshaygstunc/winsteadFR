@@ -1,6 +1,7 @@
 "use client";
 
 import AutoBreadcrumbs from "@/app/components/BreadCrumbs";
+import ReadMoreSlider from "@/app/components/ReadMoreSlider";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -255,8 +256,10 @@ export default function CommunityPage() {
                 <div className="mx-auto max-w-7xl px-6 md:px-10">
                     <AutoBreadcrumbs />
 
-                    <div className="relative z-10 mx-auto flex min-h-[50vh] max-w-7xl items-end px-6 pb-20 md:px-10">
-                        <div className="max-w-4xl">
+                    <div className="relative z-10 mx-auto grid min-h-[50vh] max-w-7xl grid-cols-1 lg:grid-cols-2 gap-10 items-center px-6 py-16 md:px-10">
+
+                        {/* LEFT SIDE */}
+                        <div className="max-w-4xl flex flex-col justify-center h-full">
                             <p className="mb-4 text-sm uppercase tracking-[0.45em] text-[#F1DC7F]">
                                 Our Communities
                             </p>
@@ -266,10 +269,45 @@ export default function CommunityPage() {
                             </h1>
 
                             <p className="mt-6 max-w-3xl text-lg leading-8 text-white/80">
-                                {community?.description}
+                                <ReadMoreSlider description={community?.description} heading={"Community Description"} />
                             </p>
                         </div>
 
+                        {/* RIGHT SIDE */}
+                        <div className="w-full flex justify-center lg:justify-end items-center h-full">
+                            <div className="w-full max-w-md rounded-3xl border border-[#D4AF37]/20 bg-gradient-to-b from-white/[0.05] to-white/[0.02] backdrop-blur-xl p-6 hover:border-[#FFD700]/40 transition-all duration-300">
+
+                                {/* Logo + Name */}
+                                <div className="flex gap-4 items-center">
+                                    <div className="relative w-16 h-16 rounded-2xl overflow-hidden bg-black border border-white/10">
+                                        <Image
+                                            src={community?.developer?.image}
+                                            alt={community?.developer?.name}
+                                            fill
+                                            className="object-contain p-2 bg-white"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <p className="text-xs uppercase tracking-[0.3em] text-[#D4AF37]">
+                                            Developer
+                                        </p>
+                                        <h3 className="text-xl font-semibold text-white">
+                                            {community?.developer?.title}
+                                        </h3>
+                                        <p className="text-sm text-white/50">
+                                            {community?.developer?.type}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Description */}
+                                <p className="mt-5 text-sm leading-6 text-white/70">
+                                    {community?.developer?.description}
+                                </p>
+
+                            </div>
+                        </div>
 
                     </div>
                 </div>

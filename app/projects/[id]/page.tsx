@@ -20,11 +20,9 @@ import projectImage from "../../../public/hero1.jpg";
 import AutoBreadcrumbs from "@/app/components/BreadCrumbs";
 import WebsiteContentService from "@/app/services/websitecontent.service";
 import ContactModal from "@/app/components/ContactModal";
-import MortgageCalculator from "@/app/components/MortrageForm";
 import LuxuryFAQ from "@/app/components/FAQ";
 import ProjectHeroSlider from "@/app/components/ProjectSlider";
 import FloorPlan from "../../../public/floorplan.webp";
-import ReadMoreSlider from "@/app/components/ReadMoreSlider";
 import PDFViewer from "@/app/components/PdfViewerSlider";
 
 const tabs = ["overview", "amenities", "FAQ"] as const;
@@ -40,20 +38,20 @@ type ContactIntent =
 type BackendAmenity =
   | string
   | {
-    name?: string;
-    icon?: string;
-  };
+      name?: string;
+      icon?: string;
+    };
 
 type BackendFloorPlan =
   | {
-    label?: string;
-    title?: string;
-    name?: string;
-    size?: string | number;
-    price?: string | number;
-    image?: string;
-    url?: string;
-  }
+      label?: string;
+      title?: string;
+      name?: string;
+      size?: string | number;
+      price?: string | number;
+      image?: string;
+      url?: string;
+    }
   | string;
 
 type BackendProject = {
@@ -65,7 +63,15 @@ type BackendProject = {
   metaDescription?: string;
   type?: string | { _id?: string; name?: string; title?: string };
   subType?: string | { _id?: string; name?: string; title?: string };
-  developer?: string | { _id?: string; name?: string; title?: string };
+  developer?:
+    | string
+    | {
+        _id?: string;
+        name?: string;
+        title?: string;
+        image?: string;
+        description?: string;
+      };
   developerType?: string;
   shortDescription?: string;
   category?: string;
@@ -98,6 +104,10 @@ type BackendProject = {
   floorPlans?: BackendFloorPlan[];
   createdAt?: string;
   updatedAt?: string;
+  handover?: string | number;
+  duringconstruction?: string | number;
+  communities?: { slug?: string; title?: string }[];
+  propertydoc?: string;
 };
 
 type UiFloorPlan = {
@@ -116,7 +126,9 @@ type UiProject = {
   price: string;
   bedrooms: string;
   area: string;
+  status: string;
   handover: string;
+  duringconstruction: string;
   developer: string;
   residence: string;
   description: string;
@@ -124,6 +136,8 @@ type UiProject = {
   floorPlans: UiFloorPlan[];
   amenities: string[];
   highlights: string[];
+  thumbnail?: string;
+  propertydoc?: string;
 };
 
 const EMPTY_VALUE = "Not available";
@@ -173,25 +187,25 @@ function getProjectImages(data?: BackendProject) {
   const images = [
     data?.propertyBanner,
     data?.thumbnail,
-    ...(Array.isArray(data?.gallery) ? data!.gallery : []),
+    ...(Array.isArray(data?.gallery) ? data.gallery : []),
   ].filter((item): item is string => Boolean(item && item.trim()));
 
   return images.length ? Array.from(new Set(images)) : fallbackImages;
 }
 
 function getAmenities(data?: BackendProject) {
-  if (!Array.isArray(data?.amenities) || !data!.amenities!.length) {
+  if (!Array.isArray(data?.amenities) || !data.amenities.length) {
     return [EMPTY_VALUE];
   }
 
-  return data!.amenities!.map((item) => {
+  return data.amenities.map((item) => {
     if (typeof item === "string") return item || EMPTY_VALUE;
     return item?.name || EMPTY_VALUE;
   });
 }
 
 function getFloorPlans(data?: BackendProject): UiFloorPlan[] {
-  if (!Array.isArray(data?.floorPlans) || !data!.floorPlans!.length) {
+  if (!Array.isArray(data?.floorPlans) || !data.floorPlans.length) {
     return [
       {
         label: EMPTY_VALUE,
@@ -202,7 +216,7 @@ function getFloorPlans(data?: BackendProject): UiFloorPlan[] {
     ];
   }
 
-  return data!.floorPlans!.map((plan, index) => {
+  return data.floorPlans.map((plan, index) => {
     if (typeof plan === "string") {
       return {
         label: plan || `Plan ${index + 1}`,
@@ -233,6 +247,34 @@ function getHighlights(data?: BackendProject) {
   ].filter(Boolean);
 
   return list.length ? list : [EMPTY_VALUE];
+}
+
+function getNumericPrice(value: string | number | undefined) {
+  if (value === null || value === undefined) return 0;
+  const cleaned = String(value).replace(/[^0-9.]/g, "");
+  const num = Number(cleaned);
+  return Number.isFinite(num) ? Math.round(num) : 0;
+}
+
+function parsePercent(value: unknown, fallback = 0): number {
+  if (value === null || value === undefined) return fallback;
+
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : fallback;
+  }
+
+  if (typeof value === "string") {
+    const cleaned = value.replace(/[^0-9.]/g, "");
+    const num = Number(cleaned);
+    if (Number.isFinite(num)) return num;
+  }
+
+  return fallback;
+}
+
+function formatAED(value: number) {
+  if (!Number.isFinite(value)) return "0";
+  return Math.round(value).toLocaleString("en-AE");
 }
 
 export default function ProjectDetailPage() {
@@ -289,8 +331,10 @@ export default function ProjectDetailPage() {
       price: formatPrice(projectDetails.price),
       bedrooms: formatBedrooms(projectDetails.bedrooms),
       area: EMPTY_VALUE,
-      handover: getDisplayValue(projectDetails.propertyStatus),
-      developer: getRelationLabel(projectDetails.developer),
+      status: getDisplayValue(projectDetails.propertyStatus),
+      handover: getDisplayValue(projectDetails.handover),
+      duringconstruction: getDisplayValue(projectDetails.duringconstruction),
+      developer: getRelationLabel(projectDetails.developer as any),
       residence: getRelationLabel(projectDetails.type),
       description:
         projectDetails.fullDescription?.trim() ||
@@ -301,6 +345,8 @@ export default function ProjectDetailPage() {
       floorPlans,
       amenities: getAmenities(projectDetails),
       highlights: getHighlights(projectDetails),
+      thumbnail: projectDetails.thumbnail,
+      propertydoc: projectDetails.propertydoc,
     };
   }, [projectDetails]);
 
@@ -316,37 +362,47 @@ export default function ProjectDetailPage() {
   const [calcTab, setCalcTab] = useState<"mortgage" | "payment-plan">("mortgage");
   const [selectedUnit, setSelectedUnit] = useState("");
   const [propertyPrice, setPropertyPrice] = useState(0);
-  const [downPaymentPercent, setDownPaymentPercent] = useState(20);
+
   const [interestRate, setInterestRate] = useState(3.5);
   const [loanYears, setLoanYears] = useState(25);
-  const [bookingPercent, setBookingPercent] = useState(10);
-  const [constructionPercent, setConstructionPercent] = useState(50);
-  const [handoverPercent, setHandoverPercent] = useState(40);
+
+  const [bookingPercent, setBookingPercent] = useState(0);
+  const [constructionPercent, setConstructionPercent] = useState(0);
+  const [handoverPercent, setHandoverPercent] = useState(0);
 
   useEffect(() => {
     if (!project?.floorPlans?.length) return;
     setSelectedUnit(project.floorPlans[0].label);
   }, [project]);
 
-  function getNumericPrice(value: string) {
-    const cleaned = value.replace(/[^0-9.]/g, "");
-    const num = Number(cleaned);
-    return Number.isFinite(num) ? Math.round(num) : 0;
-  }
-
   useEffect(() => {
-    if (selectedUnitPlan?.price && selectedUnitPlan.price !== EMPTY_VALUE) {
-      setPropertyPrice(getNumericPrice(selectedUnitPlan.price));
-      return;
-    }
+    if (!project) return;
 
-    if (project?.price && project.price !== EMPTY_VALUE) {
-      setPropertyPrice(getNumericPrice(project.price));
-      return;
-    }
+    const selectedPlanPrice =
+      selectedUnitPlan?.price && selectedUnitPlan.price !== EMPTY_VALUE
+        ? getNumericPrice(selectedUnitPlan.price)
+        : 0;
 
-    setPropertyPrice(0);
-  }, [selectedUnitPlan, project]);
+    const projectBasePrice =
+      projectDetails?.price !== undefined && projectDetails?.price !== null
+        ? getNumericPrice(projectDetails.price)
+        : project?.price && project.price !== EMPTY_VALUE
+          ? getNumericPrice(project.price)
+          : 0;
+
+    const finalPrice = selectedPlanPrice || projectBasePrice;
+    setPropertyPrice(finalPrice);
+
+    const backendConstruction = parsePercent(projectDetails?.duringconstruction, 0);
+    const backendHandover = parsePercent(projectDetails?.handover, 0);
+
+    let backendBooking = 100 - (backendConstruction + backendHandover);
+    if (backendBooking < 0) backendBooking = 0;
+
+    setConstructionPercent(backendConstruction);
+    setHandoverPercent(backendHandover);
+    setBookingPercent(backendBooking);
+  }, [project, projectDetails, selectedUnitPlan]);
 
   useEffect(() => {
     if (!project?.heroImages?.length) return;
@@ -369,16 +425,12 @@ export default function ProjectDetailPage() {
   }, []);
 
   if (loading) {
-    return (
-      <ProjectDetailsSkeleton />
-    );
+    return <ProjectDetailsSkeleton />;
   }
 
   if (!project) {
     return (
       <div className="min-h-screen bg-black text-white px-6 md:px-12 py-14">
-
-
         <div className="mt-8 rounded-[28px] border border-white/10 bg-white/[0.03] p-8">
           <h1 className="text-2xl font-semibold mb-2">Project not found</h1>
           <p className="text-white-400">
@@ -432,27 +484,36 @@ export default function ProjectDetailPage() {
     closeContactModal();
   };
 
-  const downPaymentAmount = (propertyPrice * downPaymentPercent) / 100;
-  const amountFinanced = propertyPrice - downPaymentAmount;
+  // PAYMENT PLAN
+  const bookingAmount = (propertyPrice * bookingPercent) / 100;
+  const constructionAmount = (propertyPrice * constructionPercent) / 100;
+  const handoverAmount = (propertyPrice * handoverPercent) / 100;
+
+  // MORTGAGE
+  // duringconstruction = upfront/downpayment
+  // handover = mortgage base amount
+  const downPaymentPercent = constructionPercent;
+  const downPaymentAmount = constructionAmount;
+  const loanBaseAmount = handoverAmount;
+  const amountFinanced = loanBaseAmount;
+
   const monthlyRate = interestRate / 100 / 12;
   const numberOfPayments = loanYears * 12;
 
   const monthlyPayment =
     monthlyRate > 0
       ? (amountFinanced *
-        (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments))) /
-      (Math.pow(1 + monthlyRate, numberOfPayments) - 1)
+          (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments))) /
+        (Math.pow(1 + monthlyRate, numberOfPayments) - 1)
       : amountFinanced / Math.max(numberOfPayments, 1);
 
   const annualCost = monthlyPayment * 12;
   const totalMortgagePaid = monthlyPayment * numberOfPayments;
   const totalInterestPaid = totalMortgagePaid - amountFinanced;
-  const totalCost = downPaymentAmount + totalMortgagePaid;
 
-  const bookingAmount = (propertyPrice * bookingPercent) / 100;
-  const constructionAmount = (propertyPrice * constructionPercent) / 100;
-  const handoverAmount = (propertyPrice * handoverPercent) / 100;
-  console.log(project?.developer)
+  const totalCost =
+    bookingAmount + downPaymentAmount + totalMortgagePaid;
+
   return (
     <>
       <main className="bg-black text-white min-h-screen overflow-x-hidden">
@@ -464,15 +525,6 @@ export default function ProjectDetailPage() {
           <section className="max-w-2xl px-4 md:px-10 pt-6">
             <AutoBreadcrumbs />
           </section>
-          {/* <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 text-sm text-white-300 hover:text-white transition"
-            >
-              <FaArrowLeft />
-              Back to Projects
-            </Link>
-          </section> */}
         </div>
 
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 relative z-20">
@@ -506,10 +558,15 @@ export default function ProjectDetailPage() {
 
             <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6 shadow-[0_0_40px_rgba(250,204,21,0.06)]">
               <div className="space-y-3 text-sm text-white-300">
-                <MetaRow label="Developer" value={"DAMAC"} />
-                <MetaRow label="Property Type" value={"Luxury"} />
-                <MetaRow label="Handover" value={project.handover} />
-                <MetaRow label="Category" value={project.category} isLast />
+                <MetaRow label="Developer" value={project.developer} />
+                <MetaRow label="Property Type" value={project.residence} />
+                <MetaRow label="Handover" value={project.status} />
+                <MetaRow label="Category" value={project.category} />
+                <MetaRow
+                  label="Payment Plan"
+                  value={`${bookingPercent}/${constructionPercent}/${handoverPercent}`}
+                  isLast
+                />
               </div>
 
               <button
@@ -530,10 +587,11 @@ export default function ProjectDetailPage() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`whitespace-nowrap rounded-full px-5 py-3 text-sm border transition ${active
-                    ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
-                    : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
-                    }`}
+                  className={`whitespace-nowrap rounded-full px-5 py-3 text-sm border transition ${
+                    active
+                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
+                      : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
+                  }`}
                 >
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
@@ -552,7 +610,15 @@ export default function ProjectDetailPage() {
                 <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-5">
                   Premium living shaped by design, location, and long-term value
                 </h2>
-                <PDFViewer pdfurl={project.propertydoc || "https://storage.googleapis.com/winstead-global-assets/AEON%20AT%20DUBAI%20CREEK%20HARBOUR.pdf"} description={project.description} heading="Project Description" />
+
+                <PDFViewer
+                  pdfurl={
+                    project.propertydoc ||
+                    "https://storage.googleapis.com/winstead-global-assets/AEON%20AT%20DUBAI%20CREEK%20HARBOUR.pdf"
+                  }
+                  description={project.description}
+                  heading="Project Description"
+                />
 
                 <div className="mt-8 grid sm:grid-cols-2 gap-4">
                   {project.highlights.map((item, index) => (
@@ -572,51 +638,43 @@ export default function ProjectDetailPage() {
                   About Developer
                 </p>
                 <div className="space-y-5 text-white-400">
-                  {/* Developer Section */}
                   <div>
-                    <h3 className="mb-3 text-lg font-semibold text-white">
-                      Developer
-                    </h3>
+                    <h3 className="mb-3 text-lg font-semibold text-white">Developer</h3>
 
                     <div className="flex items-start gap-4 rounded-[20px] border border-white/10 bg-white/[0.03] p-4">
-                      {projectDetails?.developer?.image && (
-                        <img
-                          src={projectDetails?.developer.image}
-                          alt={projectDetails?.developer.title}
-                          className="h-14 w-14 rounded-xl object-contain bg-white p-2"
-                        />
-                      )}
+                      {typeof projectDetails?.developer !== "string" &&
+                        projectDetails?.developer?.image && (
+                          <img
+                            src={projectDetails.developer.image}
+                            alt={projectDetails.developer.title || "Developer"}
+                            className="h-14 w-14 rounded-xl object-contain bg-white p-2"
+                          />
+                        )}
 
                       <div>
                         <h4 className="text-base font-semibold text-white">
-                          {projectDetails?.developer?.title}
+                          {typeof projectDetails?.developer !== "string"
+                            ? projectDetails?.developer?.title || EMPTY_VALUE
+                            : projectDetails?.developer || EMPTY_VALUE}
                         </h4>
                         <p className="mt-1 leading-relaxed text-white-400">
-                          {projectDetails?.developer?.description || ""}
+                          {typeof projectDetails?.developer !== "string"
+                            ? projectDetails?.developer?.description || ""
+                            : ""}
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Project Description */}
-                  {/* <div>
-                    <h3 className="mb-2 text-lg font-semibold text-white">
-                      Design-Led Living
-                    </h3>
-                    <div className="leading-relaxed">
-                      {project?.developer?.title}
-                    </div>
-                  </div> */}
-
-                  {/* Communities */}
                   <div>
                     <h3 className="mb-3 text-lg font-semibold text-white">
                       Communities
                     </h3>
 
                     <div className="flex flex-wrap gap-2">
-                      {projectDetails?.communities?.map((community: string, index: number) => (
-                        <a href={`/projects/${projectDetails?.slug}/${community?.slug}`}
+                      {projectDetails?.communities?.map((community, index) => (
+                        <a
+                          href={`/projects/${projectDetails?.slug}/${community?.slug}`}
                           key={index}
                           className="rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-4 py-2 text-sm font-medium text-[#D4AF37] backdrop-blur-sm"
                         >
@@ -657,6 +715,7 @@ export default function ProjectDetailPage() {
             </div>
           </section>
         )}
+
         {activeTab === "FAQ" && <LuxuryFAQ />}
 
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
@@ -676,23 +735,25 @@ export default function ProjectDetailPage() {
               return (
                 <div
                   key={plan.label}
-                  onClick={() => setSelectedPlan(plan.label)}
-                  className={`group relative cursor-pointer overflow-hidden rounded-[30px] border transition-all duration-500 ${active
+                  onClick={() => {
+                    setSelectedPlan(plan.label);
+                    setSelectedUnit(plan.label);
+                  }}
+                  className={`group relative cursor-pointer overflow-hidden rounded-[30px] border transition-all duration-500 ${
+                    active
                       ? "border-yellow-400/50 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] shadow-[0_20px_60px_rgba(241,220,127,0.12)]"
                       : "border-white/10 bg-white/[0.03] hover:border-yellow-400/30 hover:shadow-[0_16px_50px_rgba(241,220,127,0.08)]"
-                    }`}
+                  }`}
                 >
-                  {/* glow */}
                   <div className="absolute -top-16 left-[-20px] h-40 w-40 rounded-full bg-yellow-400/10 blur-3xl opacity-0 transition duration-500 group-hover:opacity-100" />
                   <div className="absolute bottom-[-30px] right-[-10px] h-44 w-44 rounded-full bg-yellow-500/10 blur-3xl opacity-0 transition duration-500 group-hover:opacity-100" />
 
-                  {/* top gold line */}
                   <div
-                    className={`absolute top-0 left-0 h-[2px] w-full bg-[linear-gradient(90deg,#7C5700,#F1DC7F,#B9A650)] transition-all duration-500 ${active ? "opacity-100" : "opacity-0 group-hover:opacity-80"
-                      }`}
+                    className={`absolute top-0 left-0 h-[2px] w-full bg-[linear-gradient(90deg,#7C5700,#F1DC7F,#B9A650)] transition-all duration-500 ${
+                      active ? "opacity-100" : "opacity-0 group-hover:opacity-80"
+                    }`}
                   />
 
-                  {/* image */}
                   <div className="relative h-[260px] overflow-hidden blur-sm">
                     <Image
                       src={FloorPlan}
@@ -700,18 +761,15 @@ export default function ProjectDetailPage() {
                       fill
                       className="object-contain transition duration-700 group-hover:scale-110 bg-white "
                     />
-
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent,rgba(0,0,0,0.45))]" />
 
-                    {/* floating badge */}
                     <div className="absolute top-5 left-5 rounded-full border border-yellow-400/20 bg-black/40 backdrop-blur-md px-4 py-2">
                       <p className="text-[11px] uppercase tracking-[0.22em] text-yellow-400">
                         Floor Plan
                       </p>
                     </div>
 
-                    {/* title over image */}
                     <div className="absolute bottom-5 left-5 right-5">
                       <h3 className="text-2xl font-semibold text-white leading-tight">
                         {plan.label}
@@ -719,7 +777,6 @@ export default function ProjectDetailPage() {
                     </div>
                   </div>
 
-                  {/* content */}
                   <div className="relative p-6 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] backdrop-blur-xl">
                     <div className="mb-5 grid grid-cols-2 gap-4">
                       <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
@@ -737,15 +794,12 @@ export default function ProjectDetailPage() {
                       </div>
                     </div>
 
-                    {/* bottom row */}
                     <div className="flex items-center justify-between gap-4">
                       <div>
                         <p className="text-[11px] uppercase tracking-[0.18em] text-yellow-400 mb-1">
                           Premium Layout
                         </p>
-                        <p className="text-sm text-white">
-                          Crafted for luxury living
-                        </p>
+                        <p className="text-sm text-white">Crafted for luxury living</p>
                       </div>
 
                       <button
@@ -753,10 +807,11 @@ export default function ProjectDetailPage() {
                           e.stopPropagation();
                           openContactModal("download-floor-plan");
                         }}
-                        className={`rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 ${active
+                        className={`rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 ${
+                          active
                             ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_10px_30px_rgba(241,220,127,0.18)]"
                             : "border border-white/15 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-yellow-400"
-                          }`}
+                        }`}
                       >
                         Download Plan
                       </button>
@@ -813,6 +868,7 @@ export default function ProjectDetailPage() {
             </div>
           </div>
         )}
+
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 mb-2 relative z-20">
           <div className="space-y-6">
             <div className="relative overflow-hidden rounded-[36px] border border-yellow-500/15 bg-[linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
@@ -821,41 +877,44 @@ export default function ProjectDetailPage() {
               <div className="absolute bottom-[-40px] right-[8%] h-[260px] w-[260px] rounded-full bg-yellow-500/10 blur-3xl" />
 
               <div className="relative z-10 px-5 md:px-8 lg:px-10 py-6 md:py-8">
-                {/* top tabs */}
                 <div className="flex flex-wrap gap-3 mb-8">
                   <button
                     onClick={() => setCalcTab("mortgage")}
-                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md lg:text-md font-semibold tracking-[0.18em] uppercase transition ${calcTab === "mortgage"
-                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
-                      : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
-                      }`}
+                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md font-semibold tracking-[0.18em] uppercase transition ${
+                      calcTab === "mortgage"
+                        ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
+                        : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
+                    }`}
                   >
                     Mortgage Calculator
                   </button>
 
                   <button
                     onClick={() => setCalcTab("payment-plan")}
-                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md lg:text-md font-semibold tracking-[0.18em] uppercase transition ${calcTab === "payment-plan"
-                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
-                      : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
-                      }`}
+                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md font-semibold tracking-[0.18em] uppercase transition ${
+                      calcTab === "payment-plan"
+                        ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
+                        : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
+                    }`}
                   >
                     Payment Plans
                   </button>
                 </div>
 
                 <div className="grid xl:grid-cols-[0.85fr_1.15fr] gap-8 xl:gap-10">
-                  {/* left side */}
                   <div className="rounded-[28px] border border-white/10 bg-black/25 p-5 md:p-7">
                     <div className="mb-8">
-                      <label className="block text-sm lg:text-md lg:text-md font-medium text-white-300 mb-3">
+                      <label className="block text-sm lg:text-md font-medium text-white-300 mb-3">
                         Select Unit
                       </label>
 
                       <div className="rounded-2xl border border-white/10 bg-black/30 px-4 py-4">
                         <select
                           value={selectedUnit}
-                          onChange={(e) => setSelectedUnit(e.target.value)}
+                          onChange={(e) => {
+                            setSelectedUnit(e.target.value);
+                            setSelectedPlan(e.target.value);
+                          }}
                           className="w-full bg-transparent text-white text-lg outline-none"
                         >
                           {project.floorPlans.map((plan) => (
@@ -876,15 +935,13 @@ export default function ProjectDetailPage() {
                         <PremiumCalcInput
                           label="Property Value"
                           value={propertyPrice}
-                          onChange={(value) =>
-                            setPropertyPrice(Number(value) || 0)
-                          }
+                          onChange={(value) => setPropertyPrice(Number(value) || 0)}
                         />
                         <PremiumCalcInput
-                          label="Down Payment %"
-                          value={downPaymentPercent}
+                          label="During Construction %"
+                          value={constructionPercent}
                           onChange={(value) =>
-                            setDownPaymentPercent(Number(value) || 0)
+                            setConstructionPercent(Number(value) || 0)
                           }
                         />
                         <PremiumCalcInput
@@ -896,9 +953,7 @@ export default function ProjectDetailPage() {
                           label="Interest Rate %"
                           value={interestRate}
                           step="0.1"
-                          onChange={(value) =>
-                            setInterestRate(Number(value) || 0)
-                          }
+                          onChange={(value) => setInterestRate(Number(value) || 0)}
                         />
                       </div>
                     ) : (
@@ -906,16 +961,12 @@ export default function ProjectDetailPage() {
                         <PremiumCalcInput
                           label="Property Value"
                           value={propertyPrice}
-                          onChange={(value) =>
-                            setPropertyPrice(Number(value) || 0)
-                          }
+                          onChange={(value) => setPropertyPrice(Number(value) || 0)}
                         />
                         <PremiumCalcInput
                           label="Booking %"
                           value={bookingPercent}
-                          onChange={(value) =>
-                            setBookingPercent(Number(value) || 0)
-                          }
+                          onChange={(value) => setBookingPercent(Number(value) || 0)}
                         />
                         <PremiumCalcInput
                           label="During Construction %"
@@ -927,15 +978,12 @@ export default function ProjectDetailPage() {
                         <PremiumCalcInput
                           label="On Handover %"
                           value={handoverPercent}
-                          onChange={(value) =>
-                            setHandoverPercent(Number(value) || 0)
-                          }
+                          onChange={(value) => setHandoverPercent(Number(value) || 0)}
                         />
                       </div>
                     )}
                   </div>
 
-                  {/* right side */}
                   <div className="rounded-[28px] border border-yellow-500/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-5 md:p-7">
                     <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-8">
                       <div>
@@ -956,21 +1004,17 @@ export default function ProjectDetailPage() {
                           AED {formatAED(propertyPrice)}
                         </h3>
                       </div>
-
                     </div>
 
                     {calcTab === "mortgage" ? (
                       <>
-                        <div className="grid md:grid-cols-3 ml-4  gap-6 md:gap-0 mb-1 items-stretch">
-
+                        <div className="grid md:grid-cols-3 ml-4 gap-6 md:gap-0 mb-1 items-stretch">
                           <div className="flex items-center">
                             <PremiumResultCard
                               title="Total Cost"
                               value={formatAED(totalCost)}
                               suffix="AED"
                             />
-
-                            {/* Divider */}
                             <div className="hidden md:block h-[60%] w-[1px] mx-6 bg-gradient-to-b from-transparent via-yellow-400/60 to-transparent" />
                           </div>
 
@@ -981,8 +1025,6 @@ export default function ProjectDetailPage() {
                               suffix="AED /Month"
                               highlighted
                             />
-
-                            {/* Divider */}
                             <div className="hidden md:block h-[60%] w-[1px] mx-6 bg-gradient-to-b from-transparent via-yellow-400/60 to-transparent" />
                           </div>
 
@@ -993,13 +1035,18 @@ export default function ProjectDetailPage() {
                               suffix="AED /Year"
                             />
                           </div>
-
                         </div>
 
                         <div className="rounded-[24px] border border-white/10 bg-black/25 md:p-2 space-y-4">
                           <PremiumBreakdownRow
-                            label="Down Payment"
+                            label="During Construction Down Payment"
                             value={`AED ${formatAED(downPaymentAmount)}`}
+                          />
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+
+                          <PremiumBreakdownRow
+                            label="Mortgage Base On Handover"
+                            value={`AED ${formatAED(loanBaseAmount)}`}
                           />
                           <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
 
@@ -1013,8 +1060,6 @@ export default function ProjectDetailPage() {
                             label="Total Interest Paid"
                             value={`AED ${formatAED(totalInterestPaid)}`}
                           />
-
-                          {/* 🔥 Golden subtle divider */}
                           <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
 
                           <div className="pt-3">
@@ -1035,7 +1080,7 @@ export default function ProjectDetailPage() {
                             suffix="AED"
                             highlighted
                           />
-                          
+
                           <PremiumResultCard
                             title="Construction"
                             value={formatAED(constructionAmount)}
@@ -1053,18 +1098,18 @@ export default function ProjectDetailPage() {
                             label="Booking Payment"
                             value={`AED ${formatAED(bookingAmount)}`}
                           />
-                            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
                           <PremiumBreakdownRow
                             label="During Construction"
                             value={`AED ${formatAED(constructionAmount)}`}
                           />
-                            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
                           <PremiumBreakdownRow
                             label="On Handover"
                             value={`AED ${formatAED(handoverAmount)}`}
                           />
-                            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
-                          <div className=" ">
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+                          <div>
                             <PremiumBreakdownRow
                               label="Total Cost"
                               value={`AED ${formatAED(propertyPrice)}`}
@@ -1074,14 +1119,12 @@ export default function ProjectDetailPage() {
                         </div>
                       </>
                     )}
-
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
-        {/* calculator section stays same */}
       </main>
 
       <ContactModal
@@ -1129,8 +1172,9 @@ function MetaRow({
 }) {
   return (
     <div
-      className={`flex items-center justify-between ${!isLast ? "border-b border-white/10 pb-3" : ""
-        }`}
+      className={`flex items-center justify-between ${
+        !isLast ? "border-b border-white/10 pb-3" : ""
+      }`}
     >
       <span>{label}</span>
       <span className="text-white font-semibold text-right">{value || EMPTY_VALUE}</span>
@@ -1138,75 +1182,52 @@ function MetaRow({
   );
 }
 
-
-
-function formatAED(value: number) {
-  if (!Number.isFinite(value)) return "0";
-  return Math.round(value).toLocaleString("en-AE");
-}
-
-function SkeletonBlock({
-  className = "",
-}: {
-  className?: string;
-}) {
-  return (
-    <div
-      className={`animate-pulse rounded-2xl bg-white/10 ${className}`}
-    />
-  );
+function SkeletonBlock({ className = "" }: { className?: string }) {
+  return <div className={`animate-pulse rounded-2xl bg-white/10 ${className}`} />;
 }
 
 function ProjectDetailsSkeleton() {
   return (
     <main className="bg-black text-white min-h-screen overflow-x-hidden">
-      {/* Hero */}
       <section className="relative mt-4 px-4 md:px-10">
         <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
           <SkeletonBlock className="absolute inset-0 rounded-[32px]" />
-
           <div className="absolute top-5 right-5 md:top-8 md:right-8 rounded-2xl border border-white/10 bg-black/35 backdrop-blur-md px-5 py-4 w-[140px]">
             <SkeletonBlock className="h-3 w-16 mb-2" />
             <SkeletonBlock className="h-5 w-24" />
           </div>
-
           <div className="absolute left-5 right-5 bottom-6 md:left-8 md:right-8 md:bottom-8">
             <div className="max-w-[760px]">
               <SkeletonBlock className="h-3 w-32 mb-4" />
               <SkeletonBlock className="h-10 md:h-14 w-[320px] md:w-[500px] mb-4" />
               <SkeletonBlock className="h-5 w-[220px]" />
             </div>
-
-            <section className="max-w-4xl mx-auto px-4 md:px-10 py-8">
-              <div className="flex gap-4 overflow-x-auto scrollbar-hide">
-                {[1, 2, 3, 4].map((item) => (
-                  <SkeletonBlock
-                    key={item}
-                    className="w-[120px] h-[70px] md:w-[150px] md:h-[100px] shrink-0 rounded-2xl"
-                  />
-                ))}
-              </div>
-            </section>
           </div>
         </div>
       </section>
 
-      {/* Breadcrumb + back */}
+      <section className="max-w-4xl mx-auto px-4 md:px-10 py-8">
+        <div className="flex gap-4 overflow-x-auto scrollbar-hide">
+          {[1, 2, 3, 4].map((item) => (
+            <SkeletonBlock
+              key={item}
+              className="w-[120px] h-[70px] md:w-[150px] md:h-[100px] shrink-0 rounded-2xl"
+            />
+          ))}
+        </div>
+      </section>
+
       <div className="flex justify-between w-full items-center px-4 md:px-10 pt-6 gap-4">
         <SkeletonBlock className="h-5 w-48" />
         <SkeletonBlock className="h-5 w-32" />
       </div>
 
-      {/* Quick facts + meta */}
       <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 relative z-20">
         <div className="grid lg:grid-cols-[1fr_420px] gap-6 items-start">
           <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6">
             <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-white/10 bg-black/30 p-4"
-                >
+                <div key={item} className="rounded-2xl border border-white/10 bg-black/30 p-4">
                   <div className="flex items-center gap-3 mb-3">
                     <SkeletonBlock className="h-5 w-5 rounded-full" />
                     <SkeletonBlock className="h-4 w-24" />
@@ -1220,22 +1241,17 @@ function ProjectDetailsSkeleton() {
           <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6">
             <div className="space-y-4">
               {[1, 2, 3, 4].map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center justify-between border-b border-white/10 pb-3"
-                >
+                <div key={item} className="flex items-center justify-between border-b border-white/10 pb-3">
                   <SkeletonBlock className="h-4 w-24" />
                   <SkeletonBlock className="h-4 w-28" />
                 </div>
               ))}
             </div>
-
             <SkeletonBlock className="mt-6 h-14 w-full rounded-2xl" />
           </div>
         </div>
       </section>
 
-      {/* Tabs */}
       <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-2 pb-8">
         <div className="flex gap-3">
           <SkeletonBlock className="h-11 w-28 rounded-full" />
@@ -1243,24 +1259,19 @@ function ProjectDetailsSkeleton() {
         </div>
       </section>
 
-      {/* Overview section */}
       <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
           <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
             <SkeletonBlock className="h-4 w-36 mb-3" />
-            <SkeletonBlock className="h-10 w-[70%] mb-5" />
+            <SkeletonBlock className="h-10 w-70 mb-5" />
             <div className="space-y-3 mb-8">
               <SkeletonBlock className="h-4 w-full" />
               <SkeletonBlock className="h-4 w-[95%]" />
               <SkeletonBlock className="h-4 w-[88%]" />
             </div>
-
             <div className="mt-8 grid sm:grid-cols-2 gap-4">
               {[1, 2, 3, 4].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-white/10 bg-black/30 p-4"
-                >
+                <div key={item} className="rounded-2xl border border-white/10 bg-black/30 p-4">
                   <SkeletonBlock className="h-4 w-full mb-2" />
                   <SkeletonBlock className="h-4 w-[80%]" />
                 </div>
@@ -1283,7 +1294,6 @@ function ProjectDetailsSkeleton() {
         </div>
       </section>
 
-      {/* Floor plans */}
       <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
         <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8 mb-8">
           <SkeletonBlock className="h-4 w-28 mb-3" />
@@ -1292,10 +1302,7 @@ function ProjectDetailsSkeleton() {
 
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
           {[1, 2, 3].map((item) => (
-            <div
-              key={item}
-              className="rounded-[28px] overflow-hidden border border-white/10"
-            >
+            <div key={item} className="rounded-[28px] overflow-hidden border border-white/10">
               <SkeletonBlock className="h-[240px] w-full rounded-none" />
               <div className="p-5 bg-black/40">
                 <SkeletonBlock className="h-6 w-32 mb-4" />
@@ -1316,39 +1323,19 @@ function ProjectDetailsSkeleton() {
         </div>
       </section>
 
-      {/* Gallery */}
       <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
         <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
           <SkeletonBlock className="h-4 w-20 mb-3" />
           <SkeletonBlock className="h-8 w-64 mb-8" />
-
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
             {[1, 2, 3, 4, 5, 6].map((item) => (
-              <SkeletonBlock
-                key={item}
-                className="h-[260px] w-full rounded-[24px]"
-              />
+              <SkeletonBlock key={item} className="h-[260px] w-full rounded-[24px]" />
             ))}
           </div>
         </div>
       </section>
-
     </main>
   );
-}
-function getModalHeading(intent: ContactIntent) {
-  switch (intent) {
-    case "schedule-visit":
-      return "Schedule your private project visit";
-    case "download-floor-plan":
-      return "Request detailed floor plan access";
-    case "request-brochure":
-      return "Get the full project brochure";
-    case "book-consultation":
-      return "Book a premium consultation";
-    default:
-      return "Connect with our property team";
-  }
 }
 
 function getDefaultMessage(
@@ -1360,8 +1347,7 @@ function getDefaultMessage(
     case "schedule-visit":
       return `I am interested in scheduling a private visit for ${projectTitle}. Please contact me with available timings.`;
     case "download-floor-plan":
-      return `I would like to receive the floor plan for ${projectTitle}${floorPlanLabel ? ` (${floorPlanLabel})` : ""
-        }.`;
+      return `I would like to receive the floor plan for ${projectTitle}${floorPlanLabel ? ` (${floorPlanLabel})` : ""}.`;
     case "request-brochure":
       return `Please share the latest brochure, pricing, and availability for ${projectTitle}.`;
     case "book-consultation":
@@ -1383,17 +1369,14 @@ function PremiumCalcInput({
   step?: string;
 }) {
   return (
-    <div className="rounded-[22px] border border-[#F1DC7F]/35 bg-white/[0.03] p-4 transition-all duration-300 focus-within:border-[#F1DC7F] focus-within:shadow-[0_0_0_1px_rgba(241,220,127,0.45),0_0_20px_rgba(241,220,127,0.12)]">
-      <label className="block text-sm text-[#F1DC7F] mb-2">
-        {label}
-      </label>
-
+    <div className="rounded-[22px] border border-[#F1DC7F35] bg-white/[0.03] p-4 transition-all duration-300 focus-within:border-[#F1DC7F] focus-within:shadow-[0_0_0_1px_rgba(241,220,127,0.45),0_0_20px_rgba(241,220,127,0.12)]">
+      <label className="block text-sm text-[#F1DC7F] mb-2">{label}</label>
       <input
         type="number"
         value={value}
         step={step}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent text-xl px-2 font-medium text-white outline-none border border-[#F1DC7F]/35 rounded-[22px]"
+        className="w-full bg-transparent text-xl px-2 font-medium text-white outline-none border-none"
       />
     </div>
   );
@@ -1412,10 +1395,9 @@ function PremiumResultCard({
 }) {
   return (
     <div
-      className={`rounded-[24px]  p-5 min-h-[80px] flex flex-col justify-between ${highlighted
-        ? "border-yellow-400/25"
-        : ""
-        }`}
+      className={`rounded-[24px] p-5 min-h-[80px] flex flex-col justify-between ${
+        highlighted ? "border border-yellow-400/25 bg-yellow-400/5" : ""
+      }`}
     >
       <p className="text-sm text-white-400">{title}</p>
       <div>
@@ -1441,9 +1423,7 @@ function PremiumBreakdownRow({
     <div className="flex items-center justify-between gap-5">
       <p
         className={
-          bold
-            ? "text-md md:text-lg font-semibold text-white"
-            : "text-base text-white-300"
+          bold ? "text-md md:text-lg font-semibold text-white" : "text-base text-white-300"
         }
       >
         {label}

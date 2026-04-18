@@ -13,9 +13,9 @@ export default class WebsiteContentService {
     }
   }
 
-  static async getProperties() {
+  static async getProperties(query) {
     try {
-      const response = await api.get(`/properties`);
+      const response = await api.get(`/properties?${query}`);
       return response?.data;
     } catch (error) {
       console.error("Error fetching properties:", error);

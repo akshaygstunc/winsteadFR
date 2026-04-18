@@ -28,209 +28,97 @@ export default function Page() {
 }
 
 function ProjectsContent() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
   const [projects, setProjects] = useState<any[]>([]);
-  const [showFilter, setShowFilter] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showFilter, setShowFilter] = useState(false);
 
-  const [filters, setFilters] = useState({
-    type: "",
-    residence: "",
-    bedrooms: "",
-    location: "",
-    subLocation: "",
-    category: "",
-    developer: "",
-    minSize: 1000,
-    maxSize: 10000,
-    minPrice: 1000,
-    maxPrice: 100000,
-  });
+  // 🔥 LIVE FILTERS (sidebar - instant)
+  const [liveFilters, setLiveFilters] = useState(getDefaultFilters());
 
-  const subLocationsMap: Record<string, string[]> = {
-    Dubai: [
-      "Downtown Dubai",
-      "Dubai Marina",
-      "Business Bay",
-      "Palm Jumeirah",
-      "Jumeirah Village Circle",
-    ],
-    "Abu Dhabi": [
-      "Saadiyat Island",
-      "Yas Island",
-      "Al Reem Island",
-      "Corniche Area",
-    ],
-  };
+  // 🔥 APPLIED FILTERS (top search)
+  const [appliedFilters, setAppliedFilters] = useState(getDefaultFilters());
 
-  const syncFiltersToUrl = (nextFilters: any) => {
-    const params = new URLSearchParams();
+  // ✅ FETCH PROJECTS (API BASED FILTERING)
+  const fetchProjects = async (filters: any) => {
+    try {
+      setLoading(true);
 
-    if (nextFilters.type) params.set("type", nextFilters.type);
-    if (nextFilters.residence) params.set("residence", nextFilters.residence);
-    if (nextFilters.bedrooms) params.set("bedrooms", nextFilters.bedrooms);
-    if (nextFilters.location) params.set("location", nextFilters.location);
-    if (nextFilters.subLocation) params.set("subLocation", nextFilters.subLocation);
-    if (nextFilters.category) params.set("category", nextFilters.category);
-    if (nextFilters.developer) params.set("developer", nextFilters.developer);
+      const query = buildQuery(filters);
 
-    params.set("minSize", String(nextFilters.minSize));
-    params.set("maxSize", String(nextFilters.maxSize));
-    params.set("minPrice", String(nextFilters.minPrice));
-    params.set("maxPrice", String(nextFilters.maxPrice));
+      const [response, cat] = await Promise.all([
+        WebsiteContentService.getProperties(query),
+        WebsiteContentService.getCategory(),
+      ]);
 
-    router.push(`/projects?${params.toString()}`);
-  };
-
-  useEffect(() => {
-    async function fetchProjects() {
-      try {
-        setLoading(true);
-
-        const [response, cat] = await Promise.all([
-          WebsiteContentService.getProperties(),
-          WebsiteContentService.getCategory(),
-        ]);
-
-        setCategories(cat?.filter((c: any) => c.title !== "Ultra Luxury") || []);
-        setProjects(response || []);
-      } catch (error) {
-        console.error("Error fetching properties:", error);
-      } finally {
-        setLoading(false);
-      }
+      setProjects(response.sort((a, b) => a._sortOrder - b._sortOrder) || []);
+      setCategories(cat?.filter((c: any) => c.title !== "Ultra Luxury") || []);
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    fetchProjects();
+  // ✅ INITIAL LOAD
+  useEffect(() => {
+    fetchProjects(appliedFilters);
   }, []);
 
-  useEffect(() => {
-    setFilters({
-      type: searchParams.get("type") || "",
-      residence: searchParams.get("residence") || "",
-      bedrooms: searchParams.get("bedrooms") || "",
-      location: searchParams.get("location") || "",
-      subLocation: searchParams.get("subLocation") || "",
-      category: searchParams.get("category") || "",
-      developer: searchParams.get("developer") || "",
-      minSize: Number(searchParams.get("minSize") || 1000),
-      maxSize: Number(searchParams.get("maxSize") || 10000),
-      minPrice: Number(searchParams.get("minPrice") || 1000),
-      maxPrice: Number(searchParams.get("maxPrice") || 100000),
-    });
-  }, [searchParams]);
-
-  const filteredProjects = useMemo(() => {
-    return projects.filter((p: any) => {
-      const type = p.type || p?.data?.type || "";
-      const residence = p.residence || p?.data?.residence || "";
-      const bedrooms = p.bedrooms || p?.data?.bedrooms || "";
-      const location = p.location || p?.data?.location || "";
-      const subLocation = p.subLocation || p?.data?.subLocation || "";
-      const category = p.category || p?.data?.category || "";
-      const developer = p.developer || p?.data?.developer || "";
-
-      const sizeRaw = p.area || p?.data?.area || "";
-      const numericSize = extractFirstNumber(sizeRaw);
-
-      const priceRaw = p.price || p?.data?.price || "";
-      const numericPrice = extractFirstNumber(priceRaw);
-
-      return (
-        (!filters.type || type === filters.type) &&
-        (!filters.residence || residence === filters.residence) &&
-        (!filters.bedrooms || bedrooms === filters.bedrooms) &&
-        (!filters.location || location === filters.location) &&
-        (!filters.subLocation || subLocation === filters.subLocation) &&
-        (!filters.category || category === filters.category) &&
-        (!filters.developer || developer === filters.developer) &&
-        (!numericSize ||
-          (numericSize >= filters.minSize && numericSize <= filters.maxSize)) &&
-        (!numericPrice ||
-          (numericPrice >= filters.minPrice && numericPrice <= filters.maxPrice))
-      );
-    });
-  }, [projects, filters]);
-
-  const handleSearch = (e: any) => {
-    e.preventDefault();
-
-    const params = new URLSearchParams();
-
-    if (filters.type) params.set("type", filters.type);
-    if (filters.residence) params.set("residence", filters.residence);
-    if (filters.location) params.set("location", filters.location);
-    if (filters.subLocation) params.set("subLocation", filters.subLocation);
-    if (filters.bedrooms) params.set("bedrooms", filters.bedrooms);
-    if (filters.category) params.set("category", filters.category);
-    if (filters.developer) params.set("developer", filters.developer);
-    params.set("minSize", String(filters.minSize));
-    params.set("maxSize", String(filters.maxSize));
-    params.set("minPrice", String(filters.minPrice));
-    params.set("maxPrice", String(filters.maxPrice));
-
-    router.push(`/projects?${params.toString()}`);
-  };
-
-  const updateFilter = (key: string, value: any) => {
-    const nextFilters = {
-      ...filters,
+  // ✅ SIDEBAR FILTER CHANGE (instant API hit)
+  const updateLiveFilter = (key: string, value: any) => {
+    const updated = {
+      ...liveFilters,
       [key]: value,
       ...(key === "location" ? { subLocation: "" } : {}),
     };
 
-    setFilters(nextFilters);
-    syncFiltersToUrl(nextFilters);
+    setLiveFilters(updated);
+    fetchProjects(updated); // 🔥 only right section updates
+  };
+
+  // ✅ TOP SEARCH APPLY (manual trigger)
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+
+    setAppliedFilters(liveFilters);
+    fetchProjects(liveFilters); // 🔥 only here API fires
   };
 
   const clearAllFilters = () => {
-    const resetFilters = {
-      type: "",
-      residence: "",
-      bedrooms: "",
-      location: "",
-      subLocation: "",
-      category: "",
-      developer: "",
-      minSize: 1000,
-      maxSize: 10000,
-      minPrice: 1000,
-      maxPrice: 100000,
-    };
-
-    setFilters(resetFilters);
-    router.push("/projects");
+    const reset = getDefaultFilters();
+    setLiveFilters(reset);
+    setAppliedFilters(reset);
+    fetchProjects(reset);
   };
 
   return (
     <div className="bg-black text-white min-h-screen overflow-x-hidden">
       <ProjectsHero />
-       <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6">
-                                        <AutoBreadcrumbs />
-                                      </section>
+
+      <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6">
+        <AutoBreadcrumbs />
+      </section>
+
       <ProjectsToolbar
-        filters={filters}
+        filters={liveFilters}
         handleSearch={handleSearch}
         setShowFilter={setShowFilter}
-        subLocationsMap={subLocationsMap}
-        updateFilter={updateFilter}
+        updateFilter={setLiveFilters} // 🔥 no router push
       />
 
       <div className="max-w-[85rem] mx-auto px-4 md:px-12 pb-20">
         <ResultsBar
-          count={filteredProjects.length}
-          filters={filters}
+          count={projects.length}
+          filters={liveFilters}
           clearAllFilters={clearAllFilters}
         />
 
         <div className="flex flex-col md:flex-row items-start gap-8">
           <div className="hidden md:block">
             <Sidebar
-              filters={filters}
-              updateFilter={updateFilter}
+              filters={liveFilters}
+              updateFilter={updateLiveFilter} // 🔥 instant update
               categories={categories}
             />
           </div>
@@ -242,32 +130,31 @@ function ProjectsContent() {
                 onClick={() => setShowFilter(false)}
               />
               <div className="w-[85%] max-w-[340px] bg-[#0c0c0c] p-4 overflow-y-auto border-l border-white/10">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-semibold">Filters</h2>
-                  <button onClick={() => setShowFilter(false)}>✕</button>
-                </div>
                 <Sidebar
-                  filters={filters}
-                  updateFilter={updateFilter}
+                  filters={liveFilters}
+                  updateFilter={updateLiveFilter}
                   categories={categories}
                 />
               </div>
             </div>
           )}
 
+          {/* ✅ ONLY THIS PART RE-RENDERS */}
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 flex-1">
             {loading ? (
-              Array.from({ length: 6 }).map((_, i) => <PropertyCardSkeleton key={i} />)
-            ) : filteredProjects.length > 0 ? (
-                filteredProjects.map((p: any, index: number) => (
-                  <ProjectCard key={p.id || p._id || `project-${index}`} data={p} />
+              Array.from({ length: 6 }).map((_, i) => (
+                <PropertyCardSkeleton key={i} />
+              ))
+            ) : projects.length > 0 ? (
+              projects.map((p: any, index: number) => (
+                <ProjectCard
+                  key={p.id || p._id || `project-${index}`}
+                  data={p}
+                />
               ))
             ) : (
-              <div className="col-span-full rounded-3xl border border-white/10 bg-white/5 p-10 text-center">
-                <h3 className="text-2xl font-semibold mb-3">No matching properties found</h3>
-                    <p className="text-white">
-                  Try adjusting your filters to explore more curated opportunities.
-                </p>
+                  <div className="col-span-full text-center p-10">
+                    No properties found
               </div>
             )}
           </div>
@@ -295,11 +182,25 @@ function ProjectsToolbar({
   subLocationsMap,
   updateFilter,
 }: any) {
+  const [type, setType] = useState([])
+  const [location, setLocation] = useState([])
   const availableSubLocations =
-    filters.location && subLocationsMap[filters.location]
-      ? subLocationsMap[filters.location]
-      : [];
-
+    // filters.location && subLocationsMap[filters.location]
+    //   ? subLocationsMap[filters.location]
+    //   : [];
+    useEffect(() => {
+      async function fetchCatLOc() {
+        const [typeRes, locationRes] = await Promise.all([
+          fetch("https://winsteadglobal.com/api/content/property-types"),
+          fetch("https://winsteadglobal.com/api/content/locations"),
+        ]);
+        const typeData = await typeRes.json();
+        const locationData = await locationRes.json();
+        setType(typeData)
+        setLocation(locationData)
+      }
+      fetchCatLOc()
+    }, [])
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-12 py-8">
       <form
@@ -315,8 +216,7 @@ function ProjectsToolbar({
               className="px-5 py-4 bg-transparent outline-none md:border-r border-white/10"
             >
               <option value="">Property Type</option>
-              <option value="Residential">Residential</option>
-              <option value="Commercial">Commercial</option>
+              {type?.map((ty) => <option key={ty?._id} value={ty?.title}>{ty?.title}</option>)}
             </select>
 
             <select
@@ -338,8 +238,7 @@ function ProjectsToolbar({
               className="px-5 py-4 bg-transparent outline-none md:border-r border-white/10"
             >
               <option value="">Location</option>
-              <option value="Dubai">Dubai</option>
-              <option value="Abu Dhabi">Abu Dhabi</option>
+              {location?.map((ty) => <option key={ty?._id} value={ty?.title}>{ty?.title}</option>)}
             </select>
 
             <select
@@ -349,11 +248,11 @@ function ProjectsToolbar({
               className="px-5 py-4 bg-transparent outline-none"
             >
               <option value="">Sub Location</option>
-              {availableSubLocations.map((item: string) => (
+              {/* {availableSubLocations.map((item: string) => (
                 <option key={item} value={item}>
                   {item}
                 </option>
-              ))}
+              ))} */}
             </select>
           </div>
 
@@ -434,26 +333,84 @@ function Sidebar({ filters, updateFilter, categories }: any) {
     amenities: true,
   });
 
-  const developers = ["DAMAC", "Emaar", "Meraas", "XYZ Properties"];
+  const [locations, setLocations] = useState([]);
+  const [communities, setCommunities] = useState([]);
+  const [developers, setDevelopers] = useState([]);
+  // const developers = ["DAMAC", "Emaar", "Meraas", "XYZ Properties"];
+
+  useEffect(() => {
+    async function fetchData() {
+      const [locRes, commRes, deveRes] = await Promise.all([
+        fetch("https://winsteadglobal.com/api/content/locations"),
+        fetch("https://winsteadglobal.com/api/content/communities"),
+        fetch("https://winsteadglobal.com/api/content/developer-community"),
+
+      ]);
+
+      const locData = await locRes.json();
+      const commData = await commRes.json();
+      const devData = await deveRes.json();
+
+      setLocations(locData);
+      setCommunities(commData);
+      setDevelopers(devData)
+    }
+
+    fetchData();
+  }, []);
 
   return (
-    <div className="w-[300px] rounded-[28px] border border-yellow-500/20 bg-gradient-to-b from-[#0c0c0c] to-[#111] p-6 shadow-[0_0_30px_rgba(250,204,21,0.05)]">
+    <div className="w-[300px] rounded-[28px] border border-yellow-500/20 bg-gradient-to-b from-[#0c0c0c] to-[#111] p-6">
+
       <h2 className="text-2xl font-semibold mb-6">Filters</h2>
 
+      {/* CATEGORY */}
       <Section title="Category">
         {categories?.map((cat: any) => (
           <Check
             key={cat._id}
             label={cat.title}
-            checked={filters.category === cat.title}
+            checked={filters.type === cat.title}
             onChange={() =>
-              updateFilter("category", filters.category === cat.title ? "" : cat.title)
+              updateFilter("type", filters.type === cat.title ? "" : cat.title)
             }
           />
         ))}
       </Section>
 
-      <Section title="Residence Type">
+      {/* LOCATION */}
+      <Section title="Location">
+        {locations.map((loc: any) => (
+          <Check
+            key={loc._id}
+            label={loc.title}
+            checked={filters.location === loc.title}
+            onChange={() =>
+              updateFilter("location", filters.location === loc.title ? "" : loc.title)
+            }
+          />
+        ))}
+      </Section>
+
+      {/* COMMUNITY */}
+      <Section title="Community">
+        {communities.map((c: any) => (
+          <Check
+            key={c._id}
+            label={c.title}
+            checked={filters.communities === c.title}
+            onChange={() =>
+              updateFilter(
+                "communities",
+                filters.communities === c.title ? "" : c.title
+              )
+            }
+          />
+        ))}
+      </Section>
+
+      {/* BEDROOMS */}
+      <Section title="Bedrooms">
         {["1 Bedroom", "2 Bedroom", "3 Bedroom", "4 Bedroom", "5+ Bedroom"].map(
           (item) => (
             <Check
@@ -468,90 +425,81 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         )}
       </Section>
 
-      <div className="mb-7">
-        <p className="text-sm uppercase tracking-[0.14em] text-white mb-3">Size</p>
-        <div className="flex justify-between text-xs mb-3 text-white">
-          <span>{filters.minSize.toLocaleString()} sq. ft.</span>
-          <span>{filters.maxSize.toLocaleString()} sq. ft.</span>
-        </div>
-        <Slider
-          range
-          min={1000}
-          max={10000}
-          value={[filters.minSize, filters.maxSize]}
-          onChange={(val: any) => {
-            if (!Array.isArray(val)) return;
-            updateFilter("minSize", val[0]);
-            updateFilter("maxSize", val[1]);
-          }}
-          onChangeComplete={(val: any) => {
-            if (!Array.isArray(val)) return;
-            updateFilter("minSize", val[0]);
-            updateFilter("maxSize", val[1]);
-          }}
-          trackStyle={[{ backgroundColor: "#d4a373" }]}
-          handleStyle={[
-            { borderColor: "#d4a373", backgroundColor: "#d4a373" },
-            { borderColor: "#d4a373", backgroundColor: "#d4a373" },
-          ]}
-        />
-      </div>
+      {/* PRICE RANGE */}
+      <Section title="Price Range">
+        {[
+          { label: "500k – 2M", value: "500k-2m" },
+          { label: "2M – 5M", value: "2m-5m" },
+          { label: "5M Above", value: "5m" },
+        ].map((p) => (
+          <Check
+            key={p.value}
+            label={p.label}
+            checked={filters.priceRange === p.value}
+            onChange={() =>
+              updateFilter(
+                "priceRange",
+                filters.priceRange === p.value ? "" : p.value
+              )
+            }
+          />
+        ))}
+      </Section>
 
-      <div className="mb-7">
-        <p className="text-sm uppercase tracking-[0.14em] text-white mb-3">Price Range</p>
-        <div className="flex justify-between text-xs mb-3 text-white">
-          <span>{filters.minPrice.toLocaleString()} AED</span>
-          <span>{filters.maxPrice.toLocaleString()} AED</span>
-        </div>
-        <Slider
-          range
-          min={1000}
-          max={100000}
-          value={[filters.minPrice, filters.maxPrice]}
-          onChange={(val: any) => {
-            if (!Array.isArray(val)) return;
-            updateFilter("minPrice", val[0]);
-            updateFilter("maxPrice", val[1]);
-          }}
-          onChangeComplete={(val: any) => {
-            if (!Array.isArray(val)) return;
-            updateFilter("minPrice", val[0]);
-            updateFilter("maxPrice", val[1]);
-          }}
-          trackStyle={[{ backgroundColor: "#d4a373" }]}
-          handleStyle={[
-            { borderColor: "#d4a373", backgroundColor: "#d4a373" },
-            { borderColor: "#d4a373", backgroundColor: "#d4a373" },
-          ]}
-        />
-      </div>
+      {/* SORT */}
+      <Section title="Sort By">
+        {[
+          { label: "Low to High", value: "lowToHigh" },
+          { label: "High to Low", value: "highToLow" },
+        ].map((s) => (
+          <Check
+            key={s.value}
+            label={s.label}
+            checked={filters.sort === s.value}
+            onChange={() =>
+              updateFilter("sort", filters.sort === s.value ? "" : s.value)
+            }
+          />
+        ))}
+      </Section>
 
+      {/* FEATURED */}
+      <Section title="Project Type">
+        <Check
+          label="Featured Projects"
+          checked={filters.featured === "true"}
+          onChange={() =>
+            updateFilter(
+              "feature",
+              filters.featured === "true" ? "" : "true"
+            )
+          }
+        />
+      </Section>
+
+      {/* DEVELOPER */}
       <Collapsible
         title="Developer"
         open={open.developer}
-        toggle={() => setOpen((prev) => ({ ...prev, developer: !prev.developer }))}
+        toggle={() =>
+          setOpen((prev) => ({ ...prev, developer: !prev.developer }))
+        }
       >
         {developers.map((d) => (
           <Check
-            key={d}
-            label={d}
-            checked={filters.developer === d}
+            key={d._id}
+            label={d.title}
+            checked={filters.developer === d.title}
             onChange={() =>
-              updateFilter("developer", filters.developer === d ? "" : d)
+              updateFilter(
+                "developer",
+                filters.developer === d.title ? "" : d.title
+              )
             }
           />
         ))}
       </Collapsible>
 
-      <Collapsible
-        title="Amenities"
-        open={open.amenities}
-        toggle={() => setOpen((prev) => ({ ...prev, amenities: !prev.amenities }))}
-      >
-        {["Swimming Pool", "Lounge", "Play Area", "Park", "Cinema"].map((a) => (
-          <Check key={a} label={a} checked={false} onChange={() => { }} />
-        ))}
-      </Collapsible>
     </div>
   );
 }
@@ -678,4 +626,26 @@ function PropertyCardSkeleton() {
       </div>
     </div>
   );
+}
+function getDefaultFilters() {
+  return {
+    type: "",
+    residence: "",
+    bedrooms: "",
+    location: "",
+    subLocation: "",
+    developer: "",
+  };
+}
+
+function buildQuery(filters: any) {
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== "" && value !== null && value !== undefined) {
+      params.set(key, String(value));
+    }
+  });
+
+  return params.toString();
 }

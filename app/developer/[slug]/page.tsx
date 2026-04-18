@@ -21,6 +21,7 @@ import memberImg2 from "@/public/logoo2.webp";
 import memberImg3 from "@/public/hero1.jpg";
 import memberImg4 from "@/public/hero2.png";
 import memberImg5 from "@/public/logoo3.png";
+import Banner from "@/public/hero1.jpg"
 import { useParams } from "next/navigation";
 import ReadMoreSlider from "@/app/components/ReadMoreSlider";
 import { useEffect, useState } from "react";
@@ -301,6 +302,29 @@ console.log("PROJECT:", projects);
 
     return (
         <main className="bg-black text-white">
+            <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
+
+                {/* IMAGE */}
+                <div className="absolute inset-0">
+                    <Image
+                        src={developer?.data?.banner || Banner} alt="Winstead Services"
+                        fill
+                        priority
+                        className="object-cover object-center"
+                    />
+                </div>
+
+                {/* OVERLAY (only for readability, not full dark) */}
+                {/* <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" /> */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
+
+                {/* CONTENT (BOTTOM LEFT ONLY) */}
+
+
+                {/* BOTTOM GOLD LINE */}
+                <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[linear-gradient(90deg,transparent,#F1DC7F,transparent)] opacity-80" />
+
+            </section>
             <section className="px-6 md:px-10 py-16 md:py-20">
                 <div className="mx-auto max-w-7xl">
                     <AutoBreadcrumbs />
