@@ -1,140 +1,209 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import img1 from "../../public/hero1.jpg";
-import img2 from "../../public/hero2.png";
-import img3 from "../../public/hero3.jpg";
-
-const slides = [
-  {
-    image: img1,
-    title: "The Grand Estate",
-    description1:
-      "Experience unmatched luxury with our ultra premium residences. Designed with world-class architecture, high-end interiors, and prime locations, these homes redefine modern living.",
-    description2:
-      "From panoramic views to exclusive amenities, every detail is crafted for elegance and comfort.",
-  },
-  {
-    image: img2,
-    title: "Skyline Residences",
-    description1:
-      "Step into a lifestyle of sophistication with residences crafted for those who expect the extraordinary. Every space is designed to reflect timeless luxury and modern comfort.",
-    description2:
-      "Enjoy premium finishes, expansive layouts, and exceptional views in locations that elevate your everyday living experience.",
-  },
-  {
-    image: img3,
-    title: "Royal Horizon",
-    description1:
-      "Discover iconic living spaces where luxury meets architectural brilliance. These homes combine exclusivity, style, and comfort in every corner.",
-    description2:
-      "With refined interiors, curated amenities, and a prestigious address, every moment feels elevated and exceptional.",
-  },
-];
-
+import { useEffect, useState } from "react";
+import WebsiteContentService from "../services/websitecontent.service";
+import ReadMoreSlider from "./ReadMoreSlider"
 export default function UltraLuxury() {
-  const sliderRef = useRef<HTMLDivElement | null>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [luxuaryProject, setLuxuaryProjects] = useState<any[]>([]);
+  const [activeProject, setActiveProject] = useState(0);
+  const [activeMedia, setActiveMedia] = useState(0);
 
-  const goToSlide = (index: number) => {
-    if (!sliderRef.current) return;
+  // ✅ SAFE CURRENT PROJECT
+  const currentProject = luxuaryProject[activeProject];
 
-    gsap.to(sliderRef.current, {
-      x: `-${index * 100}%`,
-      duration: 1,
-      ease: "power3.inOut",
-    });
+  // ✅ BUILD MEDIA ARRAY FROM API
+  const media =
+    currentProject
+      ? [
+        ...(currentProject.thumbnail
+          ? [{ type: "image", src: currentProject.thumbnail }]
+          : []),
+        ...(currentProject.gallery || []).map((img: string) => ({
+          type: "image",
+          src: img,
+        })),
+        ...(currentProject.propertydoc
+          ? [{ type: "video", src: currentProject.propertydoc }]
+          : []),
+      ]
+      : [];
 
-    setActiveIndex(index);
+  const currentMedia = media[activeMedia];
+
+  const nextProject = () => {
+    setActiveProject((prev) =>
+      prev + 1 >= luxuaryProject.length ? 0 : prev + 1
+    );
+    setActiveMedia(0);
   };
 
-  const nextSlide = () => {
-    const nextIndex = (activeIndex + 1) % slides.length;
-    goToSlide(nextIndex);
-  };
-
-  const prevSlide = () => {
-    const prevIndex = (activeIndex - 1 + slides.length) % slides.length;
-    goToSlide(prevIndex);
+  const prevProject = () => {
+    setActiveProject((prev) =>
+      prev - 1 < 0 ? luxuaryProject.length - 1 : prev - 1
+    );
+    setActiveMedia(0);
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const nextIndex = (activeIndex + 1) % slides.length;
-      goToSlide(nextIndex);
-    }, 4000);
+    async function fetchLuxuryProjects() {
+      const luxuryProjects = await WebsiteContentService.getProperties();
 
-    return () => clearInterval(interval);
-  }, [activeIndex]);
+      // ✅ FILTER BY TYPE ID
+      const filteredLuxuaryProject = luxuryProjects.filter(
+        (project: any) =>
+          project.type === "69d711938447debd74aa5b13"
+      ).sort((a: any, b: any) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+
+      setLuxuaryProjects(filteredLuxuaryProject);
+    }
+
+    fetchLuxuryProjects();
+  }, []);
+
+  // ✅ LOADING / EMPTY STATE
+  if (!luxuaryProject.length) {
+    return (
+      <section className="max-w-[87rem] mx-auto bg-black text-white py-16 px-6 md:px-10 animate-pulse">
+
+        {/* HEADER SHIMMER */}
+        <div className="flex items-center justify-between mb-10">
+          <div className="h-10 w-48 bg-gray-800 rounded-lg"></div>
+
+          <div className="flex gap-4">
+            <div className="h-10 w-10 bg-gray-800 rounded-full"></div>
+            <div className="h-10 w-10 bg-gray-800 rounded-full"></div>
+          </div>
+        </div>
+
+        {/* MAIN GRID SHIMMER */}
+        <div className="grid md:grid-cols-[60%_40%] gap-8 items-start">
+
+          {/* LEFT IMAGE */}
+          <div>
+            <div className="w-full h-[250px] md:h-[325px] bg-gray-800 rounded-xl"></div>
+
+            {/* THUMBNAILS */}
+            <div className="flex gap-3 mt-4">
+              {[1, 2, 3, 4].map((_, i) => (
+                <div
+                  key={i}
+                  className="w-20 h-16 bg-gray-800 rounded-lg"
+                ></div>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT CONTENT */}
+          <div className="space-y-4">
+            <div className="h-8 w-3/4 bg-gray-800 rounded"></div>
+            <div className="h-4 w-full bg-gray-800 rounded"></div>
+            <div className="h-4 w-5/6 bg-gray-800 rounded"></div>
+            <div className="h-4 w-2/3 bg-gray-800 rounded"></div>
+
+            <div className="mt-6 h-10 w-40 bg-gray-800 rounded-full"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="max-w-[87rem] mx-auto bg-black text-white py-16 px-6 md:px-10">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-10">
-        <h1 className="text-3xl md:text-5xl font-semibold">Ultra Luxury</h1>
+        <h1 className="text-3xl md:text-5xl font-semibold">
+          Ultra Luxury
+        </h1>
 
-        <Link
-          href="/projects"
-          className="border border-[#F1DC7F]/40 px-5 py-2 rounded-full text-sm lg:text-md hover:bg-yellow-400 hover:text-black transition"
-        >
-          View Projects
-        </Link>
+        {/* NAVIGATION */}
+        <div className="flex items-center gap-4">
+          <button
+            onClick={prevProject}
+            className="text-xl border border-yellow-500/40 px-4 py-1 rounded-full hover:bg-yellow-400 hover:text-black transition"
+          >
+            ‹
+          </button>
+
+          <button
+            onClick={nextProject}
+            className="text-xl border border-yellow-500/40 px-4 py-1 rounded-full hover:bg-yellow-400 hover:text-black transition"
+          >
+            ›
+          </button>
+        </div>
       </div>
 
-      {/* SINGLE PROPERTY SHOWCASE */}
+      {/* MAIN GRID */}
       <div className="grid md:grid-cols-[60%_40%] gap-8 items-start">
-        {/* LEFT IMAGE SLIDER ONLY */}
-        <div className="overflow-hidden rounded-xl relative">
-          <div ref={sliderRef} className="flex">
-            {slides.map((slide, index) => (
-              <div key={index} className="min-w-full">
-                <Image
-                  src={slide.image}
-                  alt={slide.title}
-                  className="w-full h-[250px] md:h-[325px] object-cover rounded-xl"
-                />
-              </div>
-            ))}
+        {/* LEFT MEDIA */}
+        <div>
+          {/* MAIN */}
+          <div className="rounded-xl overflow-hidden">
+            {currentMedia?.type === "image" ? (
+              <Image
+                src={currentMedia.src}
+                alt="media"
+                width={800}
+                height={500}
+                className="w-full h-[250px] md:h-[325px] object-cover"
+              />
+            ) : (
+              <video
+                src={currentMedia?.src}
+                controls
+                className="w-full h-[250px] md:h-[325px] object-cover"
+              />
+            )}
           </div>
 
-          {/* Dots */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-            {slides.map((_, index) => (
-              <button
+          {/* THUMBNAILS */}
+          <div className="flex gap-3 mt-4 overflow-x-auto">
+            {media.map((item, index) => (
+              <div
                 key={index}
-                onClick={() => goToSlide(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${activeIndex === index
-                    ? "w-8 bg-yellow-400"
-                    : "w-2 bg-white/50"
+                onClick={() => setActiveMedia(index)}
+                className={`cursor-pointer border-2 rounded-lg overflow-hidden ${activeMedia === index
+                  ? "border-yellow-400"
+                  : "border-transparent"
                   }`}
-              />
+              >
+                {item.type === "image" ? (
+                  <Image
+                    src={item.src}
+                    alt="thumb"
+                    width={100}
+                    height={80}
+                    className="w-20 h-16 object-cover"
+                  />
+                ) : (
+                  <video
+                    src={item.src}
+                    className="w-20 h-16 object-cover"
+                  />
+                )}
+              </div>
             ))}
           </div>
         </div>
 
-        {/* FIXED RIGHT CONTENT */}
+        {/* RIGHT CONTENT */}
         <div className="flex flex-col justify-between h-full">
           <div>
             <h2 className="text-2xl md:text-3xl text-yellow-400 mb-4">
-              {slides[activeIndex].title}
+              {currentProject.title}
             </h2>
 
             <p className="text-gray-300 leading-relaxed">
-              {slides[activeIndex].description1}
+              {currentProject.shortDescription ||
+                "Luxury living with premium amenities."}
             </p>
 
             <p className="text-gray-300 mt-4 leading-relaxed">
-              {slides[activeIndex].description2}
+              {<ReadMoreSlider description={currentProject.fullDescription} heading={currentProject.title} /> ||
+                "Experience world-class comfort and elegance."}
             </p>
-          </div>
 
-          <div className="flex items-center gap-3 mt-8">
-            <button className="px-6 py-3 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black font-medium hover:scale-[1.02] transition">
-              Read More
-            </button>
           </div>
         </div>
       </div>

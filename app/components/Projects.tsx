@@ -92,7 +92,7 @@ function FeaturedProjects({
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-1">
       <div>
-        <h2 className="text-2xl md:text-3xl font-semibold">
+        <h2 className="bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent text-3xl md:text-4xl font-semibold">
           Featured Projects
         </h2>
         <p className="text-lg text-white text-[.95rem] mt-5 mb-5 max-w-xl">
@@ -179,33 +179,71 @@ export default function Projects({ projects = [], homePage }: any) {
   const filteredProjects = useMemo(() => {
     if (!Array.isArray(projects)) return [];
 
-    if (activeFilter === "All") return projects;
+    // STEP 1: Normalize
+    const normalized = projects.map((project) => {
+      const category =
+        project.type 
 
-    if (activeFilter === "Vendor" && selectedVendor) {
-      return projects.filter((project) => {
-        const vendorValue =
-          project.vendor ||
-          project.developer ||
-          project.builder ||
-          project.data?.vendor ||
-          project.data?.developer ||
-          project.data?.builder ||
-          "";
-
-        return vendorValue.toLowerCase() === selectedVendor.toLowerCase();
-      });
-    }
-
-    return projects.filter((project) => {
-      const categoryValue =
-        project.type ||
-        project.category ||
-        project.data?.categoryId ||
-        project.data?.category ||
+      const vendor =
+        project.vendor ||
+        project.developer ||
+        project.builder ||
+        project.data?.vendor ||
+        project.data?.developer ||
+        project.data?.builder ||
         "";
 
-      return String(categoryValue) === String(activeFilter);
+      const featured =
+        project.featured ??
+        project.data?.featured ??
+        false;
+
+      return {
+        ...project,
+        _category: String(category),
+        _vendor: String(vendor).toLowerCase(),
+        _sortOrder: Number(project.sortOrder || project.data?.sortOrder || 0),
+        _featured: Boolean(featured),
+      };
     });
+
+    // ✅ STEP 2: ONLY FEATURED
+    let filtered = normalized.filter((p) => p._featured === true);
+
+    // ✅ ⭐ SPECIAL CASE: ALL → return everything (sorted)
+    if (activeFilter === "All") {
+      return filtered.sort((a, b) => a._sortOrder - b._sortOrder);
+    }
+
+    // ✅ STEP 3: Apply filters
+    if (activeFilter === "Vendor" && selectedVendor) {
+      filtered = filtered.filter(
+        (p) => p._vendor === selectedVendor.toLowerCase()
+      );
+    } else {
+      filtered = filtered.filter(
+        (p) => p._category === String(activeFilter)
+      );
+    }
+
+    // ✅ STEP 4: Sort
+    filtered.sort((a, b) => a._sortOrder - b._sortOrder);
+
+    // ✅ STEP 5: Limit 6 per category
+    const grouped: Record<string, typeof filtered> = {};
+
+    filtered.forEach((p) => {
+      if (!grouped[p._category]) {
+        grouped[p._category] = [];
+      }
+
+      if (grouped[p._category].length < 6) {
+        grouped[p._category].push(p);
+      }
+    });
+
+    return Object.values(grouped).flat();
+
   }, [projects, activeFilter, selectedVendor]);
 
   useEffect(() => {
@@ -273,7 +311,7 @@ export default function Projects({ projects = [], homePage }: any) {
                 </h3>
 
                 <p className="text-lg text-gray-300 leading-relaxed">
-                     {homePage?.data?.aboutWinsteadButtonText ||
+                    {homePage?.data?.aboutWinsteadDescription ||
       "Our extensive portfolio features an array of premium villas, apartments, and townhouses designed to offer unmatched comfort and elegance."}
 
                 </p>
@@ -313,7 +351,7 @@ export default function Projects({ projects = [], homePage }: any) {
             </div>
           ))
         ) : filteredProjects.length > 0 ? (
-          filteredProjects.slice(0, 6).map((project, i) => (
+            filteredProjects.map((project, i) => (
             <div key={project._id || i} className="card">
               <Card
                 image={project.thumbnail}
@@ -364,11 +402,11 @@ function Card({
         <h3 className="text-lg md:text-xl font-semibold">{title}</h3>
 
         <div className="text-[1.15rem] md:text-sm lg:text-md text-white mt-2 space-y-1 opacity-90">
-          <p className="text-[1.05rem]">${price}</p>
+          <p className="text-[1.05rem]">AED {price?.toLocaleString()}</p>
           <p className="text-[1.05rem]">{location}</p>
         </div>
 
-        <Link href={`/projects/${slug}`} className="mt-3 text-xs md:text-sm lg:text-md border border-yellow-500 px-4 py-1.5 rounded-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500">
+        <Link href={`/projects/${slug}`} className="mt-4 text-xs md:text-sm lg:text-md border border-yellow-500 px-4 py-1.5 rounded-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500">
           Check Details
         </Link>
       </div>

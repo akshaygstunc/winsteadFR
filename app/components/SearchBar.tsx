@@ -27,26 +27,7 @@ export default function SearchBar() {
   };
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const fields = [
-    {
-      key: "type",
-      label: "Property Type",
-      icon: "/home.png",
-      options: ["Villa", "Apartment", "Studio"],
-    },
-    {
-      key: "bedrooms",
-      label: "Bedrooms",
-      icon: "/bed.png",
-      options: ["1 BHK", "2 BHK", "3 BHK"],
-    },
-    {
-      key: "location",
-      label: "Location",
-      icon: "/location.png",
-      options: ["Dubai", "London", "New York"],
-    },
-  ];
+
 
   // CLOSE DROPDOWN ON OUTSIDE CLICK
   useEffect(() => {
@@ -67,8 +48,78 @@ export default function SearchBar() {
   };
 
   // HANDLE SEARCH
+  const [propertyTypes, setPropertyTypes] = useState<any[]>([]);
+  const [locations, setLocations] = useState<any[]>([]);
+  const [fields, setFields] = useState<any[]>([
+    {
+      key: "type",
+      label: "Property Type",
+      icon: "/home.png",
+      options: propertyTypes, // objects now
+    },
+    {
+      key: "bedrooms",
+      label: "Bedrooms",
+      icon: "/bed.png",
+      options: ["1 BHK", "2 BHK", "3 BHK"],
+    },
+    {
+      key: "location",
+      label: "Location",
+      icon: "/location.png",
+      options: locations, // objects now
+    },
+  ])
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [typeRes, locationRes] = await Promise.all([
+          fetch("https://winsteadglobal.com/api/content/property-types"),
+          fetch("https://winsteadglobal.com/api/content/locations"),
+        ]);
 
+        const typeData = await typeRes.json();
+        const locationData = await locationRes.json();
+        const typeDataupdate = typeData.filter((item: any) => item.title !== "Ultra Luxury");
+        setFields((prevFields) =>
+          prevFields.map((field) => {
+            if (field.key === "type") {
+              return { ...field, options: typeDataupdate };
+            } else if (field.key === "location") {
+              return { ...field, options: locationData };
+            }
+            return field;
+          })
+        );
+
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
+  }, []);
+  // const fields = [
+  //   {
+  //     key: "type",
+  //     label: "Property Type",
+  //     icon: "/home.png",
+  //     options: propertyTypes, // objects now
+  //   },
+  //   {
+  //     key: "bedrooms",
+  //     label: "Bedrooms",
+  //     icon: "/bed.png",
+  //     options: ["1 BHK", "2 BHK", "3 BHK"],
+  //   },
+  //   {
+  //     key: "location",
+  //     label: "Location",
+  //     icon: "/location.png",
+  //     options: locations, // objects now
+  //   },
+  // ];
   return (
     <div ref={dropdownRef} className="flex flex-col items-center gap-2 sm:gap-6 w-full">
       {/* INPUT ROW */}
@@ -103,15 +154,32 @@ export default function SearchBar() {
             {/* DROPDOWN */}
             {openIndex === i && (
               <div className="absolute mt-2 w-full bg-black border border-yellow-500/30 rounded-xl shadow-lg z-10">
-                {item.options.map((opt, idx) => (
-                  <div
-                    key={idx}
-                    onClick={() => handleSelect(item.key, opt)}
-                    className="text-[1.05rem] px-4 py-3 hover:bg-yellow-500/10 cursor-pointer text-sm lg:text-md lg:text-md"
-                  >
-                    {opt}
-                  </div>
-                ))}
+                {/* {console.log(item.options)} */}
+                {item.options.map((opt: any, idx: number) => {
+                  let label = "";
+                  let value: string = "";
+
+                  if (item.key === "type") {
+                    label = opt.title;     // ✅ show title
+                    value = opt._id;       // ✅ store ID
+                  } else if (item.key === "location") {
+                    label = opt.title;     // ✅ show title
+                    value = opt.title;      // ✅ store slug (BEST)
+                  } else {
+                    label = opt;
+                    value = opt;
+                  }
+
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => handleSelect(item.key, value)}
+                      className="px-4 py-3 hover:bg-yellow-500/10 cursor-pointer"
+                    >
+                      {label}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>

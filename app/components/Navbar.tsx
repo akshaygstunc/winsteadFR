@@ -224,7 +224,7 @@ export default function Navbar() {
               {link.name}
             </a>
           ))} */}
-        {parentMenu.map((item, index) => {
+        {parentMenu?.reverse().map((item, index) => {
   const children = getChildren(item._id);
 
   if (children.length > 0) {
@@ -240,6 +240,7 @@ export default function Navbar() {
               key={i}
               href={child.subtitle || "#"}
               className="block text-gray-300 text-sm lg:text-md lg:text-md hover:text-yellow-400"
+              onClick={() => setIsOpen(false)}
             >
               {child.title}
             </Link>
@@ -253,6 +254,7 @@ export default function Navbar() {
     <Link
       key={index}
       href={item.subtitle || "#"}
+      onClick={() => setIsOpen(false)}
       className="text-white text-sm lg:text-md lg:text-md border-b border-white/10 pb-2 hover:text-yellow-400 transition"
     >
       {item.title}

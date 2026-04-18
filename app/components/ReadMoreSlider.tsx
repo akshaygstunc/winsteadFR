@@ -42,8 +42,12 @@ export default function ReadMoreSlider({ description, heading }: Props) {
 
             {/* Right Slider */}
             <div
-                className={`fixed top-0 right-0 z-50 h-full w-48 sm:w-[85%] md:w-[300px] lg:w-[30%] bg-[#0b0b0b] border-l border-white/10  transform transition-transform duration-500 ease-in-out ${open ? "translate-x-0" : "translate-x-full"
+                className={`fixed right-0 z-50 w-48 sm:w-[85%] md:w-[300px] lg:w-[30%] bg-[#0b0b0b] border-l border-white/10 transform transition-transform duration-500 ease-in-out ${open ? "translate-x-0" : "translate-x-full"
                     }`}
+                style={{
+                    top: "80px",                 // 👈 pushes below header
+                    height: "calc(100vh - 80px)" // 👈 prevents full height
+                }}
             >
                 <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
                     <h3 className="text-xl md:text-2xl font-semibold text-white">
