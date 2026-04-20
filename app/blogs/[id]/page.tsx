@@ -4,7 +4,8 @@ import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import AutoBreadcrumbs from "../../components/BreadCrumbs";
-
+import Schema from "@/app/components/Schema";
+import { resolveSchemas } from "@/app/components/lib/schema/resolver";
 import Img1 from "../../../public/hero5.png";
 import Img2 from "../../../public/hero1.jpg";
 import Img3 from "../../../public/hero2.png";
@@ -196,6 +197,10 @@ export default function BlogDetailPage() {
 
   return (
     <div className="bg-black text-white min-h-screen">
+      <Schema schemas={resolveSchemas({
+        type: "blog",
+        data: blog
+      })} />
       {/* HERO */}
       <section className="relative h-[65vh] min-h-[420px]">
         <Image

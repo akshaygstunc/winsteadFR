@@ -26,6 +26,8 @@ import { useParams } from "next/navigation";
 import ReadMoreSlider from "@/app/components/ReadMoreSlider";
 import { useEffect, useState } from "react";
 import WebsiteContentService from "@/app/services/websitecontent.service";
+import Schema from "@/app/components/Schema";
+import { resolveSchemas } from "@/app/components/lib/schema/resolver";
 
 type DeveloperCategory =
     | "Luxury"
@@ -301,6 +303,11 @@ console.log("PROJECT:", projects);
     );
 
     return (
+        <>
+            <Schema schemas={resolveSchemas({
+                type: "developer",
+                data: projects
+            })} />
         <main className="bg-black text-white">
             <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
 
@@ -396,5 +403,6 @@ console.log("PROJECT:", projects);
                 </div>
             </section>
         </main>
+        </>
     );
 }

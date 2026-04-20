@@ -16,6 +16,8 @@ import { FaDollarSign } from "react-icons/fa6";
 import hero2 from "../../../public/image_6.png";
 import hero1 from "../../../public/image_7.png";
 import hero3 from "../../../public/image_5.png";
+import Schema from "../../components/Schema";
+import { resolveSchemas } from "../../components/lib/schema/resolver";
 import projectImage from "../../../public/hero1.jpg";
 import AutoBreadcrumbs from "@/app/components/BreadCrumbs";
 import WebsiteContentService from "@/app/services/websitecontent.service";
@@ -290,7 +292,7 @@ export default function ProjectDetailPage() {
   const [selectedPlan, setSelectedPlan] = useState("");
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [contactIntent, setContactIntent] = useState<ContactIntent>("general");
-
+  const [projectschema, setProjectschema] = useState({})
   const [contactForm, setContactForm] = useState({
     fullName: "",
     email: "",
@@ -305,6 +307,10 @@ export default function ProjectDetailPage() {
         setLoading(true);
         const response = await WebsiteContentService.getPropertyBySlug(slug);
         setProjectDetails(response || null);
+        setProjectschema(resolveSchemas({
+          type: "project",
+          data: response
+        }))
       } catch (error) {
         console.error("Failed to fetch property:", error);
         setProjectDetails(null);
@@ -513,9 +519,13 @@ export default function ProjectDetailPage() {
 
   const totalCost =
     bookingAmount + downPaymentAmount + totalMortgagePaid;
-
+  console.log(projectDetails)
   return (
     <>
+      {projectDetails && <Schema schemas={resolveSchemas({
+        type: "project", // or detectType(path)
+        data: projectDetails,
+      })} />}
       <main className="bg-black text-white min-h-screen overflow-x-hidden">
         <section className="relative">
           <ProjectHeroSlider project={project} fallbackImages={fallbackImages} />

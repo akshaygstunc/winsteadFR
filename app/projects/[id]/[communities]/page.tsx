@@ -1,7 +1,9 @@
 "use client";
 
 import AutoBreadcrumbs from "@/app/components/BreadCrumbs";
+import { resolveSchemas } from "@/app/components/lib/schema/resolver";
 import ReadMoreSlider from "@/app/components/ReadMoreSlider";
+import Schema from "@/app/components/Schema";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -205,9 +207,14 @@ export default function CommunityPage() {
 
         fetchCommunityData();
     }, []);
+    console.log(community)
     return (
         <main className="bg-black text-white">
             {/* HERO */}
+            {community !== null && <Schema schemas={resolveSchemas({
+                type: "community",
+                data: community
+            })} />}
             <section className="relative min-h-[58vh] overflow-hidden">
                 {community?.image && (
                     <Image
