@@ -4,7 +4,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { ToastContainer } from "react-toastify";
-
+import Layout from "./components/RootLayout";
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -24,15 +24,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${jakarta.variable}  h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
-        <main className="bg-black text-white">
-          <Navbar />
+    // <html lang="en" className={`${jakarta.variable}  h-full antialiased`}>
+    //   <body className="min-h-full flex flex-col">
+    //     <main className="bg-black text-white">
+    //       <Navbar />
+    //       {children}
+    //       <ToastContainer />
+    //       <Footer />
+    //     </main>
+    //   </body>
+    // </html>
+    <Layout className={`${jakarta.variable}  h-full antialiased`} >
+      <Navbar />
           {children}
           <ToastContainer />
           <Footer />
-        </main>
-      </body>
-    </html>
+    </Layout>
   );
 }

@@ -26,7 +26,7 @@ export default function ReadMoreSlider({ description, heading }: Props) {
                 {fullText.length > 80 && (
                     <button
                         onClick={() => setOpen(true)}
-                        className="mt-4 inline-flex items-center rounded-full border border-[#F1DC7F]/40 px-5 py-2 text-sm text-white transition hover:bg-[#F1DC7F] hover:text-black"
+                        className="bg-gradient-to-r from-yellow-300 to-yellow-600 py-3 px-4 rounded-xl text-black text-sm mt-4"
                     >
                         Read More
                     </button>

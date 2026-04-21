@@ -311,10 +311,11 @@ export default function Projects({ projects = [], homePage }: any) {
                 </h3>
 
                 <p className="text-lg text-gray-300 leading-relaxed">
-                    {homePage?.data?.aboutWinsteadDescription ||
-      "Our extensive portfolio features an array of premium villas, apartments, and townhouses designed to offer unmatched comfort and elegance."}
-
-                </p>
+                    {homePage?.data?.aboutWinsteadDescription?.slice(0, 361) ||
+      "Our extensive portfolio features an array of premium villas, apartments, and townhouses designed to offer unmatched comfort and elegance."}<br/>
+      <div className="mt-4">
+                    <Link href="/about-us" className="bg-gradient-to-r from-yellow-300 to-yellow-600 py-3 px-4 rounded-xl text-black text-sm">Read More </Link>
+                    </div> </p>
 
                 {/* <p className="text-gray-300 mt-4 leading-relaxed">
                   Our team of experienced professionals is dedicated to helping

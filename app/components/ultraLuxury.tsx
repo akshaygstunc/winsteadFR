@@ -158,14 +158,14 @@ export default function UltraLuxury() {
           </div>
 
           {/* THUMBNAILS */}
-          <div className="flex gap-3 mt-4 overflow-x-auto">
-            {media.map((item, index) => (
+          <div className="grid grid-cols-5 gap-3 mt-4 w-full">
+            {media.slice(0, 5).map((item, index) => (
               <div
                 key={index}
                 onClick={() => setActiveMedia(index)}
                 className={`cursor-pointer border-2 rounded-lg overflow-hidden ${activeMedia === index
-                  ? "border-yellow-400"
-                  : "border-transparent"
+                    ? "border-yellow-400"
+                    : "border-transparent"
                   }`}
               >
                 {item.type === "image" ? (
@@ -174,12 +174,12 @@ export default function UltraLuxury() {
                     alt="thumb"
                     width={100}
                     height={80}
-                    className="w-20 h-16 object-cover"
+                    className="w-full h-20 object-cover"
                   />
                 ) : (
                   <video
                     src={item.src}
-                    className="w-20 h-16 object-cover"
+                    className="w-full h-20 object-cover"
                   />
                 )}
               </div>

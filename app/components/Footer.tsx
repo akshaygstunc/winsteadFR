@@ -14,6 +14,13 @@ import {
 import ContactModal from "./ContactModal";
 import { FaPinterest } from "react-icons/fa6";
 import LuxuryChatbot from "./ChatBot";
+import { Tinos } from "next/font/google";
+
+const tinos = Tinos({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+});
 type ContactIntent =
   | "schedule-visit"
   | "download-floor-plan"
@@ -277,7 +284,7 @@ useEffect(() => {
      <div className="relative">
   <div className="absolute inset-0 blur-3xl opacity-20 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700]" />
 
-  <h6 className="relative text-[15vw] leading-none text-center font-bold whitespace-nowrap bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent opacity-80 mt-20">
+          <h6 className={`${tinos.className} relative text-[15vw] leading-none text-center font-bold whitespace-nowrap bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent opacity-80 mt-20`}>
     WINSTEAD
   </h6>
 </div>

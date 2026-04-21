@@ -31,7 +31,7 @@ const faqData = [
     },
 ];
 
-export default function LuxuryFAQ() {
+export default function LuxuryFAQ({ faq }) {
     const [openIndex, setOpenIndex] = useState<number | null>(0);
 
     const toggleFAQ = (index: number) => {

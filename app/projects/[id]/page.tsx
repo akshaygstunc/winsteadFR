@@ -726,7 +726,7 @@ export default function ProjectDetailPage() {
           </section>
         )}
 
-        {activeTab === "FAQ" && <LuxuryFAQ />}
+        {activeTab === "FAQ" && <LuxuryFAQ faq={project?.faq || []} />}
 
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
           <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8 mb-8">
