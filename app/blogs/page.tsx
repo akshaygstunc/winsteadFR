@@ -6,12 +6,13 @@ import NewsCTA from "../components/Blogs/NewsCTA";
 import LatestArticles from "../components/Blogs/LatestArticles";
 import NewsGrid from "../components/Blogs/NewsGrid";
 import NewsToolbar from "../components/Blogs/NewsToolbar";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Img1 from "../../public/hero5.png";
 import Img2 from "../../public/hero1.jpg";
 import Img3 from "../../public/hero2.png";
 import Img4 from "../../public/hero3.jpg";
 import AutoBreadcrumbs from "../components/BreadCrumbs";
+import WebsiteContentService from "../services/websitecontent.service";
 
 const news = [
   {
@@ -148,7 +149,24 @@ export default function NewsMedia() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState("latest");
+  const [loading, setLoading] = useState(true);
+  const [news, setNews] = useState([])
 
+  useEffect(() => {
+    async function fetchBlogs() {
+      try {
+        setLoading(true);
+        const response = await WebsiteContentService.getBlogs();
+        setNews(response || []);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchBlogs();
+  }, []);
   const filteredNews = useMemo(() => {
     let items = [...news];
 
@@ -157,8 +175,8 @@ export default function NewsMedia() {
       items = items.filter(
         (item) =>
           item.title.toLowerCase().includes(q) ||
-          item.excerpt.toLowerCase().includes(q) ||
-          item.category.toLowerCase().includes(q)
+          item.description.toLowerCase().includes(q) 
+          // item.category.toLowerCase().includes(q)
       );
     }
 
@@ -168,10 +186,10 @@ export default function NewsMedia() {
 
     items.sort((a, b) => {
       if (sort === "latest") {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       }
       if (sort === "oldest") {
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
       }
       if (sort === "title-asc") {
         return a.title.localeCompare(b.title);
@@ -201,7 +219,7 @@ export default function NewsMedia() {
         setSort={setSort}
       />
       
-      <NewsGrid news={news} />
+      <NewsGrid news={filteredNews} loading={loading} />
       {/* <NewsCTA /> */}
     </div>
   );

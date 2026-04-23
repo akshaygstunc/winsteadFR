@@ -34,7 +34,7 @@ export default function NewsToolbar({
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3">
-                        <select
+                        {/* <select
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                             className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-3 text-sm lg:text-md lg:text-md outline-none focus:border-[#F1DC7F]"
@@ -43,7 +43,7 @@ export default function NewsToolbar({
                             <option value="market-trends" className="bg-black">Market Trends</option>
                             <option value="luxury-insights" className="bg-black">Luxury Insights</option>
                             <option value="investment-signals" className="bg-black">Investment Signals</option>
-                        </select>
+                        </select> */}
 
                         <select
                             value={sort}

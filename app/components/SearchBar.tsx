@@ -21,7 +21,7 @@ export default function SearchBar() {
 
     if (values.location) params.append("location", values.location);
     if (values.type) params.append("type", values.type);
-    if (values.price) params.append("price", values.price);
+    if (values.bedrooms) params.append("bedrooms", values.bedrooms.split(" ")[0]);
     console.log(params.toString());
     router.push(`/projects?${params.toString()}`);
   };
@@ -61,7 +61,7 @@ export default function SearchBar() {
       key: "bedrooms",
       label: "Bedrooms",
       icon: "/bed.png",
-      options: ["1 BHK", "2 BHK", "3 BHK"],
+      options: ["1 Bedroom", "2 Bedroom", "3 Bedroom", "4 Bedroom", "5+ Bedroom"],
     },
     {
       key: "location",
@@ -161,7 +161,7 @@ export default function SearchBar() {
 
                   if (item.key === "type") {
                     label = opt.title;     // ✅ show title
-                    value = opt._id;       // ✅ store ID
+                    value = opt.title;       // ✅ store ID
                   } else if (item.key === "location") {
                     label = opt.title;     // ✅ show title
                     value = opt.title;      // ✅ store slug (BEST)

@@ -470,7 +470,7 @@ function Sidebar({ filters, updateFilter, categories }: any) {
           checked={filters.featured === "true"}
           onChange={() =>
             updateFilter(
-              "feature",
+              "featured",
               filters.featured === "true" ? "" : "true"
             )
           }

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import WebsiteContentService from "@/app/services/websitecontent.service";
 import Link from "next/link";
+import HtmlRenderer from "../HtmlRenderer";
 
 type BlogItem = {
     _id: string;
@@ -111,7 +112,7 @@ export default function LatestArticles() {
                                     </h3>
 
                                     <p className="text-sm lg:text-md text-white leading-relaxed">
-                                        {item?.description?.slice(0, 100)}....
+                                        {<HtmlRenderer content={item?.description?.slice(0, 100)} className="prose text-white" />}....
                                     </p>
 
                                     <Link

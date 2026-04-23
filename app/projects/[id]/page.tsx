@@ -243,7 +243,7 @@ function getFloorPlans(data?: BackendProject): UiFloorPlan[] {
 function getHighlights(data?: BackendProject) {
   const list = [
     data?.category ? `${data.category} property in ${getDisplayValue(data.city)}` : "",
-    data?.location ? `Located in ${data.location}` : "",
+    data?.locations ? `Located in ${data.locations.title}` : "",
     data?.propertyStatus ? `Status: ${data.propertyStatus}` : "",
     data?.tag ? `Property tag: ${data.tag}` : "",
   ].filter(Boolean);
@@ -528,7 +528,7 @@ export default function ProjectDetailPage() {
       })} />}
       <main className="bg-black text-white min-h-screen overflow-x-hidden">
         <section className="relative">
-          <ProjectHeroSlider project={project} fallbackImages={fallbackImages} />
+          <ProjectHeroSlider project={projectDetails} fallbackImages={fallbackImages} />
         </section>
 
         <div className="flex justify-between w-full items-center">
@@ -560,7 +560,7 @@ export default function ProjectDetailPage() {
                   <FactCard
                     icon={<FaMapMarkerAlt className="text-yellow-400" />}
                     label="Location"
-                    value={project.subLocation}
+                    value={projectDetails?.locations?.title}
                   />
                 </div>
               </div>
@@ -574,7 +574,7 @@ export default function ProjectDetailPage() {
                 <MetaRow label="Category" value={project.category} />
                 <MetaRow
                   label="Payment Plan"
-                  value={`${bookingPercent}/${constructionPercent}/${handoverPercent}`}
+                  value={`${constructionPercent}/${handoverPercent}`}
                   isLast
                 />
               </div>

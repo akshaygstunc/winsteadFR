@@ -71,7 +71,7 @@ export default function ProjectHeroSlider({ project, fallbackImages }: Props) {
                     <div className="flex items-center gap-2 text-base md:text-lg text-white mb-4">
                         <FaMapMarkerAlt className="text-yellow-400" />
                         <span>
-                            {project.subLocation}, {project.location}
+                            {/* {project.subLocation},*/} {project?.locations?.title} 
                         </span>
                     </div>
                 </div>

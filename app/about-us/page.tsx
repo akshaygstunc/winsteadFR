@@ -232,10 +232,11 @@ export default function AboutUs() {
 
               {/* IMAGE (keep static or make dynamic later) */}
               <div className="relative">
-                <Image
+                <img
                   src={aboutPage?.data?.ceoImage || img5}
                   alt="Word from CEO"
                   className="w-full h-[320px] md:h-[620px] object-cover"
+                  // width={100}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
               </div>

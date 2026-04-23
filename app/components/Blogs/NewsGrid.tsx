@@ -6,6 +6,7 @@ import { FaArrowRight } from "react-icons/fa6";
 import img from "../../../public/image_7.png";
 import WebsiteContentService from "@/app/services/websitecontent.service";
 import { useState, useEffect } from "react";
+import HtmlRenderer from "../HtmlRenderer";
 
 type BlogItem = {
     _id: string;
@@ -19,25 +20,9 @@ type BlogItem = {
     };
 };
 
-export default function NewsGrid() {
+export default function NewsGrid({ news, loading }) {
     const [blogs, setBlogs] = useState<BlogItem[]>([]);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        async function fetchBlogs() {
-            try {
-                setLoading(true);
-                const response = await WebsiteContentService.getBlogs();
-                setBlogs(response || []);
-            } catch (error) {
-                console.error("Error fetching blogs:", error);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchBlogs();
-    }, []);
     return (
         <section className="bg-black text-white px-6 md:px-12 py-14 md:py-18">
             
@@ -69,7 +54,7 @@ export default function NewsGrid() {
                         </article>
                     ))}</div> : 
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                        {blogs?.map((item, index) => {
+                        {news?.map((item, index) => {
                             const isLarge = index < 2;
 
                             return (
@@ -101,7 +86,7 @@ export default function NewsGrid() {
 
                                             {/* Description (fixed lines) */}
                                             <p className="mt-4 text-white text-sm md:text-base leading-relaxed line-clamp-3 flex-1">
-                                                {item.description || "No description available."}
+                                                {<HtmlRenderer content={item.description} className="prose text-white" /> || "No description available."}
                                             </p>
 
                                             {/* CTA stays at bottom */}

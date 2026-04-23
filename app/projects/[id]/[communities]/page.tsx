@@ -195,7 +195,7 @@ export default function CommunityPage() {
         const fetchCommunityData = async () => {
             try {
                 const response = await fetch(
-                    `https://winsteadglobal.com/api/content/commun/communities/slug/${params.communities}`,
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/content/commun/communities/slug/${params.communities}`,
                 );
                 const data = await response.json();
                 setCommunity(data);
@@ -352,7 +352,7 @@ export default function CommunityPage() {
 
                                 <div className="p-6">
                                     <p className="text-xs uppercase tracking-[0.25em] text-[#D4AF37]">
-                                        {project.location}
+                                        {project.location.title}
                                     </p>
 
                                     <h3 className="mt-3 text-2xl font-light text-white">
