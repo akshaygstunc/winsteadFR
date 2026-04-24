@@ -4,19 +4,19 @@
 
 export const dynamic = "force-dynamic";
 
-import { useSearchParams, useRouter } from "next/navigation";
-import { useState, useEffect, Suspense, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import { FaBed, FaDollarSign, FaRulerCombined } from "react-icons/fa6";
 import { FaMapMarkerAlt, FaArrowRight } from "react-icons/fa";
-import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import ProjectsHero from "../components/projects/ProjectsHero";
 import WebsiteContentService from "../services/websitecontent.service";
-import img from "../../public/hero2.png"
+import img from "../../public/hero2.png";
 import AutoBreadcrumbs from "../components/BreadCrumbs";
+
 export default function Page() {
   return (
     <Suspense
@@ -28,18 +28,16 @@ export default function Page() {
 }
 
 function ProjectsContent() {
+  const searchParams = useSearchParams();
+
   const [projects, setProjects] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
 
-  // 🔥 LIVE FILTERS (sidebar - instant)
   const [liveFilters, setLiveFilters] = useState(getDefaultFilters());
-
-  // 🔥 APPLIED FILTERS (top search)
   const [appliedFilters, setAppliedFilters] = useState(getDefaultFilters());
 
-  // ✅ FETCH PROJECTS (API BASED FILTERING)
   const fetchProjects = async (filters: any) => {
     try {
       setLoading(true);
@@ -51,7 +49,7 @@ function ProjectsContent() {
         WebsiteContentService.getCategory(),
       ]);
 
-      setProjects(response.sort((a, b) => a._sortOrder - b._sortOrder) || []);
+      setProjects(response?.sort((a: any, b: any) => a._sortOrder - b._sortOrder) || []);
       setCategories(cat?.filter((c: any) => c.title !== "Ultra Luxury") || []);
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -60,12 +58,30 @@ function ProjectsContent() {
     }
   };
 
-  // ✅ INITIAL LOAD
   useEffect(() => {
-    fetchProjects(appliedFilters);
-  }, []);
+    const urlFilters = {
+      ...getDefaultFilters(),
+      type: searchParams.get("type") || "",
+      residence: searchParams.get("residence") || "",
+      bedrooms: searchParams.get("bedrooms") || "",
+      location: searchParams.get("location") || "",
+      subLocation: searchParams.get("subLocation") || "",
+      developer: searchParams.get("developer") || "",
+      communities: searchParams.get("communities") || "",
+      minSize: searchParams.get("minSize") || "",
+      maxSize: searchParams.get("maxSize") || "",
+      minPrice: searchParams.get("minPrice") || "",
+      maxPrice: searchParams.get("maxPrice") || "",
+      priceRange: searchParams.get("priceRange") || "",
+      sort: searchParams.get("sort") || "",
+      featured: searchParams.get("featured") || "",
+    };
 
-  // ✅ SIDEBAR FILTER CHANGE (instant API hit)
+    setLiveFilters(urlFilters);
+    setAppliedFilters(urlFilters);
+    fetchProjects(urlFilters);
+  }, [searchParams]);
+
   const updateLiveFilter = (key: string, value: any) => {
     const updated = {
       ...liveFilters,
@@ -74,15 +90,13 @@ function ProjectsContent() {
     };
 
     setLiveFilters(updated);
-    fetchProjects(updated); // 🔥 only right section updates
+    fetchProjects(updated);
   };
 
-  // ✅ TOP SEARCH APPLY (manual trigger)
   const handleSearch = (e: any) => {
     e.preventDefault();
-
     setAppliedFilters(liveFilters);
-    fetchProjects(liveFilters); // 🔥 only here API fires
+    fetchProjects(liveFilters);
   };
 
   const clearAllFilters = () => {
@@ -104,7 +118,7 @@ function ProjectsContent() {
         filters={liveFilters}
         handleSearch={handleSearch}
         setShowFilter={setShowFilter}
-        updateFilter={setLiveFilters} // 🔥 no router push
+        updateFilter={setLiveFilters}
       />
 
       <div className="max-w-[85rem] mx-auto px-4 md:px-12 pb-20">
@@ -118,7 +132,7 @@ function ProjectsContent() {
           <div className="hidden md:block">
             <Sidebar
               filters={liveFilters}
-              updateFilter={updateLiveFilter} // 🔥 instant update
+              updateFilter={updateLiveFilter}
               categories={categories}
             />
           </div>
@@ -139,7 +153,6 @@ function ProjectsContent() {
             </div>
           )}
 
-          {/* ✅ ONLY THIS PART RE-RENDERS */}
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 flex-1">
             {loading ? (
               Array.from({ length: 6 }).map((_, i) => (
@@ -179,28 +192,35 @@ function ProjectsToolbar({
   filters,
   handleSearch,
   setShowFilter,
-  subLocationsMap,
   updateFilter,
 }: any) {
-  const [type, setType] = useState([])
-  const [location, setLocation] = useState([])
-  const availableSubLocations =
-    // filters.location && subLocationsMap[filters.location]
-    //   ? subLocationsMap[filters.location]
-    //   : [];
-    useEffect(() => {
-      async function fetchCatLOc() {
-        const [typeRes, locationRes] = await Promise.all([
+  const [type, setType] = useState<any[]>([]);
+  const [location, setLocation] = useState<any[]>([]);
+  const [sublocation, setsubLocation] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchCatLOc() {
+      try {
+        const [typeRes, locationRes, subLocation] = await Promise.all([
           fetch("https://winsteadglobal.com/api/content/property-types"),
           fetch("https://winsteadglobal.com/api/content/locations"),
+          fetch("https://winsteadglobal.com/api/content/sub-locations"),
         ]);
+
         const typeData = await typeRes.json();
         const locationData = await locationRes.json();
-        setType(typeData)
-        setLocation(locationData)
+        const subLocationData = await subLocation.json()
+        setType(typeData || []);
+        setLocation(locationData || []);
+        setsubLocation(subLocationData || []);
+      } catch (error) {
+        console.error("Toolbar fetch error:", error);
       }
-      fetchCatLOc()
-    }, [])
+    }
+
+    fetchCatLOc();
+  }, []);
+
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-12 py-8">
       <form
@@ -212,17 +232,21 @@ function ProjectsToolbar({
             <select
               name="type"
               value={filters.type}
-              onChange={(e) => updateFilter("type", e.target.value)}
+              onChange={(e) => updateFilter((prev: any) => ({ ...prev, type: e.target.value }))}
               className="px-5 py-4 bg-transparent outline-none md:border-r border-white/10"
             >
               <option value="">Property Type</option>
-              {type?.map((ty) => <option key={ty?._id} value={ty?.title}>{ty?.title}</option>)}
+              {type?.map((ty: any) => (
+                <option key={ty?._id} value={ty?.title}>
+                  {ty?.title}
+                </option>
+              ))}
             </select>
 
             <select
               name="residence"
               value={filters.residence}
-              onChange={(e) => updateFilter("residence", e.target.value)}
+              onChange={(e) => updateFilter((prev: any) => ({ ...prev, residence: e.target.value }))}
               className="px-5 py-4 bg-transparent outline-none md:border-r border-white/10"
             >
               <option value="">Residence Type</option>
@@ -234,25 +258,35 @@ function ProjectsToolbar({
             <select
               name="location"
               value={filters.location}
-              onChange={(e) => updateFilter("location", e.target.value)}
+              onChange={(e) =>
+                updateFilter((prev: any) => ({
+                  ...prev,
+                  location: e.target.value,
+                  subLocation: "",
+                }))
+              }
               className="px-5 py-4 bg-transparent outline-none md:border-r border-white/10"
             >
               <option value="">Location</option>
-              {location?.map((ty) => <option key={ty?._id} value={ty?.title}>{ty?.title}</option>)}
+              {location?.map((ty: any) => (
+                <option key={ty?._id} value={ty?.title}>
+                  {ty?.title}
+                </option>
+              ))}
             </select>
 
             <select
               name="subLocation"
               value={filters.subLocation}
-              onChange={(e) => updateFilter("subLocation", e.target.value)}
+              onChange={(e) => updateFilter((prev: any) => ({ ...prev, subLocation: e.target.value }))}
               className="px-5 py-4 bg-transparent outline-none"
             >
               <option value="">Sub Location</option>
-              {/* {availableSubLocations.map((item: string) => (
-                <option key={item} value={item}>
-                  {item}
+              {sublocation?.map((ty: any) => (
+                <option key={ty?._id} value={ty?.title}>
+                  {ty?.title}
                 </option>
-              ))} */}
+              ))}
             </select>
           </div>
 
@@ -289,6 +323,10 @@ function ResultsBar({ count, filters, clearAllFilters }: any) {
     filters.subLocation,
     filters.category,
     filters.developer,
+    filters.communities,
+    filters.priceRange,
+    filters.sort,
+    filters.featured,
   ].filter(Boolean);
 
   return (
@@ -333,27 +371,29 @@ function Sidebar({ filters, updateFilter, categories }: any) {
     amenities: true,
   });
 
-  const [locations, setLocations] = useState([]);
-  const [communities, setCommunities] = useState([]);
-  const [developers, setDevelopers] = useState([]);
-  // const developers = ["DAMAC", "Emaar", "Meraas", "XYZ Properties"];
+  const [locations, setLocations] = useState<any[]>([]);
+  const [communities, setCommunities] = useState<any[]>([]);
+  const [developers, setDevelopers] = useState<any[]>([]);
 
   useEffect(() => {
     async function fetchData() {
-      const [locRes, commRes, deveRes] = await Promise.all([
-        fetch("https://winsteadglobal.com/api/content/locations"),
-        fetch("https://winsteadglobal.com/api/content/communities"),
-        fetch("https://winsteadglobal.com/api/content/developer-community"),
+      try {
+        const [locRes, commRes, deveRes] = await Promise.all([
+          fetch("https://winsteadglobal.com/api/content/locations"),
+          fetch("https://winsteadglobal.com/api/content/communities"),
+          fetch("https://winsteadglobal.com/api/content/developer-community"),
+        ]);
 
-      ]);
+        const locData = await locRes.json();
+        const commData = await commRes.json();
+        const devData = await deveRes.json();
 
-      const locData = await locRes.json();
-      const commData = await commRes.json();
-      const devData = await deveRes.json();
-
-      setLocations(locData);
-      setCommunities(commData);
-      setDevelopers(devData)
+        setLocations(locData || []);
+        setCommunities(commData || []);
+        setDevelopers(devData || []);
+      } catch (error) {
+        console.error("Sidebar fetch error:", error);
+      }
     }
 
     fetchData();
@@ -361,10 +401,8 @@ function Sidebar({ filters, updateFilter, categories }: any) {
 
   return (
     <div className="w-[300px] rounded-[28px] border border-yellow-500/20 bg-gradient-to-b from-[#0c0c0c] to-[#111] p-6">
-
       <h2 className="text-2xl font-semibold mb-6">Filters</h2>
 
-      {/* CATEGORY */}
       <Section title="Category">
         {categories?.map((cat: any) => (
           <Check
@@ -378,7 +416,6 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         ))}
       </Section>
 
-      {/* LOCATION */}
       <Section title="Location">
         {locations.map((loc: any) => (
           <Check
@@ -392,7 +429,6 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         ))}
       </Section>
 
-      {/* COMMUNITY */}
       <Section title="Community">
         {communities.map((c: any) => (
           <Check
@@ -409,7 +445,6 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         ))}
       </Section>
 
-      {/* BEDROOMS */}
       <Section title="Bedrooms">
         {["1 Bedroom", "2 Bedroom", "3 Bedroom", "4 Bedroom", "5+ Bedroom"].map(
           (item) => (
@@ -425,7 +460,6 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         )}
       </Section>
 
-      {/* PRICE RANGE */}
       <Section title="Price Range">
         {[
           { label: "500k – 2M", value: "500k-2m" },
@@ -446,7 +480,6 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         ))}
       </Section>
 
-      {/* SORT */}
       <Section title="Sort By">
         {[
           { label: "Low to High", value: "lowToHigh" },
@@ -463,7 +496,6 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         ))}
       </Section>
 
-      {/* FEATURED */}
       <Section title="Project Type">
         <Check
           label="Featured Projects"
@@ -477,7 +509,6 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         />
       </Section>
 
-      {/* DEVELOPER */}
       <Collapsible
         title="Developer"
         open={open.developer}
@@ -485,7 +516,7 @@ function Sidebar({ filters, updateFilter, categories }: any) {
           setOpen((prev) => ({ ...prev, developer: !prev.developer }))
         }
       >
-        {developers.map((d) => (
+        {developers.map((d: any) => (
           <Check
             key={d._id}
             label={d.title}
@@ -499,7 +530,6 @@ function Sidebar({ filters, updateFilter, categories }: any) {
           />
         ))}
       </Collapsible>
-
     </div>
   );
 }
@@ -627,6 +657,7 @@ function PropertyCardSkeleton() {
     </div>
   );
 }
+
 function getDefaultFilters() {
   return {
     type: "",
@@ -635,6 +666,14 @@ function getDefaultFilters() {
     location: "",
     subLocation: "",
     developer: "",
+    communities: "",
+    minSize: "",
+    maxSize: "",
+    minPrice: "",
+    maxPrice: "",
+    priceRange: "",
+    sort: "",
+    featured: "",
   };
 }
 

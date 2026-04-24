@@ -198,4 +198,17 @@ export default class WebsiteContentService {
       throw e;
     }
   }
+
+  static async getSingletonBySlug(slug: string) {
+    try {
+      const response = await fetch(
+        `https://winsteadglobal.com/api/content/${slug}/singleton`,
+      );
+      if (!response.ok) throw new Error("Failed to fetch singleton");
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching singleton ${slug}:`, error);
+      return null;
+    }
+  }
 }

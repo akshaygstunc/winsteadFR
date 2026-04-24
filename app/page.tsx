@@ -23,7 +23,7 @@ export default function Home() {
       try {
         const response = await WebsiteContentService.getHomePageContent1(); // ✅ correct
 
-        const projects = await WebsiteContentService.getProperties();
+        const projects = await WebsiteContentService.getProperties({});
         const testimonials = await WebsiteContentService.getTestimonials()
         settestimonials(testimonials)
         setHomePage(response); // ✅ direct object

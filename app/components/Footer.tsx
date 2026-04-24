@@ -296,15 +296,15 @@ useEffect(() => {
           <p>© 2026 Winstead Global Real Estate LLC</p>
 
           <div className="flex items-center gap-4">
-            <a href="#" className="hover:text-[#F1DC7F] transition">
+            <a href="/privacy-policy" className="hover:text-[#F1DC7F] transition">
               Privacy Policy
             </a>
-            <a href="#" className="hover:text-[#F1DC7F] transition">
+            <a href="/term-and-conditions" className="hover:text-[#F1DC7F] transition">
               Terms & Conditions
             </a>
-            <a href="#" className="hover:text-[#F1DC7F] transition">
+            {/* <a href="#" className="hover:text-[#F1DC7F] transition">
               Sitemap
-            </a>
+            </a> */}
           </div>
         </div>
       </div>
