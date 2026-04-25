@@ -39,7 +39,11 @@ export default function LuxuryFAQ({ faq }) {
     };
 
     return (
-        <section className="relative max-w-[85rem] mx-auto px-4 md:px-10 mb-2 py-1 md:py-1 overflow-hidden">
+        !faq || faq.length === 0 ? (
+            <div className="text-center py-10 text-white">
+                No FAQs available
+            </div>
+        ) : (<section className="relative max-w-[85rem] mx-auto px-4 md:px-10 mb-2 py-1 md:py-1 overflow-hidden">
             {/* background glow */}
             <div className="absolute top-10 left-[10%] h-52 w-52 rounded-full bg-yellow-500/10 blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 right-[8%] h-72 w-72 rounded-full bg-yellow-400/10 blur-3xl pointer-events-none" />
@@ -49,7 +53,7 @@ export default function LuxuryFAQ({ faq }) {
 
                 {/* faq grid */}
                 <div className="grid gap-5">
-                    {faqData.map((faq, index) => {
+                    {faq?.map((fa, index) => {
                         const isOpen = openIndex === index;
 
                         return (
@@ -80,7 +84,7 @@ export default function LuxuryFAQ({ faq }) {
 
                                         <div>
                                             <h3 className="text-lg md:text-xl font-semibold text-white leading-snug">
-                                                {faq.question}
+                                                {fa.question}
                                             </h3>
                                         </div>
                                     </div>
@@ -105,7 +109,7 @@ export default function LuxuryFAQ({ faq }) {
                                         <div className="px-6 md:px-8 pb-6 md:pb-8">
                                             <div className="ml-14 md:ml-[60px] border-l border-yellow-400/15 pl-5 md:pl-6">
                                                 <p className="text-white text-sm md:text-base leading-relaxed">
-                                                    {faq.answer}
+                                                    {fa.answer}
                                                 </p>
                                             </div>
                                         </div>
@@ -116,6 +120,6 @@ export default function LuxuryFAQ({ faq }) {
                     })}
                 </div>
             </div>
-        </section>
+        </section>)
     );
 }

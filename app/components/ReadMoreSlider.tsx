@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
+import HtmlRenderer from "./HtmlRenderer";
 
 type Props = {
     project: {
@@ -20,7 +21,7 @@ export default function ReadMoreSlider({ description, heading }: Props) {
         <>
             <div>
                 <p className="text-white leading-relaxed text-base md:text-lg">
-                    {shortText}
+                    <HtmlRenderer content={shortText} />
                 </p>
 
                 {fullText.length > 80 && (
@@ -64,7 +65,7 @@ export default function ReadMoreSlider({ description, heading }: Props) {
 
                 <div className="h-[calc(100%-80px)] overflow-y-auto px-6 py-6">
                     <p className="text-white leading-8 text-base md:text-lg whitespace-pre-line">
-                        {fullText}
+                        <HtmlRenderer content={fullText} />
                     </p>
                 </div>
             </div>

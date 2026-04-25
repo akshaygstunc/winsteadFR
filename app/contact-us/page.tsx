@@ -36,7 +36,7 @@ export default function ContactUs() {
 
       <ContactSection contactInfo={contactData} loading={loading} />
 
-      <ContactTrustStrip />
+      <ContactTrustStrip addresses={contactData?.data?.address} />
     </div>
   );
 }

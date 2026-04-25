@@ -1,28 +1,40 @@
-export default function ContactTrustStrip() {
+import { FaMapMarkerAlt } from "react-icons/fa";
+
+export default function AddressSection({ addresses = [] }: any) {
+    const shouldScroll = addresses.length > 4;
+
+    const list = shouldScroll
+        ? [...addresses, ...addresses] // duplicate for infinite loop
+        : addresses;
+
     return (
-        <section className="pb-20 px-6 md:px-12">
-            <div className="max-w-7xl mx-auto rounded-[28px] border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 via-white/5 to-yellow-500/10 px-6 py-6 md:px-10 md:py-8">
-                <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
-                    <div>
-                        <p className="text-yellow-400 text-sm lg:text-xl lg:text-xl mb-1">Private Guidance</p>
-                        <p className="text-white-300 text-sm lg:text-xl lg:text-xl">
-                            Thoughtful support tailored to your property goals.
-                        </p>
+        <div className="relative max-w-[85rem] mx-auto px-4 md:px-10 py-6 overflow-hidden">
+            <div
+                className={`flex gap-6 ${shouldScroll ? "animate-scroll" : "flex-wrap justify-between"
+                    }`}
+            >
+                {list.map((item, index) => (
+                    <div
+                        key={index}
+                        className="rounded-[24px] border border-white/10 bg-white/5 p-6 backdrop-blur-sm hover:border-yellow-400/30 hover:bg-white/[0.07] transition"
+                    >
+                        <div className="flex items-start gap-3">
+                            <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-yellow-400/20 bg-yellow-400/10">
+                                <FaMapMarkerAlt className="text-yellow-400 text-sm" />
+                            </div>
+
+                            <div>
+                                <h3 className="text-xl font-semibold text-white mb-2">
+                                    {item.location}
+                                </h3>
+                                <p className="text-white leading-relaxed whitespace-pre-line text-sm md:text-base">
+                                    {item.address}
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <p className="text-yellow-400 text-sm lg:text-xl lg:text-xl mb-1">Premium Opportunities</p>
-                        <p className="text-white-300 text-sm lg:text-xl lg:text-xl">
-                            Access to curated residences and investment-led options.
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-yellow-400 text-sm lg:text-xl lg:text-xl mb-1">Clear Next Steps</p>
-                        <p className="text-white-300 text-sm lg:text-xl lg:text-xl">
-                            A more structured journey from inquiry to conversation.
-                        </p>
-                    </div>
-                </div>
+                ))}
             </div>
-        </section>
+        </div>
     );
 }

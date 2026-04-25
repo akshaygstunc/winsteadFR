@@ -1,6 +1,7 @@
 "use client";
 
 import AutoBreadcrumbs from "@/app/components/BreadCrumbs";
+import LuxuryFAQ from "@/app/components/FAQ";
 import { resolveSchemas } from "@/app/components/lib/schema/resolver";
 import ReadMoreSlider from "@/app/components/ReadMoreSlider";
 import Schema from "@/app/components/Schema";
@@ -321,7 +322,7 @@ export default function CommunityPage() {
             </section>
 
             {/* PROJECTS */}
-            <section className="pb-24">
+            <section className="pb-14">
                 <div className="mx-auto max-w-7xl px-6 md:px-10">
                     <div className="mb-12">
                         <p className="mb-3 text-sm uppercase tracking-[0.35em] text-[#D4AF37]">
@@ -333,7 +334,7 @@ export default function CommunityPage() {
                     </div>
 
                     <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-                        {community?.projects?.map((project: any) => (
+                        {community?.projects?.length > 0 ? community?.projects?.map((project: any) => (
                             <Link
                                 key={project._id}
                                 href={`/projects/${project.slug}`}
@@ -377,9 +378,19 @@ export default function CommunityPage() {
                                     </div>
                                 </div>
                             </Link>
-                        ))}
+                        )) : <div className="rounded-[30px] border border-dashed border-white/10 bg-white/[0.02] py-20 text-center">
+                            <h3 className="text-2xl font-semibold text-white text-center">
+                                No Projects available
+                            </h3>
+                        </div>}
                     </div>
                 </div>
+            </section>
+            <section className="pb-20 px-40">
+                <h4 className="text-5xl md:text-4xl font-light leading-[0.95] text-white">
+                    {community?.title} FAQ
+                </h4>
+                <LuxuryFAQ faq={community?.data?.faq || []} />
             </section>
         </main>
 

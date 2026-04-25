@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { FaCheckCircle, FaMapMarkerAlt, FaArrowRight } from "react-icons/fa";
+import AddressSection from "../components/contact/ContactTrustStrip";
+import WebsiteContentService from "../services/websitecontent.service";
+import { useEffect, useState } from "react";
 
 type Office = {
     city: string;
@@ -27,6 +30,25 @@ Sharjah, UAE`,
 ];
 
 export default function ThankYouPage() {
+    const [contactData, setContactData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadContactInfo() {
+            try {
+                const res = await WebsiteContentService.getContact();
+                console.log("API response:", res);
+                setContactData(res);
+            } catch (error) {
+                console.error("Error fetching contact info:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadContactInfo();
+    }, []);
+    console.log(contactData?.data?.address)
     return (
         <section className="min-h-screen bg-black text-white px-6 md:px-10 py-16 md:py-24">
             <div className="max-w-[85rem] mx-auto">
@@ -66,29 +88,9 @@ export default function ThankYouPage() {
                             </h2>
                         </div>
 
-                        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
-                            {offices.map((office, index) => (
-                                <div
-                                    key={index}
-                                    className="rounded-[24px] border border-white/10 bg-white/5 p-6 backdrop-blur-sm hover:border-yellow-400/30 hover:bg-white/[0.07] transition"
-                                >
-                                    <div className="flex items-start gap-3">
-                                        <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-yellow-400/20 bg-yellow-400/10">
-                                            <FaMapMarkerAlt className="text-yellow-400 text-sm" />
-                                        </div>
-
-                                        <div>
-                                            <h3 className="text-xl font-semibold text-white mb-2">
-                                                {office.city}
-                                            </h3>
-                                            <p className="text-white leading-relaxed whitespace-pre-line text-sm md:text-base">
-                                                {office.address}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        {/* <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5"> */}
+                            <AddressSection addresses={contactData?.data?.address} />
+                        {/* </div> */}
                     </div>
                 </div>
 
