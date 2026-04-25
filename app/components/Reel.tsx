@@ -151,7 +151,7 @@ export default function Reel({ data }: any) {
                   setHovered(null);
                   resumeSlider();
                 }}
-                className="relative flex-shrink-0 w-[70vw] sm:w-[45vw] md:w-[28vw] lg:w-[20%] min-w-[180px] md:min-w-[220px] h-[300px] md:h-[400px] rounded-xl overflow-hidden cursor-pointer group"
+                className="relative flex-shrink-0 w-[70vw] sm:w-[45vw] md:w-[28vw] lg:w-[20%] min-w-[180px] md:min-w-[220px] h-[300px] md:h-[500px] rounded-xl overflow-hidden cursor-pointer group"
               >
                 <video
                   src={item?.data?.post?.uploaded || item?.data?.video}

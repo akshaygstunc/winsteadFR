@@ -35,7 +35,7 @@ export default function ReadMoreSlider({ description, heading }: Props) {
 
             {/* Overlay */}
             <div
-                className={`fixed inset-0 z-50 bg-black/50  transition-opacity duration-300 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+                className={`fixed inset-0 z-50 bg-black/10  transition-opacity duration-300 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
                     }`}
                 onClick={() => setOpen(false)}
             />
