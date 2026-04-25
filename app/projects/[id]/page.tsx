@@ -197,12 +197,24 @@ function getProjectImages(data?: BackendProject) {
 
 function getAmenities(data?: BackendProject) {
   if (!Array.isArray(data?.amenities) || !data.amenities.length) {
-    return [EMPTY_VALUE];
+    return [{ title: EMPTY_VALUE, icon: null }];
   }
 
   return data.amenities.map((item) => {
-    if (typeof item === "string") return item || EMPTY_VALUE;
-    return item?.name || EMPTY_VALUE;
+    // string fallback (old data)
+    if (typeof item === "string") {
+      return { title: item || EMPTY_VALUE, icon: null };
+    }
+
+    // object format (current API)
+    if (typeof item === "object" && item !== null) {
+      return {
+        title: item?.title || EMPTY_VALUE,
+        icon: item?.icon || null,
+      };
+    }
+
+    return { title: EMPTY_VALUE, icon: null };
   });
 }
 
@@ -711,14 +723,24 @@ export default function ProjectDetailPage() {
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {project.amenities.map((item, index) => (
+
                   <div
-                    key={`${item}-${index}`}
+                    key={`${item.title}-${index}`}
                     className="rounded-2xl border border-white/10 bg-black/30 p-5 hover:border-yellow-400/30 transition"
                   >
                     <div className="w-10 h-10 rounded-full bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center mb-4">
-                      <FaCheckCircle className="text-yellow-400" />
+                      {item.icon ? (
+                        <img
+                          src={item.icon}
+                          alt={item.title}
+                          className="w-5 h-5 object-contain"
+                        />
+                      ) : (
+                        <FaCheckCircle className="text-yellow-400" />
+                      )}
                     </div>
-                    <p className="text-white font-medium">{item}</p>
+
+                    <p className="text-white font-medium">{item.title}</p>
                   </div>
                 ))}
               </div>
