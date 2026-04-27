@@ -153,10 +153,11 @@ export default function AboutUs() {
           </section>
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5 order-2 lg:order-1">
-              <Image
-                src={img1}
+              <img
+                src={aboutPage?.data?.introImage || img1}
                 alt="About Winstead section"
                 className="w-full h-[320px] md:h-[400px] object-cover"
+
               />
             </div>
 
@@ -165,12 +166,10 @@ export default function AboutUs() {
                 Small Introduction
               </p>
               <h2 className="text-3xl md:text-3xl font-light leading-tight mb-6">
-                {aboutPage?.data?.description || "We don’t just present properties — we present confidence."}
+                {aboutPage?.data?.introTitle || "We don’t just present properties — we present confidence."}
               </h2>
               <p className="text-white leading-8 text-base md:text-lg mb-5">
-                Our approach combines premium real estate presentation with practical
-                advisory. We aim to make the search experience feel more curated, more
-                transparent, and more valuable for buyers, families, and investors.
+                {aboutPage?.data?.introDescription || "Our approach combines premium real estate presentation with practical advisory. We aim to make the search experience feel more curated, more transparent, and more valuable for buyers, families, and investors."}
               </p>
               <p className="text-white leading-8 text-base md:text-lg">
                 Whether someone is searching for a dream residence or a strategic
@@ -214,8 +213,8 @@ export default function AboutUs() {
             </div>
 
             <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5">
-              <Image
-                src={img2}
+              <img
+                src={aboutPage?.data?.statsImage || img2}
                 alt="Stats section image"
                 className="w-full h-[320px] md:h-[520px] object-cover"
               />

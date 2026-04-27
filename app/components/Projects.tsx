@@ -272,7 +272,7 @@ export default function Projects({ projects = [], homePage }: any) {
   return (
     <section
       ref={sectionRef}
-      className="mx-auto max-w-[85rem] relative px-6 md:px-10 pt-24 md:pt-40 pb-20 bg-black text-white"
+      className="mx-auto max-w-[85rem] relative px-6 md:px-10 pt-44 md:pt-40 pb-20 bg-black text-white"
     >
       <section className="bg-black text-white py-16">
         <div className="grid md:grid-cols-[30%_70%] gap-10 items-center">

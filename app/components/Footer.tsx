@@ -317,7 +317,9 @@ useEffect(() => {
         // projectTitle={project.title}
         intent={contactIntent}
       />
+      <div className="hidden md:block">
       <LuxuryChatbot />
+      </div>
     </footer>
   );
 }

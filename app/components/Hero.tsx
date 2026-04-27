@@ -67,9 +67,9 @@ export default function Hero({ asset }) {
       {/* <div className="absolute inset-0" /> */}
 
       {/* CONTENT */}
-      <div className="hero-content absolute bottom-[-80px] sm:bottom-[-120px] w-full flex justify-center z-30">
+      <div className="hero-content absolute bottom-[-200px] sm:bottom-[-120px] w-full flex justify-center z-30">
         <div className="hero-box w-[90%] max-w-5xl bg-black/80 backdrop-blur-2xl rounded-3xl p-4 sm:p-8 border border-yellow-500/20 shadow-[0_0_60px_rgba(201,162,74,0.15)]">
-          <h1 className=" text-sm lg:text-xl lg:text-xl sm:text-2xl text-center mb-4 leading-snug">
+          <h1 className=" text-sm lg:text-xl sm:text-2xl text-center mb-4 leading-snug">
   {asset?.heroTitle || "Find Curated Properties Across the Globe"}
           </h1>
 
