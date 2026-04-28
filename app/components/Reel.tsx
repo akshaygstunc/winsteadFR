@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { FaInstagram } from "react-icons/fa";
 import WebsiteContentService from "../services/websitecontent.service";
+import Image from "next/image";
+import favicon from "@/app/favicon.ico";
 
 export default function Reel({ data }: any) {
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -106,8 +108,8 @@ export default function Reel({ data }: any) {
         {/* HEADER */}
         <div className="flex items-center justify-between mb-8 px-5 py-4 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white text-lg bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)]">
-              W
+            <div className="w-12 h-12 rounded-full flex items-center justify-center font-bold p-2 bg-white">
+             <Image src={favicon} alt="winstead"/>
             </div>
 
             <div>
@@ -151,7 +153,7 @@ export default function Reel({ data }: any) {
                   setHovered(null);
                   resumeSlider();
                 }}
-                className="relative flex-shrink-0 w-[70vw] sm:w-[45vw] md:w-[28vw] lg:w-[20%] min-w-[180px] md:min-w-[220px] h-[300px] md:h-[500px] rounded-xl overflow-hidden cursor-pointer group"
+                className="relative flex-shrink-0 w-[70vw] sm:w-[45vw] md:w-[28vw] lg:w-[20%] min-w-[180px] md:min-w-[220px] aspect-[9/16] rounded-xl overflow-hidden cursor-pointer group"
               >
                 <video
                   src={item?.data?.post?.uploaded || item?.data?.video}

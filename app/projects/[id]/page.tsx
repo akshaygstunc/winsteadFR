@@ -48,6 +48,8 @@ type BackendFloorPlan =
   | {
       label?: string;
       title?: string;
+      category?: string;
+      bedrooms?: string;
       name?: string;
       size?: string | number;
       price?: string | number;
@@ -117,6 +119,8 @@ type UiFloorPlan = {
   size: string;
   price: string;
   image: string;
+  bedrooms: string;
+  category: string;
 };
 
 type UiProject = {
@@ -162,7 +166,12 @@ function getRelationLabel(
 }
 
 function formatPrice(value: string | number | undefined) {
-  if (value === null || value === undefined || value === "" || Number(value) === 0) {
+  if (
+    value === null ||
+    value === undefined ||
+    value === "" ||
+    Number(value) === 0
+  ) {
     return EMPTY_VALUE;
   }
 
@@ -179,7 +188,12 @@ function formatPrice(value: string | number | undefined) {
 }
 
 function formatBedrooms(value: string | number | undefined) {
-  if (value === null || value === undefined || value === "" || Number(value) === 0) {
+  if (
+    value === null ||
+    value === undefined ||
+    value === "" ||
+    Number(value) === 0
+  ) {
     return EMPTY_VALUE;
   }
   return `${value} Bedroom${Number(value) > 1 ? "s" : ""}`;
@@ -194,7 +208,18 @@ function getProjectImages(data?: BackendProject) {
 
   return images.length ? Array.from(new Set(images)) : fallbackImages;
 }
+function getRange(values: (string | number)[], suffix = "") {
+  const nums = values
+    .map((v) => Number(String(v).replace(/[^\d.]/g, "")))
+    .filter((v) => !isNaN(v));
 
+  if (!nums.length) return EMPTY_VALUE;
+
+  const min = Math.min(...nums);
+  const max = Math.max(...nums);
+
+  return min === max ? `${min}${suffix}` : `${min} - ${max}${suffix}`;
+}
 function getAmenities(data?: BackendProject) {
   if (!Array.isArray(data?.amenities) || !data.amenities.length) {
     return [{ title: EMPTY_VALUE, icon: null }];
@@ -225,6 +250,8 @@ function getFloorPlans(data?: BackendProject): UiFloorPlan[] {
         label: EMPTY_VALUE,
         size: EMPTY_VALUE,
         price: EMPTY_VALUE,
+        bedrooms: EMPTY_VALUE,
+        category: EMPTY_VALUE,
         image: data?.thumbnail || fallbackImages[0],
       },
     ];
@@ -236,25 +263,42 @@ function getFloorPlans(data?: BackendProject): UiFloorPlan[] {
         label: plan || `Plan ${index + 1}`,
         size: EMPTY_VALUE,
         price: EMPTY_VALUE,
+        bedrooms: EMPTY_VALUE,
+        category: EMPTY_VALUE,
         image: data?.thumbnail || fallbackImages[0],
       };
     }
 
     return {
-      label: plan.label || plan.title || plan.name || `Plan ${index + 1}`,
-      size: getDisplayValue(plan.size),
-      price:
-        plan.price !== undefined && plan.price !== null && String(plan.price).trim() !== ""
-          ? formatPrice(plan.price)
-          : EMPTY_VALUE,
-      image: plan.image || plan.url || data?.thumbnail || fallbackImages[0],
-    };
+  label: plan.label || plan.title || plan.name || `Plan ${index + 1}`,
+
+  size: getDisplayValue(plan.size),
+
+  price:
+    plan.price !== undefined &&
+    plan.price !== null &&
+    String(plan.price).trim() !== ""
+      ? formatPrice(plan.price)
+      : EMPTY_VALUE,
+
+  image: plan.image || plan.url || data?.thumbnail || fallbackImages[0],
+
+  // ✅ ADD THESE
+  bedrooms:
+    plan.bedrooms && Number(plan.bedrooms) > 0
+      ? `${plan.bedrooms} Bedroom${Number(plan.bedrooms) > 1 ? "s" : ""}`
+      : plan.unitType || EMPTY_VALUE,
+
+  category: getDisplayValue(plan.category),
+};
   });
 }
 
 function getHighlights(data?: BackendProject) {
   const list = [
-    data?.category ? `${data.category} property in ${getDisplayValue(data.city)}` : "",
+    data?.category
+      ? `${data.category} property in ${getDisplayValue(data.city)}`
+      : "",
     data?.locations ? `Located in ${data.locations.title}` : "",
     data?.propertyStatus ? `Status: ${data.propertyStatus}` : "",
     data?.tag ? `Property tag: ${data.tag}` : "",
@@ -296,7 +340,9 @@ export default function ProjectDetailPage() {
   const slug = String(params?.id || "");
 
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [projectDetails, setProjectDetails] = useState<BackendProject | null>(null);
+  const [projectDetails, setProjectDetails] = useState<BackendProject | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -304,7 +350,7 @@ export default function ProjectDetailPage() {
   const [selectedPlan, setSelectedPlan] = useState("");
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [contactIntent, setContactIntent] = useState<ContactIntent>("general");
-  const [projectschema, setProjectschema] = useState({})
+  const [projectschema, setProjectschema] = useState({});
   const [contactForm, setContactForm] = useState({
     fullName: "",
     email: "",
@@ -319,10 +365,12 @@ export default function ProjectDetailPage() {
         setLoading(true);
         const response = await WebsiteContentService.getPropertyBySlug(slug);
         setProjectDetails(response || null);
-        setProjectschema(resolveSchemas({
-          type: "project",
-          data: response
-        }))
+        setProjectschema(
+          resolveSchemas({
+            type: "project",
+            data: response,
+          }),
+        );
       } catch (error) {
         console.error("Failed to fetch property:", error);
         setProjectDetails(null);
@@ -339,7 +387,10 @@ export default function ProjectDetailPage() {
 
     const heroImages = getProjectImages(projectDetails);
     const floorPlans = getFloorPlans(projectDetails);
-
+    const bedroomValues = projectDetails.floorPlans?.map(
+      (p: any) => p?.label?.match(/\d+/)?.[0], // extract number from "2 Bedroom"
+    );
+    const sizeValues = projectDetails.floorPlans?.map((p: any) => p?.size);
     return {
       id: projectDetails._id || "",
       title: getDisplayValue(projectDetails.title),
@@ -347,8 +398,8 @@ export default function ProjectDetailPage() {
       location: getDisplayValue(projectDetails.city),
       subLocation: getDisplayValue(projectDetails.location),
       price: formatPrice(projectDetails.price),
-      bedrooms: formatBedrooms(projectDetails.bedrooms),
-      area: EMPTY_VALUE,
+      bedrooms: getRange(bedroomValues, " Bedrooms"),
+      area: getRange(sizeValues, " sq.ft"),
       status: getDisplayValue(projectDetails.propertyStatus),
       handover: getDisplayValue(projectDetails.handover),
       duringconstruction: getDisplayValue(projectDetails.duringconstruction),
@@ -377,7 +428,9 @@ export default function ProjectDetailPage() {
     project?.floorPlans.find((item) => item.label === selectedPlan) ||
     project?.floorPlans?.[0];
 
-  const [calcTab, setCalcTab] = useState<"mortgage" | "payment-plan">("mortgage");
+  const [calcTab, setCalcTab] = useState<"mortgage" | "payment-plan">(
+    "mortgage",
+  );
   const [selectedUnit, setSelectedUnit] = useState("");
   const [propertyPrice, setPropertyPrice] = useState(0);
 
@@ -411,7 +464,10 @@ export default function ProjectDetailPage() {
     const finalPrice = selectedPlanPrice || projectBasePrice;
     setPropertyPrice(finalPrice);
 
-    const backendConstruction = parsePercent(projectDetails?.duringconstruction, 0);
+    const backendConstruction = parsePercent(
+      projectDetails?.duringconstruction,
+      0,
+    );
     const backendHandover = parsePercent(projectDetails?.handover, 0);
 
     let backendBooking = 100 - (backendConstruction + backendHandover);
@@ -483,7 +539,8 @@ export default function ProjectDetailPage() {
 
     setContactForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+      [name]:
+        type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }));
   };
 
@@ -529,18 +586,24 @@ export default function ProjectDetailPage() {
   const totalMortgagePaid = monthlyPayment * numberOfPayments;
   const totalInterestPaid = totalMortgagePaid - amountFinanced;
 
-  const totalCost =
-    bookingAmount + downPaymentAmount + totalMortgagePaid;
-  console.log(projectDetails)
+  const totalCost = bookingAmount + downPaymentAmount + totalMortgagePaid;
+  console.log(projectDetails);
   return (
     <>
-      {projectDetails && <Schema schemas={resolveSchemas({
-        type: "project", // or detectType(path)
-        data: projectDetails,
-      })} />}
+      {projectDetails && (
+        <Schema
+          schemas={resolveSchemas({
+            type: "project", // or detectType(path)
+            data: projectDetails,
+          })}
+        />
+      )}
       <main className="bg-black text-white min-h-screen overflow-x-hidden">
         <section className="relative">
-          <ProjectHeroSlider project={projectDetails} fallbackImages={fallbackImages} />
+          <ProjectHeroSlider
+            project={projectDetails}
+            fallbackImages={fallbackImages}
+          />
         </section>
 
         <div className="flex justify-between w-full items-center">
@@ -638,7 +701,13 @@ export default function ProjectDetailPage() {
                     project.propertydoc ||
                     "https://storage.googleapis.com/winstead-global-assets/AEON%20AT%20DUBAI%20CREEK%20HARBOUR.pdf"
                   }
-                  description={project.description}
+                  description={
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: project.description || "",
+                      }}
+                    />
+                  }
                   heading="Project Description"
                 />
 
@@ -649,7 +718,9 @@ export default function ProjectDetailPage() {
                       className="rounded-2xl border border-white/10 bg-black/30 p-4 flex items-start gap-3"
                     >
                       <FaCheckCircle className="text-yellow-400 mt-1 shrink-0" />
-                      <p className="text-white-300 text-sm leading-relaxed">{item}</p>
+                      <p className="text-white-300 text-sm leading-relaxed">
+                        {item}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -661,7 +732,9 @@ export default function ProjectDetailPage() {
                 </p>
                 <div className="space-y-5 text-white-400">
                   <div>
-                    <h3 className="mb-3 text-lg font-semibold text-white">Developer</h3>
+                    <h3 className="mb-3 text-lg font-semibold text-white">
+                      Developer
+                    </h3>
 
                     <div className="flex items-start gap-4 rounded-[20px] border border-white/10 bg-white/[0.03] p-4">
                       {typeof projectDetails?.developer !== "string" &&
@@ -723,7 +796,6 @@ export default function ProjectDetailPage() {
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {project.amenities.map((item, index) => (
-
                   <div
                     key={`${item.title}-${index}`}
                     className="rounded-2xl border border-white/10 bg-black/30 p-5 hover:border-yellow-400/30 transition"
@@ -731,7 +803,7 @@ export default function ProjectDetailPage() {
                     <div className="w-10 h-10 rounded-full bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center mb-4">
                       {item.icon ? (
                         <img
-                          src={item.icon}
+                          src={item?.icon}
                           alt={item.title}
                           className="w-5 h-5 object-contain"
                         />
@@ -782,7 +854,9 @@ export default function ProjectDetailPage() {
 
                   <div
                     className={`absolute top-0 left-0 h-[2px] w-full bg-[linear-gradient(90deg,#7C5700,#F1DC7F,#B9A650)] transition-all duration-500 ${
-                      active ? "opacity-100" : "opacity-0 group-hover:opacity-80"
+                      active
+                        ? "opacity-100"
+                        : "opacity-0 group-hover:opacity-80"
                     }`}
                   />
 
@@ -813,16 +887,20 @@ export default function ProjectDetailPage() {
                     <div className="mb-5 grid grid-cols-2 gap-4">
                       <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
                         <p className="text-[11px] uppercase tracking-[0.18em] text-white mb-2">
-                          Size
+                          Size: {plan.size}
                         </p>
-                        <p className="text-white font-medium text-base">{plan.size}</p>
+                        <p className="text-white font-medium text-base">
+                          Bedrooms: {plan?.bedrooms}
+                        </p>
                       </div>
 
                       <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
                         <p className="text-[11px] uppercase tracking-[0.18em] text-white mb-2">
-                          Starting Price
+                          Category: {plan?.category}
                         </p>
-                        <p className="text-white font-medium text-base">{plan.price}</p>
+                        <p className="text-white font-medium text-base">
+                          Starting Price: {plan.price}
+                        </p>
                       </div>
                     </div>
 
@@ -831,14 +909,16 @@ export default function ProjectDetailPage() {
                         <p className="text-[11px] uppercase tracking-[0.18em] text-yellow-400 mb-1">
                           Premium Layout
                         </p>
-                        <p className="text-sm text-white">Crafted for luxury living</p>
+                        <p className="text-sm text-white">
+                          Crafted for luxury living
+                        </p>
                       </div>
 
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openContactModal("download-floor-plan");
-                        }}
+                      {/* <a
+                        href={selectedUnitPlan?.image || selectedUnitPlan?.image} // or file
+                        download
+                        target="_blank"
+                        onClick={(e) => e.stopPropagation()}
                         className={`rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 ${
                           active
                             ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_10px_30px_rgba(241,220,127,0.18)]"
@@ -846,7 +926,30 @@ export default function ProjectDetailPage() {
                         }`}
                       >
                         Download Plan
-                      </button>
+                      </a> */}
+                      <a
+                        href={selectedUnitPlan?.image || "#"}
+                        download
+                        target="_blank"
+                        onClick={(e) => {
+                          if (!selectedUnitPlan?.image) {
+                            e.preventDefault();
+                            return;
+                          }
+                          e.stopPropagation();
+                        }}
+                        className={`rounded-full px-5 py-3 text-sm font-medium ${
+                          selectedUnitPlan?.image
+                            ? active
+                              ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black"
+                              : "border border-white/15 text-white"
+                            : "opacity-50 cursor-not-allowed border border-white/10 text-gray-500"
+                        }`}
+                      >
+                        {selectedUnitPlan?.image
+                          ? "Download Plan"
+                          : "Not Available"}
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -886,10 +989,18 @@ export default function ProjectDetailPage() {
 
         {previewImage && (
           <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
-            <div className="absolute inset-0" onClick={() => setPreviewImage(null)} />
+            <div
+              className="absolute inset-0"
+              onClick={() => setPreviewImage(null)}
+            />
             <div className="relative max-w-4xl w-full px-4">
               <div className="relative w-full h-[80vh] rounded-2xl overflow-hidden">
-                <Image src={previewImage} alt="Preview" fill className="object-contain" />
+                <Image
+                  src={previewImage}
+                  alt="Preview"
+                  fill
+                  className="object-contain"
+                />
               </div>
               <button
                 onClick={() => setPreviewImage(null)}
@@ -967,7 +1078,9 @@ export default function ProjectDetailPage() {
                         <PremiumCalcInput
                           label="Property Value"
                           value={propertyPrice}
-                          onChange={(value) => setPropertyPrice(Number(value) || 0)}
+                          onChange={(value) =>
+                            setPropertyPrice(Number(value) || 0)
+                          }
                         />
                         <PremiumCalcInput
                           label="During Construction %"
@@ -985,7 +1098,9 @@ export default function ProjectDetailPage() {
                           label="Interest Rate %"
                           value={interestRate}
                           step="0.1"
-                          onChange={(value) => setInterestRate(Number(value) || 0)}
+                          onChange={(value) =>
+                            setInterestRate(Number(value) || 0)
+                          }
                         />
                       </div>
                     ) : (
@@ -993,12 +1108,16 @@ export default function ProjectDetailPage() {
                         <PremiumCalcInput
                           label="Property Value"
                           value={propertyPrice}
-                          onChange={(value) => setPropertyPrice(Number(value) || 0)}
+                          onChange={(value) =>
+                            setPropertyPrice(Number(value) || 0)
+                          }
                         />
                         <PremiumCalcInput
                           label="Booking %"
                           value={bookingPercent}
-                          onChange={(value) => setBookingPercent(Number(value) || 0)}
+                          onChange={(value) =>
+                            setBookingPercent(Number(value) || 0)
+                          }
                         />
                         <PremiumCalcInput
                           label="During Construction %"
@@ -1010,7 +1129,9 @@ export default function ProjectDetailPage() {
                         <PremiumCalcInput
                           label="On Handover %"
                           value={handoverPercent}
-                          onChange={(value) => setHandoverPercent(Number(value) || 0)}
+                          onChange={(value) =>
+                            setHandoverPercent(Number(value) || 0)
+                          }
                         />
                       </div>
                     )}
@@ -1209,13 +1330,17 @@ function MetaRow({
       }`}
     >
       <span>{label}</span>
-      <span className="text-white font-semibold text-right">{value || EMPTY_VALUE}</span>
+      <span className="text-white font-semibold text-right">
+        {value || EMPTY_VALUE}
+      </span>
     </div>
   );
 }
 
 function SkeletonBlock({ className = "" }: { className?: string }) {
-  return <div className={`animate-pulse rounded-2xl bg-white/10 ${className}`} />;
+  return (
+    <div className={`animate-pulse rounded-2xl bg-white/10 ${className}`} />
+  );
 }
 
 function ProjectDetailsSkeleton() {
@@ -1259,7 +1384,10 @@ function ProjectDetailsSkeleton() {
           <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6">
             <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((item) => (
-                <div key={item} className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                <div
+                  key={item}
+                  className="rounded-2xl border border-white/10 bg-black/30 p-4"
+                >
                   <div className="flex items-center gap-3 mb-3">
                     <SkeletonBlock className="h-5 w-5 rounded-full" />
                     <SkeletonBlock className="h-4 w-24" />
@@ -1273,7 +1401,10 @@ function ProjectDetailsSkeleton() {
           <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6">
             <div className="space-y-4">
               {[1, 2, 3, 4].map((item) => (
-                <div key={item} className="flex items-center justify-between border-b border-white/10 pb-3">
+                <div
+                  key={item}
+                  className="flex items-center justify-between border-b border-white/10 pb-3"
+                >
                   <SkeletonBlock className="h-4 w-24" />
                   <SkeletonBlock className="h-4 w-28" />
                 </div>
@@ -1303,7 +1434,10 @@ function ProjectDetailsSkeleton() {
             </div>
             <div className="mt-8 grid sm:grid-cols-2 gap-4">
               {[1, 2, 3, 4].map((item) => (
-                <div key={item} className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                <div
+                  key={item}
+                  className="rounded-2xl border border-white/10 bg-black/30 p-4"
+                >
                   <SkeletonBlock className="h-4 w-full mb-2" />
                   <SkeletonBlock className="h-4 w-[80%]" />
                 </div>
@@ -1334,7 +1468,10 @@ function ProjectDetailsSkeleton() {
 
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
           {[1, 2, 3].map((item) => (
-            <div key={item} className="rounded-[28px] overflow-hidden border border-white/10">
+            <div
+              key={item}
+              className="rounded-[28px] overflow-hidden border border-white/10"
+            >
               <SkeletonBlock className="h-[240px] w-full rounded-none" />
               <div className="p-5 bg-black/40">
                 <SkeletonBlock className="h-6 w-32 mb-4" />
@@ -1361,7 +1498,10 @@ function ProjectDetailsSkeleton() {
           <SkeletonBlock className="h-8 w-64 mb-8" />
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
             {[1, 2, 3, 4, 5, 6].map((item) => (
-              <SkeletonBlock key={item} className="h-[260px] w-full rounded-[24px]" />
+              <SkeletonBlock
+                key={item}
+                className="h-[260px] w-full rounded-[24px]"
+              />
             ))}
           </div>
         </div>
@@ -1455,7 +1595,9 @@ function PremiumBreakdownRow({
     <div className="flex items-center justify-between gap-5">
       <p
         className={
-          bold ? "text-md md:text-lg font-semibold text-white" : "text-base text-white-300"
+          bold
+            ? "text-md md:text-lg font-semibold text-white"
+            : "text-base text-white-300"
         }
       >
         {label}

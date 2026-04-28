@@ -20,7 +20,9 @@ import AutoBreadcrumbs from "../components/BreadCrumbs";
 export default function Page() {
   return (
     <Suspense
-      fallback={<div className="bg-black text-white min-h-screen p-8">Loading...</div>}
+      fallback={
+        <div className="bg-black text-white min-h-screen p-8">Loading...</div>
+      }
     >
       <ProjectsContent />
     </Suspense>
@@ -49,7 +51,9 @@ function ProjectsContent() {
         WebsiteContentService.getCategory(),
       ]);
 
-      setProjects(response?.sort((a: any, b: any) => a._sortOrder - b._sortOrder) || []);
+      setProjects(
+        response?.sort((a: any, b: any) => a._sortOrder - b._sortOrder) || [],
+      );
       setCategories(cat?.filter((c: any) => c.title !== "Ultra Luxury") || []);
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -166,8 +170,8 @@ function ProjectsContent() {
                 />
               ))
             ) : (
-                  <div className="col-span-full text-center p-10">
-                    No properties found
+              <div className="col-span-full text-center p-10">
+                No properties found
               </div>
             )}
           </div>
@@ -209,7 +213,7 @@ function ProjectsToolbar({
 
         const typeData = await typeRes.json();
         const locationData = await locationRes.json();
-        const subLocationData = await subLocation.json()
+        const subLocationData = await subLocation.json();
         setType(typeData || []);
         setLocation(locationData || []);
         setsubLocation(subLocationData || []);
@@ -232,12 +236,14 @@ function ProjectsToolbar({
             <select
               name="type"
               value={filters.type}
-              onChange={(e) => updateFilter((prev: any) => ({ ...prev, type: e.target.value }))}
+              onChange={(e) =>
+                updateFilter((prev: any) => ({ ...prev, type: e.target.value }))
+              }
               className="px-5 py-4 bg-transparent outline-none md:border-r border-white/10"
             >
               <option value="">Property Type</option>
               {type?.map((ty: any) => (
-                <option key={ty?._id} value={ty?.title}>
+                <option key={ty?._id} value={ty?.title} className="text-black">
                   {ty?.title}
                 </option>
               ))}
@@ -246,13 +252,26 @@ function ProjectsToolbar({
             <select
               name="residence"
               value={filters.residence}
-              onChange={(e) => updateFilter((prev: any) => ({ ...prev, residence: e.target.value }))}
+              onChange={(e) =>
+                updateFilter((prev: any) => ({
+                  ...prev,
+                  residence: e.target.value,
+                }))
+              }
               className="px-5 py-4 bg-transparent outline-none md:border-r border-white/10"
             >
-              <option value="">Residence Type</option>
-              <option value="Villa">Villa</option>
-              <option value="Apartment">Apartment</option>
-              <option value="Office">Office</option>
+              <option value="" className="text-black">
+                Residence Type
+              </option>
+              <option value="Villa" className="text-black">
+                Villa
+              </option>
+              <option value="Apartment" className="text-black">
+                Apartment
+              </option>
+              <option value="Office" className="text-black">
+                Office
+              </option>
             </select>
 
             <select
@@ -269,7 +288,7 @@ function ProjectsToolbar({
             >
               <option value="">Location</option>
               {location?.map((ty: any) => (
-                <option key={ty?._id} value={ty?.title}>
+                <option key={ty?._id} value={ty?.title} className="text-black">
                   {ty?.title}
                 </option>
               ))}
@@ -278,12 +297,17 @@ function ProjectsToolbar({
             <select
               name="subLocation"
               value={filters.subLocation}
-              onChange={(e) => updateFilter((prev: any) => ({ ...prev, subLocation: e.target.value }))}
+              onChange={(e) =>
+                updateFilter((prev: any) => ({
+                  ...prev,
+                  subLocation: e.target.value,
+                }))
+              }
               className="px-5 py-4 bg-transparent outline-none"
             >
               <option value="">Sub Location</option>
               {sublocation?.map((ty: any) => (
-                <option key={ty?._id} value={ty?.title}>
+                <option key={ty?._id} value={ty?.title} className="text-black">
                   {ty?.title}
                 </option>
               ))}
@@ -333,7 +357,8 @@ function ResultsBar({ count, filters, clearAllFilters }: any) {
     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
       <div>
         <p className="text-white text-lg font-medium">
-          Showing <span className="text-yellow-400">{count}</span> curated properties
+          Showing <span className="text-yellow-400">{count}</span> curated
+          properties
         </p>
         {active.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-3">
@@ -408,10 +433,20 @@ function Sidebar({ filters, updateFilter, categories }: any) {
           <Check
             key={cat._id}
             label={cat.title}
-            checked={filters.type === cat.title}
-            onChange={() =>
-              updateFilter("type", filters.type === cat.title ? "" : cat.title)
-            }
+            // checked={filters.type === cat.title}
+            // onChange={() =>
+            //   updateFilter("type", filters.type === cat.title ? "" : cat.title)
+            // }
+            checked={filters.type.includes(cat.title)}
+            onChange={() => {
+              const exists = filters.type.includes(cat.title);
+
+              const updated = exists
+                ? filters.type.filter((t: string) => t !== cat.title)
+                : [...filters.type, cat.title];
+
+              updateFilter("type", updated);
+            }}
           />
         ))}
       </Section>
@@ -423,7 +458,10 @@ function Sidebar({ filters, updateFilter, categories }: any) {
             label={loc.title}
             checked={filters.location === loc.title}
             onChange={() =>
-              updateFilter("location", filters.location === loc.title ? "" : loc.title)
+              updateFilter(
+                "location",
+                filters.location === loc.title ? "" : loc.title,
+              )
             }
           />
         ))}
@@ -438,7 +476,7 @@ function Sidebar({ filters, updateFilter, categories }: any) {
             onChange={() =>
               updateFilter(
                 "communities",
-                filters.communities === c.title ? "" : c.title
+                filters.communities === c.title ? "" : c.title,
               )
             }
           />
@@ -456,7 +494,7 @@ function Sidebar({ filters, updateFilter, categories }: any) {
                 updateFilter("bedrooms", filters.bedrooms === item ? "" : item)
               }
             />
-          )
+          ),
         )}
       </Section>
 
@@ -473,7 +511,7 @@ function Sidebar({ filters, updateFilter, categories }: any) {
             onChange={() =>
               updateFilter(
                 "priceRange",
-                filters.priceRange === p.value ? "" : p.value
+                filters.priceRange === p.value ? "" : p.value,
               )
             }
           />
@@ -501,10 +539,7 @@ function Sidebar({ filters, updateFilter, categories }: any) {
           label="Featured Projects"
           checked={filters.featured === "true"}
           onChange={() =>
-            updateFilter(
-              "featured",
-              filters.featured === "true" ? "" : "true"
-            )
+            updateFilter("featured", filters.featured === "true" ? "" : "true")
           }
         />
       </Section>
@@ -524,7 +559,7 @@ function Sidebar({ filters, updateFilter, categories }: any) {
             onChange={() =>
               updateFilter(
                 "developer",
-                filters.developer === d.title ? "" : d.title
+                filters.developer === d.title ? "" : d.title,
               )
             }
           />
@@ -537,7 +572,9 @@ function Sidebar({ filters, updateFilter, categories }: any) {
 function Section({ title, children }: any) {
   return (
     <div className="mb-7">
-      <p className="text-sm uppercase tracking-[0.14em] text-white mb-3">{title}</p>
+      <p className="text-sm uppercase tracking-[0.14em] text-white mb-3">
+        {title}
+      </p>
       <div className="space-y-2">{children}</div>
     </div>
   );
@@ -560,7 +597,9 @@ function Check({
         checked={checked}
         onChange={onChange}
       />
-      <span className="group-hover:text-white text-white transition">{label}</span>
+      <span className="group-hover:text-white text-white transition">
+        {label}
+      </span>
     </label>
   );
 }
@@ -568,9 +607,17 @@ function Check({
 function Collapsible({ title, children, open, toggle }: any) {
   return (
     <div className="mb-7 border-t border-white/10 pt-5">
-      <div className="flex justify-between items-center cursor-pointer mb-3" onClick={toggle}>
-        <p className="text-sm uppercase tracking-[0.14em] text-white">{title}</p>
-        <ChevronDown size={16} className={`transition ${open ? "rotate-180" : ""}`} />
+      <div
+        className="flex justify-between items-center cursor-pointer mb-3"
+        onClick={toggle}
+      >
+        <p className="text-sm uppercase tracking-[0.14em] text-white">
+          {title}
+        </p>
+        <ChevronDown
+          size={16}
+          className={`transition ${open ? "rotate-180" : ""}`}
+        />
       </div>
       {open && <div className="space-y-2">{children}</div>}
     </div>
@@ -585,7 +632,7 @@ function ProjectCard({ data }: any) {
       <div className="group relative rounded-[28px] overflow-hidden border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-yellow-500/30 hover:shadow-[0_0_30px_rgba(250,204,21,0.08)] cursor-pointer">
         <div className="relative h-[440px]">
           <Image
-            src={data.thumbnail || img}
+            src={data?.thumbnail || img}
             alt={data.title}
             fill
             className="object-cover group-hover:scale-105 transition duration-700"
@@ -660,12 +707,12 @@ function PropertyCardSkeleton() {
 
 function getDefaultFilters() {
   return {
-    type: "",
+    type: [],
     residence: "",
-    bedrooms: "",
+    bedrooms: [],
     location: "",
     subLocation: "",
-    developer: "",
+    developer: [],
     communities: "",
     minSize: "",
     maxSize: "",

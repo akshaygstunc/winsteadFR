@@ -23,7 +23,7 @@ export default function ProjectsToolbar({ filters, handleSearch, setShowFilter }
                             defaultValue={filters.residence}
                             className="px-5 py-4 bg-transparent outline-none md:border-r border-white/10"
                         >
-                            <option value="">Residence Type</option>
+                            <option className="text-black" value="">Residence Type</option>
                             <option value="Villa">Villa</option>
                             <option value="Apartment">Apartment</option>
                             <option value="Office">Office</option>

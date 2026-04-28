@@ -108,6 +108,7 @@ export default function AboutUs() {
   return (
     <main className="bg-black text-white min-h-screen overflow-x-hidden">
       {/* HERO */}
+      
       <AboutHero data={aboutPage?.data} />
 
 

@@ -113,7 +113,7 @@ export default function BlogDetailPage() {
   const [blogDetails, setBlogDetails] = useState<BlogApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const [blogs, setBlogs] = useState([])
+  const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
     async function fetchBlog() {
@@ -121,8 +121,8 @@ export default function BlogDetailPage() {
         setLoading(true);
         setHasError(false);
         const response = await WebsiteContentService.getBlogBySlug(slug);
-        const blogsreponse = await WebsiteContentService.getBlogs()
-        setBlogs(blogsreponse)
+        const blogsreponse = await WebsiteContentService.getBlogs();
+        setBlogs(blogsreponse);
         setBlogDetails(response || null);
       } catch (error) {
         console.error("Failed to fetch blog:", error);
@@ -183,8 +183,12 @@ export default function BlogDetailPage() {
       img: heroImage,
       heroVideo: blogDetails.heroVideo || blogDetails.data?.videoUrl || "",
       suggestPropertyType: getText(blogDetails.data?.suggestPropertyType),
-      suggestPropertyCategory: getText(blogDetails.data?.suggestPropertyCategory),
-      suggestPropertyDeveloper: getText(blogDetails.data?.suggestPropertyDeveloper),
+      suggestPropertyCategory: getText(
+        blogDetails.data?.suggestPropertyCategory,
+      ),
+      suggestPropertyDeveloper: getText(
+        blogDetails.data?.suggestPropertyDeveloper,
+      ),
       metaKeywords: getText(blogDetails.data?.metaKeywords),
     };
   }, [blogDetails, slug]);
@@ -197,17 +201,21 @@ export default function BlogDetailPage() {
 
   return (
     <div className="bg-black text-white min-h-screen">
-      <Schema schemas={resolveSchemas({
-        type: "blog",
-        data: blog
-      })} />
+      <Schema
+        schemas={resolveSchemas({
+          type: "blog",
+          data: blog,
+        })}
+      />
       {/* HERO */}
       <section className="relative h-[65vh] min-h-[420px]">
         <Image
           src={blog.img}
           alt={blog.title}
           fill
-          unoptimized={typeof blog.img === "string" && blog.img.startsWith("data:")}
+          unoptimized={
+            typeof blog.img === "string" && blog.img.startsWith("data:")
+          }
           className="object-cover"
         />
         <div className="absolute inset-0 bg-black/70" />
@@ -232,13 +240,16 @@ export default function BlogDetailPage() {
 
       {/* ARTICLE CONTENT */}
       <section className="max-w-[88rem] mx-auto px-6 pb-16">
-        <p className="text-xl md:text-2xl text-white leading-relaxed mb-10">
-          {blog.desc}
-        </p>
+        {/* <div className="prose max-w-none prose-invert mb-10">
+          <div dangerouslySetInnerHTML={{ __html: blog.desc }} />
+        </div> */}
 
         <div className="space-y-8 text-white leading-8 text-base md:text-lg">
-          <p>{blog.fullDesc}</p>
-
+          {/* <p>{blog.fullDesc}</p> */}
+          <div
+            className="prose max-w-none text-white"
+            dangerouslySetInnerHTML={{ __html: blog.fullDesc }}
+          />
           <h2 className="text-2xl md:text-3xl font-semibold text-white pt-4">
             Property Insights
           </h2>
@@ -264,7 +275,9 @@ export default function BlogDetailPage() {
               alt="Article visual"
               width={1600}
               height={900}
-              unoptimized={typeof blog.img === "string" && blog.img.startsWith("data:")}
+              unoptimized={
+                typeof blog.img === "string" && blog.img.startsWith("data:")
+              }
               className="w-full h-[300px] md:h-[450px] object-cover"
             />
           </div>
@@ -306,41 +319,44 @@ export default function BlogDetailPage() {
         </h2>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {blogs?.filter((blg) => blg.slug && blg.slug !== params.id)?.slice(0, 3).map((item) => (
-            <Link
-              key={item.id}
-              href={`/blogs/${item.slug}`}
-              className="group border border-white/10 rounded-2xl overflow-hidden"
-            >
-              <div className="relative h-44">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition duration-500"
-                />
-              </div>
+          {blogs
+            ?.filter((blg) => blg.slug && blg.slug !== params.id)
+            ?.slice(0, 3)
+            .map((item) => (
+              <Link
+                key={item.id}
+                href={`/blogs/${item.slug}`}
+                className="group border border-white/10 rounded-2xl overflow-hidden"
+              >
+                <div className="relative h-44">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition duration-500"
+                  />
+                </div>
 
-              <div className="p-5">
-                <p className="text-sm text-yellow-400 mb-1">{item.category}</p>
-                <h3 className="font-semibold text-white group-hover:text-yellow-400 transition">
-                  {item.title}
-                </h3>
-              </div>
-            </Link>
-          ))}
+                <div className="p-5">
+                  <p className="text-sm text-yellow-400 mb-1">
+                    {item.category}
+                  </p>
+                  <h3 className="font-semibold text-white group-hover:text-yellow-400 transition">
+                    {item.title}
+                  </h3>
+                </div>
+              </Link>
+            ))}
         </div>
       </section>
     </div>
   );
 }
 
-function SkeletonBlock({
-  className = "",
-}: {
-  className?: string;
-}) {
-  return <div className={`animate-pulse rounded-2xl bg-white/10 ${className}`} />;
+function SkeletonBlock({ className = "" }: { className?: string }) {
+  return (
+    <div className={`animate-pulse rounded-2xl bg-white/10 ${className}`} />
+  );
 }
 
 function BlogDetailsSkeleton() {

@@ -15,12 +15,17 @@ import ContactModal from "./ContactModal";
 import { FaPinterest } from "react-icons/fa6";
 import LuxuryChatbot from "./ChatBot";
 import { Tinos } from "next/font/google";
-
+import WebsiteContentService from "../../app/services/websitecontent.service"; // adjust path
 const tinos = Tinos({
   subsets: ["latin"],
   weight: ["400", "700"],
   style: ["normal", "italic"],
 });
+type ContactSectionProps = {
+  contactPoints?: string[];
+  contactInfo?: any;
+  loading?: boolean;
+};
 type ContactIntent =
   | "schedule-visit"
   | "download-floor-plan"
@@ -38,6 +43,37 @@ export default function Footer() {
     phone: "",
     message: "",
   });
+  const [contactInfo, setContactInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchContact = async () => {
+      try {
+        const data = await WebsiteContentService.getContact();
+        console.log("CONTACT API DATA", data);
+        setContactInfo(data);
+      } catch (error) {
+        console.error("Contact fetch error", error);
+      }
+    };
+
+    fetchContact();
+  }, []);
+  const pageData = contactInfo || {};
+  console.log("wwwwwwwwww", pageData);
+  const phones = (pageData?.data?.phoneNumbers || "")
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  const emails = (pageData?.data?.emailAddresses || "")
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  const locations = (pageData?.data?.locationAddresses || "")
+    .split("\n\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
   const closeContactModal = () => {
     setIsContactModalOpen(false);
   };
@@ -93,13 +129,11 @@ export default function Footer() {
     closeContactModal();
   };
 
-
-
   useEffect(() => {
     const fetchFooter = async () => {
       const res = await fetch("/backend/footer-menu");
       const data = await res.json();
-     console.log("Footer Menu Data:", data);
+      console.log("Footer Menu Data:", data);
       // only published (IMPORTANT)
       const filtered = data.filter((item: any) => item.status === "published");
 
@@ -108,18 +142,18 @@ export default function Footer() {
 
     fetchFooter();
   }, []);
-useEffect(() => {
-  const fetchExplore = async () => {
-    const res = await fetch("/backend/footer-menu-2");
-    const data = await res.json();
+  useEffect(() => {
+    const fetchExplore = async () => {
+      const res = await fetch("/backend/footer-menu-2");
+      const data = await res.json();
 
-    console.log("Explore Menu:", data);
+      console.log("Explore Menu:", data);
 
-    setExploreLinks(data); // no filter अभी
-  };
+      setExploreLinks(data); // no filter अभी
+    };
 
-  fetchExplore();
-}, []);
+    fetchExplore();
+  }, []);
 
   return (
     <footer className="relative bg-[#000] text-white overflow-hidden border-t border-white/10">
@@ -154,7 +188,7 @@ useEffect(() => {
             <Link
               href="https://wa.me/971547558866"
               target="_blank"
-              className="px-6 py-3 rounded-full border border-yellow-500/60 hover:border-[#F1DC7F] hover:text-[#F1DC7F] transition"
+              className="px-6 py-3 rounded-full border border-yellow-500/60 hover:border-[#F1DC7F] hover:text-[#F1DC7F] transition flex items-center justify-center"
             >
               <FaWhatsapp className="w-6 h-6 text-yellow-400 text-lg transition duration-300" />
             </Link>
@@ -166,8 +200,16 @@ useEffect(() => {
       <div className="relative px-6 md:px-12 lg:px-20 py-14">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
-          <div >
-            <Image src={"https://storage.googleapis.com/winstead-global-assets/projects/gallery/1776246712700-winlogo.png"} alt="Winstead" width={180} height={180} className="mb-5" />
+          <div>
+            <Image
+              src={
+                "https://storage.googleapis.com/winstead-global-assets/projects/gallery/1776246712700-winlogo.png"
+              }
+              alt="Winstead"
+              width={180}
+              height={180}
+              className="mb-5"
+            />
             {/* <p className="text-white leading-relaxed text-sm lg:text-xl lg:text-xl md:text-base max-w-sm">
               Winstead delivers access to refined living and high-potential real
               estate opportunities through a tailored, investor-first approach.
@@ -234,33 +276,60 @@ useEffect(() => {
             </ul>
           </div>
           {/* Explore */}
-        <div>
-  <h3 className="text-white text-lg mb-5 font-bold">Explore</h3>
+          <div>
+            <h3 className="text-white text-lg mb-5 font-bold">Explore</h3>
 
-  <ul className="grid grid-cols-2 md:grid-cols-1 gap-y-3 gap-x-6 text-white">
-    {exploreLinks.map((item, index) => (
-      <li key={index}>
-        <Link
-          href={item.subtitle || "#"}
-          className="hover:text-[#F1DC7F] transition"
-        >
-          {item.title}
-        </Link>
-      </li>
-    ))}
-  </ul>
-</div>
+            <ul className="grid grid-cols-2 md:grid-cols-1 gap-y-3 gap-x-6 text-white">
+              {exploreLinks.map((item, index) => (
+                <li key={index}>
+                  <Link
+                    href={item.subtitle || "#"}
+                    className="hover:text-[#F1DC7F] transition"
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
           {/* Contact */}
           <div>
             <h3 className="text-white text-lg mb-5 font-bold">Contact</h3>
             <div className="space-y-4 text-white text-sm  md:text-base">
-              <p>
+              {/* <p>
                 2601, Iris Bay, Business Bay, Dubai
                 <br />
                 Dubai, UAE
-              </p>
-              <p>+971 54 755 8866</p>
-              <p>info@winsteadglobal.com</p>
+              </p> */}
+
+              <div className="space-y-2">
+                {locations.map((loc, index) => (
+                  <p key={index}>{loc}</p>
+                ))}
+              </div>
+              <div className="space-y-1">
+                {phones.map((phone, index) => (
+                  <a
+                    key={index}
+                    href={`tel:${phone.replace(/\s/g, "")}`}
+                    className="block hover:text-yellow-400"
+                  >
+                    {phone}
+                  </a>
+                ))}
+              </div>
+              <div className="space-y-2 break-words">
+                {emails.map((email: string, index: number) => (
+                  <a
+                    key={index}
+                    href={`mailto:${email}`}
+                    className="block text-md text-white hover:text-yellow-400 transition"
+                  >
+                    {email}
+                  </a>
+                ))}
+              </div>
+
               <p>Mon - Sat : 9:00 AM - 7:00 PM</p>
             </div>
 
@@ -281,13 +350,15 @@ useEffect(() => {
         </div>
 
         {/* giant wordmark */}
-     <div className="relative">
-  <div className="absolute inset-0 blur-3xl opacity-20 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700]" />
+        <div className="relative">
+          <div className="absolute inset-0 blur-3xl opacity-20 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700]" />
 
-          <h6 className={`${tinos.className} relative text-[15vw] leading-none text-center font-bold whitespace-nowrap bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent opacity-80 mt-20`}>
-    WINSTEAD
-  </h6>
-</div>
+          <h6
+            className={`${tinos.className} relative text-[15vw] leading-none text-center font-bold whitespace-nowrap bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent opacity-80 mt-20`}
+          >
+            WINSTEAD
+          </h6>
+        </div>
       </div>
 
       {/* bottom strip */}
@@ -296,10 +367,16 @@ useEffect(() => {
           <p>© 2026 Winstead Global Real Estate LLC</p>
 
           <div className="flex items-center gap-4">
-            <a href="/privacy-policy" className="hover:text-[#F1DC7F] transition">
+            <a
+              href="/privacy-policy"
+              className="hover:text-[#F1DC7F] transition"
+            >
               Privacy Policy
             </a>
-            <a href="/term-and-conditions" className="hover:text-[#F1DC7F] transition">
+            <a
+              href="/term-and-conditions"
+              className="hover:text-[#F1DC7F] transition"
+            >
               Terms & Conditions
             </a>
             {/* <a href="#" className="hover:text-[#F1DC7F] transition">
@@ -314,11 +391,11 @@ useEffect(() => {
         onSubmit={handleContactSubmit}
         form={contactForm}
         onChange={handleContactChange}
-        // projectTitle={project.title}
+        projectTitle="General Inquiry"
         intent={contactIntent}
       />
       <div className="hidden md:block">
-      <LuxuryChatbot />
+        <LuxuryChatbot />
       </div>
     </footer>
   );

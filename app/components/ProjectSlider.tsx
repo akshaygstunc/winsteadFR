@@ -17,7 +17,7 @@ type Props = {
 
 export default function ProjectHeroSlider({ project, fallbackImages }: Props) {
     const images =
-        project?.heroImages?.length > 0 ? project.heroImages : fallbackImages;
+        project?.gallery?.length > 0 ? project.gallery : fallbackImages;
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
