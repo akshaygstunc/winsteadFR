@@ -833,7 +833,7 @@ export default function ProjectDetailPage() {
           </div>
 
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {project.floorPlans.map((plan) => {
+            {projectDetails.floorPlans.map((plan) => {
               const active = selectedPlan === plan.label;
 
               return (
@@ -843,90 +843,44 @@ export default function ProjectDetailPage() {
                     setSelectedPlan(plan.label);
                     setSelectedUnit(plan.label);
                   }}
-                  className={`group relative cursor-pointer overflow-hidden rounded-[30px] border transition-all duration-500 ${
-                    active
-                      ? "border-yellow-400/50 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] shadow-[0_20px_60px_rgba(241,220,127,0.12)]"
-                      : "border-white/10 bg-white/[0.03] hover:border-yellow-400/30 hover:shadow-[0_16px_50px_rgba(241,220,127,0.08)]"
-                  }`}
-                >
-                  <div className="absolute -top-16 left-[-20px] h-40 w-40 rounded-full bg-yellow-400/10 blur-3xl opacity-0 transition duration-500 group-hover:opacity-100" />
-                  <div className="absolute bottom-[-30px] right-[-10px] h-44 w-44 rounded-full bg-yellow-500/10 blur-3xl opacity-0 transition duration-500 group-hover:opacity-100" />
-
-                  <div
-                    className={`absolute top-0 left-0 h-[2px] w-full bg-[linear-gradient(90deg,#7C5700,#F1DC7F,#B9A650)] transition-all duration-500 ${
-                      active
-                        ? "opacity-100"
-                        : "opacity-0 group-hover:opacity-80"
+                  className={`group relative cursor-pointer overflow-hidden rounded-2xl border transition-all duration-300 ${active
+                    ? "border-yellow-400/50 bg-white/[0.05] shadow-[0_10px_40px_rgba(241,220,127,0.12)]"
+                    : "border-white/10 bg-white/[0.03] hover:border-yellow-400/30"
                     }`}
-                  />
-
-                  <div className="relative h-[260px] overflow-hidden blur-sm">
+                >
+                  {/* IMAGE */}
+                  <div className="relative h-[100px] flex  overflow-hidden">
                     <Image
                       src={FloorPlan}
                       alt={plan.label}
                       fill
-                      className="object-contain transition duration-700 group-hover:scale-110 bg-white "
+                      className="object-contain bg-white transition duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent,rgba(0,0,0,0.45))]" />
 
-                    <div className="absolute top-5 left-5 rounded-full border border-yellow-400/20 bg-black/40 backdrop-blur-md px-4 py-2">
-                      <p className="text-[11px] uppercase tracking-[0.22em] text-yellow-400">
-                        Floor Plan
-                      </p>
-                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
-                    <div className="absolute bottom-5 left-5 right-5">
-                      <h3 className="text-2xl font-semibold text-white leading-tight">
+                    <div className="absolute bottom-3 left-4 right-4">
+                      <h3 className="text-lg font-semibold text-white leading-tight">
                         {plan.label}
                       </h3>
                     </div>
                   </div>
 
-                  <div className="relative p-6 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] backdrop-blur-xl">
-                    <div className="mb-5 grid grid-cols-2 gap-4">
-                      <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                        <p className="text-[11px] uppercase tracking-[0.18em] text-white mb-2">
-                          Size: {plan.size}
-                        </p>
-                        <p className="text-white font-medium text-base">
-                          Bedrooms: {plan?.bedrooms}
-                        </p>
-                      </div>
-
-                      <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                        <p className="text-[11px] uppercase tracking-[0.18em] text-white mb-2">
-                          Category: {plan?.category}
-                        </p>
-                        <p className="text-white font-medium text-base">
-                          Starting Price: {plan.price}
-                        </p>
-                      </div>
+                  {/* CONTENT */}
+                  <div className="p-4">
+                    {/* INLINE INFO (replaces 2 big boxes) */}
+                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-white/70">
+                      <span>{plan.size}</span>
+                      <span>• {plan.bedrooms} Beds</span>
+                      <span>• {plan.category}</span>
                     </div>
 
-                    <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <p className="text-[11px] uppercase tracking-[0.18em] text-yellow-400 mb-1">
-                          Premium Layout
-                        </p>
-                        <p className="text-sm text-white">
-                          Crafted for luxury living
-                        </p>
-                      </div>
+                    {/* PRICE + CTA */}
+                    <div className="flex items-center justify-between mt-3">
+                      <p className="text-white font-semibold text-base">
+                        ₹{plan.price}
+                      </p>
 
-                      {/* <a
-                        href={selectedUnitPlan?.image || selectedUnitPlan?.image} // or file
-                        download
-                        target="_blank"
-                        onClick={(e) => e.stopPropagation()}
-                        className={`rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 ${
-                          active
-                            ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_10px_30px_rgba(241,220,127,0.18)]"
-                            : "border border-white/15 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-yellow-400"
-                        }`}
-                      >
-                        Download Plan
-                      </a> */}
                       <a
                         href={selectedUnitPlan?.image || "#"}
                         download
@@ -938,19 +892,21 @@ export default function ProjectDetailPage() {
                           }
                           e.stopPropagation();
                         }}
-                        className={`rounded-full px-5 py-3 text-sm font-medium ${
-                          selectedUnitPlan?.image
+                        className={`text-xs px-4 py-2 rounded-full transition ${selectedUnitPlan?.image
                             ? active
-                              ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black"
-                              : "border border-white/15 text-white"
+                            ? "bg-yellow-400 text-black"
+                            : "border border-white/20 text-white hover:border-yellow-400/50 hover:text-yellow-400"
                             : "opacity-50 cursor-not-allowed border border-white/10 text-gray-500"
-                        }`}
+                          }`}
                       >
-                        {selectedUnitPlan?.image
-                          ? "Download Plan"
-                          : "Not Available"}
+                        {selectedUnitPlan?.image ? "Download" : "N/A"}
                       </a>
                     </div>
+
+                    {/* SUBTEXT */}
+                    <p className="text-xs text-white/50 mt-2 uppercase text-yellow">
+                      {plan?.title}
+                    </p>
                   </div>
                 </div>
               );
