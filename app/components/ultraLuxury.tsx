@@ -52,7 +52,7 @@ export default function UltraLuxury() {
       // ✅ FILTER BY TYPE ID
       const filteredLuxuaryProject = luxuryProjects.filter(
         (project: any) =>
-          project.type === "69d711938447debd74aa5b13"
+          project.type.includes("69d711938447debd74aa5b13")
       ).sort((a: any, b: any) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 
       setLuxuaryProjects(filteredLuxuaryProject);

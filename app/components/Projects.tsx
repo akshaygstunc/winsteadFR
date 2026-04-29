@@ -182,7 +182,11 @@ export default function Projects({ projects = [], homePage }: any) {
     // STEP 1: Normalize
     const normalized = projects.map((project) => {
       const category =
-        project.type 
+        Array.isArray(project.type)
+          ? project.type
+          : project.type
+            ? [project.type]
+            : [];
 
       const vendor =
         project.vendor ||
@@ -200,7 +204,7 @@ export default function Projects({ projects = [], homePage }: any) {
 
       return {
         ...project,
-        _category: String(category),
+        _category: category,
         _vendor: String(vendor).toLowerCase(),
         _sortOrder: Number(project.sortOrder || project.data?.sortOrder || 0),
         _featured: Boolean(featured),
@@ -221,8 +225,8 @@ export default function Projects({ projects = [], homePage }: any) {
         (p) => p._vendor === selectedVendor.toLowerCase()
       );
     } else {
-      filtered = filtered.filter(
-        (p) => p._category === String(activeFilter)
+      filtered = filtered.filter((p) =>
+        p._category?.includes(String(activeFilter))
       );
     }
 
