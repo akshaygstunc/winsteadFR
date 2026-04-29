@@ -17,11 +17,11 @@ import img5 from "../../public/male.png";
 import img4 from "../../public/hero4.png";
 import AboutHero from "../components/about/About";
 import WebsiteContentService from "../services/websitecontent.service";
-
-
+import Skeleton from "../components/ui/Skeleton";
 
 export default function AboutUs() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [aboutPage, setAboutPage] = useState<any>({});
   const galleryImages =
     aboutPage?.data?.media?.map((img: string) => ({
@@ -31,10 +31,13 @@ export default function AboutUs() {
   useEffect(() => {
     async function fetchAbout() {
       try {
+        setLoading(true);
         const res = await WebsiteContentService.getAboutPage();
         setAboutPage(res);
       } catch (error) {
         console.error("Error fetching about page:", error);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -50,7 +53,9 @@ export default function AboutUs() {
     return () => clearInterval(timer);
   }, [galleryImages.length]);
   const goPrev = () => {
-    setActiveSlide((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+    setActiveSlide(
+      (prev) => (prev - 1 + galleryImages.length) % galleryImages.length,
+    );
   };
 
   const goNext = () => {
@@ -93,7 +98,6 @@ export default function AboutUs() {
     },
   ];
 
-
   const helpItems = [
     aboutPage?.data?.point1Text,
     aboutPage?.data?.point2Text,
@@ -103,14 +107,11 @@ export default function AboutUs() {
     aboutPage?.data?.point6Text,
   ];
 
-
-
   return (
     <main className="bg-black text-white min-h-screen overflow-x-hidden">
       {/* HERO */}
-      
-      <AboutHero data={aboutPage?.data} />
 
+      <AboutHero data={aboutPage?.data} />
 
       <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6">
         <AutoBreadcrumbs />
@@ -124,59 +125,106 @@ export default function AboutUs() {
               {/* LEFT IMAGE */}
               <div>
                 <div className="relative w-full h-[150px] md:h-[300px]">
-                  <Image
-                    src={aboutPage?.data?.aboutWinsteadImage || image2}
-                    alt="About"
-                    fill
-                    className="object-cover rounded-xl"
-                  />
+                  {loading ? (
+                    <div className="animate-pulse">
+                      <div className="w-full h-[150px] md:h-[300px] rounded-xl bg-white/10 relative overflow-hidden">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(241,220,127,0.12),transparent_60%)]" />
+                      </div>
+                    </div>
+                  ) : (
+                    <Image
+                      src={aboutPage?.data?.aboutWinsteadImage || image2}
+                      alt="About"
+                      fill
+                      className="object-cover rounded-xl"
+                    />
+                  )}
                 </div>
               </div>
 
               {/* RIGHT TEXT */}
               <div className="max-w-[85rem]">
-                <h3 className="text-3xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
+                {/* <h3 className="text-3xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
                   {aboutPage?.data?.aboutWinsteadTitle || "About Winstead"}
-                </h3>
-
-                {aboutPage?.data?.aboutWinsteadDescription
-                  ?.split("\n\n")
-                  .map((para: string, index: number) => (
-                    <p
-                      key={index}
-                      className="text-gray-300 leading-relaxed mt-4 first:mt-0"
-                    >
-                      {para}
-                    </p>
-                  ))}
+                </h3> */}
+                <>
+                  {loading ? (
+                    <div className="space-y-3 animate-pulse">
+                      <div className="h-6 w-48 rounded bg-white/10" />
+                      <div className="h-4 w-full rounded bg-white/10" />
+                      <div className="h-4 w-5/6 rounded bg-white/10" />
+                    </div>
+                  ) : (
+                    <>
+                      <h3 className="text-3xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
+                        {aboutPage?.data?.aboutWinsteadTitle}
+                      </h3>
+                      {aboutPage?.data?.aboutWinsteadDescription
+                        ?.split("\n\n")
+                        .map((para: string, index: number) => (
+                          <p
+                            key={index}
+                            className="text-gray-300 leading-relaxed mt-4 first:mt-0"
+                          >
+                            {para}
+                          </p>
+                        ))}
+                    </>
+                  )}
+                </>
               </div>
             </div>
           </section>
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5 order-2 lg:order-1">
-              <img
-                src={aboutPage?.data?.introImage || img1}
-                alt="About Winstead section"
-                className="w-full h-[320px] md:h-[400px] object-cover"
-
-              />
+              {loading ? (
+                <Skeleton className="w-full h-[150px] md:h-[300px] rounded-xl" />
+              ) : (
+                <img
+                  src={aboutPage?.data?.introImage || img1}
+                  alt="About Winstead section"
+                  className="w-full h-[320px] md:h-[400px] object-cover"
+                />
+              )}
             </div>
 
             <div className="order-1 lg:order-2">
-              <p className="text-[12px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
-                Small Introduction
-              </p>
-              <h2 className="text-3xl md:text-3xl font-light leading-tight mb-6">
-                {aboutPage?.data?.introTitle || "We don’t just present properties — we present confidence."}
-              </h2>
-              <p className="text-white leading-8 text-base md:text-lg mb-5">
-                {aboutPage?.data?.introDescription || "Our approach combines premium real estate presentation with practical advisory. We aim to make the search experience feel more curated, more transparent, and more valuable for buyers, families, and investors."}
-              </p>
-              <p className="text-white leading-8 text-base md:text-lg">
-                Whether someone is searching for a dream residence or a strategic
-                investment, our role is to bring more clarity, trust, and direction to
-                the process.
-              </p>
+              {loading ? (
+                <div className="space-y-4">
+                  {/* Small label */}
+                  <Skeleton className="h-3 w-32" />
+
+                  {/* Heading */}
+                  <Skeleton className="h-8 w-full" />
+
+                  {/* Paragraph lines */}
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-5/6" />
+
+                  {/* Second paragraph */}
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-4/6" />
+                </div>
+              ) : (
+                <>
+                  <p className="text-[12px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
+                    Small Introduction
+                  </p>
+                  <h2 className="text-3xl md:text-3xl font-light leading-tight mb-6">
+                    {aboutPage?.data?.introTitle ||
+                      "We don’t just present properties — we present confidence."}
+                  </h2>
+                  <p className="text-white leading-8 text-base md:text-lg mb-5">
+                    {aboutPage?.data?.introDescription ||
+                      "Our approach combines premium real estate presentation with practical advisory. We aim to make the search experience feel more curated, more transparent, and more valuable for buyers, families, and investors."}
+                  </p>
+                  <p className="text-white leading-8 text-base md:text-lg">
+                    Whether someone is searching for a dream residence or a
+                    strategic investment, our role is to bring more clarity,
+                    trust, and direction to the process.
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -186,14 +234,36 @@ export default function AboutUs() {
       <section className="py-12 md:py-20">
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-16 items-center">
-            <div>
+             <div>
+        {loading ? (
+          <>
+            {/* Heading skeleton */}
+            <div className="space-y-4 mb-8">
+              <Skeleton className="h-3 w-24" />
+              <Skeleton className="h-8 w-3/4" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+            </div>
+
+            {/* Stats cards skeleton */}
+            <div className="grid grid-cols-2 gap-5">
+              {[1, 2, 3, 4].map((_, i) => (
+                <Skeleton key={i} className="h-[120px] rounded-[28px]" />
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
               <p className="text-[12px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
                 Stats
               </p>
               <h2 className="text-3xl md:text-3xl font-light leading-tight mb-6">
-                {aboutPage?.data?.statsTitle || 'Numbers that reflect trust, growth, and premium service.'}               </h2>
+                {aboutPage?.data?.statsTitle ||
+                  "Numbers that reflect trust, growth, and premium service."}{" "}
+              </h2>
               <p className="text-white leading-8 text-base md:text-lg mb-8">
-                {aboutPage?.data?.statsSubtitle || 'Over time, our focus on quality guidance and curated opportunities has helped us build stronger client relationships and a more premium real         estate presence.'}
+                {aboutPage?.data?.statsSubtitle ||
+                  "Over time, our focus on quality guidance and curated opportunities has helped us build stronger client relationships and a more premium real         estate presence."}
               </p>
 
               <div className="grid grid-cols-2 gap-5">
@@ -211,14 +281,20 @@ export default function AboutUs() {
                   </div>
                 ))}
               </div>
+               </>
+        )}
             </div>
 
             <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5">
+             {loading ? (
+          <Skeleton className="w-full h-[320px] md:h-[520px] rounded-[28px]" />
+        ) : (
               <img
                 src={aboutPage?.data?.statsImage || img2}
                 alt="Stats section image"
                 className="w-full h-[320px] md:h-[520px] object-cover"
               />
+                )}
             </div>
           </div>
         </div>
@@ -229,9 +305,12 @@ export default function AboutUs() {
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="rounded-[32px] border border-[#b89b45]/25 bg-gradient-to-br from-[#0f0f0f] to-[#151515] overflow-hidden">
             <div className="grid lg:grid-cols-[0.9fr_1.1fr] items-center">
-
               {/* IMAGE (keep static or make dynamic later) */}
               <div className="relative">
+                 {loading ? (
+            <Skeleton className="w-full h-[320px] md:h-[620px]" />
+          ) : (
+            <>
                 <img
                   src={aboutPage?.data?.ceoImage || img5}
                   alt="Word from CEO"
@@ -239,10 +318,37 @@ export default function AboutUs() {
                   // width={100}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+              </>
+          )}
               </div>
 
               {/* CONTENT */}
               <div className="p-8 md:p-12 lg:p-16">
+                  {loading ? (
+            <div className="space-y-4">
+              
+              {/* Quote icon placeholder */}
+              <Skeleton className="h-8 w-8 rounded-full" />
+
+              {/* small title */}
+              <Skeleton className="h-3 w-40" />
+
+              {/* heading */}
+              <Skeleton className="h-8 w-3/4" />
+
+              {/* paragraphs */}
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+              <Skeleton className="h-4 w-4/6" />
+
+              {/* name */}
+              <Skeleton className="h-5 w-40 mt-6" />
+
+              {/* designation */}
+              <Skeleton className="h-4 w-32" />
+            </div>
+          ) : (
+            <>
                 <FaQuoteLeft className="text-[#b89b45] text-3xl md:text-4xl mb-6" />
 
                 <p className="text-[12px] md:text-sm lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
@@ -275,8 +381,9 @@ export default function AboutUs() {
                     {aboutPage?.data?.ceoDesignation}
                   </p>
                 </div>
+                 </>
+          )}
               </div>
-
             </div>
           </div>
         </div>
@@ -287,14 +394,48 @@ export default function AboutUs() {
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-center">
             <div>
+               {loading ? (
+          <>
+            {/* Heading skeleton */}
+            <div className="space-y-4 mb-8">
+              <Skeleton className="h-3 w-24" />
+              <Skeleton className="h-8 w-3/4" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+            </div>
+
+            {/* Cards skeleton */}
+            <div className="grid gap-5">
+              {[1, 2, 3].map((_, i) => (
+                <div
+                  key={i}
+                  className="flex space-x-4 rounded-[28px] border border-[#b89b45]/25 bg-white/[0.03] p-4"
+                >
+                  {/* icon */}
+                  <Skeleton className="w-16 h-10 rounded-xl" />
+
+                  {/* text */}
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-5 w-40" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
               <p className="text-[12px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
                 Why Us
               </p>
               <h2 className="text-3xl md:text-3xl font-light leading-tight mb-5">
-                {aboutPage?.data?.whyChooseTitle || "Why clients choose us for premium property guidance"}
+                {aboutPage?.data?.whyChooseTitle ||
+                  "Why clients choose us for premium property guidance"}
               </h2>
               <p className="text-white leading-8 text-base md:text-lg mb-8">
-                {aboutPage?.data?.whyChooseDescription || "We combine presentation, market understanding, and relationship-led service to create a smoother and more premium real estate experience."}
+                {aboutPage?.data?.whyChooseDescription ||
+                  "We combine presentation, market understanding, and relationship-led service to create a smoother and more premium real estate experience."}
               </p>
 
               <div className="grid gap-5">
@@ -305,7 +446,6 @@ export default function AboutUs() {
                   >
                     <div className="w-16 h-10 rounded-xl border border-[#b89b45]/40 bg-[#b89b45]/10 flex items-center justify-center text-[#d7bd70] mb-6">
                       {item.icon}
-
                     </div>
                     <div>
                       <h3 className="text-xl font-bold mb-1">{item.title}</h3>
@@ -314,16 +454,22 @@ export default function AboutUs() {
                   </div>
                 ))}
               </div>
+               </>
+        )}
             </div>
 
             <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5">
               <div className="relative w-full h-[320px] md:h-[745px]">
+                 {loading ? (
+            <Skeleton className="w-full h-full rounded-[28px]" />
+          ) : (
                 <Image
                   src={aboutPage?.data?.whyChooseImage || img4}
                   alt="Why choose us"
                   fill
                   className="object-cover"
                 />
+                 )}
               </div>
             </div>
           </div>
@@ -334,22 +480,66 @@ export default function AboutUs() {
       <section className="py-8 md:py-8">
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-
             {/* IMAGE */}
             <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5 order-2 lg:order-1">
               <div className="relative w-full h-[320px] md:h-[950px]">
+                {loading ? (
+            <Skeleton className="w-full h-full rounded-[28px]" />
+          ) : (
                 <Image
                   src={aboutPage?.data?.howWeHelpImage || aboutImg}
                   alt="How we can help"
                   fill
                   className="object-cover"
-                />
+                /> )}
               </div>
             </div>
 
             {/* CONTENT */}
             <div className="order-1 lg:order-2">
+               {loading ? (
+          <>
+            {/* TITLE + HEADING + DESC */}
+            <div className="space-y-4 mb-8">
+              <Skeleton className="h-3 w-40" />
+              <Skeleton className="h-8 w-3/4" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+            </div>
 
+            {/* POINTS */}
+            <div className="grid grid-cols-2 gap-4 mb-8">
+              {[1, 2, 3, 4].map((_, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-4 rounded-[22px] border border-[#b89b45]/20 bg-white/[0.03] px-5 py-4"
+                >
+                  <Skeleton className="w-10 h-10 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-4/6" />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* CARDS */}
+            <div className="grid md:grid-cols-2 gap-5">
+              {[1, 2].map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-[22px] border border-[#b89b45]/20 bg-white/[0.03] px-5 py-4"
+                >
+                  <Skeleton className="w-14 h-14 rounded-2xl mb-5" />
+                  <Skeleton className="h-6 w-40 mb-3" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-5/6" />
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
               {/* TITLE */}
               <p className="text-[12px] md:text-sm lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
                 How We Can Help
@@ -357,7 +547,8 @@ export default function AboutUs() {
 
               {/* HEADING */}
               <h2 className="text-3xl md:text-3xl font-light leading-tight mb-6">
-                {aboutPage?.data?.howWeHelpTitle || "Guidance that goes beyond listings — making the search smoother, clearer, and more rewarding."}
+                {aboutPage?.data?.howWeHelpTitle ||
+                  "Guidance that goes beyond listings — making the search smoother, clearer, and more rewarding."}
               </h2>
 
               {/* DESCRIPTION */}
@@ -391,7 +582,6 @@ export default function AboutUs() {
 
               {/* CARDS */}
               <div className="grid md:grid-cols-2 gap-5">
-
                 {/* Curated Experience */}
                 <div className="rounded-[22px] border border-[#b89b45]/20 bg-white/[0.03] px-5 py-4">
                   <div className="w-14 h-14 rounded-2xl border border-[#b89b45]/40 bg-[#b89b45]/10 flex items-center justify-center text-[#d7bd70] mb-5">
@@ -417,8 +607,9 @@ export default function AboutUs() {
                     {aboutPage?.data?.guidedSupportDescription}
                   </p>
                 </div>
-
               </div>
+               </>
+        )}
             </div>
           </div>
         </div>
@@ -429,14 +620,34 @@ export default function AboutUs() {
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-16 items-center mb-10">
             <div>
+               {loading ? (
+          <>
+            {/* Heading */}
+            <div className="space-y-4 mb-6">
+              <Skeleton className="h-3 w-28" />
+              <Skeleton className="h-8 w-3/4" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-3 mt-6">
+              <Skeleton className="w-12 h-12 rounded-full" />
+              <Skeleton className="w-12 h-12 rounded-full" />
+            </div>
+          </>
+        ) : (
+          <>
               <p className="text-[12px] md:text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-[#b89b45] mb-4">
                 Gallery
               </p>
               <h2 className="text-3xl md:text-3xl font-light leading-tight mb-4">
-                {aboutPage?.data?.galleryTitle || 'A visual glimpse into the premium world we represent'}
+                {aboutPage?.data?.galleryTitle ||
+                  "A visual glimpse into the premium world we represent"}
               </h2>
               <p className="text-white leading-8 text-base md:text-lg">
-                {aboutPage?.data?.galleryDescription || 'A more picturized section that keeps the same theme while making the page feel richer and more premium.'}
+                {aboutPage?.data?.galleryDescription ||
+                  "A more picturized section that keeps the same theme while making the page feel richer and more premium."}
               </p>
 
               <div className="flex items-center gap-3 mt-8">
@@ -453,9 +664,25 @@ export default function AboutUs() {
                   <FaArrowRight />
                 </button>
               </div>
+              </>
+        )}
             </div>
 
             <div className="relative rounded-[32px] overflow-hidden border border-[#b89b45]/25 bg-white/[0.03]">
+              {loading ? (
+          <>
+            {/* Image skeleton */}
+            <Skeleton className="w-full h-[320px] md:h-[320px] rounded-[32px]" />
+
+            {/* Dots skeleton */}
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
+              {[1, 2, 3].map((_, i) => (
+                <Skeleton key={i} className="h-2.5 w-6 rounded-full" />
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
               <div
                 className="flex transition-transform duration-700 ease-in-out"
                 style={{ transform: `translateX(-${activeSlide * 100}%)` }}
@@ -473,7 +700,6 @@ export default function AboutUs() {
 
                 {galleryImages.map((item, index) => (
                   <div key={index} className="min-w-full relative">
-
                     <div className="relative w-full h-[320px] md:h-[320px]">
                       <Image
                         src={item.src}
@@ -493,11 +719,16 @@ export default function AboutUs() {
                   <button
                     key={index}
                     onClick={() => setActiveSlide(index)}
-                    className={`h-2.5 rounded-full transition-all ${activeSlide === index ? "w-10 bg-[#d7bd70]" : "w-2.5 bg-white/40"
-                      }`}
+                    className={`h-2.5 rounded-full transition-all ${
+                      activeSlide === index
+                        ? "w-10 bg-[#d7bd70]"
+                        : "w-2.5 bg-white/40"
+                    }`}
                   />
                 ))}
               </div>
+               </>
+        )}
             </div>
           </div>
         </div>
