@@ -37,12 +37,26 @@ export default function ContactModal({
   projectTitle,
   intent,
   projectImage,
+  property,
 }: {
   isOpen: boolean;
   onClose: () => void;
   projectTitle?: string;
   intent: ContactIntent;
   projectImage: string;
+  property?: {
+    // ← add this
+    propertyId: string | null;
+    propertyTitle: string;
+    projectName: string;
+    location: string;
+    unitLabel: string;
+    configuration: string;
+    area: string;
+    price: number;
+    currency: string;
+    propertyUrl: string;
+  };
 }) {
   const route = useRouter();
   function getModalHeading(intent: ContactIntent) {
@@ -176,8 +190,8 @@ export default function ContactModal({
 
     try {
       setIsSubmitting(true);
-const ipRes = await fetch("https://api.ipify.org?format=json");
-const ipData = await ipRes.json();
+      const ipRes = await fetch("https://api.ipify.org?format=json");
+      const ipData = await ipRes.json();
       const payload = {
         contact: {
           fullName: contactForm.fullName.trim(),
@@ -191,6 +205,18 @@ const ipData = await ipRes.json();
               ? `${browserLocation.city}, ${browserLocation.country}`
               : "",
         },
+        property: property ?? {     // ← add this block
+    propertyId: null,
+    propertyTitle: "",
+    projectName: "",
+    location: "",
+    unitLabel: "",
+    configuration: "",
+    area: "",
+    price: 0,
+    currency: "",
+    propertyUrl: "",
+  },
         // ✅ PROPERTY DATA
         projectTitle: projectTitle || "General Inquiry",
         intent: intent || "general",
@@ -239,27 +265,26 @@ const ipData = await ipRes.json();
     }
   };
   useEffect(() => {
-  async function fetchLocation() {
-    try {
-      const res = await fetch("https://ipapi.co/json/");
-      const data = await res.json();
+    async function fetchLocation() {
+      try {
+        const res = await fetch("https://ipapi.co/json/");
+        const data = await res.json();
 
-      setBrowserLocation({
-        city: data.city,
-        country: data.country_name,
-      });
+        setBrowserLocation({
+          city: data.city,
+          country: data.country_name,
+        });
 
-      // optional: store for reuse
-      localStorage.setItem("city", data.city);
-      localStorage.setItem("country", data.country_name);
-
-    } catch (err) {
-      console.error("Location fetch failed", err);
+        // optional: store for reuse
+        localStorage.setItem("city", data.city);
+        localStorage.setItem("country", data.country_name);
+      } catch (err) {
+        console.error("Location fetch failed", err);
+      }
     }
-  }
 
-  fetchLocation();
-}, []);
+    fetchLocation();
+  }, []);
 
   if (!isOpen) return null;
 
@@ -275,7 +300,9 @@ const ipData = await ipRes.json();
           <div className="absolute -top-20 -left-10 h-60 w-60 rounded-full bg-yellow-500/10 blur-3xl" />
           <div className="absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-yellow-400/10 blur-3xl" />
           <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-center py-2 leading-tight mb-4">
-            {isSubmitted ? "Thank you for your inquiry" : getModalHeading(intent)}
+            {isSubmitted
+              ? "Thank you for your inquiry"
+              : getModalHeading(intent)}
           </h3>
           <div className="relative grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)]">
             <div className="overflow-y-auto border-b lg:border-b-0 lg:border-r border-white/10 p-5 sm:p-6 md:p-8 bg-white/[0.02]">
@@ -283,29 +310,43 @@ const ipData = await ipRes.json();
                 Premium Assistance
               </div>
 
-
-
               <p className="text-white leading-relaxed mb-6 text-sm sm:text-base">
                 {isSubmitted ? (
                   <>
                     We’ve received your request for{" "}
-                    <span className="text-white font-medium">{projectTitle}</span>.
-                    Our team will get back to you shortly.
+                    <span className="text-white font-medium">
+                      {projectTitle}
+                    </span>
+                    . Our team will get back to you shortly.
                   </>
                 ) : (
                   <>
-                    Share your details and our team will connect with you regarding{" "}
-                    <span className="text-white font-medium">{projectTitle}</span>.
+                    Share your details and our team will connect with you
+                    regarding{" "}
+                    <span className="text-white font-medium">
+                      {projectTitle}
+                    </span>
+                    .
                   </>
                 )}
               </p>
 
               <div className="space-y-4">
                 <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                  {projectImage && <p className="text-xs uppercase tracking-[0.16em] text-white mb-1">
-                    Project
-                  </p>}
-                  <img src={projectImage ? projectImage : "https://storage.googleapis.com/winstead-global-assets/projects/gallery/1776470103143-hero5.png"} alt="Project Image" className="w-full h-auto rounded-lg" />
+                  {projectImage && (
+                    <p className="text-xs uppercase tracking-[0.16em] text-white mb-1">
+                      Project
+                    </p>
+                  )}
+                  <img
+                    src={
+                      projectImage
+                        ? projectImage
+                        : "https://storage.googleapis.com/winstead-global-assets/projects/gallery/1776470103143-hero5.png"
+                    }
+                    alt="Project Image"
+                    className="w-full h-auto rounded-lg"
+                  />
                 </div>
 
                 {/* <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
@@ -352,52 +393,68 @@ const ipData = await ipRes.json();
                     Inquiry Submitted Successfully
                   </h4>
                   <p className="text-white max-w-md text-sm sm:text-base">
-                    Thank you. Our team will review your request and contact you soon.
+                    Thank you. Our team will review your request and contact you
+                    soon.
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleContactSubmit} className="space-y-4 pt-8 sm:pt-4">
+                <form
+                  onSubmit={handleContactSubmit}
+                  className="space-y-4 pt-8 sm:pt-4"
+                >
                   <div>
-                    <label className="text-sm text-white mb-2 block">Full Name</label>
+                    <label className="text-sm text-white mb-2 block">
+                      Full Name
+                    </label>
                     <input
                       name="fullName"
                       value={contactForm.fullName}
                       onChange={handleContactChange}
                       placeholder="Enter your full name"
-                      className={`w-full rounded-2xl border bg-black/30 px-4 py-3 text-white outline-none ${errors.fullName
-                        ? "border-red-500"
-                        : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
-                        }
+                      className={`w-full rounded-2xl border bg-black/30 px-4 py-3 text-white outline-none ${
+                        errors.fullName
+                          ? "border-red-500"
+                          : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
+                      }
   focus:outline-none
                                                 }`}
                     />
                     {errors.fullName && (
-                      <p className="mt-1 text-sm text-red-400">{errors.fullName}</p>
+                      <p className="mt-1 text-sm text-red-400">
+                        {errors.fullName}
+                      </p>
                     )}
                   </div>
 
                   <div>
-                    <label className="text-sm text-white mb-2 block">Email Address</label>
+                    <label className="text-sm text-white mb-2 block">
+                      Email Address
+                    </label>
                     <input
                       type="email"
                       name="email"
                       value={contactForm.email}
                       onChange={handleContactChange}
                       placeholder="Enter your email"
-                      className={`w-full rounded-2xl border bg-black/30 px-4 py-3 text-white outline-none ${errors.email
-                        ? "border-red-500"
-                        : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
-                        }
+                      className={`w-full rounded-2xl border bg-black/30 px-4 py-3 text-white outline-none ${
+                        errors.email
+                          ? "border-red-500"
+                          : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
+                      }
   focus:outline-none
                                                 }`}
                     />
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-400">{errors.email}</p>
+                      <p className="mt-1 text-sm text-red-400">
+                        {errors.email}
+                      </p>
                     )}
                   </div>
 
                   <div>
-                    <label className="text-sm text-white mb-2 block">Phone Number</label>
+                    <label className="text-sm text-white mb-2 block">
+                      Phone Number
+                    </label>
 
                     <div className="grid grid-cols-1 sm:grid-cols-[130px_1fr] gap-3">
                       <select
@@ -422,16 +479,19 @@ const ipData = await ipRes.json();
                         value={contactForm.phone}
                         onChange={handleContactChange}
                         placeholder="Enter phone number"
-                        className={`w-full rounded-2xl border bg-black/30 px-4 py-3 text-white outline-none ${errors.phone
-                          ? "border-red-500"
-                          : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
-                          }
+                        className={`w-full rounded-2xl border bg-black/30 px-4 py-3 text-white outline-none ${
+                          errors.phone
+                            ? "border-red-500"
+                            : "border-yellow-400/50 focus:border-yellow-400 focus:shadow-[0_0_14px_rgba(241,220,127,0.25)]"
+                        }
   focus:outline-none     }`}
                       />
                     </div>
 
                     {errors.phone && (
-                      <p className="mt-1 text-sm text-red-400">{errors.phone}</p>
+                      <p className="mt-1 text-sm text-red-400">
+                        {errors.phone}
+                      </p>
                     )}
                   </div>
 
@@ -468,6 +528,5 @@ const ipData = await ipRes.json();
         </div>
       </div>
     </div>
-
   );
 }
