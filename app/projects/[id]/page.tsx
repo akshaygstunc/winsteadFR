@@ -1019,7 +1019,7 @@ export default function ProjectDetailPage() {
                     Mortgage Calculator
                   </button>
 
-                  <button
+                  {/* <button
                     onClick={() => setCalcTab("payment-plan")}
                     className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md font-semibold tracking-[0.18em] uppercase transition ${
                       calcTab === "payment-plan"
@@ -1028,7 +1028,7 @@ export default function ProjectDetailPage() {
                     }`}
                   >
                     Payment Plans
-                  </button>
+                  </button> */}
                 </div>
 
                 <div className="grid xl:grid-cols-[0.85fr_1.15fr] gap-8 xl:gap-10">
@@ -1062,27 +1062,41 @@ export default function ProjectDetailPage() {
                     
                     {calcTab === "mortgage" ? (
                       <div className="grid sm:grid-cols-2 gap-5">
+
+                        {/* PROPERTY PRICE */}
                         <PremiumCalcInput
-                          label="Property Value"
+                          label="Property Price (AED)"
+                          helper="Total price of the property"
                           value={propertyPrice}
                           onChange={(value) =>
                             setPropertyPrice(Number(value) || 0)
                           }
                         />
+
+                        {/* DOWN PAYMENT */}
                         <PremiumCalcInput
-                          label="During Construction %"
+                          label="Down Payment (%)"
+                          helper="Amount you pay upfront"
                           value={constructionPercent}
                           onChange={(value) =>
                             setConstructionPercent(Number(value) || 0)
                           }
                         />
+
+                        {/* LOAN DURATION */}
                         <PremiumCalcInput
-                          label="Term (Years)"
+                          label="Loan Duration (Years)"
+                          helper="Number of years to repay the loan"
                           value={loanYears}
-                          onChange={(value) => setLoanYears(Number(value) || 0)}
+                          onChange={(value) =>
+                            setLoanYears(Number(value) || 0)
+                          }
                         />
+
+                        {/* INTEREST RATE */}
                         <PremiumCalcInput
-                          label="Interest Rate %"
+                          label="Interest Rate (%)"
+                          helper="Average bank rate is around 3% – 5%"
                           value={interestRate}
                           step="0.1"
                           onChange={(value) =>
@@ -1148,67 +1162,62 @@ export default function ProjectDetailPage() {
 
                     {calcTab === "mortgage" ? (
                       <>
-                        <div className="grid md:grid-cols-3 ml-4 gap-6 md:gap-0 mb-1 items-stretch">
-                          <div className="flex items-center">
-                            <PremiumResultCard
-                              title="Total Cost"
-                              value={formatAED(totalCost)}
-                              suffix="AED"
-                            />
-                            <div className="hidden md:block h-[60%] w-[1px] mx-6 bg-gradient-to-b from-transparent via-yellow-400/60 to-transparent" />
-                          </div>
+                        <div className="grid md:grid-cols-3 gap-4 mb-6">
 
-                          <div className="flex items-center">
-                            <PremiumResultCard
-                              title="Mortgage Payment"
-                              value={formatAED(monthlyPayment)}
-                              suffix="AED /Month"
-                              highlighted
-                            />
-                            <div className="hidden md:block h-[60%] w-[1px] mx-6 bg-gradient-to-b from-transparent via-yellow-400/60 to-transparent" />
-                          </div>
+                          <PremiumResultCard
+                            title="Total You Pay"
+                            value={formatAED(totalCost)}
+                            suffix="AED"
+                          />
 
-                          <div>
-                            <PremiumResultCard
-                              title="Annual Cost"
-                              value={formatAED(annualCost)}
-                              suffix="AED /Year"
-                            />
-                          </div>
+                          <PremiumResultCard
+                            title="Monthly Payment"
+                            value={formatAED(monthlyPayment)}
+                            suffix="AED /Month"
+                            highlighted
+                          />
+
+                          <PremiumResultCard
+                            title="Yearly Payment"
+                            value={formatAED(annualCost)}
+                            suffix="AED /Year"
+                          />
                         </div>
 
                         <div className="rounded-[24px] border border-white/10 bg-black/25 md:p-2 space-y-4">
+
                           <PremiumBreakdownRow
-                            label="During Construction Down Payment"
+                            label="Your Down Payment"
                             value={`AED ${formatAED(downPaymentAmount)}`}
                           />
-                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent" />
 
                           <PremiumBreakdownRow
-                            label="Mortgage Base On Handover"
+                            label="Loan from Bank"
                             value={`AED ${formatAED(loanBaseAmount)}`}
                           />
-                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent" />
 
                           <PremiumBreakdownRow
-                            label="Amount Financed"
+                            label="Total Loan Amount"
                             value={`AED ${formatAED(amountFinanced)}`}
                           />
-                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent" />
 
                           <PremiumBreakdownRow
-                            label="Total Interest Paid"
+                            label="Interest You Will Pay"
                             value={`AED ${formatAED(totalInterestPaid)}`}
                           />
-                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent" />
 
                           <div className="pt-3">
                             <PremiumBreakdownRow
-                              label="Total Cost"
+                              label="Total Amount You Pay"
                               value={`AED ${formatAED(totalCost)}`}
                               bold
                             />
                           </div>
+
                         </div>
                       </>
                     ) : (
@@ -1521,21 +1530,36 @@ function PremiumCalcInput({
   value,
   onChange,
   step,
+  helper,
 }: {
   label: string;
   value: string | number;
   onChange: (value: string) => void;
   step?: string;
+    helper?: string;
 }) {
   return (
     <div className="rounded-[22px] border border-[#F1DC7F35] bg-white/[0.03] p-4 transition-all duration-300 focus-within:border-[#F1DC7F] focus-within:shadow-[0_0_0_1px_rgba(241,220,127,0.45),0_0_20px_rgba(241,220,127,0.12)]">
-      <label className="block text-sm text-[#F1DC7F] mb-2">{label}</label>
+
+      {/* LABEL */}
+      <label className="block text-sm text-[#F1DC7F] mb-1 font-medium">
+        {label}
+      </label>
+
+      {/* HELPER TEXT */}
+      {helper && (
+        <p className="text-xs text-white/50 mb-2 leading-relaxed">
+          {helper}
+        </p>
+      )}
+
+      {/* INPUT */}
       <input
         type="number"
         value={value}
         step={step}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent text-xl px-2 font-medium text-white outline-none border-none"
+        className="w-full bg-transparent text-lg px-2 py-1 font-semibold text-white outline-none border-none placeholder:text-white/30"
       />
     </div>
   );
