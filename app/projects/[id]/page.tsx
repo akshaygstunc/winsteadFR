@@ -913,7 +913,38 @@ export default function ProjectDetailPage() {
             })}
           </div>
         </section>
+        {projectDetails?.latitude && projectDetails?.longitude && (
+          <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
+            <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
 
+              <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
+                Location Map
+              </p>
+
+              <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-6">
+                Explore project location
+              </h2>
+
+              <div className="w-full h-[400px] rounded-2xl overflow-hidden border border-white/10">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen
+                  src={`https://www.google.com/maps?q=${projectDetails.latitude},${projectDetails.longitude}&z=15&output=embed`}
+                />
+              </div>
+
+              {/* OPTIONAL ADDRESS */}
+              {projectDetails.address && (
+                <p className="text-sm text-white-400 mt-4">
+                  📍 {projectDetails.address}
+                </p>
+              )}
+            </div>
+          </section>
+        )}
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
           <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
             <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
@@ -1028,7 +1059,7 @@ export default function ProjectDetailPage() {
                         </select>
                       </div>
                     </div>
-
+                    
                     {calcTab === "mortgage" ? (
                       <div className="grid sm:grid-cols-2 gap-5">
                         <PremiumCalcInput
