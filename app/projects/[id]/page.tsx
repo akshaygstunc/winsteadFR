@@ -404,7 +404,11 @@ export default function ProjectDetailPage() {
       handover: getDisplayValue(projectDetails.handover),
       duringconstruction: getDisplayValue(projectDetails.duringconstruction),
       developer: getRelationLabel(projectDetails.developer as any),
-      residence: getRelationLabel(projectDetails.type),
+      propertyType: getRelationLabel(projectDetails?.type),
+      // residence: getRelationLabel(projectDetails.type),
+      residence: Array.isArray(projectDetails.type)
+  ? projectDetails.type.map((t: any) => t?.title || t?.name || "").filter(Boolean).join(", ") || EMPTY_VALUE
+  : getRelationLabel(projectDetails.type),
       description:
         projectDetails.fullDescription?.trim() ||
         projectDetails.shortDescription?.trim() ||
@@ -521,6 +525,7 @@ export default function ProjectDetailPage() {
 
   const openContactModal = (intent: ContactIntent) => {
     setContactIntent(intent);
+    setIsContactModalOpen(true);
     setContactForm((prev) => ({
       ...prev,
       message: getDefaultMessage(intent, project.title, activePlan?.label),
@@ -552,6 +557,7 @@ export default function ProjectDetailPage() {
       intent: contactIntent,
       projectId: project.id,
       projectTitle: project.title,
+      propertyType: project.residence,
       floorPlan: activePlan?.label || "",
     };
 
@@ -1285,6 +1291,18 @@ export default function ProjectDetailPage() {
         onChange={handleContactChange}
         projectTitle={project.title}
         intent={contactIntent}
+         property={{                                          // ← add this
+    propertyId: project.id || null,
+    propertyTitle: project.title || "",
+    projectName: project.title || "",
+    location: project.subLocation || project.location || "",
+    unitLabel: activePlan?.label || "",
+    configuration: activePlan?.bedrooms || "",
+    area: activePlan?.size || "",
+    price: getNumericPrice(activePlan?.price ?? project.price) || 0,
+    currency: "AED",
+    propertyUrl: typeof window !== "undefined" ? window.location.href : "",
+  }}
       />
     </>
   );

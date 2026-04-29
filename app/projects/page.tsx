@@ -467,22 +467,6 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         ))}
       </Section>
 
-      <Section title="Community">
-        {communities.map((c: any) => (
-          <Check
-            key={c._id}
-            label={c.title}
-            checked={filters.communities === c.title}
-            onChange={() =>
-              updateFilter(
-                "communities",
-                filters.communities === c.title ? "" : c.title,
-              )
-            }
-          />
-        ))}
-      </Section>
-
       <Section title="Bedrooms">
         {["1 Bedroom", "2 Bedroom", "3 Bedroom", "4 Bedroom", "5+ Bedroom"].map(
           (item) => (
@@ -555,16 +539,40 @@ function Sidebar({ filters, updateFilter, categories }: any) {
           <Check
             key={d._id}
             label={d.title}
-            checked={filters.developer === d.title}
+            checked={filters.developer === d._id}
             onChange={() =>
               updateFilter(
                 "developer",
-                filters.developer === d.title ? "" : d.title,
+                filters.developer === d._id ? "" : d._id,
               )
             }
           />
         ))}
       </Collapsible>
+
+    <Section title="Community">
+  {(communities || [])
+    .filter((c: any) => {
+      // ✅ No developer selected → show all
+      if (!filters.developer) return true;
+
+      // ✅ Match using correct path
+      return c.data?.developer === filters.developer;
+    })
+    .map((c: any) => (
+      <Check
+        key={c._id}
+        label={c.title}
+        checked={filters.communities === c._id}
+        onChange={() =>
+          updateFilter(
+            "communities",
+            filters.communities === c._id ? "" : c._id
+          )
+        }
+      />
+    ))}
+</Section>
     </div>
   );
 }
@@ -712,7 +720,7 @@ function getDefaultFilters() {
     bedrooms: [],
     location: "",
     subLocation: "",
-    developer: [],
+    developer: "",
     communities: "",
     minSize: "",
     maxSize: "",
