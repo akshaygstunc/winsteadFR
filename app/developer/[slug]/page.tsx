@@ -238,6 +238,7 @@ console.log("PROJECT:", projects);
                     name: found.title,
                     image: found.image || "/logoo4.webp",
                     category: "Luxury",
+                    bannerimage: found.data.bannerimage,
                     type: "Developer",
                     headquarters: found.data?.city || "Dubai",
                     projects: "50+ Projects",
@@ -314,7 +315,7 @@ console.log("PROJECT:", projects);
                 {/* IMAGE */}
                 <div className="absolute inset-0">
                     <Image
-                        src={developer?.data?.banner || Banner} alt="Winstead Services"
+                            src={developer?.bannerimage} alt="Winstead Services"
                         fill
                         priority
                         className="object-cover object-center"
