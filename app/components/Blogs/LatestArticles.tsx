@@ -104,16 +104,20 @@ export default function LatestArticles() {
 
                                 <div className="p-5 space-y-4">
                                     <p className="text-xs uppercase tracking-[0.18em] text-white">
-                                        {item.date || "Recent Article"}
+                                        {new Date(item.createdAt).toLocaleDateString("en-IN", {
+                                            day: "numeric",
+                                            month: "long",
+                                            year: "numeric",
+                                        }) || "Recent Article"}
                                     </p>
 
                                     <h3 className="text-xl font-semibold leading-snug group-hover:text-yellow-300 transition">
                                         {item.title}
                                     </h3>
 
-                                    <p className="text-sm lg:text-md text-white leading-relaxed">
+                                    {/* <p className="text-sm lg:text-md text-white leading-relaxed">
                                         {<HtmlRenderer content={item?.description?.slice(0, 100)} className="prose text-white" />}....
-                                    </p>
+                                    </p> */}
 
                                     <Link
                                         href={`/blogs/${item?.slug}`}

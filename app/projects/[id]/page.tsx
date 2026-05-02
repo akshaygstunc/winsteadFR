@@ -26,6 +26,7 @@ import LuxuryFAQ from "@/app/components/FAQ";
 import ProjectHeroSlider from "@/app/components/ProjectSlider";
 import FloorPlan from "../../../public/floorplan.webp";
 import PDFViewer from "@/app/components/PdfViewerSlider";
+import ReadMoreSlider from "@/app/components/ReadMoreSlider";
 
 const tabs = ["overview", "amenities", "FAQ"] as const;
 type TabKey = (typeof tabs)[number];
@@ -388,9 +389,10 @@ export default function ProjectDetailPage() {
     const heroImages = getProjectImages(projectDetails);
     const floorPlans = getFloorPlans(projectDetails);
     const bedroomValues = projectDetails.floorPlans?.map(
-      (p: any) => p?.label?.match(/\d+/)?.[0], // extract number from "2 Bedroom"
+      (p: any) => p?.data?.bedrooms, // extract number from "2 Bedroom"
     );
-    const sizeValues = projectDetails.floorPlans?.map((p: any) => p?.size);
+    const sizeValues = projectDetails.floorPlans?.map((p: any) => p?.data?.size);
+    console.log(sizeValues, "sizeValues")
     return {
       id: projectDetails._id || "",
       title: getDisplayValue(projectDetails.title),
@@ -594,6 +596,7 @@ export default function ProjectDetailPage() {
 
   const totalCost = bookingAmount + downPaymentAmount + totalMortgagePaid;
   console.log(projectDetails);
+  const isVideo = (url: string) => /\.(mp4|webm|ogg)$/i.test(url);
   return (
     <>
       {projectDetails && (
@@ -702,17 +705,10 @@ export default function ProjectDetailPage() {
                   Premium living shaped by design, location, and long-term value
                 </h2>
 
-                <PDFViewer
-                  pdfurl={
-                    project.propertydoc ||
-                    "https://storage.googleapis.com/winstead-global-assets/AEON%20AT%20DUBAI%20CREEK%20HARBOUR.pdf"
-                  }
+                <ReadMoreSlider
+
                   description={
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: project.description || "",
-                      }}
-                    />
+                    project.description
                   }
                   heading="Project Description"
                 />
@@ -876,15 +872,15 @@ export default function ProjectDetailPage() {
                   <div className="p-4">
                     {/* INLINE INFO (replaces 2 big boxes) */}
                     <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-white/70">
-                      <span>{plan.size}</span>
-                      <span>• {plan.bedrooms} Beds</span>
+                      <span>{plan?.data?.size}</span>
+                      <span>• {plan?.data?.bedrooms} Beds</span>
                       <span>• {plan.category}</span>
                     </div>
 
                     {/* PRICE + CTA */}
                     <div className="flex items-center justify-between mt-3">
                       <p className="text-white font-semibold text-base">
-                        ₹{plan.price}
+                        AED {plan.price}
                       </p>
 
                       <a
@@ -961,19 +957,39 @@ export default function ProjectDetailPage() {
             </h2>
 
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {project.heroImages.map((image, idx) => (
+              {project.heroImages.map((media, idx) => (
                 <div
                   key={idx}
-                  onClick={() => setPreviewImage(image)}
+                  onClick={() => setPreviewImage(media)}
                   className="relative h-[260px] rounded-[24px] overflow-hidden border border-white/10 cursor-pointer group"
                 >
-                  <Image
-                    src={image}
-                    alt=""
-                    fill
-                    className="object-cover group-hover:scale-110 transition duration-500"
-                  />
+                  {isVideo(media) ? (
+                    <video
+                      src={media}
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                      className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                    />
+                  ) : (
+                    <Image
+                      src={media}
+                      alt=""
+                      fill
+                      className="object-cover group-hover:scale-110 transition duration-500"
+                    />
+                  )}
+
+                  {/* Hover Overlay */}
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition" />
+
+                  {/* Optional: Video Indicator */}
+                  {isVideo(media) && (
+                    <div className="absolute bottom-3 right-3 text-xs bg-black/60 text-white px-2 py-1 rounded">
+                      VIDEO
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
