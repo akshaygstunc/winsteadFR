@@ -157,7 +157,7 @@ function ProjectsContent() {
             </div>
           )}
 
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 flex-1">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 md:grid-cols-2 gap-6 flex-1">
             {loading ? (
               Array.from({ length: 6 }).map((_, i) => (
                 <PropertyCardSkeleton key={i} />
@@ -653,10 +653,10 @@ function ProjectCard({ data }: any) {
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 p-5">
-          <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-5">
+          <div className="rounded-2xl border border-white/10 bg-black/30  p-5">
             <h2 className="text-xl font-semibold mb-3">{data.title}</h2>
 
-            <div className="space-y-2 text-sm text-white">
+            <div className="space-y-2 text-sm text-white ">
               <div className="flex items-center gap-2">
                 <FaBed className="text-yellow-400 text-xs" />
                 {data.bedrooms}
