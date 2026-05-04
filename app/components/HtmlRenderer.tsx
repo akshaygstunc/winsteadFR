@@ -12,7 +12,7 @@ export default function HtmlRenderer({ content, className }: Props) {
 
     return (
         <div
-            className={className}
+            className={`prose max-w-none text-white prose-strong:text-inherit prose-strong:text-white ${className}`}
             dangerouslySetInnerHTML={{ __html: cleanHtml }}
         />
     );

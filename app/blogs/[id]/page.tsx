@@ -12,6 +12,7 @@ import Img3 from "../../../public/hero2.png";
 import Img4 from "../../../public/hero3.jpg";
 import WebsiteContentService from "@/app/services/websitecontent.service";
 import { useEffect, useMemo, useState } from "react";
+import HtmlRenderer from "@/app/components/HtmlRenderer";
 
 type BlogApiResponse = {
   _id?: string;
@@ -208,18 +209,33 @@ export default function BlogDetailPage() {
         })}
       />
       {/* HERO */}
-      <section className="relative h-[65vh] min-h-[420px]">
-        <Image
-          src={blog.img}
-          alt={blog.title}
-          fill
-          unoptimized={
-            typeof blog.img === "string" && blog.img.startsWith("data:")
-          }
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-black/70" />
+      {/* HERO */}
+      <section className="relative h-[65vh] min-h-[420px] overflow-hidden">
+        {blog.heroVideo ? (
+          <video
+            src={blog.heroVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <Image
+            src={blog.img}
+            alt={blog.title}
+            fill
+            unoptimized={
+              typeof blog.img === "string" && blog.img.startsWith("data:")
+            }
+            className="object-cover"
+          />
+        )}
 
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/30" />
+
+        {/* Content */}
         <div className="relative max-w-4xl mx-auto px-6 h-full flex flex-col justify-end pb-12">
           <p className="text-yellow-400 uppercase text-sm tracking-[0.2em] mb-3">
             {blog.category}
@@ -246,10 +262,7 @@ export default function BlogDetailPage() {
 
         <div className="space-y-8 text-white leading-8 text-base md:text-lg">
           {/* <p>{blog.fullDesc}</p> */}
-          <div
-            className="prose max-w-none text-white"
-            dangerouslySetInnerHTML={{ __html: blog.fullDesc }}
-          />
+          <HtmlRenderer content={blog.fullDesc} />
           <h2 className="text-2xl md:text-3xl font-semibold text-white pt-4">
             Property Insights
           </h2>
@@ -291,7 +304,7 @@ export default function BlogDetailPage() {
             {blog.metaKeywords}
           </p> */}
 
-          {blog.heroVideo ? (
+          {/* {blog.heroVideo ? (
             <p>
               <span className="text-white font-medium">Video Reference:</span>{" "}
               <a
@@ -308,7 +321,7 @@ export default function BlogDetailPage() {
               <span className="text-white font-medium">Video Reference:</span>{" "}
               Not available
             </p>
-          )}
+          )} */}
         </div>
       </section>
 

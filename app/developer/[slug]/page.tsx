@@ -238,7 +238,7 @@ console.log("PROJECT:", projects);
                     name: found.title,
                     image: found.image || "/logoo4.webp",
                     category: "Luxury",
-                    bannerimage: found.data.bannerimage,
+                    bannerimage: found.data.bannerImage,
                     type: "Developer",
                     headquarters: found.data?.city || "Dubai",
                     projects: "50+ Projects",
@@ -348,9 +348,7 @@ console.log("PROJECT:", projects);
                         </h1>
 
                         <p className="mt-5 text-lg leading-relaxed text-white">
-                            Discover master-planned luxury communities crafted by{" "}
-                            {developer.name}, where lifestyle, architecture, and long-term
-                            investment value come together in Dubai’s most desirable locations.
+                                {<ReadMoreSlider description={developer?.description || `Discover master-planned luxury communities crafted by ${developer.name}, where lifestyle, architecture, and long-term investment value come together in Dubai’s most desirable locations.`} heading={"Developer Description"} />}
                         </p>
                     </div>
                 </div>

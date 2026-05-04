@@ -15,7 +15,7 @@ export default function ReadMoreSlider({ description, heading }: Props) {
 
     const fullText = description || "No description available.";
     const shortText =
-        fullText.length > 80 ? `${fullText.slice(0, 140)}...` : fullText;
+        fullText.length > 80 ? `${fullText.slice(0, 140)}` : fullText;
 
     return (
         <>

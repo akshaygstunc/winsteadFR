@@ -219,7 +219,12 @@ function getRange(values: (string | number)[], suffix = "") {
   const min = Math.min(...nums);
   const max = Math.max(...nums);
 
-  return min === max ? `${min}${suffix}` : `${min} - ${max}${suffix}`;
+  const minLabel = min === 0 ? "Studio" : `${min}${suffix}`;
+  const maxLabel = `${max}${suffix}`;
+
+  return min === max
+    ? minLabel
+    : `${minLabel} - ${maxLabel}`;
 }
 function getAmenities(data?: BackendProject) {
   if (!Array.isArray(data?.amenities) || !data.amenities.length) {
@@ -756,7 +761,7 @@ export default function ProjectDetailPage() {
                         </h4>
                         <p className="mt-1 leading-relaxed text-white-400">
                           {typeof projectDetails?.developer !== "string"
-                            ? projectDetails?.developer?.description || ""
+                            ? <ReadMoreSlider description={projectDetails?.developer?.description} heading={"Developer Description"} /> 
                             : ""}
                         </p>
                       </div>
@@ -871,7 +876,7 @@ export default function ProjectDetailPage() {
                   {/* CONTENT */}
                   <div className="p-4">
                     {/* INLINE INFO (replaces 2 big boxes) */}
-                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-white/70">
+                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-white">
                       <span>{plan?.data?.size}</span>
                       <span>• {plan?.data?.bedrooms} Beds</span>
                       <span>• {plan.category}</span>
@@ -894,19 +899,15 @@ export default function ProjectDetailPage() {
                           }
                           e.stopPropagation();
                         }}
-                        className={`text-xs px-4 py-2 rounded-full transition ${selectedUnitPlan?.image
-                            ? active
-                            ? "bg-yellow-400 text-black"
-                            : "border border-white/20 text-white hover:border-yellow-400/50 hover:text-yellow-400"
-                            : "opacity-50 cursor-not-allowed border border-white/10 text-gray-500"
-                          }`}
+                        className={`text-xs px-4 py-2 rounded-full bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black transition
+                          `}
                       >
                         {selectedUnitPlan?.image ? "Download" : "N/A"}
                       </a>
                     </div>
 
                     {/* SUBTEXT */}
-                    <p className="text-xs text-white/50 mt-2 uppercase text-yellow">
+                    <p className="text-xs text-white mt-2 uppercase text-yellow">
                       {plan?.title}
                     </p>
                   </div>
