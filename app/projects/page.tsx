@@ -635,6 +635,42 @@ function Collapsible({ title, children, open, toggle }: any) {
 /* ================= CARD ================= */
 
 function ProjectCard({ data }: any) {
+  function getBedroomRange(floorPlans: any[]) {
+    if (!Array.isArray(floorPlans) || !floorPlans.length) return null;
+
+    const nums = floorPlans
+      .map((fp) => Number(fp?.data?.bedrooms))
+      .filter((n) => !isNaN(n));
+
+    if (!nums.length) return null;
+
+    const min = Math.min(...nums);
+    const max = Math.max(...nums);
+
+    const minLabel = min === 0 ? "Studio" : min;
+    const maxLabel = max === 0 ? "Studio" : max;
+    console.log(min)
+    return min === max
+      ? `${minLabel}`
+      : `${minLabel} to ${maxLabel}`;
+
+  }
+  function getSqftRange(floorPlans: any[]) {
+    if (!Array.isArray(floorPlans) || !floorPlans.length) return null;
+
+    const nums = floorPlans
+      .map((fp) => Number(String(fp?.data?.size || "").replace(/[^\d.]/g, "")))
+      .filter((n) => !isNaN(n) && n > 0);
+
+    if (!nums.length) return null;
+
+    const min = Math.min(...nums);
+    const max = Math.max(...nums);
+
+    return min === max
+      ? `${min} sqft`
+      : `${min} to ${max} sqft`;
+  }
   return (
     <Link href={`/projects/${data.slug}`} className="block">
       <div className="group relative rounded-[28px] overflow-hidden border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-yellow-500/30 hover:shadow-[0_0_30px_rgba(250,204,21,0.08)] cursor-pointer">
@@ -659,7 +695,7 @@ function ProjectCard({ data }: any) {
             <div className="space-y-2 text-sm text-white ">
               <div className="flex items-center gap-2">
                 <FaBed className="text-yellow-400 text-xs" />
-                {data.bedrooms}
+                {getBedroomRange(data.floorPlans)} Bedrooms
               </div>
 
               <div className="flex items-center gap-2">
@@ -669,7 +705,7 @@ function ProjectCard({ data }: any) {
 
               <div className="flex items-center gap-2">
                 <FaRulerCombined className="text-yellow-400 text-xs" />
-                {data.area}
+                {getSqftRange(data.floorPlans)}
               </div>
 
               <div className="flex items-center gap-2">
