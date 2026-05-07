@@ -52,6 +52,15 @@ export default class WebsiteContentService {
       throw error;
     }
   }
+  static async getCareer() {
+    try {
+      const response = await api.get("/content/career-page");
+      console.log(response?.data);
+      return response?.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   static async getDevelopers() {
     try {

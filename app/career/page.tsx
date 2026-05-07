@@ -125,14 +125,16 @@ function JobSkeleton() {
 export default function CareerPage() {
   const [selectedJob, setSelectedJob] = useState<any>(null);
   const [careerData, setCareerData] = useState<any>(null);
+  const [career, setCareer] = useState<any>({})
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchCareers = async () => {
       try {
         const res = await WebsiteContentService.GetCareers();
+        const res2 = await WebsiteContentService.getCareer();
         console.log(res)
 
-
+        setCareer(res2[0])
         setCareerData(res);
       } catch (error) {
         console.log("Career fetch error", error);
@@ -143,13 +145,37 @@ export default function CareerPage() {
 
     fetchCareers();
   }, []);
+  const data = career?.data || {};
+  const benefitCards = [
+  {
+    title: data?.cardtitle1,
+    text: data?.carddescription1,
+    icon: <FaBuilding className="text-yellow-400" />,
+  },
+  {
+    title: data?.cardtitle2,
+    text: data?.carddescription2,
+    icon: <FaHandshake className="text-yellow-400" />,
+  },
+  {
+    title: data?.cardtitle3,
+    text: data?.carddescription3,
+    icon: <FaChartLine className="text-yellow-400" />,
+  },
+  {
+    title: data?.cardtitle4,
+    text: data?.carddescription4,
+    icon: <FaUsers className="text-yellow-400" />,
+  },
+].filter((b) => b.title);
+const lines = (data?.bannerSubtitle || "").split("\n");
   return (
     <main className="min-h-screen bg-black text-white overflow-x-hidden">
       <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden bg-black text-white">
         {/* IMAGE */}
         <div className="absolute inset-0">
           <Image
-            src={banner}
+            src={career?.data?.bannerImage}
             alt="News Banner"
             fill
             priority
@@ -166,15 +192,23 @@ export default function CareerPage() {
           <div className="w-full max-w-7xl  px-6 md:px-12 pb-14 md:pb-20">
             <div className="max-w-xl text-left ">
               <p className="mb-3 text-[11px] uppercase tracking-[0.35em] text-[#F1DC7F]">
-                Career
+                {career?.data?.bannerTitle}
               </p>
 
               <h1 className="text-xl md:text-2xl xl:text-5xl font-semibold leading-[1.05] max-w-[520px]">
-                Build a career
-                <span className="block bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
-                  in premium real estate.
-                </span>
-              </h1>
+  {lines.map((line, i) => (
+    <span
+      key={i}
+      className={
+        i === 1
+          ? "block bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent"
+          : "block text-white"
+      }
+    >
+      {line}
+    </span>
+  ))}
+</h1>
             </div>
           </div>
         </div>
@@ -191,50 +225,52 @@ export default function CareerPage() {
       >
         <div className="grid lg:grid-cols-[0.95fr_1.05fr] gap-6">
           <div className="rounded-[30px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-            <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.22em] text-yellow-400 mb-3">
-              Our Culture
-            </p>
-            <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-5">
-              Professional standards. Relationship-first mindset.
-            </h2>
-            <p className="text-gray-300 leading-relaxed text-base md:text-lg">
-              Real estate is driven by trust, speed, and presentation. We bring
-              those together with a premium brand approach, sharp execution, and
-              a strong focus on delivering real value for buyers, investors,
-              landlords, and partners.
-            </p>
+            <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
+  Our Culture
+</p>
 
-            <div className="mt-8 space-y-4">
-              {[
-                "Client trust comes first",
-                "Strong presentation matters",
-                "Speed and follow-up drive results",
-                "Execution beats empty promises",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-white/10 bg-black/25 px-4 py-4 text-gray-200"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
+<h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-5">
+  {data.introTitle}
+</h2>
+
+<p className="text-gray-300 leading-relaxed text-base md:text-lg">
+  {data.introDescription}
+</p>
+
+<div className="mt-8 space-y-4">
+  {[data.intropointer1, data.intropointer2, data.intropointer3, data.intropointer4]
+    .filter(Boolean)
+    .map((item, i) => (
+      <div
+        key={i}
+        className="rounded-2xl border border-white/10 bg-black/25 px-4 py-4 text-gray-200"
+      >
+        {item}
+      </div>
+    ))}
+</div>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
-            {benefits.map((benefit) => (
-              <div
-                key={benefit.title}
-                className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6"
-              >
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-yellow-400/20 bg-yellow-400/10 text-lg">
-                  {benefit.icon}
-                </div>
-                <h3 className="text-xl font-semibold mb-3">{benefit.title}</h3>
-                <p className="text-gray-400 leading-relaxed">{benefit.text}</p>
-              </div>
-            ))}
-          </div>
+  {benefitCards.map((benefit, i) => (
+    <div
+      key={i}
+      className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6"
+    >
+      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-yellow-400/20 bg-yellow-400/10 text-lg">
+        {benefit.icon}
+      </div>
+
+      <h3 className="text-xl font-semibold mb-3">
+        {benefit.title}
+      </h3>
+
+      <p className="text-white-400 leading-relaxed">
+        {benefit.text}
+      </p>
+    </div>
+  ))}
+</div>
         </div>
       </section>
 
@@ -449,37 +485,7 @@ export default function CareerPage() {
         )}
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 md:px-10 pb-20">
-        <div className="relative overflow-hidden rounded-[34px] border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 via-white/5 to-yellow-500/10 p-8 md:p-12">
-          <div className="absolute top-0 left-[10%] h-[220px] w-[220px] rounded-full bg-yellow-500/10 blur-3xl" />
-          <div className="absolute bottom-[-60px] right-[5%] h-[220px] w-[220px] rounded-full bg-yellow-400/10 blur-3xl" />
-
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-            <div className="max-w-2xl">
-              <p className="text-sm lg:text-md lg:text-md uppercase tracking-[0.25em] text-yellow-400 mb-3">
-                Don’t See Your Role?
-              </p>
-              <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-4">
-                Great real estate talent does not always fit inside a standard
-                job title.
-              </h2>
-              <p className="text-gray-300 leading-relaxed">
-                If you believe you can add value across sales, client
-                relationships, leasing, operations, or marketing, send us your
-                profile and let’s talk.
-              </p>
-            </div>
-
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] px-7 py-4 font-semibold text-black hover:scale-[1.03] transition"
-            >
-              Send Your Application
-              <FaArrowRight className="text-sm lg:text-md lg:text-md" />
-            </Link>
-          </div>
-        </div>
-      </section>
+     
     </main>
   );
 }

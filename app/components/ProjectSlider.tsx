@@ -22,7 +22,7 @@ export default function ProjectHeroSlider({
     fallbackImages,
 }: Props) {
     const images =
-        project?.gallery?.length > 0 ? project.gallery : fallbackImages;
+        project?.bannerImages?.length > 0 ? project.bannerImages : project?.gallery?.length > 0 ? project.gallery: fallbackImages;
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
