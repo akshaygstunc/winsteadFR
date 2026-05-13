@@ -108,12 +108,16 @@ export default function BlogDetailPage() {
       <section className="relative h-[65vh] min-h-[420px] overflow-hidden">
         {blog.heroVideo ? (
           <video
-            src={blog.heroVideo}
-            autoPlay
-            muted
-            loop
-            className="absolute inset-0 w-full h-full object-cover"
-          />
+  src={blog.heroVideo}
+  autoPlay
+  muted
+  loop
+  playsInline
+  preload="auto"
+  className="absolute inset-0 w-full h-full object-cover"
+>
+  Your browser does not support the video tag.
+</video>
         ) : (
           <Image
             src={blog.img}
