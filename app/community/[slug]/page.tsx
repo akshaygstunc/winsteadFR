@@ -481,7 +481,8 @@ const slug = String(params?.slug || "");
                   <FactCard
                     icon={<FaDollarSign className="text-yellow-400" />}
                     label="Starting Price"
-                    value={project.price}
+                    value=
+                     {Number(project.price || 0).toLocaleString()}
                   />
                   <FactCard
                     icon={<FaBed className="text-yellow-400" />}
@@ -832,7 +833,7 @@ const slug = String(params?.slug || "");
                       <div className="grid sm:grid-cols-2 gap-5">
                         <PremiumCalcInput
                           label="Property Value"
-                          value={propertyPrice}
+                          value={Number(propertyPrice || 0).toLocaleString()}
                           onChange={(value) =>
                             setPropertyPrice(Number(value) || 0)
                           }
@@ -862,7 +863,7 @@ const slug = String(params?.slug || "");
                       <div className="grid sm:grid-cols-2 gap-5">
                         <PremiumCalcInput
                           label="Property Value"
-                          value={propertyPrice}
+                          value={Number(propertyPrice || 0).toLocaleString()}
                           onChange={(value) =>
                             setPropertyPrice(Number(value) || 0)
                           }

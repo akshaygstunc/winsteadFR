@@ -101,7 +101,7 @@ export default function MortgageCalculator({
                                 <div className="grid sm:grid-cols-2 gap-5">
                                     <PremiumCalcInput
                                         label="Property Value"
-                                        value={propertyPrice}
+                                        value={Number(propertyPrice || 0).toLocaleString()}
                                         onChange={(value) => setPropertyPrice(Number(value) || 0)}
                                     />
                                     <PremiumCalcInput

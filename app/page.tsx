@@ -24,10 +24,10 @@ export default function Home() {
         const response = await WebsiteContentService.getHomePageContent1(); // ✅ correct
 
         const projects = await WebsiteContentService.getProperties({});
-        const testimonials = await WebsiteContentService.getTestimonials()
-        settestimonials(testimonials)
+        const testimonials = await WebsiteContentService.getTestimonials();
+        settestimonials(testimonials);
         setHomePage(response); // ✅ direct object
-        setProjects(projects)
+        setProjects(projects);
       } catch (error) {
         console.error("Error fetching homepage content:", error);
       }
@@ -83,7 +83,7 @@ export default function Home() {
 
           try {
             const res = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${long}&accept-language=en`
+              `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${long}&accept-language=en`,
             );
 
             const data = await res.json();
@@ -112,7 +112,7 @@ export default function Home() {
           enableHighAccuracy: true,
           timeout: 10000,
           maximumAge: 0,
-        }
+        },
       );
     };
 
@@ -121,12 +121,13 @@ export default function Home() {
   return (
     <div className="bg-black text-white">
       {/* <Navbar /> */}
-      <Hero asset={homePage} />      <Projects projects={projects} homePage={homePage} />
+      <Hero asset={homePage} />{" "}
+      <Projects projects={projects} homePage={homePage} />
       <Logos />
       <UltraLuxury />
       <Testimonials testimonialsdata={testimonialsdata} />
       <Reel data={homePage?.data} />
-      <Stats data={homePage?.data} />      <LatestArticles news={news} />
+      <Stats data={homePage?.data} /> <LatestArticles news={news} />
     </div>
   );
 }

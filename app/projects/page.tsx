@@ -550,29 +550,29 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         ))}
       </Collapsible>
 
-    <Section title="Community">
-  {(communities || [])
-    .filter((c: any) => {
-      // ✅ No developer selected → show all
-      if (!filters.developer) return true;
+      <Section title="Community">
+        {(communities || [])
+          .filter((c: any) => {
+            // ✅ No developer selected → show all
+            if (!filters.developer) return true;
 
-      // ✅ Match using correct path
-      return c.data?.developer === filters.developer;
-    })
-    .map((c: any) => (
-      <Check
-        key={c._id}
-        label={c.title}
-        checked={filters.communities === c._id}
-        onChange={() =>
-          updateFilter(
-            "communities",
-            filters.communities === c._id ? "" : c._id
-          )
-        }
-      />
-    ))}
-</Section>
+            // ✅ Match using correct path
+            return c.data?.developer === filters.developer;
+          })
+          .map((c: any) => (
+            <Check
+              key={c._id}
+              label={c.title}
+              checked={filters.communities === c._id}
+              onChange={() =>
+                updateFilter(
+                  "communities",
+                  filters.communities === c._id ? "" : c._id,
+                )
+              }
+            />
+          ))}
+      </Section>
     </div>
   );
 }
@@ -652,19 +652,20 @@ function ProjectCard({ data }: any) {
           {data.category}
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-5">
-          <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-5">
-            <h2 className="text-xl font-semibold mb-3">{data.title}</h2>
+        <div className="absolute bottom-0 left-0 right-0 p-2">
+          <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-3">
+            <h2 className="text-lg font-semibold mb-2">{data.title}</h2>
 
-            <div className="space-y-2 text-sm text-white">
+            <div className="space-y-1 text-xs md:text-sm text-white">
               <div className="flex items-center gap-2">
                 <FaBed className="text-yellow-400 text-xs" />
                 {data.bedrooms}
               </div>
 
               <div className="flex items-center gap-2">
-                <FaDollarSign className="text-yellow-400 text-xs" />
-                {data.price}
+                {/* <FaDollarSign className="text-yellow-400 text-xs" /> */}
+                <span className="text-yellow-400 text-xs">AED</span>{" "}
+                {Number(data.price || 0).toLocaleString()}
               </div>
 
               <div className="flex items-center gap-2">
@@ -678,7 +679,7 @@ function ProjectCard({ data }: any) {
               </div>
             </div>
 
-            <div className="mt-5 w-full py-3 rounded-xl border border-white/20 text-sm hover:border-yellow-400 hover:text-white transition inline-flex items-center justify-center gap-2">
+            <div className="mt-3 w-full py-2 rounded-xl border border-white/20 text-sm hover:border-yellow-400 hover:text-white transition inline-flex items-center justify-center gap-2">
               Check Details <FaArrowRight className="text-xs" />
             </div>
           </div>

@@ -406,8 +406,8 @@ export default function ProjectDetailPage() {
       developer: getRelationLabel(projectDetails.developer as any),
       propertyType: getRelationLabel(projectDetails?.type),
       // residence: getRelationLabel(projectDetails.type),
-      residence: Array.isArray(projectDetails.type)
-  ? projectDetails.type.map((t: any) => t?.title || t?.name || "").filter(Boolean).join(", ") || EMPTY_VALUE
+      residence: Array.isArray(projectDetails.floorPlans)
+  ? projectDetails.floorPlans.map((t: any) => t?.title || t?.name || "").filter(Boolean).join(", ") || EMPTY_VALUE
   : getRelationLabel(projectDetails.type),
       description:
         projectDetails.fullDescription?.trim() ||
@@ -624,7 +624,7 @@ export default function ProjectDetailPage() {
               <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6">
                 <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
                   <FactCard
-                    icon={<FaDollarSign className="text-yellow-400" />}
+                    icon="AED"
                     label="Starting Price"
                     value={project.price}
                   />
@@ -839,7 +839,7 @@ export default function ProjectDetailPage() {
           </div>
 
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {projectDetails.floorPlans.map((plan) => {
+            {projectDetails?.floorPlans.map((plan) => {
               const active = selectedPlan === plan.label;
 
               return (
@@ -877,14 +877,14 @@ export default function ProjectDetailPage() {
                     {/* INLINE INFO (replaces 2 big boxes) */}
                     <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-white/70">
                       <span>{plan.size}</span>
-                      <span>• {plan.bedrooms} Beds</span>
+                      <span>• {plan.data.bedrooms} Beds</span>
                       <span>• {plan.category}</span>
                     </div>
 
                     {/* PRICE + CTA */}
                     <div className="flex items-center justify-between mt-3">
                       <p className="text-white font-semibold text-base">
-                        ₹{plan.price}
+                        AED {plan.data.price}
                       </p>
 
                       <a
@@ -1319,7 +1319,7 @@ function FactCard({
 }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-      <div className="flex items-center gap-3 mb-3">
+      <div className="flex items-center gap-3 mb-3 text-gold">
         {icon}
         <p className="text-sm text-white-400">{label}</p>
       </div>

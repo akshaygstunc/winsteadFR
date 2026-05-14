@@ -81,7 +81,7 @@ export default function UltraLuxury() {
 
           {/* LEFT IMAGE */}
           <div>
-            <div className="w-full h-[250px] md:h-[325px] bg-gray-800 rounded-xl"></div>
+            <div className="w-full h-[250px] md:h-[355px] bg-gray-800 rounded-xl"></div>
 
             {/* THUMBNAILS */}
             <div className="flex gap-3 mt-4">

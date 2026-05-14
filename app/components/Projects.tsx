@@ -212,8 +212,10 @@ export default function Projects({ projects = [], homePage }: any) {
 
     // ✅ ⭐ SPECIAL CASE: ALL → return everything (sorted)
     if (activeFilter === "All") {
-      return filtered.sort((a, b) => a._sortOrder - b._sortOrder);
-    }
+  return filtered
+    .sort((a, b) => a._sortOrder - b._sortOrder)
+    .slice(0, 6);
+}
 
     // ✅ STEP 3: Apply filters
     if (activeFilter === "Vendor" && selectedVendor) {
@@ -358,7 +360,7 @@ export default function Projects({ projects = [], homePage }: any) {
                 image={project.thumbnail}
                 title={project.title}
                 location={project.location || project.data?.location}
-                price={project.price || project.data?.price}
+                price={Number(project.price || project.data?.price).toLocaleString()}
                 slug={project?.slug}
               />
             </div>
