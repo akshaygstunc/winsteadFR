@@ -1,3 +1,4 @@
+import axios from "axios";
 import { api } from "./api";
 
 export default class WebsiteContentService {
@@ -189,15 +190,25 @@ export default class WebsiteContentService {
       throw error;
     }
   }
-
-  static async GetPodcasts() {
-    try {
-      const response = await api.get(`/content/podcast`);
-      return response.data;
-    } catch (e) {
-      throw e;
-    }
+ static async GetPodcasts() {
+  try {
+    const response = await fetch("/api/instagram");
+    if (!response.ok) return [];
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching Instagram reels:", error);
+    return [];
   }
+}
+
+  // static async GetPodcasts() {
+  //   try {
+  //     const response = await api.get(`/content/podcast`);
+  //     return response.data;
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 
   static async getSingletonBySlug(slug: string) {
     try {
