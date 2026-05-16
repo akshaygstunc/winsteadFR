@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import NewsHero from "../components/Blogs/NewsHero";
 import MarketBrief from "../components/Blogs/MarketBreif";
 import FeaturedStory from "../components/Blogs/FeaturedStory";
@@ -150,8 +150,9 @@ export default function NewsMedia() {
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState("latest");
   const [loading, setLoading] = useState(true);
-  const [news, setNews] = useState([])
-
+  const [news, setNews] = useState([]);
+const [currentPage, setCurrentPage] = useState(1);
+const [itemsPerPage] = useState(3);
   useEffect(() => {
     async function fetchBlogs() {
       try {
@@ -175,8 +176,8 @@ export default function NewsMedia() {
       items = items.filter(
         (item) =>
           item.title.toLowerCase().includes(q) ||
-          item.description.toLowerCase().includes(q) 
-          // item.category.toLowerCase().includes(q)
+          item.description.toLowerCase().includes(q),
+        // item.category.toLowerCase().includes(q)
       );
     }
 
@@ -186,10 +187,14 @@ export default function NewsMedia() {
 
     items.sort((a, b) => {
       if (sort === "latest") {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
       }
       if (sort === "oldest") {
-        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
       }
       if (sort === "title-asc") {
         return a.title.localeCompare(b.title);
@@ -203,13 +208,23 @@ export default function NewsMedia() {
     return items;
   }, [news, search, category, sort]);
 
+  const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
+
+const paginatedNews = filteredNews.slice(
+  (currentPage - 1) * itemsPerPage,
+  currentPage * itemsPerPage
+);
+
+useEffect(() => {
+  setCurrentPage(1);
+}, [search, category, sort]);
 
   return (
     <div className="bg-black text-white">
       <NewsHero />
       <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
-                      <AutoBreadcrumbs />
-                    </section>
+        <AutoBreadcrumbs />
+      </section>
       <NewsToolbar
         search={search}
         setSearch={setSearch}
@@ -218,11 +233,49 @@ export default function NewsMedia() {
         sort={sort}
         setSort={setSort}
       />
-      
-      <NewsGrid news={filteredNews} loading={loading} />
+
+     <NewsGrid news={paginatedNews} loading={loading} />
+
+     {totalPages > 1 && (
+  <div className="flex items-center justify-center gap-3 py-14">
+    <button
+      disabled={currentPage === 1}
+      onClick={() => setCurrentPage((p) => p - 1)}
+      className="px-4 py-2 rounded-xl border border-white/10 bg-white/[0.03] disabled:opacity-40"
+    >
+      Prev
+    </button>
+
+    {Array.from({ length: totalPages }, (_, i) => i + 1)
+      .slice(
+        Math.max(currentPage - 3, 0),
+        Math.max(currentPage - 3, 0) + 5
+      )
+      .map((page) => (
+        <button
+          key={page}
+          onClick={() => setCurrentPage(page)}
+          className={`h-11 min-w-[44px] rounded-xl border transition ${
+            currentPage === page
+              ? "border-yellow-400 bg-yellow-400 text-black"
+              : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400"
+          }`}
+        >
+          {page}
+        </button>
+      ))}
+
+    <button
+      disabled={currentPage === totalPages}
+      onClick={() => setCurrentPage((p) => p + 1)}
+      className="px-4 py-2 rounded-xl border border-white/10 bg-white/[0.03] disabled:opacity-40"
+    >
+      Next
+    </button>
+  </div>
+)}
+
       {/* <NewsCTA /> */}
     </div>
   );
 }
-
-

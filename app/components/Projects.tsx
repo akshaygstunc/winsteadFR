@@ -60,8 +60,10 @@ function FeaturedProjects({
         setCategoriesLoading(true);
         const response = await WebsiteContentService.getCategory();
         const developers = await WebsiteContentService.getDevelopers();
-        setVendors(developers)
-        const filtercat = response?.filter((item) => item.title !== "Ultra Luxury")
+        setVendors(developers);
+        const filtercat = response?.filter(
+          (item) => item.title !== "Ultra Luxury",
+        );
         setCategories(filtercat || []);
       } catch (error) {
         console.error("Error fetching project categories:", error);
@@ -96,57 +98,61 @@ function FeaturedProjects({
           Featured Projects
         </h2>
         <p className="text-lg text-white text-[.95rem] mt-5 mb-5 max-w-xl">
-          Discover exceptional properties with Winstead in premium locations worldwide.
+          Discover exceptional properties with Winstead in premium locations
+          worldwide.
         </p>
       </div>
 
       <div className="flex flex-wrap gap-2 relative">
         <button
           onClick={() => handleMainFilter("All")}
-          className={`text-[1.05rem] px-4 py-2 text-sm mb-2 lg:text-md rounded-lg border transition ${activeFilter === "All"
-            ? "bg-yellow-500 text-black border-yellow-500"
-            : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
-            }`}
+          className={`text-[1.05rem] px-4 py-2 text-sm mb-2 lg:text-md rounded-lg border transition ${
+            activeFilter === "All"
+              ? "bg-yellow-500 text-black border-yellow-500"
+              : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
+          }`}
         >
           All
         </button>
 
         {categoriesLoading
           ? Array.from({ length: 3 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-[44px] w-[100px] rounded-lg border border-white/10 bg-white/10 animate-pulse"
-            />
-          ))
+              <div
+                key={i}
+                className="h-[44px] w-[100px] rounded-lg border border-white/10 bg-white/10 animate-pulse"
+              />
+            ))
           : categories?.map((category) => (
-            <button
-              key={category._id}
-              onClick={() => handleMainFilter(category._id)}
-              className={`text-[1.05rem] mb-2 px-4 py-2 text-sm lg:text-md rounded-lg border transition ${activeFilter === category._id
-                ? "bg-yellow-500 text-black border-yellow-500"
-                : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
+              <button
+                key={category._id}
+                onClick={() => handleMainFilter(category._id)}
+                className={`text-[1.05rem] mb-2 px-4 py-2 text-sm lg:text-md rounded-lg border transition ${
+                  activeFilter === category._id
+                    ? "bg-yellow-500 text-black border-yellow-500"
+                    : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
                 }`}
-            >
-              {category.title}
-            </button>
-          ))}
+              >
+                {category.title}
+              </button>
+            ))}
 
         <div className="relative">
-          <button
+          {/* <button
             onClick={() => {
               setVendorOpen((prev) => !prev);
               // setActiveFilter("Vendor");
             }}
-            className={`text-[1.05rem] mb-2 px-4 py-2 text-sm lg:text-md rounded-lg border transition flex items-center gap-2 ${activeFilter === "Vendor"
-              ? "bg-yellow-500 text-black border-yellow-500"
-              : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
-              }`}
+            className={`text-[1.05rem] mb-2 px-4 py-2 text-sm lg:text-md rounded-lg border transition flex items-center gap-2 ${
+              activeFilter === "Vendor"
+                ? "bg-yellow-500 text-black border-yellow-500"
+                : "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
+            }`}
           >
             {selectedVendorname || "Developer"}
             <span className="text-xs">▼</span>
-          </button>
+          </button> */}
 
-          {vendorOpen && (
+          {/* {vendorOpen && (
             <div className="absolute right-0 mt-2 min-w-[180px] bg-black border border-yellow-500/30 rounded-lg shadow-lg z-50 overflow-hidden">
               {vendors?.map((vendor) => (
                 <button
@@ -158,7 +164,7 @@ function FeaturedProjects({
                 </button>
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>
@@ -181,12 +187,7 @@ export default function Projects({ projects = [], homePage }: any) {
 
     // STEP 1: Normalize
     const normalized = projects.map((project) => {
-      const category =
-        Array.isArray(project.type)
-          ? project.type
-          : project.type
-            ? [project.type]
-            : [];
+      const category = project.type;
 
       const vendor =
         project.vendor ||
@@ -197,10 +198,7 @@ export default function Projects({ projects = [], homePage }: any) {
         project.data?.builder ||
         "";
 
-      const featured =
-        project.featured ??
-        project.data?.featured ??
-        false;
+      const featured = project.featured ?? project.data?.featured ?? false;
 
       return {
         ...project,
@@ -216,18 +214,16 @@ export default function Projects({ projects = [], homePage }: any) {
 
     // ✅ ⭐ SPECIAL CASE: ALL → return everything (sorted)
     if (activeFilter === "All") {
-      return filtered.sort((a, b) => a._sortOrder - b._sortOrder);
+      return filtered.sort((a, b) => a._sortOrder - b._sortOrder).slice(0, 6);
     }
 
     // ✅ STEP 3: Apply filters
     if (activeFilter === "Vendor" && selectedVendor) {
       filtered = filtered.filter(
-        (p) => p._vendor === selectedVendor.toLowerCase()
+        (p) => p._vendor === selectedVendor.toLowerCase(),
       );
     } else {
-      filtered = filtered.filter((p) =>
-        p._category?.includes(String(activeFilter))
-      );
+      filtered = filtered.filter((p) => p._category === String(activeFilter));
     }
 
     // ✅ STEP 4: Sort
@@ -247,7 +243,6 @@ export default function Projects({ projects = [], homePage }: any) {
     });
 
     return Object.values(grouped).flat();
-
   }, [projects, activeFilter, selectedVendor]);
 
   useEffect(() => {
@@ -296,30 +291,33 @@ export default function Projects({ projects = [], homePage }: any) {
           ) : (
             <>
               <div>
-               <Image
-    src={
-      homePage?.data?.aboutWinsteadImage ||
-      image2
-    }
-    alt="About"
-    width={600}
-    height={400}
-    className="w-full h-[150px] md:h-[300px] object-cover rounded-xl"
-  />
-
+                <Image
+                  src={homePage?.data?.aboutWinsteadImage || image2}
+                  alt="About"
+                  width={600}
+                  height={400}
+                  className="w-full h-[150px] md:h-[300px] object-cover rounded-xl"
+                />
               </div>
 
               <div className="max-w-7xl">
                 <h3 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[#B9A650] via-[#F1DC7F] to-[#7C5700] bg-clip-text text-transparent">
-    {homePage?.data?.aboutWinsteadTitle || "About Winstead"}
+                  {homePage?.data?.aboutWinsteadTitle || "About Winstead"}
                 </h3>
 
                 <p className="text-lg text-gray-300 leading-relaxed">
-                    {homePage?.data?.aboutWinsteadDescription?.slice(0, 361) ||
-      "Our extensive portfolio features an array of premium villas, apartments, and townhouses designed to offer unmatched comfort and elegance."}<br/>
-      <div className="mt-4">
-                    <Link href="/about-us" className="bg-gradient-to-r from-yellow-300 to-yellow-600 py-3 px-4 rounded-xl text-black text-sm">Read More </Link>
-                    </div> </p>
+                  {homePage?.data?.aboutWinsteadDescription?.slice(0, 361) ||
+                    "Our extensive portfolio features an array of premium villas, apartments, and townhouses designed to offer unmatched comfort and elegance."}
+                  <br />
+                  <div className="mt-4">
+                    <Link
+                      href="/about-us"
+                      className="bg-gradient-to-r from-yellow-300 to-yellow-600 py-3 px-4 rounded-xl text-black text-sm"
+                    >
+                      Read More{" "}
+                    </Link>
+                  </div>{" "}
+                </p>
 
                 {/* <p className="text-gray-300 mt-4 leading-relaxed">
                   Our team of experienced professionals is dedicated to helping
@@ -356,13 +354,15 @@ export default function Projects({ projects = [], homePage }: any) {
             </div>
           ))
         ) : filteredProjects.length > 0 ? (
-            filteredProjects.map((project, i) => (
+          filteredProjects.map((project, i) => (
             <div key={project._id || i} className="card">
               <Card
                 image={project.thumbnail}
                 title={project.title}
                 location={project.location || project.data?.location}
-                price={project.price || project.data?.price}
+                price={Number(
+                  project.price || project.data?.price,
+                ).toLocaleString()}
                 slug={project?.slug}
               />
             </div>
@@ -382,13 +382,13 @@ function Card({
   title,
   location,
   price,
-  slug
+  slug,
 }: {
   image?: string;
   title?: string;
   location?: string;
   price?: string | number;
-  slug: string
+  slug: string;
 }) {
   return (
     <div className="relative w-full h-full rounded-2xl overflow-hidden group cursor-pointer transition-all duration-500 hover:-translate-y-2">
@@ -411,7 +411,10 @@ function Card({
           <p className="text-[1.05rem]">{location}</p>
         </div>
 
-        <Link href={`/projects/${slug}`} className="mt-4 text-xs md:text-sm lg:text-md border border-yellow-500 px-4 py-1.5 rounded-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500">
+        <Link
+          href={`/projects/${slug}`}
+          className="mt-4 text-xs md:text-sm lg:text-md border border-yellow-500 px-4 py-1.5 rounded-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500"
+        >
           Check Details
         </Link>
       </div>
