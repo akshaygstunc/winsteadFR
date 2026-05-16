@@ -222,9 +222,7 @@ function getRange(values: (string | number)[], suffix = "") {
   const minLabel = min === 0 ? "Studio" : `${min}${suffix}`;
   const maxLabel = `${max}${suffix}`;
 
-  return min === max
-    ? minLabel
-    : `${minLabel} - ${maxLabel}`;
+  return min === max ? minLabel : `${minLabel} - ${maxLabel}`;
 }
 function getAmenities(data?: BackendProject) {
   if (!Array.isArray(data?.amenities) || !data.amenities.length) {
@@ -276,27 +274,27 @@ function getFloorPlans(data?: BackendProject): UiFloorPlan[] {
     }
 
     return {
-  label: plan.label || plan.title || plan.name || `Plan ${index + 1}`,
+      label: plan.label || plan.title || plan.name || `Plan ${index + 1}`,
 
-  size: getDisplayValue(plan.size),
+      size: getDisplayValue(plan.size),
 
-  price:
-    plan.price !== undefined &&
-    plan.price !== null &&
-    String(plan.price).trim() !== ""
-      ? formatPrice(plan.price)
-      : EMPTY_VALUE,
+      price:
+        plan.price !== undefined &&
+        plan.price !== null &&
+        String(plan.price).trim() !== ""
+          ? formatPrice(plan.price)
+          : EMPTY_VALUE,
 
-  image: plan.image || plan.url || data?.thumbnail || fallbackImages[0],
+      image: plan.image || plan.url || data?.thumbnail || fallbackImages[0],
 
-  // ✅ ADD THESE
-  bedrooms:
-    plan.bedrooms && Number(plan.bedrooms) > 0
-      ? `${plan.bedrooms} Bedroom${Number(plan.bedrooms) > 1 ? "s" : ""}`
-      : plan.unitType || EMPTY_VALUE,
+      // ✅ ADD THESE
+      bedrooms:
+        plan.bedrooms && Number(plan.bedrooms) > 0
+          ? `${plan.bedrooms} Bedroom${Number(plan.bedrooms) > 1 ? "s" : ""}`
+          : plan.unitType || EMPTY_VALUE,
 
-  category: getDisplayValue(plan.category),
-};
+      category: getDisplayValue(plan.category),
+    };
   });
 }
 
@@ -396,8 +394,10 @@ export default function ProjectDetailPage() {
     const bedroomValues = projectDetails.floorPlans?.map(
       (p: any) => p?.data?.bedrooms, // extract number from "2 Bedroom"
     );
-    const sizeValues = projectDetails.floorPlans?.map((p: any) => p?.data?.size);
-    console.log(sizeValues, "sizeValues")
+    const sizeValues = projectDetails.floorPlans?.map(
+      (p: any) => p?.data?.size,
+    );
+    console.log(sizeValues, "sizeValues");
     return {
       id: projectDetails._id || "",
       title: getDisplayValue(projectDetails.title),
@@ -414,8 +414,39 @@ export default function ProjectDetailPage() {
       propertyType: getRelationLabel(projectDetails?.type),
       // residence: getRelationLabel(projectDetails.type),
       residence: Array.isArray(projectDetails.floorPlans)
-  ? projectDetails.floorPlans.map((t: any) => t?.title || t?.name || "").filter(Boolean).join(", ") || EMPTY_VALUE
-  : getRelationLabel(projectDetails.type),
+        ? (() => {
+            const plans = projectDetails.floorPlans
+              .map((t: any) => (t?.title || t?.name || "").trim())
+              .filter(Boolean);
+
+            const groups: Record<string, string[]> = {};
+            for (const plan of plans) {
+              const words = plan.split(" ");
+              const suffix = words[words.length - 1]; // "Apartment", "Penthouse"
+              const prefix = words
+                .slice(0, -1)
+                .join(" ")
+                .replace(/\s+/g, "")
+                .toUpperCase(); // "1BR", "2BR"
+              if (!groups[suffix]) groups[suffix] = [];
+              if (!groups[suffix].includes(prefix)) groups[suffix].push(prefix);
+            }
+
+            // Format: "1BR, 2, 3, 4, 5, 6BR Apartment, Penthouse"
+            const allSuffixes = Object.keys(groups).join(", ");
+            const allPrefixes = Object.values(groups)
+              .flat()
+              .filter((v, i, arr) => arr.indexOf(v) === i); // dedupe
+
+            // Compress: show first, middle as numbers only, last with BR
+            const compressed = allPrefixes.map((p, i) => {
+              if (i === 0 || i === allPrefixes.length - 1) return p; // "1BR", "6BR"
+              return p.replace("BR", ""); // "2", "3", "4", "5"
+            });
+
+            return `${compressed.join(", ")} ${allSuffixes}`;
+          })()
+        : getRelationLabel(projectDetails.type),
       description:
         projectDetails.fullDescription?.trim() ||
         projectDetails.shortDescription?.trim() ||
@@ -639,7 +670,7 @@ export default function ProjectDetailPage() {
                   <FactCard
                     icon={<FaBed className="text-yellow-400" />}
                     label="Bedrooms"
-                    value={project.bedrooms}
+                    value={project.residence}
                   />
                   <FactCard
                     icon={<FaRulerCombined className="text-yellow-400" />}
@@ -651,6 +682,11 @@ export default function ProjectDetailPage() {
                     label="Location"
                     value={projectDetails?.locations?.title}
                   />
+                  {/* <FactCard
+                    icon={<FaRulerCombined className="text-yellow-400" />}
+                    label="Floor Plans"
+                    value={project.residence}
+                  /> */}
                 </div>
               </div>
             </div>
@@ -711,10 +747,7 @@ export default function ProjectDetailPage() {
                 </h2>
 
                 <ReadMoreSlider
-
-                  description={
-                    project.description
-                  }
+                  description={project.description}
                   heading="Project Description"
                 />
 
@@ -760,9 +793,16 @@ export default function ProjectDetailPage() {
                             : projectDetails?.developer || EMPTY_VALUE}
                         </h4>
                         <p className="mt-1 leading-relaxed text-white-400">
-                          {typeof projectDetails?.developer !== "string"
-                            ? <ReadMoreSlider description={projectDetails?.developer?.description} heading={"Developer Description"} /> 
-                            : ""}
+                          {typeof projectDetails?.developer !== "string" ? (
+                            <ReadMoreSlider
+                              description={
+                                projectDetails?.developer?.description
+                              }
+                              heading={"Developer Description"}
+                            />
+                          ) : (
+                            ""
+                          )}
                         </p>
                       </div>
                     </div>
@@ -850,10 +890,11 @@ export default function ProjectDetailPage() {
                     setSelectedPlan(plan.label);
                     setSelectedUnit(plan.label);
                   }}
-                  className={`group relative cursor-pointer overflow-hidden rounded-2xl border transition-all duration-300 ${active
-                    ? "border-yellow-400/50 bg-white/[0.05] shadow-[0_10px_40px_rgba(241,220,127,0.12)]"
-                    : "border-white/10 bg-white/[0.03] hover:border-yellow-400/30"
-                    }`}
+                  className={`group relative cursor-pointer overflow-hidden rounded-2xl border transition-all duration-300 ${
+                    active
+                      ? "border-yellow-400/50 bg-white/[0.05] shadow-[0_10px_40px_rgba(241,220,127,0.12)]"
+                      : "border-white/10 bg-white/[0.03] hover:border-yellow-400/30"
+                  }`}
                 >
                   {/* IMAGE */}
                   <div className="relative h-[100px] flex  overflow-hidden">
@@ -919,7 +960,6 @@ export default function ProjectDetailPage() {
         {projectDetails?.latitude && projectDetails?.longitude && (
           <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
             <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
-
               <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
                 Location Map
               </p>
@@ -1082,10 +1122,9 @@ export default function ProjectDetailPage() {
                         </select>
                       </div>
                     </div>
-                    
+
                     {calcTab === "mortgage" ? (
                       <div className="grid sm:grid-cols-2 gap-5">
-
                         {/* PROPERTY PRICE */}
                         <PremiumCalcInput
                           label="Property Price (AED)"
@@ -1111,9 +1150,7 @@ export default function ProjectDetailPage() {
                           label="Loan Duration (Years)"
                           helper="Number of years to repay the loan"
                           value={loanYears}
-                          onChange={(value) =>
-                            setLoanYears(Number(value) || 0)
-                          }
+                          onChange={(value) => setLoanYears(Number(value) || 0)}
                         />
 
                         {/* INTEREST RATE */}
@@ -1186,7 +1223,6 @@ export default function ProjectDetailPage() {
                     {calcTab === "mortgage" ? (
                       <>
                         <div className="grid md:grid-cols-3 gap-4 mb-6">
-
                           <PremiumResultCard
                             title="Total You Pay"
                             value={formatAED(totalCost)}
@@ -1208,7 +1244,6 @@ export default function ProjectDetailPage() {
                         </div>
 
                         <div className="rounded-[24px] border border-white/10 bg-black/25 md:p-2 space-y-4">
-
                           <PremiumBreakdownRow
                             label="Your Down Payment"
                             value={`AED ${formatAED(downPaymentAmount)}`}
@@ -1240,7 +1275,6 @@ export default function ProjectDetailPage() {
                               bold
                             />
                           </div>
-
                         </div>
                       </>
                     ) : (
@@ -1308,18 +1342,20 @@ export default function ProjectDetailPage() {
         onChange={handleContactChange}
         projectTitle={project.title}
         intent={contactIntent}
-         property={{                                          // ← add this
-    propertyId: project.id || null,
-    propertyTitle: project.title || "",
-    projectName: project.title || "",
-    location: project.subLocation || project.location || "",
-    unitLabel: activePlan?.label || "",
-    configuration: activePlan?.bedrooms || "",
-    area: activePlan?.size || "",
-    price: getNumericPrice(activePlan?.price ?? project.price) || 0,
-    currency: "AED",
-    propertyUrl: typeof window !== "undefined" ? window.location.href : "",
-  }}
+        property={{
+          // ← add this
+          propertyId: project.id || null,
+          propertyTitle: project.title || "",
+          projectName: project.title || "",
+          location: project.subLocation || project.location || "",
+          unitLabel: activePlan?.label || "",
+          configuration: activePlan?.bedrooms || "",
+          area: activePlan?.size || "",
+          price: getNumericPrice(activePlan?.price ?? project.price) || 0,
+          currency: "AED",
+          propertyUrl:
+            typeof window !== "undefined" ? window.location.href : "",
+        }}
       />
     </>
   );
@@ -1571,11 +1607,10 @@ function PremiumCalcInput({
   value: string | number;
   onChange: (value: string) => void;
   step?: string;
-    helper?: string;
+  helper?: string;
 }) {
   return (
     <div className="rounded-[22px] border border-[#F1DC7F35] bg-white/[0.03] p-4 transition-all duration-300 focus-within:border-[#F1DC7F] focus-within:shadow-[0_0_0_1px_rgba(241,220,127,0.45),0_0_20px_rgba(241,220,127,0.12)]">
-
       {/* LABEL */}
       <label className="block text-sm text-[#F1DC7F] mb-1 font-medium">
         {label}
@@ -1583,9 +1618,7 @@ function PremiumCalcInput({
 
       {/* HELPER TEXT */}
       {helper && (
-        <p className="text-xs text-white/50 mb-2 leading-relaxed">
-          {helper}
-        </p>
+        <p className="text-xs text-white/50 mb-2 leading-relaxed">{helper}</p>
       )}
 
       {/* INPUT */}

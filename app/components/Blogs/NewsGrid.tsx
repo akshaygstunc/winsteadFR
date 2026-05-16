@@ -20,7 +20,7 @@ type BlogItem = {
   };
 };
 
-export default function NewsGrid({ news, loading }) {
+export default function NewsGrid({ news, loading, basePath = "blogs" }) {
   const [blogs, setBlogs] = useState<BlogItem[]>([]);
 
   return (
@@ -61,10 +61,10 @@ export default function NewsGrid({ news, loading }) {
 
               return (
                 <Link
-                  href={`/blogs/${item.slug}`}
-                  key={item._id}
-                  className="block"
-                >
+    href={item.slug ? `/${basePath}/${item.slug}` : "#"}  // ✅ fallback to # if no slug
+    key={item._id}
+    className="block"
+  >
                   <article
                     className={`group h-full flex flex-col rounded-[28px] overflow-hidden border border-white/10 bg-white/[0.03] hover:border-[#F1DC7F]/30 hover:shadow-[0_0_40px_rgba(241,220,127,0.08)] transition duration-300`}
                   >
@@ -85,19 +85,17 @@ export default function NewsGrid({ news, loading }) {
 
                     {/* Content */}
                     <div className="p-5 md:p-6 flex flex-col flex-1">
-                       <p className="text-xs uppercase tracking-[0.18em] text-white mb-2">
-                                        {new Date(item.createdAt).toLocaleDateString("en-IN", {
-                                            day: "numeric",
-                                            month: "long",
-                                            year: "numeric",
-                                        }) || "Recent Article"}
-                                    </p>
+                      <p className="text-xs uppercase tracking-[0.18em] text-white mb-2">
+                        {new Date(item.createdAt).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        }) || "Recent Article"}
+                      </p>
                       {/* Title (fixed lines) */}
                       <h3 className="font-semibold leading-[1.2] text-lg line-clamp-2 group-hover:text-[#F1DC7F] transition">
                         {item.title}
                       </h3>
-
-                     
 
                       {/* CTA stays at bottom */}
                       <div className="mt-6 inline-flex items-center gap-2 text-sm text-[#F1DC7F]">

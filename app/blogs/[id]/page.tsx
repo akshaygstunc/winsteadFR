@@ -359,10 +359,8 @@ export default function BlogDetailPage() {
     
     {/* ── LEFT: Main Article ── */}
     <div>
-      <h2 className="text-2xl md:text-3xl font-semibold text-white pb-4">
-        Property Insights
-      </h2>
-      <div className="relative rounded-[24px] overflow-hidden border border-white/10">
+     
+      <div className="relative rounded-[24px] overflow-hidden border border-white/10 pt-4">
         <Image
           src={blog.img || Img3}
           alt="Article visual"

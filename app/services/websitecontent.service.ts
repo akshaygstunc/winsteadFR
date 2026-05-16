@@ -199,6 +199,26 @@ export default class WebsiteContentService {
       throw error;
     }
   }
+ 
+static async getMedia() {
+  try {
+    const response = await api.get("/content/media");
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching media:", error);
+    throw error;
+  }
+}
+
+static async getMedia() {
+  try {
+    const response = await api.get("/content/media");
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching media:", error);
+    throw error;
+  }
+}
  static async GetPodcasts() {
   try {
     const response = await fetch("/api/instagram");
@@ -218,17 +238,22 @@ export default class WebsiteContentService {
   //     throw e;
   //   }
   // }
-
-  static async getSingletonBySlug(slug: string) {
-    try {
-      const response = await fetch(
-        `https://winsteadglobal.com/api/content/${slug}/singleton`,
-      );
-      if (!response.ok) throw new Error("Failed to fetch singleton");
-      return await response.json();
-    } catch (error) {
-      console.error(`Error fetching singleton ${slug}:`, error);
-      return null;
-    }
+static async getMediaById(id: string) {
+  try {
+    const response = await api.get(`/content/media/${id}`);
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching media by id:", error);
+    throw error;
   }
+}
+  static async getSingletonBySlug(slug: string) {
+  try {
+    const response = await api.get(`/content/${slug}/singleton`);
+    return response?.data;
+  } catch (error) {
+    console.error(`Error fetching singleton ${slug}:`, error);
+    return null;
+  }
+}
 }

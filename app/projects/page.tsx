@@ -157,7 +157,7 @@ function ProjectsContent() {
             </div>
           )}
 
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 md:grid-cols-2 gap-6 flex-1">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 md:grid-cols-3 gap-6 flex-1">
             {loading ? (
               Array.from({ length: 6 }).map((_, i) => (
                 <PropertyCardSkeleton key={i} />
@@ -638,22 +638,37 @@ function ProjectCard({ data }: any) {
   function getBedroomRange(floorPlans: any[]) {
     if (!Array.isArray(floorPlans) || !floorPlans.length) return null;
 
-    const nums = floorPlans
-      .map((fp) => Number(fp?.data?.bedrooms))
-      .filter((n) => !isNaN(n));
+    const plans = floorPlans
+      .map((fp) => (fp?.title || fp?.name || "").trim())
+      .filter(Boolean);
 
-    if (!nums.length) return null;
+    if (!plans.length) return null;
 
-    const min = Math.min(...nums);
-    const max = Math.max(...nums);
+    // Group by suffix (Apartment, Penthouse, Villa etc.)
+    const groups: Record<string, string[]> = {};
+    for (const plan of plans) {
+      const words = plan.split(" ");
+      const suffix = words[words.length - 1];
+      const prefix = words
+        .slice(0, -1)
+        .join(" ")
+        .replace(/\s+/g, "")
+        .toUpperCase(); // "1BR", "2BR"
+      if (!groups[suffix]) groups[suffix] = [];
+      if (!groups[suffix].includes(prefix)) groups[suffix].push(prefix);
+    }
 
-    const minLabel = min === 0 ? "Studio" : min;
-    const maxLabel = max === 0 ? "Studio" : max;
-    console.log(min)
-    return min === max
-      ? `${minLabel}`
-      : `${minLabel} to ${maxLabel}`;
+    const allSuffixes = Object.keys(groups).join(", ");
+    const allPrefixes = Object.values(groups)
+      .flat()
+      .filter((v, i, arr) => arr.indexOf(v) === i);
 
+    const compressed = allPrefixes.map((p, i) => {
+      if (i === 0 || i === allPrefixes.length - 1) return p; // "1BR", "6BR"
+      return p.replace("BR", ""); // "2", "3", "4"
+    });
+
+    return `${compressed.join(", ")} ${allSuffixes}`;
   }
   function getSqftRange(floorPlans: any[]) {
     if (!Array.isArray(floorPlans) || !floorPlans.length) return null;
@@ -667,57 +682,60 @@ function ProjectCard({ data }: any) {
     const min = Math.min(...nums);
     const max = Math.max(...nums);
 
-    return min === max
-      ? `${min} sqft`
-      : `${min} to ${max} sqft`;
+    return min === max ? `${min} sqft` : `${min} to ${max} sqft`;
   }
   return (
     <Link href={`/projects/${data.slug}`} className="block">
-      <div className="group relative rounded-[28px] overflow-hidden border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-yellow-500/30 hover:shadow-[0_0_30px_rgba(250,204,21,0.08)] cursor-pointer">
-        <div className="relative h-[440px]">
+      <div className="group relative w-[280px] rounded-[20px] overflow-hidden border border-white/8 bg-[#0e0e0f] transition-all duration-350 hover:-translate-y-1 hover:border-yellow-500/25 hover:shadow-[0_12px_40px_rgba(250,204,21,0.07)] cursor-pointer">
+        {/* Image */}
+        <div className="relative h-[200px] overflow-hidden">
           <Image
             src={data?.thumbnail || img}
             alt={data.title}
             fill
-            className="object-cover group-hover:scale-105 transition duration-700"
+            className="object-cover group-hover:scale-105 transition duration-600"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b]/95 via-[#0a0a0b]/10 to-transparent" />
+          <div className="absolute top-[10px] left-[10px] text-[10px] font-medium tracking-wide px-[9px] py-[3px] rounded-full bg-black/60 border border-white/15 backdrop-blur-md text-white/85">
+            {data.category}
+          </div>
         </div>
 
-        <div className="absolute top-4 left-4 bg-black/70 text-xs px-3 py-1 rounded-full border border-white/20 backdrop-blur-sm">
-          {data.category}
-        </div>
+        {/* Body */}
+        <div className="px-[14px] pt-3 pb-[14px]">
+          <h2 className="text-[14px] font-semibold text-white mb-[10px] truncate">
+            {data.title}
+          </h2>
 
-        <div className="absolute bottom-0 left-0 right-0 p-2">
-          <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-3">
-            <h2 className="text-lg font-semibold mb-2">{data.title}</h2>
-
-            <div className="space-y-1 text-xs md:text-sm text-white">
-              <div className="flex items-center gap-2">
-                <FaBed className="text-yellow-400 text-xs" />
-                {getBedroomRange(data.floorPlans)} Bedrooms
-              </div>
-
-              <div className="flex items-center gap-2">
-                {/* <FaDollarSign className="text-yellow-400 text-xs" /> */}
-                <span className="text-yellow-400 text-xs">AED</span>{" "}
-                {Number(data.price || 0).toLocaleString()}
-              </div>
-
-              <div className="flex items-center gap-2">
-                <FaRulerCombined className="text-yellow-400 text-xs" />
-                {getSqftRange(data.floorPlans)}
-              </div>
-
-              <div className="flex items-center gap-2">
-                <FaMapMarkerAlt className="text-yellow-400 text-xs" />
+          <div className="grid grid-cols-2 gap-[6px] mb-3">
+            <div className="flex items-center gap-[5px] text-[11px] text-white/55">
+              <FaBed className="text-yellow-400 text-[11px] shrink-0" />
+              <span className="truncate">
+                {getBedroomRange(data.floorPlans)}
+              </span>
+            </div>
+            <div className="flex items-center gap-[5px] text-[11px] text-white/55">
+              <FaRulerCombined className="text-yellow-400 text-[11px] shrink-0" />
+              <span className="truncate">{getSqftRange(data.floorPlans)}</span>
+            </div>
+            <div className="col-span-2 flex items-center gap-[5px] text-[11px] text-white/55">
+              <FaMapMarkerAlt className="text-yellow-400 text-[11px] shrink-0" />
+              <span className="truncate">
                 {data.location}, {data.subLocation}
-              </div>
+              </span>
             </div>
+          </div>
 
-            <div className="mt-3 w-full py-2 rounded-xl border border-white/20 text-sm hover:border-yellow-400 hover:text-white transition inline-flex items-center justify-center gap-2">
-              Check Details <FaArrowRight className="text-xs" />
-            </div>
+          <div className="flex items-center justify-between pt-[10px] border-t border-white/7">
+            <p className="text-[15px] font-semibold text-white">
+              <sup className="text-[10px] font-medium text-yellow-400 mr-[2px]">
+                AED
+              </sup>
+              {Number(data.price || 0).toLocaleString()}
+            </p>
+            <button className="flex items-center gap-1 text-[11px] font-medium text-white/50 border border-white/12 px-[10px] py-[5px] rounded-[8px] group-hover:text-yellow-400 group-hover:border-yellow-400/40 transition-all">
+              Details <FaArrowRight className="text-[9px]" />
+            </button>
           </div>
         </div>
       </div>
