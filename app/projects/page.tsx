@@ -688,19 +688,11 @@ function ProjectCard({ data }: any) {
           {data.category}
         </div>
 
-<<<<<<< HEAD
-        <div className="absolute bottom-0 left-0 right-0 p-5">
-          <div className="rounded-2xl border border-white/10 bg-black/30  p-5">
-            <h2 className="text-xl font-semibold mb-3">{data.title}</h2>
-
-            <div className="space-y-2 text-sm text-white ">
-=======
         <div className="absolute bottom-0 left-0 right-0 p-2">
           <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-3">
             <h2 className="text-lg font-semibold mb-2">{data.title}</h2>
 
             <div className="space-y-1 text-xs md:text-sm text-white">
->>>>>>> feature
               <div className="flex items-center gap-2">
                 <FaBed className="text-yellow-400 text-xs" />
                 {getBedroomRange(data.floorPlans)} Bedrooms
