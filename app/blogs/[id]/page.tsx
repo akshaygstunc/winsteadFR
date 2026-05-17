@@ -10,6 +10,7 @@ import Img1 from "../../../public/hero5.png";
 import Img3 from "../../../public/hero2.png";
 import WebsiteContentService from "@/app/services/websitecontent.service";
 import { useEffect, useMemo, useState } from "react";
+import HtmlRenderer from "@/app/components/HtmlRenderer";
 
 
 // ─── Advertisement Components ───────────────────────────────────────────────
@@ -223,7 +224,7 @@ export default function BlogDetailPage() {
   const [suggestedProperties, setSuggestedProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-
+  const [advertisements, setAdvertisements] = useState<any[]>([]);
   useEffect(() => {
     async function fetchBlog() {
       try {
@@ -235,6 +236,7 @@ export default function BlogDetailPage() {
         setBlogDetails(response || null);
         setBlogs(blogsResponse || []);
         setSuggestedProperties(response?.suggestedProperties || []);
+        setAdvertisements(response?.data?.advertisements || []);
       } catch (err) {
         console.error(err);
         setHasError(true);
@@ -373,10 +375,7 @@ export default function BlogDetailPage() {
         />
       </div>
       <div className="space-y-8 text-white leading-8 text-base md:text-lg pt-5">
-        <div
-          className="prose prose-invert max-w-none text-white prose-headings:text-white prose-a:text-yellow-400"
-          dangerouslySetInnerHTML={{ __html: blog.desc }}
-        />
+       <HtmlRenderer content={blog.fullDesc}/>
 
         {blog.heroVideo ? (
           <p>
@@ -401,49 +400,6 @@ export default function BlogDetailPage() {
 
     {/* ── RIGHT: Advertisement Sidebar ── */}
     <aside className="hidden lg:flex flex-col gap-6 sticky top-28 self-start">
-      
-      {/* Ad Slot 1 — Large Banner */}
-      {/* TODO: Replace static data with advertisement API response */}
-      <AdBannerLarge
-        ad={{
-          image: Img1,             // TODO: ad.image
-          title: "Premium Villa",  // TODO: ad.title
-          subtitle: "Palm Jumeirah, Dubai", // TODO: ad.subtitle
-          cta: "View Property",    // TODO: ad.ctaLabel
-          href: "/projects",       // TODO: ad.ctaUrl
-          badge: "Sponsored",
-        }}
-      />
-
-      {/* Ad Slot 2 — Featured Project Card */}
-      {/* TODO: Replace static data with advertisement API response */}
-      <AdFeaturedCard
-        ad={{
-          image: "Img2",
-          title: "Luxury Apartments",
-          location: "Downtown Dubai",
-          price: "AED 2,400,000",
-          href: "/projects",
-          badge: "Featured",
-        }}
-      />
-
-      {/* Ad Slot 3 — Small Square Ad */}
-      {/* TODO: Replace static data with advertisement API response */}
-      <AdSquareBanner
-        ad={{
-          image: Img3,
-          headline: "Invest in UAE Real Estate",
-          cta: "Get Free Consultation",
-          href: "/contact",
-          badge: "Ad",
-        }}
-      />
-    </aside>
-  </div>
-</section>
-
-      {/* ✅ 2 COLUMN GRID */}
       <div className="grid grid-cols-2 gap-3">
 
         {suggestedProperties.map((p: any) => (
@@ -480,6 +436,28 @@ export default function BlogDetailPage() {
         ))}
 
       </div>
+      {/* Ad Slot 1 — Large Banner */}
+      {/* TODO: Replace static data with advertisement API response */}
+      {advertisements.length > 0 && advertisements.map((ad: any, index: number) => (
+        <AdBannerLarge
+          key={index}
+          ad={{
+            image: ad.image || Img1,             // TODO: ad.image
+            title: ad.text || "Premium Villa",  // TODO: ad.title
+            subtitle: ad.subtitle || "Palm Jumeirah, Dubai", // TODO: ad.subtitle
+            cta: ad.ctaLabel || "View Property",    // TODO: ad.ctaLabel
+            href: ad.ctaUrl || "/projects",       // TODO: ad.ctaUrl
+            badge: ad.badge || "Sponsored",
+          }}
+        />
+      ))}
+
+    </aside>
+  </div>
+</section>
+
+      {/* ✅ 2 COLUMN GRID */}
+      
     </div>
 
 )}
