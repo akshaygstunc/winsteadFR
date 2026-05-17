@@ -4,11 +4,11 @@ import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import AutoBreadcrumbs from "../../components/BreadCrumbs";
-import WebsiteContentService from "@/app/services/websitecontent.service";
+import WebsiteContentService from "../../services/websitecontent.service.ts";
 import { useEffect, useMemo, useState } from "react";
 import Img1 from "../../../public/hero5.png";
 import Img3 from "../../../public/hero2.png";
-
+import HtmlRenderer from "../../components/HtmlRenderer"
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 const EMPTY_TEXT = "Not available";
@@ -43,10 +43,13 @@ export default function NewsMediaDetailPage() {
         // reuse getBlogBySlug — same API shape, just different collection
         // if your backend has a separate media slug endpoint, swap it here:
         // WebsiteContentService.getMediaBySlug(slug)
-        const response = await WebsiteContentService.getBlogBySlug(slug);
+        const response = await WebsiteContentService.getMedia();
         const mediaList = await WebsiteContentService.getMedia();
 
-        setDetails(response || null);
+       const matchedData =
+  response?.find((item: any) => item?.slug === slug) || null;
+
+setDetails(matchedData);
         setRelatedMedia(mediaList || []);
         setSuggestedProperties(response?.suggestedProperties || []);
       } catch (err) {
@@ -71,7 +74,7 @@ export default function NewsMediaDetailPage() {
         details.pageType ||
         details.entity ||
         EMPTY_TEXT,
-      description: details.description || EMPTY_TEXT,
+      description: details.description,
       img: details.image || Img1,
       heroVideo: details.heroVideo || details.data?.videoUrl || "",
       date:
@@ -93,7 +96,7 @@ export default function NewsMediaDetailPage() {
     );
   }
 
-  if (hasError || !article) return notFound();
+  // if (hasError || !article) return notFound();
 
   // related = all media except current slug, max 4
   const related = relatedMedia.filter((m) => m.slug !== slug).slice(0, 4);
@@ -135,26 +138,9 @@ export default function NewsMediaDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12 items-start">
           {/* LEFT: Article body */}
           <div>
-            {/* Featured image */}
-            <div className="rounded-[20px] overflow-hidden border border-white/10 mb-8">
-              <Image
-                src={article.img || Img3}
-                alt={article.title}
-                width={1600}
-                height={900}
-                unoptimized={
-                  typeof article.img === "string" &&
-                  article.img.startsWith("data:")
-                }
-                className="w-full h-[300px] md:h-[440px] object-cover"
-              />
-            </div>
 
             {/* Body HTML */}
-            <div
-              className="prose prose-invert max-w-none text-white prose-headings:text-white prose-a:text-yellow-400 leading-8 text-base md:text-lg"
-              dangerouslySetInnerHTML={{ __html: article.description }}
-            />
+          <HtmlRenderer content={details?.description} />
 
             {/* Video link */}
             {article.heroVideo && (
@@ -198,7 +184,7 @@ export default function NewsMediaDetailPage() {
                         <h4 className="text-xs font-medium line-clamp-2 group-hover:text-yellow-400 transition">
                           {p.title}
                         </h4>
-                        <p className="text-[10px] text-gray-500 truncate">
+                        <p className="text-[10px] text-white truncate">
                           {p.location?.title}
                         </p>
                       </div>
@@ -211,7 +197,7 @@ export default function NewsMediaDetailPage() {
 
           {/* RIGHT: Related media sidebar */}
           <aside className="hidden lg:flex flex-col gap-5 sticky top-28 self-start">
-            <p className="text-[10px] uppercase tracking-[0.25em] text-white/40 mb-1">
+            <p className="text-[10px] uppercase tracking-[0.25em] text-white mb-1">
               More from News & Media
             </p>
 
@@ -239,7 +225,7 @@ export default function NewsMediaDetailPage() {
                   <h4 className="text-xs font-medium line-clamp-2 group-hover:text-yellow-400 transition leading-relaxed">
                     {item.title}
                   </h4>
-                  <p className="text-[10px] text-white/30">
+                  <p className="text-[10px] text-white">
                     {formatDate(item.createdAt)}
                   </p>
                 </div>
@@ -249,7 +235,7 @@ export default function NewsMediaDetailPage() {
             {/* CTA */}
             <Link
               href="/news-media"
-              className="mt-2 block text-center text-xs border border-white/10 hover:border-yellow-400/40 text-white/50 hover:text-yellow-400 py-3 rounded-xl transition"
+              className="mt-2 block text-center text-xs border border-white/10 hover:border-yellow-400/40 text-white hover:text-yellow-400 py-3 rounded-xl transition"
             >
               View all news & media →
             </Link>

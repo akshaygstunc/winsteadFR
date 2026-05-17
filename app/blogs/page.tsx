@@ -15,12 +15,14 @@ export default function BlogsPage() {
   const [items, setItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 9;
-
+  const [pageContent, setPageContent] = useState(null); 
   useEffect(() => {
     async function fetch() {
       try {
         setLoading(true);
         const res = await WebsiteContentService.getBlogs();
+        const res2 = await WebsiteContentService.getNewsMedia(); // ✅ different call
+        setPageContent(res2 || null); // ✅ set page content
         setItems(res || []);
       } catch (e) {
         console.error(e);
@@ -59,7 +61,7 @@ export default function BlogsPage() {
 
   return (
     <div className="bg-black text-white">
-      <NewsHero />
+      <NewsHero pageContent={pageContent} />
       <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
         <AutoBreadcrumbs />
       </section>

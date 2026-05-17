@@ -89,7 +89,29 @@ export default class WebsiteContentService {
 
       return response?.data;
     } catch (e) {
-      throw error;
+      throw e;
+    }
+  }
+  static async getNewsMedia(slug: string) {
+    try {
+      const response = await api.get(
+        `/content/news-media/singleton`,
+      );
+
+      return response?.data;
+    } catch (e) {
+      throw e;
+    }
+  }
+  static async getdeveloperProjects(slug: string) {
+    try {
+      const response = await api.get(
+        `/properties/developer/${slug}`,
+      );
+
+      return response?.data;
+    } catch (e) {
+      throw e;
     }
   }
 

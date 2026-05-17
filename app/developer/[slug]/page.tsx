@@ -207,14 +207,15 @@ export default function DeveloperDetailsPage() {
     const [developer, setDeveloper] = useState<any>(null);
     const [projects, setProjects] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-
+    const [standaloneprojects, setStandaloneProjects] = useState<any>({});
 
 console.log("PROJECT:", projects);
 
     useEffect(() => {
         const fetchProjects = async () => {
             const res = await WebsiteContentService.GetDeveloperCommunities(params.slug);
-
+            const res2 = await WebsiteContentService.getdeveloperProjects(params.slug);
+            setStandaloneProjects(res2 || []); // ✅ set projects data
             console.log(res)
             setProjects(res); // 👈 DIRECT set (no filter)
         };
@@ -238,7 +239,7 @@ console.log("PROJECT:", projects);
                     name: found.title,
                     image: found.image || "/logoo4.webp",
                     category: "Luxury",
-                    bannerimage: found.data.bannerImage,
+                    bannerimage: found.data.bannerimage,
                     type: "Developer",
                     headquarters: found.data?.city || "Dubai",
                     projects: "50+ Projects",
@@ -340,7 +341,7 @@ console.log("PROJECT:", projects);
                     {/* Heading */}
                     <div className="mt-10 max-w-4xl">
                         <p className="mb-3 text-sm uppercase tracking-[0.3em] text-[#D4AF37]">
-                            Our Communities
+                            Our {standaloneprojects?.length < 0 ? "Communities" : "Standalone Projects"}
                         </p>
 
                         <h1 className="text-4xl md:text-6xl font-semibold tracking-tight text-white">
@@ -392,11 +393,49 @@ console.log("PROJECT:", projects);
                                 </Link>
                             ))}
                         </div>
+                    ) : 
+                            standaloneprojects?.length > 0 ? (
+                        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+                            {standaloneprojects?.map((property) => (
+                                <Link
+                                    key={property._id}
+                                    href={`/projects/${developer.slug}/${property.slug}`}
+                                    className="group block overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.03] transition duration-500 hover:border-[#D4AF37]/40 hover:bg-white/[0.05]"
+                                >
+                                    {/* Image */}
+                                    <div className="relative h-[300px] overflow-hidden">
+                                        <Image
+                                            src={property.image}
+                                            alt={property.title}
+                                            fill
+                                            className="object-cover transition duration-700 group-hover:scale-105"
+                                        />
+
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+                                        <div className="absolute bottom-5 left-5 right-5">
+                                            <p className="text-xs uppercase tracking-[0.25em] text-[#D4AF37]">
+                                                Community
+                                            </p>
+
+                                            <h3 className="mt-2 text-2xl font-semibold text-white">
+                                                {property.title}
+                                            </h3>
+
+                                            <p className="mt-2 text-sm text-white/75">
+                                                {property.data?.city || property.location || "Dubai"}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    
                     ) : (
-                            <div className="rounded-[30px] border border-dashed border-white/10 bg-white/[0.02] py-20 text-center">
-                                <h3 className="text-2xl font-semibold text-white">
-                                    No communities available
-                                </h3>
+                        <div className="text-center py-20">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                No communities available
+                            </h3>
                         </div>
                     )}
                 </div>

@@ -1,13 +1,14 @@
 import Image from "next/image";
 import banner from "../../../public/hero3.jpg";
 
-export default function NewsHero() {
+export default function NewsHero({pageContent}) {
+  
   return (
     <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
       {/* IMAGE */}
       <div className="absolute inset-0">
         <Image
-          src={banner}
+          src={pageContent?.data?.bannerImage}
           alt="News Banner"
           fill
           priority
@@ -24,7 +25,7 @@ export default function NewsHero() {
         <div className="w-full max-w-7xl  px-6 md:px-12 pb-14 md:pb-20">
           <div className="max-w-xl text-left ">
             <p className="mb-3 text-[11px] uppercase tracking-[0.35em] text-[#F1DC7F]">
-              News & Media
+              {pageContent?.data?.bannerTitle}
             </p>
 
             <h1 className="text-xl md:text-2xl xl:text-5xl font-semibold leading-[1.05] max-w-[520px]">
