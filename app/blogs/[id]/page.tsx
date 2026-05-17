@@ -446,7 +446,7 @@ export default function BlogDetailPage() {
             title: ad.text || "Premium Villa",  // TODO: ad.title
             subtitle: ad.subtitle || "Palm Jumeirah, Dubai", // TODO: ad.subtitle
             cta: ad.ctaLabel || "View Property",    // TODO: ad.ctaLabel
-            href: ad.ctaUrl || "/projects",       // TODO: ad.ctaUrl
+            href: ad.link || "/projects",       // TODO: ad.ctaUrl
             badge: ad.badge || "Sponsored",
           }}
         />
