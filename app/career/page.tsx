@@ -196,7 +196,7 @@ const lines = (data?.bannerSubtitle || "").split("\n");
               </p>
 
               <h1 className="text-xl md:text-2xl xl:text-5xl font-semibold leading-[1.05] max-w-[520px]">
-  {lines.map((line, i) => (
+  {lines.map((line: string, i: number) => (
     <span
       key={i}
       className={
@@ -297,7 +297,7 @@ const lines = (data?.bannerSubtitle || "").split("\n");
         <div className="grid gap-5">
           {loading
             ? Array.from({ length: 4 }).map((_, i) => <JobSkeleton key={i} />)
-            : careerData.map((job) => (
+            : careerData.map((job: any) => (
               <div
                 key={job.id}
                 className="rounded-[30px] border border-white/10 bg-white/[0.03] p-6 md:p-8 hover:border-yellow-400/25 transition"

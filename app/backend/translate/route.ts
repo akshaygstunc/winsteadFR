@@ -23,6 +23,9 @@ export async function POST(req: NextRequest) {
     });
   } catch (e: any) {
     console.log(e.response);
-    return NextResponse.error(e.response);
+   return NextResponse.json(
+  { error: e?.message || "Something went wrong" },
+  { status: 500 }
+);
   }
 }

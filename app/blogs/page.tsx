@@ -12,7 +12,7 @@ export default function BlogsPage() {
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState("latest");
   const [loading, setLoading] = useState(true);
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 9;
   const [pageContent, setPageContent] = useState(null); 
@@ -21,7 +21,7 @@ export default function BlogsPage() {
       try {
         setLoading(true);
         const res = await WebsiteContentService.getBlogs();
-        const res2 = await WebsiteContentService.getNewsMedia(); // ✅ different call
+        const res2 = await WebsiteContentService.getNewsMedia("blogs");// ✅ different call
         setPageContent(res2 || null); // ✅ set page content
         setItems(res || []);
       } catch (e) {
