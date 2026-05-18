@@ -718,7 +718,7 @@ export default function AboutUs() {
                   </div>
 
                   <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
-                    {galleryImages.map((_, index) => (
+                    {galleryImages.map((_: unknown, index: number) => (
                       <button
                         key={index}
                         onClick={() => setActiveSlide(index)}
