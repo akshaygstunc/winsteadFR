@@ -686,7 +686,7 @@ function ProjectCard({ data }: any) {
   }
   return (
     <Link href={`/projects/${data.slug}`} className="block">
-      <div className="group relative w-[250px] lg:w-[280] rounded-[20px] overflow-hidden border border-white/8 bg-[#0e0e0f] transition-all duration-350 hover:-translate-y-1 hover:border-yellow-500/25 hover:shadow-[0_12px_40px_rgba(250,204,21,0.07)] cursor-pointer">
+      <div className="group relative xs:w-[230px] sm:w-[250px] lg:w-[280] rounded-[20px] overflow-hidden border border-white/8 bg-[#0e0e0f] transition-all duration-350 hover:-translate-y-1 hover:border-yellow-500/25 hover:shadow-[0_12px_40px_rgba(250,204,21,0.07)] cursor-pointer">
         {/* Image */}
         <div className="relative h-[200px] overflow-hidden">
           <Image
@@ -726,14 +726,14 @@ function ProjectCard({ data }: any) {
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-[10px] border-t border-white/7">
+          <div className="flex items-center justify-between pt-[10px] border-t border-white/7 flex-wrap lg:flex-nowrap">
             <p className="text-[15px] font-semibold text-white">
               <sup className="text-[10px] font-medium text-yellow-400 mr-[2px]">
                 AED
               </sup>
-              {Number(data.price || 0).toLocaleString()}
+             <span className="sm:text-[13px] lg:text-[16px]"> {Number(data.price || 0).toLocaleString()}</span>
             </p>
-            <button className="flex items-center gap-1 text-[11px] font-medium text-white/50 border border-white/12 px-[10px] py-[5px] rounded-[8px] group-hover:text-yellow-400 group-hover:border-yellow-400/40 transition-all">
+            <button className="flex items-center gap-1 text-[11px] font-medium text-white/50 border border-white/12 mt-1 lg:mt-0 px-[10px] py-[5px] rounded-[8px] group-hover:text-yellow-400 group-hover:border-yellow-400/40 transition-all">
               Details <FaArrowRight className="text-[9px]" />
             </button>
           </div>
