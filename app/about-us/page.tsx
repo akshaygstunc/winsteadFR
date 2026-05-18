@@ -708,7 +708,6 @@ export default function AboutUs() {
                           <img
                             src={item.src}
                             alt={item.alt}
-                            fill
                             className="object-cover"
                           />
                         </div>
