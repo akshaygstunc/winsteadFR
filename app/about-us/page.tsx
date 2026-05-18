@@ -702,7 +702,7 @@ export default function AboutUs() {
                   </div>
                 ))} */}
 
-                    {galleryImages.map((item, index) => (
+                    {galleryImages.map((item: { src: string; alt: string }, index: number) => (
                       <div key={index} className="min-w-full relative">
                         <div className="relative w-full h-[320px] md:h-[320px]">
                           <img
