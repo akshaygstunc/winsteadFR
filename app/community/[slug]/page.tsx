@@ -605,6 +605,7 @@ export default function ProjectDetailPage() {
                       Design-Led Living
                     </h3>
                     <p className="leading-relaxed">
+                      {/* @ts-ignore */}
                       <ReadMoreSlider
                         description={project.description}
                         heading="Project Description"
