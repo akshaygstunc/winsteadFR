@@ -8,7 +8,7 @@ import {
   FaBuilding,
   FaChartLine,
   FaClock,
-  FaHandshake,
+  FaHandshake, 
   FaMapMarkerAlt,
   FaUsers,
 } from "react-icons/fa";
