@@ -7,11 +7,9 @@ export default function NewsHero({pageContent}) {
     <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
       {/* IMAGE */}
       <div className="absolute inset-0">
-        <Image
+        <img
           src={pageContent?.data?.bannerImage}
           alt="News Banner"
-          fill
-          priority
           className="object-cover object-center"
         />
       </div>

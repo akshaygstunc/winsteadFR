@@ -35,10 +35,9 @@ function AdBannerLarge({ ad }: AdBannerLargeProps) {
       className="group relative block rounded-2xl overflow-hidden border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300"
     >
       <div className="relative h-[220px] w-full">
-        <Image
+        <img
           src={ad.image}
           alt={ad.title}
-          fill
           className="object-cover group-hover:scale-105 transition duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
@@ -87,10 +86,9 @@ function AdFeaturedCard({ ad }: AdFeaturedCardProps) {
       )}
 
       <div className="relative h-[160px] w-full">
-        <Image
+        <img
           src={ad.image}
           alt={ad.title}
-          fill
           className="object-cover group-hover:scale-105 transition duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
@@ -128,10 +126,9 @@ function AdSquareBanner({ ad }: AdSquareBannerProps) {
       className="group relative block rounded-2xl overflow-hidden border border-white/10 hover:border-yellow-500/40 transition-all duration-300"
     >
       <div className="relative h-[140px] w-full">
-        <Image
+        <img
           src={ad.image}
           alt={ad.headline}
-          fill
           className="object-cover group-hover:scale-105 transition duration-500"
         />
         <div className="absolute inset-0 bg-black/70" />
