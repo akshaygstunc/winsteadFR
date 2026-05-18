@@ -39,20 +39,20 @@ type ContactIntent =
 type BackendAmenity =
   | string
   | {
-    name?: string;
-    icon?: string;
-  };
+      name?: string;
+      icon?: string;
+    };
 
 type BackendFloorPlan =
   | {
-    label?: string;
-    title?: string;
-    name?: string;
-    size?: string | number;
-    price?: string | number;
-    image?: string;
-    url?: string;
-  }
+      label?: string;
+      title?: string;
+      name?: string;
+      size?: string | number;
+      price?: string | number;
+      image?: string;
+      url?: string;
+    }
   | string;
 
 type BackendProject = {
@@ -145,7 +145,12 @@ function getRelationLabel(
 }
 
 function formatPrice(value: string | number | undefined) {
-  if (value === null || value === undefined || value === "" || Number(value) === 0) {
+  if (
+    value === null ||
+    value === undefined ||
+    value === "" ||
+    Number(value) === 0
+  ) {
     return EMPTY_VALUE;
   }
 
@@ -162,7 +167,12 @@ function formatPrice(value: string | number | undefined) {
 }
 
 function formatBedrooms(value: string | number | undefined) {
-  if (value === null || value === undefined || value === "" || Number(value) === 0) {
+  if (
+    value === null ||
+    value === undefined ||
+    value === "" ||
+    Number(value) === 0
+  ) {
     return EMPTY_VALUE;
   }
   return `${value} Bedroom${Number(value) > 1 ? "s" : ""}`;
@@ -215,7 +225,9 @@ function getFloorPlans(data?: BackendProject): UiFloorPlan[] {
       label: plan.label || plan.title || plan.name || `Plan ${index + 1}`,
       size: getDisplayValue(plan.size),
       price:
-        plan.price !== undefined && plan.price !== null && String(plan.price).trim() !== ""
+        plan.price !== undefined &&
+        plan.price !== null &&
+        String(plan.price).trim() !== ""
           ? formatPrice(plan.price)
           : EMPTY_VALUE,
       image: plan.image || plan.url || data?.thumbnail || fallbackImages[0],
@@ -225,7 +237,9 @@ function getFloorPlans(data?: BackendProject): UiFloorPlan[] {
 
 function getHighlights(data?: BackendProject) {
   const list = [
-    data?.category ? `${data.category} property in ${getDisplayValue(data.city)}` : "",
+    data?.category
+      ? `${data.category} property in ${getDisplayValue(data.city)}`
+      : "",
     data?.location ? `Located in ${data.location}` : "",
     data?.propertyStatus ? `Status: ${data.propertyStatus}` : "",
     data?.tag ? `Property tag: ${data.tag}` : "",
@@ -236,9 +250,11 @@ function getHighlights(data?: BackendProject) {
 
 export default function ProjectDetailPage() {
   const params = useParams();
-const slug = String(params?.slug || "");
+  const slug = String(params?.slug || "");
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [projectDetails, setProjectDetails] = useState<BackendProject | null>(null);
+  const [projectDetails, setProjectDetails] = useState<BackendProject | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -311,7 +327,9 @@ const slug = String(params?.slug || "");
     project?.floorPlans.find((item) => item.label === selectedPlan) ||
     project?.floorPlans?.[0];
 
-  const [calcTab, setCalcTab] = useState<"mortgage" | "payment-plan">("mortgage");
+  const [calcTab, setCalcTab] = useState<"mortgage" | "payment-plan">(
+    "mortgage",
+  );
   const [selectedUnit, setSelectedUnit] = useState("");
   const [propertyPrice, setPropertyPrice] = useState(0);
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
@@ -367,16 +385,12 @@ const slug = String(params?.slug || "");
   }, []);
 
   if (loading) {
-    return (
-      <ProjectDetailsSkeleton />
-    );
+    return <ProjectDetailsSkeleton />;
   }
 
   if (!project) {
     return (
       <div className="min-h-screen bg-black text-white px-6 md:px-12 py-14">
-
-
         <div className="mt-8 rounded-[28px] border border-white/10 bg-white/[0.03] p-8">
           <h1 className="text-2xl font-semibold mb-2">Project not found</h1>
           <p className="text-white-400">
@@ -411,7 +425,8 @@ const slug = String(params?.slug || "");
 
     setContactForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+      [name]:
+        type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }));
   };
 
@@ -438,8 +453,8 @@ const slug = String(params?.slug || "");
   const monthlyPayment =
     monthlyRate > 0
       ? (amountFinanced *
-        (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments))) /
-      (Math.pow(1 + monthlyRate, numberOfPayments) - 1)
+          (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments))) /
+        (Math.pow(1 + monthlyRate, numberOfPayments) - 1)
       : amountFinanced / Math.max(numberOfPayments, 1);
 
   const annualCost = monthlyPayment * 12;
@@ -453,9 +468,12 @@ const slug = String(params?.slug || "");
 
   return (
     <>
-      <main className="bg-black text-white min-h-screen overflow-x-hidden">
+      <main className="bg-black text-white min-h-screen overflow-x-hidden sm:mt-[80px]">
         <section className="relative">
-          <ProjectHeroSlider project={project} fallbackImages={fallbackImages} />
+          <ProjectHeroSlider
+            project={project}
+            fallbackImages={fallbackImages}
+          />
         </section>
 
         <div className="flex justify-between w-full items-center">
@@ -481,8 +499,7 @@ const slug = String(params?.slug || "");
                   <FactCard
                     icon={<FaDollarSign className="text-yellow-400" />}
                     label="Starting Price"
-                    value=
-                     {Number(project.price || 0).toLocaleString()}
+                    value={Number(project.price || 0).toLocaleString()}
                   />
                   <FactCard
                     icon={<FaBed className="text-yellow-400" />}
@@ -529,10 +546,11 @@ const slug = String(params?.slug || "");
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`whitespace-nowrap rounded-full px-5 py-3 text-sm border transition ${active
-                    ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
-                    : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
-                    }`}
+                  className={`whitespace-nowrap rounded-full px-5 py-3 text-sm border transition ${
+                    active
+                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black border-transparent"
+                      : "border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-white"
+                  }`}
                 >
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
@@ -551,7 +569,10 @@ const slug = String(params?.slug || "");
                 <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-5">
                   Premium living shaped by design, location, and long-term value
                 </h2>
-                <ReadMoreSlider description={project.description} heading="Project Description" />
+                <ReadMoreSlider
+                  description={project.description}
+                  heading="Project Description"
+                />
 
                 <div className="mt-8 grid sm:grid-cols-2 gap-4">
                   {project.highlights.map((item, index) => (
@@ -560,7 +581,9 @@ const slug = String(params?.slug || "");
                       className="rounded-2xl border border-white/10 bg-black/30 p-4 flex items-start gap-3"
                     >
                       <FaCheckCircle className="text-yellow-400 mt-1 shrink-0" />
-                      <p className="text-white-300 text-sm leading-relaxed">{item}</p>
+                      <p className="text-white-300 text-sm leading-relaxed">
+                        {item}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -572,15 +595,26 @@ const slug = String(params?.slug || "");
                 </p>
                 <div className="space-y-5 text-white-400">
                   <div>
-                    <h3 className="text-white text-lg font-semibold mb-2">Strategic Positioning</h3>
+                    <h3 className="text-white text-lg font-semibold mb-2">
+                      Strategic Positioning
+                    </h3>
                     <p className="leading-relaxed">{project.category}</p>
                   </div>
                   <div>
-                    <h3 className="text-white text-lg font-semibold mb-2">Design-Led Living</h3>
-                    <p className="leading-relaxed"><ReadMoreSlider description={project.description} heading="Project Description" /></p>
+                    <h3 className="text-white text-lg font-semibold mb-2">
+                      Design-Led Living
+                    </h3>
+                    <p className="leading-relaxed">
+                      <ReadMoreSlider
+                        description={project.description}
+                        heading="Project Description"
+                      />
+                    </p>
                   </div>
                   <div>
-                    <h3 className="text-white text-lg font-semibold mb-2">Long-Term Potential</h3>
+                    <h3 className="text-white text-lg font-semibold mb-2">
+                      Long-Term Potential
+                    </h3>
                     <p className="leading-relaxed">{project.handover}</p>
                   </div>
                 </div>
@@ -635,10 +669,11 @@ const slug = String(params?.slug || "");
                 <div
                   key={plan.label}
                   onClick={() => setSelectedPlan(plan.label)}
-                  className={`group relative cursor-pointer overflow-hidden rounded-[30px] border transition-all duration-500 ${active
+                  className={`group relative cursor-pointer overflow-hidden rounded-[30px] border transition-all duration-500 ${
+                    active
                       ? "border-yellow-400/50 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] shadow-[0_20px_60px_rgba(241,220,127,0.12)]"
                       : "border-white/10 bg-white/[0.03] hover:border-yellow-400/30 hover:shadow-[0_16px_50px_rgba(241,220,127,0.08)]"
-                    }`}
+                  }`}
                 >
                   {/* glow */}
                   <div className="absolute -top-16 left-[-20px] h-40 w-40 rounded-full bg-yellow-400/10 blur-3xl opacity-0 transition duration-500 group-hover:opacity-100" />
@@ -646,8 +681,11 @@ const slug = String(params?.slug || "");
 
                   {/* top gold line */}
                   <div
-                    className={`absolute top-0 left-0 h-[2px] w-full bg-[linear-gradient(90deg,#7C5700,#F1DC7F,#B9A650)] transition-all duration-500 ${active ? "opacity-100" : "opacity-0 group-hover:opacity-80"
-                      }`}
+                    className={`absolute top-0 left-0 h-[2px] w-full bg-[linear-gradient(90deg,#7C5700,#F1DC7F,#B9A650)] transition-all duration-500 ${
+                      active
+                        ? "opacity-100"
+                        : "opacity-0 group-hover:opacity-80"
+                    }`}
                   />
 
                   {/* image */}
@@ -684,14 +722,18 @@ const slug = String(params?.slug || "");
                         <p className="text-[11px] uppercase tracking-[0.18em] text-white mb-2">
                           Size
                         </p>
-                        <p className="text-white font-medium text-base">{plan.size}</p>
+                        <p className="text-white font-medium text-base">
+                          {plan.size}
+                        </p>
                       </div>
 
                       <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
                         <p className="text-[11px] uppercase tracking-[0.18em] text-white mb-2">
                           Starting Price
                         </p>
-                        <p className="text-white font-medium text-base">{plan.price}</p>
+                        <p className="text-white font-medium text-base">
+                          {plan.price}
+                        </p>
                       </div>
                     </div>
 
@@ -711,10 +753,11 @@ const slug = String(params?.slug || "");
                           e.stopPropagation();
                           openContactModal("download-floor-plan");
                         }}
-                        className={`rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 ${active
+                        className={`rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 ${
+                          active
                             ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_10px_30px_rgba(241,220,127,0.18)]"
                             : "border border-white/15 bg-white/[0.03] text-white hover:border-yellow-400/40 hover:text-yellow-400"
-                          }`}
+                        }`}
                       >
                         Download Plan
                       </button>
@@ -757,10 +800,18 @@ const slug = String(params?.slug || "");
 
         {previewImage && (
           <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
-            <div className="absolute inset-0" onClick={() => setPreviewImage(null)} />
+            <div
+              className="absolute inset-0"
+              onClick={() => setPreviewImage(null)}
+            />
             <div className="relative max-w-4xl w-full px-4">
               <div className="relative w-full h-[80vh] rounded-2xl overflow-hidden">
-                <Image src={previewImage} alt="Preview" fill className="object-contain" />
+                <Image
+                  src={previewImage}
+                  alt="Preview"
+                  fill
+                  className="object-contain"
+                />
               </div>
               <button
                 onClick={() => setPreviewImage(null)}
@@ -783,20 +834,22 @@ const slug = String(params?.slug || "");
                 <div className="flex flex-wrap gap-3 mb-8">
                   <button
                     onClick={() => setCalcTab("mortgage")}
-                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md lg:text-md font-semibold tracking-[0.18em] uppercase transition ${calcTab === "mortgage"
-                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
-                      : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
-                      }`}
+                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md lg:text-md font-semibold tracking-[0.18em] uppercase transition ${
+                      calcTab === "mortgage"
+                        ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
+                        : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
+                    }`}
                   >
                     Mortgage Calculator
                   </button>
 
                   <button
                     onClick={() => setCalcTab("payment-plan")}
-                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md lg:text-md font-semibold tracking-[0.18em] uppercase transition ${calcTab === "payment-plan"
-                      ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
-                      : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
-                      }`}
+                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md lg:text-md font-semibold tracking-[0.18em] uppercase transition ${
+                      calcTab === "payment-plan"
+                        ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
+                        : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
+                    }`}
                   >
                     Payment Plans
                   </button>
@@ -914,13 +967,11 @@ const slug = String(params?.slug || "");
                           AED {formatAED(propertyPrice)}
                         </h3>
                       </div>
-
                     </div>
 
                     {calcTab === "mortgage" ? (
                       <>
                         <div className="grid md:grid-cols-3 ml-4  gap-6 md:gap-0 mb-1 items-stretch">
-
                           <div className="flex items-center">
                             <PremiumResultCard
                               title="Total Cost"
@@ -951,7 +1002,6 @@ const slug = String(params?.slug || "");
                               suffix="AED /Year"
                             />
                           </div>
-
                         </div>
 
                         <div className="rounded-[24px] border border-white/10 bg-black/25 md:p-2 space-y-4">
@@ -993,7 +1043,7 @@ const slug = String(params?.slug || "");
                             suffix="AED"
                             highlighted
                           />
-                          
+
                           <PremiumResultCard
                             title="Construction"
                             value={formatAED(constructionAmount)}
@@ -1011,17 +1061,17 @@ const slug = String(params?.slug || "");
                             label="Booking Payment"
                             value={`AED ${formatAED(bookingAmount)}`}
                           />
-                            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
                           <PremiumBreakdownRow
                             label="During Construction"
                             value={`AED ${formatAED(constructionAmount)}`}
                           />
-                            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
                           <PremiumBreakdownRow
                             label="On Handover"
                             value={`AED ${formatAED(handoverAmount)}`}
                           />
-                            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent " />
                           <div className=" ">
                             <PremiumBreakdownRow
                               label="Total Cost"
@@ -1032,7 +1082,6 @@ const slug = String(params?.slug || "");
                         </div>
                       </>
                     )}
-
                   </div>
                 </div>
               </div>
@@ -1087,37 +1136,32 @@ function MetaRow({
 }) {
   return (
     <div
-      className={`flex items-center justify-between ${!isLast ? "border-b border-white/10 pb-3" : ""
-        }`}
+      className={`flex items-center justify-between ${
+        !isLast ? "border-b border-white/10 pb-3" : ""
+      }`}
     >
       <span>{label}</span>
-      <span className="text-white font-semibold text-right">{value || EMPTY_VALUE}</span>
+      <span className="text-white font-semibold text-right">
+        {value || EMPTY_VALUE}
+      </span>
     </div>
   );
 }
-
-
 
 function formatAED(value: number) {
   if (!Number.isFinite(value)) return "0";
   return Math.round(value).toLocaleString("en-AE");
 }
 
-function SkeletonBlock({
-  className = "",
-}: {
-  className?: string;
-}) {
+function SkeletonBlock({ className = "" }: { className?: string }) {
   return (
-    <div
-      className={`animate-pulse rounded-2xl bg-white/10 ${className}`}
-    />
+    <div className={`animate-pulse rounded-2xl bg-white/10 ${className}`} />
   );
 }
 
 function ProjectDetailsSkeleton() {
   return (
-    <main className="bg-black text-white min-h-screen overflow-x-hidden">
+    <main className="bg-black text-white min-h-screen overflow-x-hidden sm:mt-[80px]">
       {/* Hero */}
       <section className="relative mt-4 px-4 md:px-10">
         <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
@@ -1290,7 +1334,6 @@ function ProjectDetailsSkeleton() {
           </div>
         </div>
       </section>
-
     </main>
   );
 }
@@ -1318,8 +1361,9 @@ function getDefaultMessage(
     case "schedule-visit":
       return `I am interested in scheduling a private visit for ${projectTitle}. Please contact me with available timings.`;
     case "download-floor-plan":
-      return `I would like to receive the floor plan for ${projectTitle}${floorPlanLabel ? ` (${floorPlanLabel})` : ""
-        }.`;
+      return `I would like to receive the floor plan for ${projectTitle}${
+        floorPlanLabel ? ` (${floorPlanLabel})` : ""
+      }.`;
     case "request-brochure":
       return `Please share the latest brochure, pricing, and availability for ${projectTitle}.`;
     case "book-consultation":
@@ -1367,10 +1411,9 @@ function PremiumResultCard({
 }) {
   return (
     <div
-      className={`rounded-[24px]  p-5 min-h-[80px] flex flex-col justify-between ${highlighted
-        ? "border-yellow-400/25"
-        : ""
-        }`}
+      className={`rounded-[24px]  p-5 min-h-[80px] flex flex-col justify-between ${
+        highlighted ? "border-yellow-400/25" : ""
+      }`}
     >
       <p className="text-sm text-white-400">{title}</p>
       <div>

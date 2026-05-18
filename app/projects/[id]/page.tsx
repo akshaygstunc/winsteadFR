@@ -643,7 +643,7 @@ export default function ProjectDetailPage() {
           })}
         />
       )}
-      <main className="bg-black text-white min-h-screen overflow-x-hidden">
+      <main className="bg-black text-white min-h-screen overflow-x-hidden sm:mt-[80px]">
         <section className="relative">
           <ProjectHeroSlider
             project={projectDetails}
@@ -890,67 +890,63 @@ export default function ProjectDetailPage() {
                     setSelectedPlan(plan.label);
                     setSelectedUnit(plan.label);
                   }}
-                  className={`group relative cursor-pointer overflow-hidden rounded-2xl border transition-all duration-300 ${
+                  className={`group relative cursor-pointer overflow-hidden rounded-xl border transition-all duration-300 ${
                     active
                       ? "border-yellow-400/50 bg-white/[0.05] shadow-[0_10px_40px_rgba(241,220,127,0.12)]"
                       : "border-white/10 bg-white/[0.03] hover:border-yellow-400/30"
                   }`}
                 >
                   {/* IMAGE */}
-                  <div className="relative h-[100px] flex  overflow-hidden">
+                  <div className="relative h-[160px] overflow-hidden">
                     <Image
                       src={FloorPlan}
                       alt={plan.label}
                       fill
                       className="object-contain bg-white transition duration-500 group-hover:scale-105"
                     />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
-                    <div className="absolute bottom-3 left-4 right-4">
-                      <h3 className="text-lg font-semibold text-white leading-tight">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/5 to-transparent" />
+                    <div className="absolute bottom-2 left-3 right-3">
+                      <h3 className="text-sm font-semibold text-white leading-tight">
                         {plan.label}
                       </h3>
                     </div>
                   </div>
 
                   {/* CONTENT */}
-                  <div className="p-4">
-                    {/* INLINE INFO (replaces 2 big boxes) */}
-                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-white/70">
-                      <span>{plan.size}</span>
-                      <span>• {plan.data.bedrooms} Beds</span>
-                      <span>• {plan.category}</span>
-                    </div>
-
-                    {/* PRICE + CTA */}
-                    <div className="flex items-center justify-between mt-3">
-                      <p className="text-white font-semibold text-base">
+                  <div className="px-3 py-2 flex items-center justify-between gap-2">
+                    {/* LEFT: meta + price */}
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap gap-x-2 text-xs text-white/60 leading-tight">
+                        <span>{plan.size}</span>
+                        <span>• {plan.data.bedrooms} Beds</span>
+                        <span>• {plan.category}</span>
+                      </div>
+                      <p className="text-sm font-semibold text-white mt-0.5">
                         AED {plan.data.price}
                       </p>
-
-                      <a
-                        href={selectedUnitPlan?.image || "#"}
-                        download
-                        target="_blank"
-                        onClick={(e) => {
-                          if (!selectedUnitPlan?.image) {
-                            e.preventDefault();
-                            return;
-                          }
-                          e.stopPropagation();
-                        }}
-                        className={`text-xs px-4 py-2 rounded-full bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black transition
-                          `}
-                      >
-                        {selectedUnitPlan?.image ? "Download" : "N/A"}
-                      </a>
+                      {plan?.title && (
+                        <p className="text-[10px] text-yellow-400 uppercase mt-0.5 truncate">
+                          {plan.title}
+                        </p>
+                      )}
                     </div>
 
-                    {/* SUBTEXT */}
-                    <p className="text-xs text-white mt-2 uppercase text-yellow">
-                      {plan?.title}
-                    </p>
+                    {/* RIGHT: CTA */}
+                    <a
+                      href={selectedUnitPlan?.image || "#"}
+                      download
+                      target="_blank"
+                      onClick={(e) => {
+                        if (!selectedUnitPlan?.image) {
+                          e.preventDefault();
+                          return;
+                        }
+                        e.stopPropagation();
+                      }}
+                      className="shrink-0 text-[11px] px-3 py-1.5 rounded-full bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black"
+                    >
+                      {selectedUnitPlan?.image ? "Download" : "N/A"}
+                    </a>
                   </div>
                 </div>
               );
@@ -1412,7 +1408,7 @@ function SkeletonBlock({ className = "" }: { className?: string }) {
 
 function ProjectDetailsSkeleton() {
   return (
-    <main className="bg-black text-white min-h-screen overflow-x-hidden">
+    <main className="bg-black text-white min-h-screen overflow-x-hidden sm:mt-[80px]">
       <section className="relative mt-4 px-4 md:px-10">
         <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-6">
           <SkeletonBlock className="absolute inset-0 rounded-[32px]" />

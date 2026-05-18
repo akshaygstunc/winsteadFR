@@ -55,7 +55,7 @@ export default function ServicesOverview({
     <section className="py-8 px-6 md:px-12 border-b border-white/10">
       <div className="max-w-[85rem] mx-auto">
         {/* HEADER */}
-        <div className="max-w-3xl mx-auto text-center mb-14">
+        <div className="max-w-3xl mx-auto text-left lg:text-center mb-14">
           {loading ? (
             <div className="space-y-4 flex flex-col items-center">
               <div className="h-4 w-36 rounded bg-white/10 animate-pulse" />
@@ -84,7 +84,7 @@ export default function ServicesOverview({
         </div>
 
         {/* SERVICES GRID */}
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 text-left">
           {loading
             ? Array.from({ length: 3 }).map((_, index) => (
               <article

@@ -111,7 +111,7 @@ function ProjectsContent() {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen overflow-x-hidden">
+    <div className="bg-black text-white min-h-screen overflow-x-hidden sm:mt-[80px]">
       <ProjectsHero />
 
       <section className="max-w-[85rem] mx-auto px-4 md:px-10 pt-6">
@@ -157,7 +157,7 @@ function ProjectsContent() {
             </div>
           )}
 
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 md:grid-cols-3 gap-6 flex-1">
+          <div className="w-full grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 md:grid-cols-3 gap-6 flex-1">
             {loading ? (
               Array.from({ length: 6 }).map((_, i) => (
                 <PropertyCardSkeleton key={i} />
@@ -686,7 +686,7 @@ function ProjectCard({ data }: any) {
   }
   return (
     <Link href={`/projects/${data.slug}`} className="block">
-      <div className="group relative w-[280px] rounded-[20px] overflow-hidden border border-white/8 bg-[#0e0e0f] transition-all duration-350 hover:-translate-y-1 hover:border-yellow-500/25 hover:shadow-[0_12px_40px_rgba(250,204,21,0.07)] cursor-pointer">
+      <div className="group relative w-[250px] lg:w-[280] rounded-[20px] overflow-hidden border border-white/8 bg-[#0e0e0f] transition-all duration-350 hover:-translate-y-1 hover:border-yellow-500/25 hover:shadow-[0_12px_40px_rgba(250,204,21,0.07)] cursor-pointer">
         {/* Image */}
         <div className="relative h-[200px] overflow-hidden">
           <Image

@@ -25,6 +25,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "next/image": [
+        "./src/lib/Image"
       ]
     }
   },
