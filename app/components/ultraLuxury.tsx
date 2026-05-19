@@ -142,11 +142,12 @@ export default function UltraLuxury() {
           <div className="rounded-xl overflow-hidden">
             {currentMedia?.type === "image" ? (
               <Image
+                key={currentMedia.src}
                 src={currentMedia.src}
                 alt="media"
                 width={800}
                 height={500}
-                className="w-full h-[250px] md:h-[325px] object-cover"
+                className="w-full h-[250px] md:h-[325px] object-cover pointer-events-none"
               />
             ) : (
               <video
@@ -167,6 +168,7 @@ export default function UltraLuxury() {
                     ? "border-yellow-400"
                     : "border-transparent"
                   }`}
+                  style={{ pointerEvents: 'auto' }}
               >
                 {item.type === "image" ? (
                   <Image
@@ -174,7 +176,7 @@ export default function UltraLuxury() {
                     alt="thumb"
                     width={100}
                     height={80}
-                    className="w-full h-20 object-cover"
+                    className="w-full h-20 object-cover pointer-events-none"
                   />
                 ) : (
                   <video

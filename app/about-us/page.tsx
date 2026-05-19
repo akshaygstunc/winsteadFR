@@ -471,7 +471,7 @@ export default function AboutUs() {
                   <img
                     src={aboutPage?.data?.whyChooseImage || img4}
                     alt="Why-choose-us"
-                    className="object-cover"
+                    className="w-full h-full object-cover"
                   />
                 )}
               </div>
@@ -493,7 +493,7 @@ export default function AboutUs() {
                   <img
                     src={aboutPage?.data?.howWeHelpImage || aboutImg}
                     alt="How we can help"
-                    className="object-cover"
+                    className="w-full h-full object-cover"
                   />
                 )}
               </div>

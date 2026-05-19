@@ -11,16 +11,24 @@ export default function Image({
   ...props
 }: ImageProps) {
   const [imgSrc, setImgSrc] = useState(src);
+  const [hasError, setHasError] = useState(false);
 
-  return (
-    <NextImage
-      {...props}
-      src={typeof imgSrc === "string" ? imgSrc : imgSrc}
-      alt={alt}
-      quality={quality}
-      loading={props.priority ? undefined : loading}
-      sizes={sizes}
-      onError={() => setImgSrc("/placeholder.webp")}
-    />
-  );
+  return hasError ? (
+  <div
+    className={`bg-gray-800 flex items-center justify-center ${props.className}`}
+    style={{ width: props.width, height: props.height }}
+  >
+    <span className="text-gray-500 text-xs">No Image</span>
+  </div>
+) : (
+  <NextImage
+    {...props}
+    src={typeof imgSrc === "string" ? imgSrc : imgSrc}
+    alt={alt}
+    quality={quality}
+    loading={props.priority ? undefined : loading}
+    sizes={sizes}
+    onError={() => setHasError(true)}
+  />
+);
 }
