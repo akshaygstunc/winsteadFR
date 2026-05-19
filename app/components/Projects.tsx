@@ -223,7 +223,11 @@ export default function Projects({ projects = [], homePage }: any) {
         (p) => p._vendor === selectedVendor.toLowerCase(),
       );
     } else {
-      filtered = filtered.filter((p) => p._category === String(activeFilter));
+      filtered = filtered.filter((p) =>
+  Array.isArray(p._category)
+    ? p._category.includes(String(activeFilter))  // ← use includes() for arrays
+    : p._category === String(activeFilter)
+);;
     }
 
     // ✅ STEP 4: Sort
