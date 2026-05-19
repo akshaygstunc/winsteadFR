@@ -11,6 +11,7 @@ export default function UltraLuxury() {
 
   // ✅ SAFE CURRENT PROJECT
   const currentProject = luxuaryProject[activeProject];
+  console.log("currentProject fields:", currentProject);
 
   // ✅ BUILD MEDIA ARRAY FROM API
   const media =

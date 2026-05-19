@@ -1,6 +1,6 @@
 "use client";
 import NextImage, { ImageProps } from "@/src/lib/NextImage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Image({
   src,
@@ -12,23 +12,28 @@ export default function Image({
 }: ImageProps) {
   const [imgSrc, setImgSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
-
-  return hasError ? (
-  <div
-    className={`bg-gray-800 flex items-center justify-center ${props.className}`}
-    style={{ width: props.width, height: props.height }}
-  >
-    <span className="text-gray-500 text-xs">No Image</span>
-  </div>
-) : (
-  <NextImage
-    {...props}
-    src={typeof imgSrc === "string" ? imgSrc : imgSrc}
-    alt={alt}
-    quality={quality}
-    loading={props.priority ? undefined : loading}
-    sizes={sizes}
-    onError={() => setHasError(true)}
-  />
-);
+ useEffect(() => {
+    if (src) {
+      setImgSrc(src);
+      setHasError(false);
+    }
+  }, [src]);
+   return hasError ? (
+    <div
+      className={`bg-gray-800 flex items-center justify-center ${props.className}`}
+      style={{ width: props.width, height: props.height }}
+    >
+      <span className="text-gray-500 text-xs">No Image</span>
+    </div>
+  ) : (
+    <NextImage
+      {...props}
+      src={imgSrc}
+      alt={alt}
+      quality={quality}
+      loading={props.priority ? undefined : loading}
+      sizes={sizes}
+      onError={() => setHasError(true)}
+    />
+  );
 }

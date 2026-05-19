@@ -38,7 +38,7 @@ function AdBannerLarge({ ad }: AdBannerLargeProps) {
         <img
           src={ad.image}
           alt={ad.title}
-          className="object-cover group-hover:scale-105 transition duration-500"
+          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
       </div>

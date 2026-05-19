@@ -29,13 +29,13 @@ export default function ContactHero({
                             alt={bannerTitle}
                             fill
                             priority
-                            className="object-cover object-center"
+                            className="w-full h-full object-cover object-center"
                         />
                 )}
             </div>
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-black/5 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent" />
 
             <div className="relative z-10 flex h-full items-end justify-center">
                 <div className="w-full max-w-7xl px-6 pb-14 md:px-12 md:pb-20">

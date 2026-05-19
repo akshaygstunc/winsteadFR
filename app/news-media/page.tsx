@@ -33,6 +33,7 @@ export default function NewsMediaPage() {
     }
     fetch();
   }, []);
+console.log("pageContent-media  ",pageContent)
 
   const filtered = useMemo(() => {
     let data = [...items];

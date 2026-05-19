@@ -92,6 +92,15 @@ export default class WebsiteContentService {
       throw e;
     }
   }
+  static async getBlogPage() {
+  try {
+    const response = await api.get("/content/blogs-page/singleton"); // ← your blogs page singleton endpoint
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching blog page content:", error);
+    return null;
+  }
+}
   static async getNewsMedia(slug: string) {
     try {
       const response = await api.get(
@@ -232,15 +241,6 @@ static async getMedia() {
   }
 }
 
-static async getMedia() {
-  try {
-    const response = await api.get("/content/media");
-    return response?.data;
-  } catch (error) {
-    console.error("Error fetching media:", error);
-    throw error;
-  }
-}
  static async GetPodcasts() {
   try {
     const response = await fetch("/api/instagram");

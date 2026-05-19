@@ -34,7 +34,7 @@ export default function ServicesHero({ servicesData, loading = false }) {
                         alt={heroTitle || "Winstead Services"}
                         fill
                         priority
-                        className="object-cover object-center"
+                        className="w-full h-full object-cover object-center"
                     />
                 )}
             </div>
