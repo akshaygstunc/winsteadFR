@@ -75,12 +75,18 @@ function GalleryHero({ galleryData, loading = false }: any) {
         {loading ? (
           <div className="h-full w-full bg-white/10 animate-pulse" />
         ) : (
-          <Image src={bannerImage} alt={bannerTitle} fill priority className="object-cover object-center" />
+          <Image
+            src={bannerImage}
+            alt={bannerTitle}
+            fill
+            priority
+            className="object-cover object-center"
+          />
         )}
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-black/5 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent" />
 
       <div className="relative z-10 h-full flex items-end justify-center">
         <div className="w-full max-w-[85rem] px-6 md:px-12 pb-14 md:pb-20">
@@ -93,7 +99,9 @@ function GalleryHero({ galleryData, loading = false }: any) {
               </>
             ) : (
               <>
-                <p className="mb-3 text-[11px] uppercase tracking-[0.35em] text-[#F1DC7F]">{bannerTitle}</p>
+                <p className="mb-3 text-[11px] uppercase tracking-[0.35em] text-[#F1DC7F]">
+                  {bannerTitle}
+                </p>
                 <h1 className="text-xl md:text-2xl xl:text-5xl font-semibold leading-[1.05] max-w-[520px]">
                   {subtitleLines[0]}
                   {subtitleLines[1] && (
@@ -157,7 +165,6 @@ function EventGalleryModal({
 
   return (
     <div className="fixed inset-0 z-[999] bg-black/98 backdrop-blur-md flex flex-col">
-
       {/* ── Top bar ── */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0">
         <div className="flex items-center gap-4">
@@ -180,10 +187,8 @@ function EventGalleryModal({
 
       {/* ── Main viewer ── */}
       <div className="flex flex-1 overflow-hidden">
-
         {/* Left: main media + nav */}
         <div className="relative flex-1 flex items-center justify-center bg-black/60 px-4 py-4">
-
           {total > 1 && (
             <>
               <button
@@ -227,7 +232,6 @@ function EventGalleryModal({
 
         {/* Right: info panel + filmstrip */}
         <div className="hidden lg:flex flex-col w-[300px] xl:w-[340px] border-l border-white/10 bg-black/80 shrink-0">
-
           {/* Event info */}
           <div className="p-6 border-b border-white/10">
             {/* Gold accent line */}
@@ -240,21 +244,27 @@ function EventGalleryModal({
             {event.data?.location && (
               <div className="flex items-start gap-2.5 mb-3">
                 <FaMapMarkerAlt className="text-yellow-400 mt-0.5 shrink-0 text-xs" />
-                <span className="text-gray-300 text-sm">{event.data.location}</span>
+                <span className="text-gray-300 text-sm">
+                  {event.data.location}
+                </span>
               </div>
             )}
 
             {event.data?.eventDate && (
               <div className="flex items-start gap-2.5 mb-3">
                 <FaCalendarAlt className="text-yellow-400 mt-0.5 shrink-0 text-xs" />
-                <span className="text-gray-300 text-sm">{formatEventDate(event.data.eventDate)}</span>
+                <span className="text-gray-300 text-sm">
+                  {formatEventDate(event.data.eventDate)}
+                </span>
               </div>
             )}
 
             {event.data?.author && (
               <div className="flex items-start gap-2.5 mb-3">
                 <FaUser className="text-yellow-400 mt-0.5 shrink-0 text-xs" />
-                <span className="text-gray-300 text-sm capitalize">{event.data.author}</span>
+                <span className="text-gray-300 text-sm capitalize">
+                  {event.data.author}
+                </span>
               </div>
             )}
 
@@ -267,7 +277,8 @@ function EventGalleryModal({
             {/* Media type badge */}
             <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-3 py-1">
               <span className="text-[10px] uppercase tracking-[0.2em] text-yellow-400">
-                {currentIsVideo ? "Video" : "Photo"} · {activeMediaIndex + 1}/{total}
+                {currentIsVideo ? "Video" : "Photo"} · {activeMediaIndex + 1}/
+                {total}
               </span>
             </div>
           </div>
@@ -345,7 +356,13 @@ function EventGalleryModal({
                     <FaPlay className="text-white text-sm" />
                   </div>
                 ) : (
-                  <Image src={url} alt={`Thumb ${index + 1}`} fill unoptimized className="object-cover" />
+                  <Image
+                    src={url}
+                    alt={`Thumb ${index + 1}`}
+                    fill
+                    unoptimized
+                    className="object-cover"
+                  />
                 )}
               </button>
             );
@@ -375,7 +392,7 @@ function GalleryGrid({
   // Derive tabs from events (using entity or a fixed label since API has no category)
   const tabs = useMemo(() => {
     const cats = Array.from(
-      new Set(events.map((e) => e.data?.category || e.entity || "Events"))
+      new Set(events.map((e) => e.data?.category || e.entity || "Events")),
     );
     return ["All", ...cats];
   }, [events]);
@@ -383,7 +400,7 @@ function GalleryGrid({
   const filteredEvents = useMemo(() => {
     if (activeTab === "All") return events;
     return events.filter(
-      (e) => (e.data?.category || e.entity || "Events") === activeTab
+      (e) => (e.data?.category || e.entity || "Events") === activeTab,
     );
   }, [activeTab, events]);
 
@@ -420,11 +437,12 @@ function GalleryGrid({
     <>
       <section className="bg-black px-6 md:px-12 md:py-8 text-white">
         <div className="max-w-[85rem] mx-auto">
-
           {/* Header */}
           <div className="mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div className="max-w-2xl">
-              <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">{eyebrow}</p>
+              <p className="text-sm uppercase tracking-[0.25em] text-yellow-400 mb-3">
+                {eyebrow}
+              </p>
               <h2 className="text-3xl md:text-5xl font-semibold leading-tight">
                 {title.replace("event category", "")}
                 <span className="text-yellow-400">
@@ -432,7 +450,9 @@ function GalleryGrid({
                 </span>
               </h2>
             </div>
-            <p className="max-w-xl text-sm md:text-base leading-relaxed text-gray-400">{description}</p>
+            <p className="max-w-xl text-sm md:text-base leading-relaxed text-gray-400">
+              {description}
+            </p>
           </div>
 
           {/* Tabs */}
@@ -456,11 +476,17 @@ function GalleryGrid({
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {loading
               ? Array.from({ length: 6 }).map((_, i) => (
-                  <article key={i} className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] h-[360px] animate-pulse" />
+                  <article
+                    key={i}
+                    className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] h-[360px] animate-pulse"
+                  />
                 ))
               : filteredEvents.map((event) => {
-                  const coverSrc = event.data?.coverImage || event.data?.media?.[0] || galleryImg1;
-                  const mediaCount = event.data?.media?.length || 0;
+                  const coverSrc =
+                    event?.data?.coverImage?.trim() || // ← trim to catch whitespace too
+                    event?.data?.media?.[0] ||
+                    null;
+                  const mediaCount = event?.data?.media?.length || 0;
                   const dateLabel = formatEventDate(event.data?.eventDate);
 
                   return (
@@ -507,7 +533,9 @@ function GalleryGrid({
                             {dateLabel}
                           </p>
                         )}
-                        <h3 className="text-xl md:text-2xl font-semibold leading-tight">{event.title}</h3>
+                        <h3 className="text-xl md:text-2xl font-semibold leading-tight">
+                          {event.title}
+                        </h3>
                         {event.data?.location && (
                           <p className="mt-2 text-sm text-gray-300 flex items-center gap-1.5">
                             <FaMapMarkerAlt className="text-yellow-400 text-xs shrink-0" />
@@ -562,7 +590,11 @@ export default function GalleryPage() {
       <section className="max-w-7xl mx-auto px-4 md:px-10 pt-6">
         <AutoBreadcrumbs />
       </section>
-      <GalleryGrid events={events} loading={loading} galleryData={galleryData} />
+      <GalleryGrid
+        events={events}
+        loading={loading}
+        galleryData={galleryData}
+      />
     </main>
   );
 }
