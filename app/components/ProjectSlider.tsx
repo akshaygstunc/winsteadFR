@@ -46,7 +46,7 @@ export default function ProjectHeroSlider({
     }, [images, currentIndex]);
 
     return (
-        <div className="relative h-[74vh] min-h-[560px] md:min-h-[640px] overflow-hidden rounded-[32px] border border-white/10">
+        <div className="relative w-full min-h-[560px] md:min-h-[640px] bg-black overflow-hidden rounded-[32px] border border-white/10">
             {/* SLIDES */}
             {images.map((media, index) => (
                 <div
@@ -70,7 +70,7 @@ export default function ProjectHeroSlider({
                             alt={`${project.title}-${index}`}
                             fill
                             priority={index === 0}
-                            className="object-cover"
+                            className="h-full w-full object-cover"
                         />
                     )}
                 </div>

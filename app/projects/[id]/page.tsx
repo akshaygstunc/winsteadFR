@@ -181,11 +181,11 @@ function formatPrice(value: string | number | undefined) {
   }
 
   const numeric = Number(String(value).replace(/,/g, ""));
-  if (!Number.isNaN(numeric) && numeric > 0) {
-    return `AED ${numeric.toLocaleString("en-AE")}`;
+  if (!Number.isFinite(numeric) || numeric <= 0) {
+    return String(value);
   }
 
-  return String(value);
+  return `AED ${numeric.toLocaleString("en-AE")}`;
 }
 
 function formatBedrooms(value: string | number | undefined) {
@@ -209,33 +209,34 @@ function getProjectImages(data?: BackendProject) {
 
   return images.length ? Array.from(new Set(images)) : fallbackImages;
 }
+
+// FIX 1: Remove Studio (0) values — filter out nums that are 0 before computing range
 function getRange(values: (string | number)[], suffix = "") {
   const nums = values
     .map((v) => Number(String(v).replace(/[^\d.]/g, "")))
-    .filter((v) => !isNaN(v));
+    .filter((v) => !isNaN(v) && v > 0); // <-- exclude 0 (Studio) values
 
   if (!nums.length) return EMPTY_VALUE;
 
   const min = Math.min(...nums);
   const max = Math.max(...nums);
 
-  const minLabel = min === 0 ? "Studio" : `${min}${suffix}`;
+  const minLabel = `${min}${suffix}`;
   const maxLabel = `${max}${suffix}`;
 
   return min === max ? minLabel : `${minLabel} - ${maxLabel}`;
 }
+
 function getAmenities(data?: BackendProject) {
   if (!Array.isArray(data?.amenities) || !data.amenities.length) {
     return [{ title: EMPTY_VALUE, icon: null }];
   }
 
   return data.amenities.map((item) => {
-    // string fallback (old data)
     if (typeof item === "string") {
       return { title: item || EMPTY_VALUE, icon: null };
     }
 
-    // object format (current API)
     if (typeof item === "object" && item !== null) {
       return {
         title: item?.title || EMPTY_VALUE,
@@ -287,7 +288,6 @@ function getFloorPlans(data?: BackendProject): UiFloorPlan[] {
 
       image: plan.image || plan.url || data?.thumbnail || fallbackImages[0],
 
-      // ✅ ADD THESE
       bedrooms:
         plan.bedrooms && Number(plan.bedrooms) > 0
           ? `${plan.bedrooms} Bedroom${Number(plan.bedrooms) > 1 ? "s" : ""}`
@@ -392,7 +392,7 @@ export default function ProjectDetailPage() {
     const heroImages = getProjectImages(projectDetails);
     const floorPlans = getFloorPlans(projectDetails);
     const bedroomValues = projectDetails.floorPlans?.map(
-      (p: any) => p?.data?.bedrooms, // extract number from "2 Bedroom"
+      (p: any) => p?.data?.bedrooms,
     );
     const sizeValues = projectDetails.floorPlans?.map(
       (p: any) => p?.data?.size,
@@ -412,7 +412,6 @@ export default function ProjectDetailPage() {
       duringconstruction: getDisplayValue(projectDetails.duringconstruction),
       developer: getRelationLabel(projectDetails.developer as any),
       propertyType: getRelationLabel(projectDetails?.type),
-      // residence: getRelationLabel(projectDetails.type),
       residence: Array.isArray(projectDetails.floorPlans)
         ? (() => {
             const plans = projectDetails.floorPlans
@@ -422,26 +421,24 @@ export default function ProjectDetailPage() {
             const groups: Record<string, string[]> = {};
             for (const plan of plans) {
               const words = plan.split(" ");
-              const suffix = words[words.length - 1]; // "Apartment", "Penthouse"
+              const suffix = words[words.length - 1];
               const prefix = words
                 .slice(0, -1)
                 .join(" ")
                 .replace(/\s+/g, "")
-                .toUpperCase(); // "1BR", "2BR"
+                .toUpperCase();
               if (!groups[suffix]) groups[suffix] = [];
               if (!groups[suffix].includes(prefix)) groups[suffix].push(prefix);
             }
 
-            // Format: "1BR, 2, 3, 4, 5, 6BR Apartment, Penthouse"
             const allSuffixes = Object.keys(groups).join(", ");
             const allPrefixes = Object.values(groups)
               .flat()
-              .filter((v, i, arr) => arr.indexOf(v) === i); // dedupe
+              .filter((v, i, arr) => arr.indexOf(v) === i);
 
-            // Compress: show first, middle as numbers only, last with BR
             const compressed = allPrefixes.map((p, i) => {
-              if (i === 0 || i === allPrefixes.length - 1) return p; // "1BR", "6BR"
-              return p.replace("BR", ""); // "2", "3", "4", "5"
+              if (i === 0 || i === allPrefixes.length - 1) return p;
+              return p.replace("BR", "");
             });
 
             return `${compressed.join(", ")} ${allSuffixes}`;
@@ -609,8 +606,6 @@ export default function ProjectDetailPage() {
   const handoverAmount = (propertyPrice * handoverPercent) / 100;
 
   // MORTGAGE
-  // duringconstruction = upfront/downpayment
-  // handover = mortgage base amount
   const downPaymentPercent = constructionPercent;
   const downPaymentAmount = constructionAmount;
   const loanBaseAmount = handoverAmount;
@@ -633,12 +628,13 @@ export default function ProjectDetailPage() {
   const totalCost = bookingAmount + downPaymentAmount + totalMortgagePaid;
   console.log(projectDetails);
   const isVideo = (url: string) => /\.(mp4|webm|ogg)$/i.test(url);
+
   return (
     <>
       {projectDetails && (
         <Schema
           schemas={resolveSchemas({
-            type: "project", // or detectType(path)
+            type: "project",
             data: projectDetails,
           })}
         />
@@ -682,11 +678,6 @@ export default function ProjectDetailPage() {
                     label="Location"
                     value={projectDetails?.locations?.title}
                   />
-                  {/* <FactCard
-                    icon={<FaRulerCombined className="text-yellow-400" />}
-                    label="Floor Plans"
-                    value={project.residence}
-                  /> */}
                 </div>
               </div>
             </div>
@@ -869,6 +860,7 @@ export default function ProjectDetailPage() {
 
         {activeTab === "FAQ" && <LuxuryFAQ faq={projectDetails?.faq || []} />}
 
+        {/* FLOOR PLANS SECTION */}
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
           <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8 mb-8">
             <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
@@ -931,28 +923,25 @@ export default function ProjectDetailPage() {
                       )}
                     </div>
 
-                    {/* RIGHT: CTA */}
-                    <a
-                      href={selectedUnitPlan?.image || "#"}
-                      download
-                      target="_blank"
+                    {/* FIX 2: Download button now opens contact modal instead of direct download */}
+                    <button
                       onClick={(e) => {
-                        if (!selectedUnitPlan?.image) {
-                          e.preventDefault();
-                          return;
-                        }
                         e.stopPropagation();
+                        setSelectedPlan(plan.label);
+                        setSelectedUnit(plan.label);
+                        openContactModal("download-floor-plan");
                       }}
                       className="shrink-0 text-[11px] px-3 py-1.5 rounded-full bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black"
                     >
-                      {selectedUnitPlan?.image ? "Download" : "N/A"}
-                    </a>
+                      Download
+                    </button>
                   </div>
                 </div>
               );
             })}
           </div>
         </section>
+
         {projectDetails?.latitude && projectDetails?.longitude && (
           <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
             <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
@@ -975,7 +964,6 @@ export default function ProjectDetailPage() {
                 />
               </div>
 
-              {/* OPTIONAL ADDRESS */}
               {projectDetails.address && (
                 <p className="text-sm text-white-400 mt-4">
                   📍 {projectDetails.address}
@@ -984,6 +972,8 @@ export default function ProjectDetailPage() {
             </div>
           </section>
         )}
+
+        {/* GALLERY SECTION */}
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
           <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 md:p-8">
             <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
@@ -993,12 +983,16 @@ export default function ProjectDetailPage() {
               Visual highlights of the project
             </h2>
 
-            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {/* FIX 3: Mobile image responsiveness — use aspect-ratio container instead of fixed h-[260px].
+                On mobile: single column, full image visible via object-contain.
+                On md+: two-col grid with object-cover for a tighter visual. */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {project.heroImages.map((media, idx) => (
                 <div
                   key={idx}
                   onClick={() => setPreviewImage(media)}
-                  className="relative h-[260px] rounded-[24px] overflow-hidden border border-white/10 cursor-pointer group"
+                  className="relative rounded-[24px] overflow-hidden border border-white/10 cursor-pointer group bg-black/40"
+                  style={{ aspectRatio: "16/10" }}
                 >
                   {isVideo(media) ? (
                     <video
@@ -1014,14 +1008,15 @@ export default function ProjectDetailPage() {
                       src={media}
                       alt=""
                       fill
-                      className="object-cover group-hover:scale-110 transition duration-500"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                      className="object-cover sm:object-cover group-hover:scale-110 transition duration-500"
+                      style={{ objectPosition: "center" }}
                     />
                   )}
 
                   {/* Hover Overlay */}
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition" />
 
-                  {/* Optional: Video Indicator */}
                   {isVideo(media) && (
                     <div className="absolute bottom-3 right-3 text-xs bg-black/60 text-white px-2 py-1 rounded">
                       VIDEO
@@ -1033,31 +1028,9 @@ export default function ProjectDetailPage() {
           </div>
         </section>
 
-        {previewImage && (
-          <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
-            <div
-              className="absolute inset-0"
-              onClick={() => setPreviewImage(null)}
-            />
-            <div className="relative max-w-4xl w-full px-4">
-              <div className="relative w-full h-[80vh] rounded-2xl overflow-hidden">
-                <Image
-                  src={previewImage}
-                  alt="Preview"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <button
-                onClick={() => setPreviewImage(null)}
-                className="absolute top-2 right-6 text-white text-3xl font-bold"
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-        )}
+        
 
+        {/* MORTGAGE CALCULATOR SECTION */}
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 mb-2 relative z-20">
           <div className="space-y-6">
             <div className="relative overflow-hidden rounded-[36px] border border-yellow-500/15 bg-[linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
@@ -1077,17 +1050,6 @@ export default function ProjectDetailPage() {
                   >
                     Mortgage Calculator
                   </button>
-
-                  {/* <button
-                    onClick={() => setCalcTab("payment-plan")}
-                    className={`rounded-full px-6 py-3 text-xs md:text-sm lg:text-md font-semibold tracking-[0.18em] uppercase transition ${
-                      calcTab === "payment-plan"
-                        ? "bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)] text-black shadow-[0_8px_30px_rgba(241,220,127,0.25)]"
-                        : "border border-white/10 bg-white/[0.03] text-white hover:border-yellow-400/30 hover:text-white"
-                    }`}
-                  >
-                    Payment Plans
-                  </button> */}
                 </div>
 
                 <div className="grid xl:grid-cols-[0.85fr_1.15fr] gap-8 xl:gap-10">
@@ -1121,7 +1083,6 @@ export default function ProjectDetailPage() {
 
                     {calcTab === "mortgage" ? (
                       <div className="grid sm:grid-cols-2 gap-5">
-                        {/* PROPERTY PRICE */}
                         <PremiumCalcInput
                           label="Property Price (AED)"
                           helper="Total price of the property"
@@ -1131,7 +1092,6 @@ export default function ProjectDetailPage() {
                           }
                         />
 
-                        {/* DOWN PAYMENT */}
                         <PremiumCalcInput
                           label="Down Payment (%)"
                           helper="Amount you pay upfront"
@@ -1141,7 +1101,6 @@ export default function ProjectDetailPage() {
                           }
                         />
 
-                        {/* LOAN DURATION */}
                         <PremiumCalcInput
                           label="Loan Duration (Years)"
                           helper="Number of years to repay the loan"
@@ -1149,7 +1108,6 @@ export default function ProjectDetailPage() {
                           onChange={(value) => setLoanYears(Number(value) || 0)}
                         />
 
-                        {/* INTEREST RATE */}
                         <PremiumCalcInput
                           label="Interest Rate (%)"
                           helper="Average bank rate is around 3% – 5%"
@@ -1327,7 +1285,81 @@ export default function ProjectDetailPage() {
             </div>
           </div>
         </section>
+        {/* FIX 4 (CTA): Full-width CTA section inserted after gallery, before mortgage calculator */}
+        <section className="max-w-[85rem] mx-auto px-4 md:px-10 pb-14">
+          <div className="relative overflow-hidden rounded-[28px] border border-yellow-500/20 bg-[linear-gradient(135deg,rgba(185,166,80,0.12),rgba(124,87,0,0.08))]">
+            {/* Decorative blobs */}
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+              <div className="absolute -top-16 -left-16 h-64 w-64 rounded-full bg-yellow-400/10 blur-3xl" />
+              <div className="absolute -bottom-16 -right-16 h-64 w-64 rounded-full bg-yellow-500/10 blur-3xl" />
+            </div>
+
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 px-6 py-10 md:px-12 md:py-12">
+              {/* Left text */}
+              <div className="text-center md:text-left max-w-xl">
+                <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
+                  Ready to take the next step?
+                </p>
+                <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-3">
+                  Let's find your perfect unit in{" "}
+                  <span className="text-transparent bg-clip-text bg-[linear-gradient(84deg,#B9A650,#F1DC7F,#7C5700)]">
+                    {project.title}
+                  </span>
+                </h2>
+                <p className="text-sm text-white/60 leading-relaxed">
+                  Our property consultants are available to walk you through floor plans, pricing, and payment options — at your convenience.
+                </p>
+              </div>
+
+              {/* Right CTAs */}
+              <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-3 shrink-0 w-full md:w-auto">
+                <button
+                  onClick={() => openContactModal("schedule-visit")}
+                  className="rounded-2xl bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black px-7 py-4 font-semibold text-sm hover:scale-[1.02] transition whitespace-nowrap"
+                >
+                  Schedule a Visit
+                </button>
+                <button
+                  onClick={() => openContactModal("request-brochure")}
+                  className="rounded-2xl border border-yellow-400/30 bg-white/[0.04] text-white px-7 py-4 font-semibold text-sm hover:border-yellow-400/60 hover:bg-white/[0.07] transition whitespace-nowrap"
+                >
+                  Request Brochure
+                </button>
+               
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
+
+      {/* IMAGE PREVIEW MODAL */}
+      {previewImage && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div
+            className="absolute inset-0"
+            onClick={() => setPreviewImage(null)}
+          />
+          <div className="relative max-w-4xl w-full px-4">
+            {/* FIX 3 cont: Preview modal — use contain so full image always shows */}
+            <div className="relative w-full rounded-2xl overflow-hidden bg-black/60"
+              style={{ aspectRatio: "16/9" }}>
+              <Image
+                src={previewImage}
+                alt="Preview"
+                fill
+                sizes="100vw"
+                className="object-contain"
+              />
+            </div>
+            <button
+              onClick={() => setPreviewImage(null)}
+              className="absolute top-2 right-6 text-white text-3xl font-bold"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
 
       <ContactModal
         isOpen={isContactModalOpen}
@@ -1339,7 +1371,6 @@ export default function ProjectDetailPage() {
         projectTitle={project.title}
         intent={contactIntent}
         property={{
-          // ← add this
           propertyId: project.id || null,
           propertyTitle: project.title || "",
           projectName: project.title || "",
@@ -1607,17 +1638,14 @@ function PremiumCalcInput({
 }) {
   return (
     <div className="rounded-[22px] border border-[#F1DC7F35] bg-white/[0.03] p-4 transition-all duration-300 focus-within:border-[#F1DC7F] focus-within:shadow-[0_0_0_1px_rgba(241,220,127,0.45),0_0_20px_rgba(241,220,127,0.12)]">
-      {/* LABEL */}
       <label className="block text-sm text-[#F1DC7F] mb-1 font-medium">
         {label}
       </label>
 
-      {/* HELPER TEXT */}
       {helper && (
         <p className="text-xs text-white/50 mb-2 leading-relaxed">{helper}</p>
       )}
 
-      {/* INPUT */}
       <input
         type="number"
         value={value}

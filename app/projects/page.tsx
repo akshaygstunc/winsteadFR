@@ -686,7 +686,7 @@ function ProjectCard({ data }: any) {
   }
   return (
     <Link href={`/projects/${data.slug}`} className="block">
-      <div className="group relative xs:w-[230px] sm:w-[250px] lg:w-[280] rounded-[20px] overflow-hidden border border-white/8 bg-[#0e0e0f] transition-all duration-350 hover:-translate-y-1 hover:border-yellow-500/25 hover:shadow-[0_12px_40px_rgba(250,204,21,0.07)] cursor-pointer">
+      <div className="group relative xs:w-[230px] sm:w-[250px] lg:w-[280] rounded-[20px] overflow-hidden border border-black/20 bg-[#0e0e0f] transition-all duration-350 hover:-translate-y-1 cursor-pointer">
         {/* Image */}
         <div className="relative h-[200px] overflow-hidden">
           <Image
@@ -695,8 +695,8 @@ function ProjectCard({ data }: any) {
             fill
             className="object-cover group-hover:scale-105 transition duration-600"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b]/95 via-[#0a0a0b]/10 to-transparent" />
-          <div className="absolute top-[10px] left-[10px] text-[10px] font-medium tracking-wide px-[9px] py-[3px] rounded-full bg-black/60 border border-white/15 backdrop-blur-md text-white/85">
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b]/15 via-[#0a0a0b]/10 to-transparent" />
+          <div className="absolute top-[10px] left-[10px] text-[10px] font-medium tracking-wide px-[9px] py-[3px] rounded-full bg-black/10 border border-white/15 backdrop-blur-md text-white/85">
             {data.category}
           </div>
         </div>
@@ -738,6 +738,11 @@ function ProjectCard({ data }: any) {
             </button>
           </div>
         </div>
+        {/* <div className="absolute inset-0 bg-gradient-to-t from-black via-black/15 to-transparent" /> */}
+      <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-transparent group-hover:border-yellow-400/40 transition duration-500" />
+      <div className="absolute top-0 left-0 w-0 h-[2px] bg-gradient-to-r from-transparent via-yellow-400 to-transparent transition-all duration-500 group-hover:w-full" />
+      <div className="absolute bottom-0 right-0 w-0 h-[2px] bg-gradient-to-l from-transparent via-yellow-400 to-transparent transition-all duration-500 group-hover:w-full" />
+
       </div>
     </Link>
   );

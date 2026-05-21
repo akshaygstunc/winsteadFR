@@ -224,7 +224,7 @@ export default function Navbar() {
               {link.name}
             </a>
           ))} */}
-        {parentMenu?.reverse().map((item, index) => {
+        {parentMenu?.map((item, index) => {
   const children = getChildren(item._id);
 
   if (children.length > 0) {

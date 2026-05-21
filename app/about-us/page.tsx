@@ -219,7 +219,7 @@ console.log("aboutPage",aboutPage)
             </div>
           </section>
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5 order-2 lg:order-1">
+            <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5 order-1 lg:order-1">
               {loading ? (
                 <Skeleton className="w-full h-[150px] md:h-[300px] rounded-xl" />
               ) : (
@@ -231,7 +231,7 @@ console.log("aboutPage",aboutPage)
               )}
             </div>
 
-            <div className="order-1 lg:order-2">
+            <div className="order-2 lg:order-2">
               {loading ? (
                 <div className="space-y-4">
                   {/* Small label */}
@@ -277,7 +277,7 @@ console.log("aboutPage",aboutPage)
       <section className="py-12 md:py-20">
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-16 items-center">
-            <div>
+            <div className="order-2 lg:order-1">
               {loading ? (
                 <>
                   {/* Heading skeleton */}
@@ -328,7 +328,7 @@ console.log("aboutPage",aboutPage)
               )}
             </div>
 
-            <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5">
+            <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5 order-1 lg:order-2">
               {loading ? (
                 <Skeleton className="w-full h-[320px] md:h-[520px] rounded-[28px]" />
               ) : (
@@ -435,7 +435,7 @@ console.log("aboutPage",aboutPage)
       <section className="py-12 md:py-15">
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-center">
-            <div>
+            <div className="order-2 lg:order-1">
               {loading ? (
                 <>
                   {/* Heading skeleton */}
@@ -504,7 +504,7 @@ console.log("aboutPage",aboutPage)
               )}
             </div>
 
-            <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5">
+            <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5 order-1 lg:order-2">
               <div className="relative w-full h-[320px] md:h-[745px]">
                 {loading ? (
                   <Skeleton className="w-full h-full rounded-[28px]" />
@@ -526,7 +526,7 @@ console.log("aboutPage",aboutPage)
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             {/* IMAGE */}
-            <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5 order-2 lg:order-1">
+            <div className="relative rounded-[28px] overflow-hidden border border-[#b89b45]/25 bg-white/5 order-1 lg:order-2">
               <div className="relative w-full h-[320px] md:h-[950px]">
                 {loading ? (
                   <Skeleton className="w-full h-full rounded-[28px]" />
@@ -541,7 +541,7 @@ console.log("aboutPage",aboutPage)
             </div>
 
             {/* CONTENT */}
-            <div className="order-1 lg:order-2">
+            <div className="order-2 lg:order-2">
               {loading ? (
                 <>
                   {/* TITLE + HEADING + DESC */}
@@ -664,7 +664,7 @@ console.log("aboutPage",aboutPage)
       <section className="py-8 md:py-8 pb-20 md:pb-4">
         <div className="max-w-[88rem] mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-16 items-center mb-10">
-            <div>
+            <div className="order-2 lg:order-1">
               {loading ? (
                 <>
                   {/* Heading */}
@@ -713,7 +713,7 @@ console.log("aboutPage",aboutPage)
               )}
             </div>
 
-            <div className="relative rounded-[32px] overflow-hidden border border-[#b89b45]/25 bg-white/[0.03]">
+            <div className="relative rounded-[32px] overflow-hidden border border-[#b89b45]/25 bg-white/[0.03] order-1 lg:order-2">
               {loading ? (
                 <>
                   {/* Image skeleton */}
