@@ -628,14 +628,14 @@ export default function ProjectDetailPage() {
   const totalCost = bookingAmount + downPaymentAmount + totalMortgagePaid;
   console.log(projectDetails);
 
-  const isYoutubeUrl = (url: string) => {
-  if (!url) return false;
+  // const isYoutubeUrl = (url: string) => {
+  // if (!url) return false;
 
-  return (
-    url.includes("youtube.com/watch") ||
-    url.includes("youtu.be/") ||
-    url.includes("youtube.com/embed/")
-  );
+  // return (
+  //   url.includes("youtube.com/watch") ||
+  //   url.includes("youtu.be/") ||
+  //   url.includes("youtube.com/embed/")
+  // );
 };
 
 const isVimeoUrl = (url: string) => {
@@ -647,28 +647,16 @@ const isVimeoUrl = (url: string) => {
 const isVideo = (url: string) => {
   if (!url) return false;
 
-  // youtube
-  if (isYoutubeUrl(url)) return true;
+  // direct video extensions only
+  if (/\.(mp4|webm|ogg|mov|m4v|avi|mkv)$/i.test(url)) return true;
 
-  // vimeo
-  if (isVimeoUrl(url)) return true;
-
-  // direct video extensions
-  if (
-    /\.(mp4|webm|ogg|mov|m4v|avi|mkv)$/i.test(url)
-  ) {
-    return true;
-  }
-
-  // cloudinary / streaming / signed urls
+  // cloudinary / streaming urls
   if (
     url.includes("/video/") ||
     url.includes("video/upload") ||
     url.includes(".m3u8") ||
     url.includes(".mpd")
-  ) {
-    return true;
-  }
+  ) return true;
 
   return false;
 };
@@ -1078,7 +1066,27 @@ const getVimeoEmbedUrl = (url: string) => {
                   className="relative rounded-[24px] overflow-hidden border border-white/10 cursor-pointer group bg-black/40"
                   style={{ aspectRatio: "16/10" }}
                 >
-                  {isYoutubeUrl(media) ? (
+                  {isVideo(media) ? (
+  <video
+    src={media}
+    muted
+    loop
+    playsInline
+    autoPlay
+    controls
+    className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+  />
+) : (
+  <Image
+    src={media}
+    alt=""
+    fill
+    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+    className="object-cover sm:object-cover group-hover:scale-110 transition duration-500"
+    style={{ objectPosition: "center" }}
+  />
+)}
+                  {/* {isYoutubeUrl(media) ? (
   <iframe
     src={getYoutubeEmbedUrl(media)}
     className="w-full h-full object-cover"
@@ -1111,7 +1119,7 @@ const getVimeoEmbedUrl = (url: string) => {
                       className="object-cover sm:object-cover group-hover:scale-110 transition duration-500"
                       style={{ objectPosition: "center" }}
                     />
-                  )}
+                  )} */}
 
                   {/* Hover Overlay */}
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition" />
@@ -1130,29 +1138,7 @@ const getVimeoEmbedUrl = (url: string) => {
         </section>
 
 
-        {previewImage && (
-          <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
-            <div
-              className="absolute inset-0"
-              onClick={() => setPreviewImage(null)}
-            />
-            <div className="relative max-w-4xl w-full px-4">
-              <div className="relative w-full h-[80vh] rounded-2xl overflow-hidden">
-                {isYoutubeUrl(previewImage) ? (
-  <iframe
-    src={getYoutubeEmbedUrl(previewImage)}
-    className="w-full h-full rounded-2xl"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowFullScreen
-  />
-) : isVimeoUrl(previewImage) ? (
-  <iframe
-    src={getVimeoEmbedUrl(previewImage)}
-    className="w-full h-full rounded-2xl"
-    allow="autoplay; fullscreen; picture-in-picture"
-    allowFullScreen
-  />
-) : isVideo(previewImage) ? (
+        {isVideo(previewImage) ? (
   <video
     src={previewImage}
     controls
@@ -1167,16 +1153,6 @@ const getVimeoEmbedUrl = (url: string) => {
     className="object-contain"
   />
 )}
-              </div>
-              <button
-                onClick={() => setPreviewImage(null)}
-                className="absolute top-2 right-6 text-white text-3xl font-bold"
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-        )}
 
 
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 mb-2 relative z-20">
