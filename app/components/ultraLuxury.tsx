@@ -202,10 +202,10 @@ export default function UltraLuxury() {
                 "Luxury living with premium amenities."}
             </p>
 
-            <p className="text-gray-300 mt-4 leading-relaxed">
+            <div  className="text-gray-300 mt-4 leading-relaxed">
               {<ReadMoreSlider description={currentProject.fullDescription} heading={currentProject.title} /> ||
                 "Experience world-class comfort and elegance."}
-            </p>
+            </div>
 
           </div>
         </div>
