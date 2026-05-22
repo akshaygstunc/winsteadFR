@@ -636,70 +636,70 @@ export default function ProjectDetailPage() {
   //   url.includes("youtu.be/") ||
   //   url.includes("youtube.com/embed/")
   // );
-};
+  // };
 
-const isVimeoUrl = (url: string) => {
-  if (!url) return false;
+  const isVimeoUrl = (url: string) => {
+    if (!url) return false;
 
-  return url.includes("vimeo.com/");
-};
+    return url.includes("vimeo.com/");
+  };
 
-const isVideo = (url: string) => {
-  if (!url) return false;
+  const isVideo = (url: string) => {
+    if (!url) return false;
 
-  // direct video extensions only
-  if (/\.(mp4|webm|ogg|mov|m4v|avi|mkv)$/i.test(url)) return true;
+    // direct video extensions only
+    if (/\.(mp4|webm|ogg|mov|m4v|avi|mkv)$/i.test(url)) return true;
 
-  // cloudinary / streaming urls
-  if (
-    url.includes("/video/") ||
-    url.includes("video/upload") ||
-    url.includes(".m3u8") ||
-    url.includes(".mpd")
-  ) return true;
+    // cloudinary / streaming urls
+    if (
+      url.includes("/video/") ||
+      url.includes("video/upload") ||
+      url.includes(".m3u8") ||
+      url.includes(".mpd")
+    )
+      return true;
 
-  return false;
-};
+    return false;
+  };
 
-const getYoutubeEmbedUrl = (url: string) => {
-  try {
-    // youtu.be
-    if (url.includes("youtu.be/")) {
-      const id = url.split("youtu.be/")[1]?.split("?")[0];
+  const getYoutubeEmbedUrl = (url: string) => {
+    try {
+      // youtu.be
+      if (url.includes("youtu.be/")) {
+        const id = url.split("youtu.be/")[1]?.split("?")[0];
+
+        return `https://www.youtube.com/embed/${id}`;
+      }
+
+      // already embed
+      if (url.includes("youtube.com/embed/")) {
+        return url;
+      }
+
+      // watch?v=
+      const parsed = new URL(url);
+
+      const id = parsed.searchParams.get("v");
 
       return `https://www.youtube.com/embed/${id}`;
+    } catch {
+      return "";
     }
+  };
 
-    // already embed
-    if (url.includes("youtube.com/embed/")) {
-      return url;
+  const getVimeoEmbedUrl = (url: string) => {
+    try {
+      const match = url.match(/vimeo\.com\/(\d+)/);
+
+      if (!match?.[1]) return "";
+
+      return `https://player.vimeo.com/video/${match[1]}`;
+    } catch {
+      return "";
     }
-
-    // watch?v=
-    const parsed = new URL(url);
-
-    const id = parsed.searchParams.get("v");
-
-    return `https://www.youtube.com/embed/${id}`;
-  } catch {
-    return "";
-  }
-};
-
-const getVimeoEmbedUrl = (url: string) => {
-  try {
-    const match = url.match(/vimeo\.com\/(\d+)/);
-
-    if (!match?.[1]) return "";
-
-    return `https://player.vimeo.com/video/${match[1]}`;
-  } catch {
-    return "";
-  }
-};
+  };
 
   // const isVideo = (url: string) => /\.(mp4|webm|ogg)$/i.test(url);
-
 
   return (
     <>
@@ -1067,25 +1067,25 @@ const getVimeoEmbedUrl = (url: string) => {
                   style={{ aspectRatio: "16/10" }}
                 >
                   {isVideo(media) ? (
-  <video
-    src={media}
-    muted
-    loop
-    playsInline
-    autoPlay
-    controls
-    className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-  />
-) : (
-  <Image
-    src={media}
-    alt=""
-    fill
-    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-    className="object-cover sm:object-cover group-hover:scale-110 transition duration-500"
-    style={{ objectPosition: "center" }}
-  />
-)}
+                    <video
+                      src={media}
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                      controls
+                      className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                    />
+                  ) : (
+                    <Image
+                      src={media}
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                      className="object-cover sm:object-cover group-hover:scale-110 transition duration-500"
+                      style={{ objectPosition: "center" }}
+                    />
+                  )}
                   {/* {isYoutubeUrl(media) ? (
   <iframe
     src={getYoutubeEmbedUrl(media)}
@@ -1137,23 +1137,21 @@ const getVimeoEmbedUrl = (url: string) => {
           </div>
         </section>
 
-
         {isVideo(previewImage) ? (
-  <video
-    src={previewImage}
-    controls
-    autoPlay
-    className="w-full h-full object-contain rounded-2xl bg-black"
-  />
-) : (
-  <Image
-    src={previewImage}
-    alt="Preview"
-    fill
-    className="object-contain"
-  />
-)}
-
+          <video
+            src={previewImage}
+            controls
+            autoPlay
+            className="w-full h-full object-contain rounded-2xl bg-black"
+          />
+        ) : (
+          <Image
+            src={previewImage}
+            alt="Preview"
+            fill
+            className="object-contain"
+          />
+        )}
 
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 mb-2 relative z-20">
           <div className="space-y-6">
@@ -1431,7 +1429,9 @@ const getVimeoEmbedUrl = (url: string) => {
                   </span>
                 </h2>
                 <p className="text-sm text-white/60 leading-relaxed">
-                  Our property consultants are available to walk you through floor plans, pricing, and payment options — at your convenience.
+                  Our property consultants are available to walk you through
+                  floor plans, pricing, and payment options — at your
+                  convenience.
                 </p>
               </div>
 
@@ -1449,7 +1449,6 @@ const getVimeoEmbedUrl = (url: string) => {
                 >
                   Request Brochure
                 </button>
-               
               </div>
             </div>
           </div>
@@ -1465,8 +1464,10 @@ const getVimeoEmbedUrl = (url: string) => {
           />
           <div className="relative max-w-4xl w-full px-4">
             {/* FIX 3 cont: Preview modal — use contain so full image always shows */}
-            <div className="relative w-full rounded-2xl overflow-hidden bg-black/60"
-              style={{ aspectRatio: "16/9" }}>
+            <div
+              className="relative w-full rounded-2xl overflow-hidden bg-black/60"
+              style={{ aspectRatio: "16/9" }}
+            >
               <Image
                 src={previewImage}
                 alt="Preview"
