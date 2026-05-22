@@ -627,6 +627,7 @@ export default function ProjectDetailPage() {
 
   const totalCost = bookingAmount + downPaymentAmount + totalMortgagePaid;
   console.log(projectDetails);
+
   const isYoutubeUrl = (url: string) => {
   if (!url) return false;
 
@@ -708,6 +709,10 @@ const getVimeoEmbedUrl = (url: string) => {
     return "";
   }
 };
+
+  const isVideo = (url: string) => /\.(mp4|webm|ogg)$/i.test(url);
+
+
   return (
     <>
       {projectDetails && (
@@ -1111,7 +1116,9 @@ const getVimeoEmbedUrl = (url: string) => {
                   {/* Hover Overlay */}
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition" />
 
+                  {/* Optional: Video Indicator */}
                   {/* {isVideo(media) && (
+                  {isVideo(media) && (
                     <div className="absolute bottom-3 right-3 text-xs bg-black/60 text-white px-2 py-1 rounded">
                       VIDEO
                     </div>
@@ -1121,6 +1128,7 @@ const getVimeoEmbedUrl = (url: string) => {
             </div>
           </div>
         </section>
+
 
         {previewImage && (
           <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
@@ -1169,6 +1177,7 @@ const getVimeoEmbedUrl = (url: string) => {
             </div>
           </div>
         )}
+
 
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 mb-2 relative z-20">
           <div className="space-y-6">
