@@ -1130,12 +1130,35 @@ const getVimeoEmbedUrl = (url: string) => {
             />
             <div className="relative max-w-4xl w-full px-4">
               <div className="relative w-full h-[80vh] rounded-2xl overflow-hidden">
-                <Image
-                  src={previewImage}
-                  alt="Preview"
-                  fill
-                  className="object-contain"
-                />
+                {isYoutubeUrl(previewImage) ? (
+  <iframe
+    src={getYoutubeEmbedUrl(previewImage)}
+    className="w-full h-full rounded-2xl"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  />
+) : isVimeoUrl(previewImage) ? (
+  <iframe
+    src={getVimeoEmbedUrl(previewImage)}
+    className="w-full h-full rounded-2xl"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowFullScreen
+  />
+) : isVideo(previewImage) ? (
+  <video
+    src={previewImage}
+    controls
+    autoPlay
+    className="w-full h-full object-contain rounded-2xl bg-black"
+  />
+) : (
+  <Image
+    src={previewImage}
+    alt="Preview"
+    fill
+    className="object-contain"
+  />
+)}
               </div>
               <button
                 onClick={() => setPreviewImage(null)}
