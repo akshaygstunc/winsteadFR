@@ -348,9 +348,9 @@ console.log("PROJECT:", projects);
                             {developer.name}
                         </h1>
 
-                        <p className="mt-5 text-lg leading-relaxed text-white">
+                        <div className="mt-5 text-lg leading-relaxed text-white">
                                 {<ReadMoreSlider description={developer?.description || `Discover master-planned luxury communities crafted by ${developer.name}, where lifestyle, architecture, and long-term investment value come together in Dubai’s most desirable locations.`} heading={"Developer Description"} />}
-                        </p>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -276,9 +276,9 @@ export default function CommunityPage() {
                                 {community?.title}
                             </h1>
 
-                            <p className="mt-6 max-w-3xl text-lg leading-8 text-white/80">
+                            <div className="mt-6 max-w-3xl text-lg leading-8 text-white/80">
                                 <ReadMoreSlider description={community?.description} heading={"Community Description"} />
-                            </p>
+                            </div>
                         </div>
 
                         {/* RIGHT SIDE */}

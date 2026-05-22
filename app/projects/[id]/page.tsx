@@ -627,8 +627,87 @@ export default function ProjectDetailPage() {
 
   const totalCost = bookingAmount + downPaymentAmount + totalMortgagePaid;
   console.log(projectDetails);
-  const isVideo = (url: string) => /\.(mp4|webm|ogg)$/i.test(url);
+  const isYoutubeUrl = (url: string) => {
+  if (!url) return false;
 
+  return (
+    url.includes("youtube.com/watch") ||
+    url.includes("youtu.be/") ||
+    url.includes("youtube.com/embed/")
+  );
+};
+
+const isVimeoUrl = (url: string) => {
+  if (!url) return false;
+
+  return url.includes("vimeo.com/");
+};
+
+const isVideo = (url: string) => {
+  if (!url) return false;
+
+  // youtube
+  if (isYoutubeUrl(url)) return true;
+
+  // vimeo
+  if (isVimeoUrl(url)) return true;
+
+  // direct video extensions
+  if (
+    /\.(mp4|webm|ogg|mov|m4v|avi|mkv)$/i.test(url)
+  ) {
+    return true;
+  }
+
+  // cloudinary / streaming / signed urls
+  if (
+    url.includes("/video/") ||
+    url.includes("video/upload") ||
+    url.includes(".m3u8") ||
+    url.includes(".mpd")
+  ) {
+    return true;
+  }
+
+  return false;
+};
+
+const getYoutubeEmbedUrl = (url: string) => {
+  try {
+    // youtu.be
+    if (url.includes("youtu.be/")) {
+      const id = url.split("youtu.be/")[1]?.split("?")[0];
+
+      return `https://www.youtube.com/embed/${id}`;
+    }
+
+    // already embed
+    if (url.includes("youtube.com/embed/")) {
+      return url;
+    }
+
+    // watch?v=
+    const parsed = new URL(url);
+
+    const id = parsed.searchParams.get("v");
+
+    return `https://www.youtube.com/embed/${id}`;
+  } catch {
+    return "";
+  }
+};
+
+const getVimeoEmbedUrl = (url: string) => {
+  try {
+    const match = url.match(/vimeo\.com\/(\d+)/);
+
+    if (!match?.[1]) return "";
+
+    return `https://player.vimeo.com/video/${match[1]}`;
+  } catch {
+    return "";
+  }
+};
   return (
     <>
       {projectDetails && (
@@ -994,16 +1073,31 @@ export default function ProjectDetailPage() {
                   className="relative rounded-[24px] overflow-hidden border border-white/10 cursor-pointer group bg-black/40"
                   style={{ aspectRatio: "16/10" }}
                 >
-                  {isVideo(media) ? (
-                    <video
-                      src={media}
-                      muted
-                      loop
-                      playsInline
-                      autoPlay
-                      className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                    />
-                  ) : (
+                  {isYoutubeUrl(media) ? (
+  <iframe
+    src={getYoutubeEmbedUrl(media)}
+    className="w-full h-full object-cover"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  />
+) : isVimeoUrl(media) ? (
+  <iframe
+    src={getVimeoEmbedUrl(media)}
+    className="w-full h-full object-cover"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowFullScreen
+  />
+) : isVideo(media) ? (
+  <video
+    src={media}
+    muted
+    loop
+    playsInline
+    autoPlay
+    controls
+    className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+  />
+): (
                     <Image
                       src={media}
                       alt=""
@@ -1017,20 +1111,42 @@ export default function ProjectDetailPage() {
                   {/* Hover Overlay */}
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition" />
 
-                  {isVideo(media) && (
+                  {/* {isVideo(media) && (
                     <div className="absolute bottom-3 right-3 text-xs bg-black/60 text-white px-2 py-1 rounded">
                       VIDEO
                     </div>
-                  )}
+                  )} */}
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        
+        {previewImage && (
+          <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+            <div
+              className="absolute inset-0"
+              onClick={() => setPreviewImage(null)}
+            />
+            <div className="relative max-w-4xl w-full px-4">
+              <div className="relative w-full h-[80vh] rounded-2xl overflow-hidden">
+                <Image
+                  src={previewImage}
+                  alt="Preview"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <button
+                onClick={() => setPreviewImage(null)}
+                className="absolute top-2 right-6 text-white text-3xl font-bold"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
 
-        {/* MORTGAGE CALCULATOR SECTION */}
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 mb-2 relative z-20">
           <div className="space-y-6">
             <div className="relative overflow-hidden rounded-[36px] border border-yellow-500/15 bg-[linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.35)]">

@@ -8,8 +8,18 @@ import { FaCircleNotch } from "react-icons/fa";
 // import videoSrc from "../../public/video.mp4";
 
 export default function Hero({ asset }) {
-  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+const [videoLoaded, setVideoLoaded] = useState(false);
+const videoSrc = asset?.heroVideo || "/videoabout.mp4";
 
+useEffect(() => {
+  setVideoLoaded(false);
+  setVideoError(false);
+}, [videoSrc]);
+
+useEffect(() => {
+  setVideoLoaded(false);
+}, [videoSrc]);
   useEffect(() => {
     gsap.from(".hero-img", {
       scale: 1.1,
@@ -25,6 +35,7 @@ export default function Hero({ asset }) {
       ease: "power3.out",
     });
   }, []);
+  console.log("assetess",asset)
 
   return (
     <div className="h-[350] lg:h-screen relative">
@@ -51,15 +62,17 @@ export default function Hero({ asset }) {
 
       {/* VIDEO */}
       <video
+      key={asset?.heroVideo || "/videoabout.mp4"} 
+      src={asset?.heroVideo || "/videoabout.mp4"} // ✅ dynamic
+      autoPlay
+      muted
+      loop
+      playsInline
+      onLoadedData={() => setVideoLoaded(true)}
+      onError={() => setVideoLoaded(true)} 
         className={`absolute w-full h-full object-cover object-top transition-opacity duration-700 ${
           videoLoaded ? "opacity-100" : "opacity-0"
         }`}
-        src={asset?.heroVideo || "/videoabout.mp4"} // ✅ dynamic
-        autoPlay
-        muted
-        loop
-        playsInline
-        onLoadedData={() => setVideoLoaded(true)}
       />
       {/* DARK GRADIENT OVERLAY */}
       {/* <div className="absolute inset-0" /> */}
