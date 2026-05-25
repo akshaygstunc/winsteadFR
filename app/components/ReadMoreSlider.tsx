@@ -20,9 +20,9 @@ export default function ReadMoreSlider({ description, heading }: Props) {
     return (
         <>
             <div>
-                <p className="text-white leading-relaxed text-base md:text-lg">
+                <div className="text-white leading-relaxed text-base md:text-lg">
                     <HtmlRenderer content={shortText} />
-                </p>
+                </div>
 
                 {fullText.length > 80 && (
                     <button

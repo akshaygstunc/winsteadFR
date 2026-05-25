@@ -309,7 +309,7 @@ export default function Projects({ projects = [], homePage }: any) {
                   {homePage?.data?.aboutWinsteadTitle || "About Winstead"}
                 </h3>
 
-                <p className="text-lg text-gray-300 leading-relaxed">
+                <div className="text-lg text-gray-300 leading-relaxed">
                   {homePage?.data?.aboutWinsteadDescription?.slice(0, 361) ||
                     "Our extensive portfolio features an array of premium villas, apartments, and townhouses designed to offer unmatched comfort and elegance."}
                   <br />
@@ -321,7 +321,7 @@ export default function Projects({ projects = [], homePage }: any) {
                       Read More{" "}
                     </Link>
                   </div>{" "}
-                </p>
+                </div>
 
                 {/* <p className="text-gray-300 mt-4 leading-relaxed">
                   Our team of experienced professionals is dedicated to helping
@@ -394,13 +394,33 @@ function Card({
   price?: string | number;
   slug: string;
 }) {
+  const isVideo = (url?: string) => {
+    if (!url) return false;
+    return (
+      /\.(mp4|webm|ogg|mov|m4v)$/i.test(url) ||
+      url.includes("/video/") ||
+      url.includes("video/upload")
+    );
+  };
+
   return (
     <div className="relative w-full h-full rounded-2xl overflow-hidden group cursor-pointer transition-all duration-500 hover:-translate-y-2">
-      <img
-        src={image || (images[0] as any).src}
-        alt="project"
-        className="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-[1.06]"
-      />
+      {isVideo(image) ? (
+        <video
+          src={image}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-[1.06]"
+        />
+      ) : (
+        <img
+          src={image || (images[0] as any).src}
+          alt="project"
+          className="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-[1.06]"
+        />
+      )}
 
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/15 to-transparent" />
       <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-transparent group-hover:border-yellow-400/40 transition duration-500" />
@@ -409,12 +429,10 @@ function Card({
 
       <div className="absolute bottom-0 p-5 w-full transition duration-500 group-hover:translate-y-[-4px]">
         <h3 className="text-lg md:text-xl font-semibold">{title}</h3>
-
         <div className="text-[1.15rem] md:text-sm lg:text-md text-white mt-2 space-y-1 opacity-90">
           <p className="text-[1.05rem]">AED {price?.toLocaleString()}</p>
           <p className="text-[1.05rem]">{location}</p>
         </div>
-
         <Link
           href={`/projects/${slug}`}
           className="mt-4 text-xs md:text-sm lg:text-md border border-yellow-500 px-4 py-1.5 rounded-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500"

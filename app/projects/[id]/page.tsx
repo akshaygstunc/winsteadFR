@@ -205,7 +205,13 @@ function getProjectImages(data?: BackendProject) {
     data?.propertyBanner,
     data?.thumbnail,
     ...(Array.isArray(data?.gallery) ? data.gallery : []),
-  ].filter((item): item is string => Boolean(item && item.trim()));
+  ].filter(
+    (item): item is string =>
+      Boolean(item && item.trim()) &&
+      !item.includes("youtu.be") &&
+      !item.includes("youtube.com") &&
+      !item.includes("vimeo.com")
+  );
 
   return images.length ? Array.from(new Set(images)) : fallbackImages;
 }
@@ -662,42 +668,42 @@ export default function ProjectDetailPage() {
     return false;
   };
 
-  const getYoutubeEmbedUrl = (url: string) => {
-    try {
-      // youtu.be
-      if (url.includes("youtu.be/")) {
-        const id = url.split("youtu.be/")[1]?.split("?")[0];
+  // const getYoutubeEmbedUrl = (url: string) => {
+  //   try {
+  //     // youtu.be
+  //     if (url.includes("youtu.be/")) {
+  //       const id = url.split("youtu.be/")[1]?.split("?")[0];
 
-        return `https://www.youtube.com/embed/${id}`;
-      }
+  //       return `https://www.youtube.com/embed/${id}`;
+  //     }
 
-      // already embed
-      if (url.includes("youtube.com/embed/")) {
-        return url;
-      }
+  //     // already embed
+  //     if (url.includes("youtube.com/embed/")) {
+  //       return url;
+  //     }
 
-      // watch?v=
-      const parsed = new URL(url);
+  //     // watch?v=
+  //     const parsed = new URL(url);
 
-      const id = parsed.searchParams.get("v");
+  //     const id = parsed.searchParams.get("v");
 
-      return `https://www.youtube.com/embed/${id}`;
-    } catch {
-      return "";
-    }
-  };
+  //     return `https://www.youtube.com/embed/${id}`;
+  //   } catch {
+  //     return "";
+  //   }
+  // };
 
-  const getVimeoEmbedUrl = (url: string) => {
-    try {
-      const match = url.match(/vimeo\.com\/(\d+)/);
+  // const getVimeoEmbedUrl = (url: string) => {
+  //   try {
+  //     const match = url.match(/vimeo\.com\/(\d+)/);
 
-      if (!match?.[1]) return "";
+  //     if (!match?.[1]) return "";
 
-      return `https://player.vimeo.com/video/${match[1]}`;
-    } catch {
-      return "";
-    }
-  };
+  //     return `https://player.vimeo.com/video/${match[1]}`;
+  //   } catch {
+  //     return "";
+  //   }
+  // };
 
   // const isVideo = (url: string) => /\.(mp4|webm|ogg)$/i.test(url);
 
@@ -855,7 +861,7 @@ export default function ProjectDetailPage() {
                             ? projectDetails?.developer?.title || EMPTY_VALUE
                             : projectDetails?.developer || EMPTY_VALUE}
                         </h4>
-                        <p className="mt-1 leading-relaxed text-white-400">
+                        <div className="mt-1 leading-relaxed text-white-400">
                           {typeof projectDetails?.developer !== "string" ? (
                             <ReadMoreSlider
                               description={
@@ -866,7 +872,7 @@ export default function ProjectDetailPage() {
                           ) : (
                             ""
                           )}
-                        </p>
+                        </div>
                       </div>
                     </div>
                   </div>
