@@ -311,10 +311,10 @@ console.log("PROJECT:", projects);
                 data: projects
             })} />
         <main className="bg-black text-white">
-            <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
+            <section className="relative h-[80vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
 
                 {/* IMAGE */}
-                <div className="absolute inset-0">
+                <div className="absolute inset-0 bg-black aspect-[1440/550]">
                     <Image
                             src={developer?.bannerimage} alt="Winstead Services"
                         fill

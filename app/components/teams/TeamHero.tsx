@@ -23,7 +23,7 @@
         const secondLine = titleParts[1] || "";
 
         return (
-            <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
+            <section className="relative h-[70vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
                 {/* IMAGE */}
                 <div className="absolute inset-0">
                     {loading ? (
