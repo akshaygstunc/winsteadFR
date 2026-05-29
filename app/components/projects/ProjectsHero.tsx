@@ -15,7 +15,7 @@ export default function ProjectsHero() {
       );
   }, []);
 
-  const bannerImage = projectDetail?.data?.bannerImage;
+  const bannerImage = projectDetail?.data?.bannerImage || "/hero4.png";
 
   const bannerTitle = projectDetail?.data?.bannerTitle || "Curated Projects";
 
@@ -24,18 +24,19 @@ export default function ProjectsHero() {
     "Explore premium properties crafted for clients";
 
   return (
-    <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white bg-center ">
+    <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white bg-center">
       {" "}
       {/* IMAGE */}{" "}
-      <div className="absolute inset-0 top-0 bg-black aspect-[1440/500]">
-  <Image
-    src={bannerImage}
-    alt="News Banner"
-    fill
-    priority
-    className="object-cover object-center"
-  />
-</div>
+      <div className="absolute inset-0">
+        {" "}
+        <Image
+          src={bannerImage}
+          alt="News Banner"
+          fill
+          priority
+          className="object-cover object-center"
+        />{" "}
+      </div>{" "}
       {/* OVERLAY (only for readability, not full dark) */}{" "}
       {/* <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" /> */}{" "}
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />{" "}

@@ -165,7 +165,7 @@ console.log("aboutPage",aboutPage)
             <div className="grid md:grid-cols-[30%_70%] gap-10 items-center">
               {/* LEFT IMAGE */}
               <div>
-                <div className="relative w-full h-[150px] md:h-[300px] mb-20">
+                <div className="relative w-full h-[150px] md:h-[300px]">
                   {loading ? (
                     <div className="animate-pulse">
                       <div className="w-full h-[150px] md:h-[300px] rounded-xl bg-white/10 relative overflow-hidden">

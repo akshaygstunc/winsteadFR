@@ -321,8 +321,7 @@ export default function BlogDetailPage() {
     <div className="bg-black text-white min-h-screen">
 
       {/* HERO */}
-      <section className="relative h-[75vh] min-h-[420px]">
-         <div className="absolute inset-0 bg-black aspect-[1440/500]">
+      <section className="relative h-[65vh] min-h-[420px]">
         <Image
           src={blog.img}
           alt={blog.title}
@@ -330,9 +329,8 @@ export default function BlogDetailPage() {
           unoptimized={
             typeof blog.img === "string" && blog.img.startsWith("data:")
           }
-          className="object-cover object-center"
+          className="object-cover"
         />
-      </div>
         <div className="absolute inset-0 bg-black/20" />
 
         <div className="relative max-w-4xl mx-auto px-6 h-full flex flex-col justify-end pb-12">

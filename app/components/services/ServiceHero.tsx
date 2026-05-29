@@ -23,7 +23,7 @@ export default function ServicesHero({ servicesData, loading = false }) {
         <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
 
             {/* IMAGE */}
-            <div className="absolute inset-0 bg-black aspect-[1440/500]">
+            <div className="absolute inset-0">
                 {loading ? (
                     <div className="relative h-full w-full overflow-hidden bg-neutral-800">
                         <div className="absolute inset-0 shimmer" />
@@ -34,7 +34,7 @@ export default function ServicesHero({ servicesData, loading = false }) {
                         alt={heroTitle || "Winstead Services"}
                         fill
                         priority
-                        className=" object-cover object-center"
+                        className="w-full h-full object-cover object-center"
                     />
                 )}
             </div>
