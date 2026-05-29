@@ -237,7 +237,7 @@ export default function CommunityPage() {
             {/* DEVELOPER STRIP */}
             <section className="border-b border-white/10 bg-[#050505] py-4">
                 <div className="mx-auto flex max-w-7xl items-center gap-5 px-6 md:px-10">
-                    <div className="relative h-16 w-16 overflow-hidden rounded-2xl  border border-white/10 bg-white/[0.03] p-3">
+                    <div className="relative h-16 w-16 overflow-hidden rounded-2xl  border border-white/10 bg-gradient-to-br from-gray-100 to-gray-400 p-3">
                         {community?.developer?.image && (
                             <Image
                                 src={community.developer.image}

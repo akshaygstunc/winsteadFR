@@ -210,7 +210,7 @@ function getProjectImages(data?: BackendProject) {
       Boolean(item && item.trim()) &&
       !item.includes("youtu.be") &&
       !item.includes("youtube.com") &&
-      !item.includes("vimeo.com")
+      !item.includes("vimeo.com"),
   );
 
   return images.length ? Array.from(new Set(images)) : fallbackImages;
@@ -1065,7 +1065,7 @@ export default function ProjectDetailPage() {
                 On mobile: single column, full image visible via object-contain.
                 On md+: two-col grid with object-cover for a tighter visual. */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {project.heroImages.map((media, idx) => (
+              {project?.heroImages.map((media, idx) => (
                 <div
                   key={idx}
                   onClick={() => setPreviewImage(media)}
@@ -1151,12 +1151,7 @@ export default function ProjectDetailPage() {
             className="w-full h-full object-contain rounded-2xl bg-black"
           />
         ) : (
-          <Image
-            src={previewImage}
-            alt="Preview"
-            fill
-            className="object-contain"
-          />
+          ""
         )}
 
         <section className="max-w-[85rem] mx-auto px-4 md:px-10 mt-6 md:mt-8 mb-2 relative z-20">
