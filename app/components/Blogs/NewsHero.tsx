@@ -4,13 +4,13 @@ import banner from "../../../public/hero3.jpg";
 export default function NewsHero({pageContent}) {
   
   return (
-    <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
+    <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white mt-20">
       {/* IMAGE */}
       <div className="absolute inset-0">
         <img
           src={pageContent?.data?.bannerImage}
           alt="News Banner"
-          className="object-cover object-center"
+          className="w-full h-full object-cover object-center"
         />
       </div>
 

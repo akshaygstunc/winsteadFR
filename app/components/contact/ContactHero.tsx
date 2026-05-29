@@ -19,7 +19,7 @@ export default function ContactHero({
     const subtitleLines = bannerSubtitle.split("\n");
 
     return (
-        <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
+        <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white mt-20">
             <div className="absolute inset-0">
                 {loading ? (
                     <div className="h-full w-full animate-pulse bg-white/10" />

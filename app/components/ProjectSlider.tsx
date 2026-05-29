@@ -46,7 +46,7 @@ export default function ProjectHeroSlider({
     }, [images, currentIndex]);
 
     return (
-        <div className="relative w-full min-h-[560px] md:min-h-[640px] bg-black overflow-hidden rounded-[32px] border border-white/10">
+        <div className="relative w-full min-h-[560px] md:min-h-[640px] bg-black overflow-hidden rounded-[32px] border border-white/10 mt-20">
             {/* SLIDES */}
             {images.map((media, index) => (
                 <div
