@@ -62,9 +62,9 @@ console.log("pageContent-blog",pageContent)
   return (
     <div className="bg-black text-white">
       {/* <NewsHero pageContent={pageContent} /> */}
-      <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
+      <section className="relative h-[75vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
       {/* IMAGE */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 bg-black aspect-[1440/500]">
         <img
           src={pageContent?.data?.bannerImage}
           alt="News Banner"

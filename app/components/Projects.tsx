@@ -295,12 +295,11 @@ export default function Projects({ projects = [], homePage }: any) {
           ) : (
             <>
               <div>
-                <Image
-                  src={homePage?.data?.aboutWinsteadImage || image2}
+                <img
+                  src={homePage?.data?.aboutWinsteadImage}
                   alt="About"
-                  width={600}
-                  height={400}
-                  className="w-full h-[150px] md:h-[300px] object-cover rounded-xl"
+                  
+                  className="object-cover rounded-xl"
                 />
               </div>
 
