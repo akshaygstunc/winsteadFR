@@ -70,8 +70,8 @@ function GalleryHero({ galleryData, loading = false }: any) {
   const subtitleLines = bannerSubtitle.split("\n");
 
   return (
-    <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
-      <div className="absolute inset-0">
+    <section className="relative h-[70vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
+      <div className="absolute inset-0 bg-black aspect-[1440/500]">
         {loading ? (
           <div className="h-full w-full bg-white/10 animate-pulse" />
         ) : (
