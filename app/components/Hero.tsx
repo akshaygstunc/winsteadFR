@@ -26,7 +26,7 @@ useEffect(() => {
       duration: 1,
       ease: "power2.out",
     });
-
+ 
     gsap.from(".hero-box", {
       y: 120,
       opacity: 0,

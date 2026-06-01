@@ -112,7 +112,7 @@ console.log("aboutPage",aboutPage)
       {/* HERO */}
 
       {/* <AboutHero data={aboutPage} /> */}
-        <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white">
+        <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white mt-20">
             {/* IMAGE */}
             <div className="absolute inset-0">
               <Image
