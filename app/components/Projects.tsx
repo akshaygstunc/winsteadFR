@@ -230,23 +230,13 @@ export default function Projects({ projects = [], homePage }: any) {
 );;
     }
 
-    // ✅ STEP 4: Sort
-    filtered.sort((a, b) => a._sortOrder - b._sortOrder);
+    // STEP 4: Sort
+filtered.sort((a, b) => a._sortOrder - b._sortOrder);
 
-    // ✅ STEP 5: Limit 6 per category
-    const grouped: Record<string, typeof filtered> = {};
+// STEP 5: Always return only 6 projects
+return filtered.slice(0, 6);
 
-    filtered.forEach((p) => {
-      if (!grouped[p._category]) {
-        grouped[p._category] = [];
-      }
-
-      if (grouped[p._category].length < 6) {
-        grouped[p._category].push(p);
-      }
-    });
-
-    return Object.values(grouped).flat();
+   
   }, [projects, activeFilter, selectedVendor]);
 
   useEffect(() => {

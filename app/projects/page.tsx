@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 export const dynamic = "force-dynamic";
@@ -7,15 +6,21 @@ export const dynamic = "force-dynamic";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
-import { FaBed, FaDollarSign, FaRulerCombined } from "react-icons/fa6";
-import { FaMapMarkerAlt, FaArrowRight } from "react-icons/fa";
+import { FaBed, FaRulerCombined } from "react-icons/fa6";
+import {
+  FaMapMarkerAlt,
+  FaArrowRight,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 import "rc-slider/assets/index.css";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import ProjectsHero from "../components/projects/ProjectsHero";
 import WebsiteContentService from "../services/websitecontent.service";
-import img from "../../public/hero2.png";
 import AutoBreadcrumbs from "../components/BreadCrumbs";
+
+const PAGE_SIZE = 15;
 
 export default function Page() {
   return (
@@ -29,20 +34,63 @@ export default function Page() {
   );
 }
 
+function getDefaultFilters() {
+  return {
+    category: [] as string[],
+    residence: "",
+    bedrooms: [] as string[],
+    // location, subLocation, developer, communities all send IDs to the API
+    location: "",
+    subLocation: "",
+    developer: "",
+    communities: "",
+    minSize: "",
+    maxSize: "",
+    minPrice: "",
+    maxPrice: "",
+    priceRange: "",
+    sort: "",
+    featured: "",
+  };
+}
+
+/**
+ * buildQuery handles arrays as repeated params: category=Villa&category=Apartment
+ */
+function buildQuery(filters: ReturnType<typeof getDefaultFilters>) {
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      value.forEach((v) => {
+        if (v !== "" && v !== null && v !== undefined)
+          params.append(key, String(v));
+      });
+    } else if (value !== "" && value !== null && value !== undefined) {
+      params.set(key, String(value));
+    }
+  });
+
+  return params.toString();
+}
+
 function ProjectsContent() {
   const searchParams = useSearchParams();
 
-  const [projects, setProjects] = useState<any[]>([]);
+  const [allProjects, setAllProjects] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [liveFilters, setLiveFilters] = useState(getDefaultFilters());
-  const [appliedFilters, setAppliedFilters] = useState(getDefaultFilters());
 
-  const fetchProjects = async (filters: any) => {
+  const fetchProjects = async (
+    filters: ReturnType<typeof getDefaultFilters>,
+  ) => {
     try {
       setLoading(true);
+      setCurrentPage(1);
 
       const query = buildQuery(filters);
 
@@ -51,7 +99,7 @@ function ProjectsContent() {
         WebsiteContentService.getCategory(),
       ]);
 
-      setProjects(
+      setAllProjects(
         response?.sort((a: any, b: any) => a._sortOrder - b._sortOrder) || [],
       );
       setCategories(cat?.filter((c: any) => c.title !== "Ultra Luxury") || []);
@@ -62,12 +110,19 @@ function ProjectsContent() {
     }
   };
 
+  // Read URL params on mount
   useEffect(() => {
-    const urlFilters = {
+    const parseArray = (val: string | null) =>
+      val ? val.split(",").filter(Boolean) : [];
+
+    const urlFilters: ReturnType<typeof getDefaultFilters> = {
       ...getDefaultFilters(),
-      type: searchParams.get("type") || "",
+      category: parseArray(
+        searchParams.get("category") || searchParams.get("type"),
+      ),
+      bedrooms: parseArray(searchParams.get("bedrooms")),
       residence: searchParams.get("residence") || "",
-      bedrooms: searchParams.get("bedrooms") || "",
+      // These all send IDs — read them as-is from URL
       location: searchParams.get("location") || "",
       subLocation: searchParams.get("subLocation") || "",
       developer: searchParams.get("developer") || "",
@@ -82,32 +137,45 @@ function ProjectsContent() {
     };
 
     setLiveFilters(urlFilters);
-    setAppliedFilters(urlFilters);
     fetchProjects(urlFilters);
   }, [searchParams]);
 
   const updateLiveFilter = (key: string, value: any) => {
-    const updated = {
-      ...liveFilters,
-      [key]: value,
-      ...(key === "location" ? { subLocation: "" } : {}),
-    };
-
-    setLiveFilters(updated);
-    fetchProjects(updated);
+    setLiveFilters((prev) => {
+      const updated = {
+        ...prev,
+        [key]: value,
+        // Reset subLocation when location changes
+        ...(key === "location" ? { subLocation: "" } : {}),
+        // Reset communities when developer changes
+        ...(key === "developer" ? { communities: "" } : {}),
+      };
+      fetchProjects(updated);
+      return updated;
+    });
   };
 
   const handleSearch = (e: any) => {
     e.preventDefault();
-    setAppliedFilters(liveFilters);
     fetchProjects(liveFilters);
   };
 
   const clearAllFilters = () => {
     const reset = getDefaultFilters();
     setLiveFilters(reset);
-    setAppliedFilters(reset);
     fetchProjects(reset);
+  };
+
+  // ─── Pagination ────────────────────────────────────────────────────────────
+  const totalPages = Math.ceil(allProjects.length / PAGE_SIZE);
+  const paginatedProjects = allProjects.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -122,17 +190,18 @@ function ProjectsContent() {
         filters={liveFilters}
         handleSearch={handleSearch}
         setShowFilter={setShowFilter}
-        updateFilter={setLiveFilters}
+        updateFilter={updateLiveFilter}
       />
 
       <div className="max-w-[85rem] mx-auto px-4 md:px-12 pb-20">
         <ResultsBar
-          count={projects.length}
+          count={allProjects.length}
           filters={liveFilters}
           clearAllFilters={clearAllFilters}
         />
 
         <div className="flex flex-col md:flex-row items-start gap-8">
+          {/* Desktop sidebar */}
           <div className="hidden md:block">
             <Sidebar
               filters={liveFilters}
@@ -141,6 +210,7 @@ function ProjectsContent() {
             />
           </div>
 
+          {/* Mobile sidebar drawer */}
           {showFilter && (
             <div className="fixed inset-0 z-50 flex">
               <div
@@ -157,22 +227,35 @@ function ProjectsContent() {
             </div>
           )}
 
-          <div className="w-full grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 md:grid-cols-3 gap-6 flex-1">
-            {loading ? (
-              Array.from({ length: 6 }).map((_, i) => (
-                <PropertyCardSkeleton key={i} />
-              ))
-            ) : projects.length > 0 ? (
-              projects.map((p: any, index: number) => (
-                <ProjectCard
-                  key={p.id || p._id || `project-${index}`}
-                  data={p}
-                />
-              ))
-            ) : (
-              <div className="col-span-full text-center p-10">
-                No properties found
-              </div>
+          {/* Cards grid */}
+          <div className="flex-1 w-full flex flex-col gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 md:grid-cols-3 gap-6">
+              {loading ? (
+                Array.from({ length: PAGE_SIZE }).map((_, i) => (
+                  <PropertyCardSkeleton key={i} />
+                ))
+              ) : paginatedProjects.length > 0 ? (
+                paginatedProjects.map((p: any, index: number) => (
+                  <ProjectCard
+                    key={p.id || p._id || `project-${index}`}
+                    data={p}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full text-center p-10">
+                  No properties found
+                </div>
+              )}
+            </div>
+
+            {!loading && totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                totalItems={allProjects.length}
+                pageSize={PAGE_SIZE}
+                onPageChange={goToPage}
+              />
             )}
           </div>
         </div>
@@ -181,13 +264,89 @@ function ProjectsContent() {
   );
 }
 
-function extractFirstNumber(value: string | number) {
-  if (typeof value === "number") return value;
-  if (!value) return 0;
+/* ================= PAGINATION ================= */
 
-  const cleaned = String(value).replace(/,/g, "");
-  const match = cleaned.match(/\d+(\.\d+)?/);
-  return match ? Number(match[0]) : 0;
+function Pagination({
+  currentPage,
+  totalPages,
+  totalItems,
+  pageSize,
+  onPageChange,
+}: {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  pageSize: number;
+  onPageChange: (page: number) => void;
+}) {
+  const from = (currentPage - 1) * pageSize + 1;
+  const to = Math.min(currentPage * pageSize, totalItems);
+
+  const pages: (number | "...")[] = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
+  } else {
+    pages.push(1);
+    if (currentPage > 3) pages.push("...");
+    for (
+      let i = Math.max(2, currentPage - 1);
+      i <= Math.min(totalPages - 1, currentPage + 1);
+      i++
+    ) {
+      pages.push(i);
+    }
+    if (currentPage < totalPages - 2) pages.push("...");
+    pages.push(totalPages);
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <p className="text-white/40 text-sm">
+        Showing {from}–{to} of {totalItems} properties
+      </p>
+
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="w-9 h-9 flex items-center justify-center rounded-full border border-white/10 text-white/50 disabled:opacity-30 hover:border-yellow-500/50 hover:text-yellow-400 transition"
+        >
+          <FaChevronLeft className="text-xs" />
+        </button>
+
+        {pages.map((p, i) =>
+          p === "..." ? (
+            <span
+              key={`ellipsis-${i}`}
+              className="w-9 h-9 flex items-center justify-center text-white/30 text-sm"
+            >
+              …
+            </span>
+          ) : (
+            <button
+              key={p}
+              onClick={() => onPageChange(p as number)}
+              className={`w-9 h-9 flex items-center justify-center rounded-full text-sm font-medium transition ${
+                p === currentPage
+                  ? "bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black"
+                  : "border border-white/10 text-white/60 hover:border-yellow-500/50 hover:text-yellow-400"
+              }`}
+            >
+              {p}
+            </button>
+          ),
+        )}
+
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="w-9 h-9 flex items-center justify-center rounded-full border border-white/10 text-white/50 disabled:opacity-30 hover:border-yellow-500/50 hover:text-yellow-400 transition"
+        >
+          <FaChevronRight className="text-xs" />
+        </button>
+      </div>
+    </div>
+  );
 }
 
 /* ================= TOOLBAR ================= */
@@ -210,18 +369,13 @@ function ProjectsToolbar({
           fetch("https://winsteadglobal.com/api/content/locations"),
           fetch("https://winsteadglobal.com/api/content/sub-locations"),
         ]);
-
-        const typeData = await typeRes.json();
-        const locationData = await locationRes.json();
-        const subLocationData = await subLocation.json();
-        setType(typeData || []);
-        setLocation(locationData || []);
-        setsubLocation(subLocationData || []);
+        setType((await typeRes.json()) || []);
+        setLocation((await locationRes.json()) || []);
+        setsubLocation((await subLocation.json()) || []);
       } catch (error) {
         console.error("Toolbar fetch error:", error);
       }
     }
-
     fetchCatLOc();
   }, []);
 
@@ -233,11 +387,16 @@ function ProjectsToolbar({
       >
         <div className="flex flex-col lg:flex-row gap-3">
           <div className="flex flex-col md:flex-row flex-1 rounded-2xl overflow-hidden border border-white/10 bg-black/20">
+            {/* Category: sends title string (property.category is a string like "Residential") */}
             <select
-              name="type"
-              value={filters.type}
+              name="category"
+              value={
+                Array.isArray(filters.category)
+                  ? filters.category[0] || ""
+                  : filters.category
+              }
               onChange={(e) =>
-                updateFilter((prev: any) => ({ ...prev, type: e.target.value }))
+                updateFilter("category", e.target.value ? [e.target.value] : [])
               }
               className="px-5 py-4 bg-transparent outline-none md:border-r border-white/10"
             >
@@ -252,12 +411,7 @@ function ProjectsToolbar({
             <select
               name="residence"
               value={filters.residence}
-              onChange={(e) =>
-                updateFilter((prev: any) => ({
-                  ...prev,
-                  residence: e.target.value,
-                }))
-              }
+              onChange={(e) => updateFilter("residence", e.target.value)}
               className="px-5 py-4 bg-transparent outline-none md:border-r border-white/10"
             >
               <option value="" className="text-black">
@@ -274,40 +428,31 @@ function ProjectsToolbar({
               </option>
             </select>
 
+            {/* FIX: Location toolbar sends _id to match property.location (which is an ID) */}
             <select
               name="location"
               value={filters.location}
-              onChange={(e) =>
-                updateFilter((prev: any) => ({
-                  ...prev,
-                  location: e.target.value,
-                  subLocation: "",
-                }))
-              }
+              onChange={(e) => updateFilter("location", e.target.value)}
               className="px-5 py-4 bg-transparent outline-none md:border-r border-white/10"
             >
               <option value="">Location</option>
               {location?.map((ty: any) => (
-                <option key={ty?._id} value={ty?.title} className="text-black">
+                <option key={ty?._id} value={ty?._id} className="text-black">
                   {ty?.title}
                 </option>
               ))}
             </select>
 
+            {/* FIX: SubLocation toolbar sends _id to match property.sublocation (which is an ID) */}
             <select
               name="subLocation"
               value={filters.subLocation}
-              onChange={(e) =>
-                updateFilter((prev: any) => ({
-                  ...prev,
-                  subLocation: e.target.value,
-                }))
-              }
+              onChange={(e) => updateFilter("subLocation", e.target.value)}
               className="px-5 py-4 bg-transparent outline-none"
             >
               <option value="">Sub Location</option>
               {sublocation?.map((ty: any) => (
-                <option key={ty?._id} value={ty?.title} className="text-black">
+                <option key={ty?._id} value={ty?._id} className="text-black">
                   {ty?.title}
                 </option>
               ))}
@@ -322,7 +467,6 @@ function ProjectsToolbar({
             >
               Filters
             </button>
-
             <button
               type="submit"
               className="px-7 py-4 rounded-2xl bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black font-semibold hover:scale-[1.02] transition"
@@ -340,14 +484,22 @@ function ProjectsToolbar({
 
 function ResultsBar({ count, filters, clearAllFilters }: any) {
   const active = [
-    filters.type,
+    ...(Array.isArray(filters.category)
+      ? filters.category
+      : filters.category
+        ? [filters.category]
+        : []),
+    ...(Array.isArray(filters.bedrooms)
+      ? filters.bedrooms
+      : filters.bedrooms
+        ? [filters.bedrooms]
+        : []),
     filters.residence,
-    filters.bedrooms,
-    filters.location,
-    filters.subLocation,
-    filters.category,
-    filters.developer,
-    filters.communities,
+    // For IDs we just show that a filter is active; labels are shown as tags
+    filters.location ? "Location selected" : "",
+    filters.subLocation ? "Sub-location selected" : "",
+    filters.developer ? "Developer selected" : "",
+    filters.communities ? "Community selected" : "",
     filters.priceRange,
     filters.sort,
     filters.featured,
@@ -370,7 +522,6 @@ function ResultsBar({ count, filters, clearAllFilters }: any) {
                 {item}
               </span>
             ))}
-
             <button
               onClick={clearAllFilters}
               className="px-3 py-1 rounded-full border border-yellow-500/30 text-yellow-400 text-sm"
@@ -391,14 +542,17 @@ function ResultsBar({ count, filters, clearAllFilters }: any) {
 /* ================= SIDEBAR ================= */
 
 function Sidebar({ filters, updateFilter, categories }: any) {
-  const [open, setOpen] = useState({
-    developer: true,
-    amenities: true,
-  });
-
+  const [open, setOpen] = useState({ developer: true, amenities: true });
   const [locations, setLocations] = useState<any[]>([]);
-  const [communities, setCommunities] = useState<any[]>([]);
-  const [developers, setDevelopers] = useState<any[]>([]);
+  const [allCommunities, setAllCommunities] = useState<any[]>([]);
+  const [filteredCommunities, setFilteredCommunities] = useState<any[]>([]);
+
+  // Developers that have at least one community → shown in "Developers" section
+  const [developersWithCommunity, setDevelopersWithCommunity] = useState<any[]>(
+    [],
+  );
+  // Developers marked isStandalone=true → shown in "Standalone Developers" section
+  const [standaloneDevelopers, setStandaloneDevelopers] = useState<any[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -409,58 +563,105 @@ function Sidebar({ filters, updateFilter, categories }: any) {
           fetch("https://winsteadglobal.com/api/content/developer-community"),
         ]);
 
-        const locData = await locRes.json();
-        const commData = await commRes.json();
-        const devData = await deveRes.json();
+        const locationsData = await locRes.json();
+        const communitiesData = await commRes.json();
+        const developersData = await deveRes.json();
 
-        setLocations(locData || []);
-        setCommunities(commData || []);
-        setDevelopers(devData || []);
+        setLocations(locationsData || []);
+        setAllCommunities(communitiesData || []);
+
+        // Only entities that are developers
+        const devs = (developersData || []).filter(
+          (item: any) => item.entity === "developer-community",
+        );
+
+        // FIX: Both lists use _id consistently for comparison
+        // Developers that have at least one community linked to them
+        const withCommunity = devs.filter((developer: any) =>
+          communitiesData.some(
+            (community: any) => community?.data?.developer === developer._id,
+          ),
+        );
+
+        // Standalone developers (isStandalone flag on the developer record)
+        const standalone = devs.filter(
+          (developer: any) =>
+            !communitiesData.some(
+              (community: any) => community?.data?.developer === developer._id,
+            ),
+        );
+        console.log("Selected Developer", filters.developer);
+        console.log(
+          communitiesData.map((c: any) => ({
+            community: c.title,
+            developer: c?.data?.developer,
+          })),
+        );
+        setDevelopersWithCommunity(withCommunity);
+        setStandaloneDevelopers(standalone);
       } catch (error) {
-        console.error("Sidebar fetch error:", error);
+        console.error(error);
       }
     }
 
     fetchData();
   }, []);
 
+  // When developer filter changes, filter communities to only those belonging to that developer
+  useEffect(() => {
+    if (!filters.developer) {
+      setFilteredCommunities(allCommunities);
+      return;
+    }
+
+    const matched = allCommunities.filter(
+      (community: any) => community?.data?.developer === filters.developer,
+    );
+
+    setFilteredCommunities(matched);
+  }, [filters.developer, allCommunities]);
+
+  const toggleArrayFilter = (key: string, value: string, current: string[]) => {
+    const exists = current.includes(value);
+    updateFilter(
+      key,
+      exists ? current.filter((v) => v !== value) : [...current, value],
+    );
+  };
+
   return (
     <div className="w-[300px] rounded-[28px] border border-yellow-500/20 bg-gradient-to-b from-[#0c0c0c] to-[#111] p-6">
       <h2 className="text-2xl font-semibold mb-6">Filters</h2>
 
+      {/* Category: filter value is the title string (matches property.category) */}
       <Section title="Category">
         {categories?.map((cat: any) => (
           <Check
             key={cat._id}
             label={cat.title}
-            // checked={filters.type === cat.title}
-            // onChange={() =>
-            //   updateFilter("type", filters.type === cat.title ? "" : cat.title)
-            // }
-            checked={filters.type.includes(cat.title)}
-            onChange={() => {
-              const exists = filters.type.includes(cat.title);
-
-              const updated = exists
-                ? filters.type.filter((t: string) => t !== cat.title)
-                : [...filters.type, cat.title];
-
-              updateFilter("type", updated);
-            }}
+            checked={(filters.category as string[]).includes(cat.title)}
+            onChange={() =>
+              toggleArrayFilter(
+                "category",
+                cat.title,
+                filters.category as string[],
+              )
+            }
           />
         ))}
       </Section>
 
+      {/* FIX: Location sends _id to match property.location which is an ID */}
       <Section title="Location">
         {locations.map((loc: any) => (
           <Check
             key={loc._id}
             label={loc.title}
-            checked={filters.location === loc.title}
+            checked={filters.location === loc._id}
             onChange={() =>
               updateFilter(
                 "location",
-                filters.location === loc.title ? "" : loc.title,
+                filters.location === loc._id ? "" : loc._id,
               )
             }
           />
@@ -473,9 +674,13 @@ function Sidebar({ filters, updateFilter, categories }: any) {
             <Check
               key={item}
               label={item}
-              checked={filters.bedrooms === item}
+              checked={(filters.bedrooms as string[]).includes(item)}
               onChange={() =>
-                updateFilter("bedrooms", filters.bedrooms === item ? "" : item)
+                toggleArrayFilter(
+                  "bedrooms",
+                  item,
+                  filters.bedrooms as string[],
+                )
               }
             />
           ),
@@ -528,14 +733,23 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         />
       </Section>
 
+      {/*
+        Developers with Communities section.
+        FIX: always sends developer._id (matches property.developer which is an ID).
+        A developer can appear here AND in Standalone section simultaneously.
+        Selecting a developer here will also filter the Community section below.
+      */}
       <Collapsible
-        title="Developer"
+        title="Developers"
         open={open.developer}
         toggle={() =>
-          setOpen((prev) => ({ ...prev, developer: !prev.developer }))
+          setOpen((prev) => ({
+            ...prev,
+            developer: !prev.developer,
+          }))
         }
       >
-        {developers.map((d: any) => (
+        {developersWithCommunity.map((d: any) => (
           <Check
             key={d._id}
             label={d.title}
@@ -550,28 +764,49 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         ))}
       </Collapsible>
 
+      {/*
+        Community section.
+        FIX: sends community._id (matches property.communities which is an ID).
+        When a developer is selected above, only that developer's communities are shown.
+        When no developer is selected, all communities are shown.
+      */}
       <Section title="Community">
-        {(communities || [])
-          .filter((c: any) => {
-            // ✅ No developer selected → show all
-            if (!filters.developer) return true;
+        {filteredCommunities.map((c: any) => (
+          <Check
+            key={c._id}
+            label={c.title}
+            checked={filters.communities === c._id}
+            onChange={() =>
+              updateFilter(
+                "communities",
+                filters.communities === c._id ? "" : c._id,
+              )
+            }
+          />
+        ))}
+      </Section>
 
-            // ✅ Match using correct path
-            return c.data?.developer === filters.developer;
-          })
-          .map((c: any) => (
-            <Check
-              key={c._id}
-              label={c.title}
-              checked={filters.communities === c._id}
-              onChange={() =>
-                updateFilter(
-                  "communities",
-                  filters.communities === c._id ? "" : c._id,
-                )
-              }
-            />
-          ))}
+      {/*
+        Standalone Developers section.
+        FIX: sends developer._id (same filter key "developer", same ID format).
+        A developer can appear here AND in the Developers section above — both
+        sections set the same filter key so they stay in sync (only one can be
+        active at a time).
+      */}
+      <Section title="Standalone Developers">
+        {standaloneDevelopers.map((d: any) => (
+          <Check
+            key={d._id}
+            label={d.title}
+            checked={filters.developer === d.title}
+            onChange={() =>
+              updateFilter(
+                "developer",
+                filters.developer === d.title ? "" : d.title,
+              )
+            }
+          />
+        ))}
       </Section>
     </div>
   );
@@ -637,14 +872,10 @@ function Collapsible({ title, children, open, toggle }: any) {
 function ProjectCard({ data }: any) {
   function getBedroomRange(floorPlans: any[]) {
     if (!Array.isArray(floorPlans) || !floorPlans.length) return null;
-
     const plans = floorPlans
       .map((fp) => (fp?.title || fp?.name || "").trim())
       .filter(Boolean);
-
     if (!plans.length) return null;
-
-    // Group by suffix (Apartment, Penthouse, Villa etc.)
     const groups: Record<string, string[]> = {};
     for (const plan of plans) {
       const words = plan.split(" ");
@@ -653,55 +884,53 @@ function ProjectCard({ data }: any) {
         .slice(0, -1)
         .join(" ")
         .replace(/\s+/g, "")
-        .toUpperCase(); // "1BR", "2BR"
+        .toUpperCase();
       if (!groups[suffix]) groups[suffix] = [];
       if (!groups[suffix].includes(prefix)) groups[suffix].push(prefix);
     }
-
     const allSuffixes = Object.keys(groups).join(", ");
     const allPrefixes = Object.values(groups)
       .flat()
       .filter((v, i, arr) => arr.indexOf(v) === i);
-
-    const compressed = allPrefixes.map((p, i) => {
-      if (i === 0 || i === allPrefixes.length - 1) return p; // "1BR", "6BR"
-      return p.replace("BR", ""); // "2", "3", "4"
-    });
-
+    const compressed = allPrefixes.map((p, i) =>
+      i === 0 || i === allPrefixes.length - 1 ? p : p.replace("BR", ""),
+    );
     return `${compressed.join(", ")} ${allSuffixes}`;
   }
+
   function getSqftRange(floorPlans: any[]) {
     if (!Array.isArray(floorPlans) || !floorPlans.length) return null;
-
     const nums = floorPlans
       .map((fp) => Number(String(fp?.data?.size || "").replace(/[^\d.]/g, "")))
       .filter((n) => !isNaN(n) && n > 0);
-
     if (!nums.length) return null;
-
     const min = Math.min(...nums);
     const max = Math.max(...nums);
-
     return min === max ? `${min} sqft` : `${min} to ${max} sqft`;
   }
+
   return (
     <Link href={`/projects/${data.slug}`} className="block">
-      <div className="group relative xs:w-[230px] sm:w-[250px] lg:w-[280] rounded-[20px] overflow-hidden border border-black/20 bg-[#0e0e0f] transition-all duration-350 hover:-translate-y-1 cursor-pointer">
-        {/* Image */}
+      <div className="group relative rounded-[20px] overflow-hidden border border-black/20 bg-[#0e0e0f] transition-all duration-350 hover:-translate-y-1 cursor-pointer">
         <div className="relative h-[200px] overflow-hidden">
-          <Image
-            src={data?.thumbnail || img}
-            alt={data.title}
-            fill
-            className="object-cover group-hover:scale-105 transition duration-600"
-          />
+          {data?.thumbnail ? (
+            <Image
+              src={data.thumbnail}
+              alt={data.title}
+              fill
+              className="object-cover group-hover:scale-105 transition duration-600"
+            />
+          ) : (
+            <div className="w-full h-full bg-white/5 flex items-center justify-center">
+              <span className="text-white/20 text-xs">No Image</span>
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b]/15 via-[#0a0a0b]/10 to-transparent" />
           <div className="absolute top-[10px] left-[10px] text-[10px] font-medium tracking-wide px-[9px] py-[3px] rounded-full bg-black/10 border border-white/15 backdrop-blur-md text-white/85">
             {data.category}
           </div>
         </div>
 
-        {/* Body */}
         <div className="px-[14px] pt-3 pb-[14px]">
           <h2 className="text-[14px] font-semibold text-white mb-[10px] truncate">
             {data.title}
@@ -711,17 +940,22 @@ function ProjectCard({ data }: any) {
             <div className="flex items-center gap-[5px] text-[11px] text-white/55">
               <FaBed className="text-yellow-400 text-[11px] shrink-0" />
               <span className="truncate">
-                {getBedroomRange(data.floorPlans)}
+                {getBedroomRange(data.floorPlans) || "—"}
               </span>
             </div>
             <div className="flex items-center gap-[5px] text-[11px] text-white/55">
               <FaRulerCombined className="text-yellow-400 text-[11px] shrink-0" />
-              <span className="truncate">{getSqftRange(data.floorPlans)}</span>
+              <span className="truncate">
+                {getSqftRange(data.floorPlans) || "—"}
+              </span>
             </div>
             <div className="col-span-2 flex items-center gap-[5px] text-[11px] text-white/55">
               <FaMapMarkerAlt className="text-yellow-400 text-[11px] shrink-0" />
+              {/* property.sublocation is a string (may be ID or label depending on API) */}
               <span className="truncate">
-                {data.location}, {data.subLocation}
+                {[data.location, data.sublocation || data.subLocation]
+                  .filter(Boolean)
+                  .join(", ")}
               </span>
             </div>
           </div>
@@ -731,18 +965,19 @@ function ProjectCard({ data }: any) {
               <sup className="text-[10px] font-medium text-yellow-400 mr-[2px]">
                 AED
               </sup>
-             <span className="sm:text-[13px] lg:text-[16px]"> {Number(data.price || 0).toLocaleString()}</span>
+              <span className="sm:text-[13px] lg:text-[16px]">
+                {Number(data.price || 0).toLocaleString()}
+              </span>
             </p>
             <button className="flex items-center gap-1 text-[11px] font-medium text-white/50 border border-white/12 mt-1 lg:mt-0 px-[10px] py-[5px] rounded-[8px] group-hover:text-yellow-400 group-hover:border-yellow-400/40 transition-all">
               Details <FaArrowRight className="text-[9px]" />
             </button>
           </div>
         </div>
-        {/* <div className="absolute inset-0 bg-gradient-to-t from-black via-black/15 to-transparent" /> */}
-      <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-transparent group-hover:border-yellow-400/40 transition duration-500" />
-      <div className="absolute top-0 left-0 w-0 h-[2px] bg-gradient-to-r from-transparent via-yellow-400 to-transparent transition-all duration-500 group-hover:w-full" />
-      <div className="absolute bottom-0 right-0 w-0 h-[2px] bg-gradient-to-l from-transparent via-yellow-400 to-transparent transition-all duration-500 group-hover:w-full" />
 
+        <div className="pointer-events-none absolute inset-0 rounded-[20px] border border-transparent group-hover:border-yellow-400/40 transition duration-500" />
+        <div className="absolute top-0 left-0 w-0 h-[2px] bg-gradient-to-r from-transparent via-yellow-400 to-transparent transition-all duration-500 group-hover:w-full" />
+        <div className="absolute bottom-0 right-0 w-0 h-[2px] bg-gradient-to-l from-transparent via-yellow-400 to-transparent transition-all duration-500 group-hover:w-full" />
       </div>
     </Link>
   );
@@ -750,56 +985,14 @@ function ProjectCard({ data }: any) {
 
 function PropertyCardSkeleton() {
   return (
-    <div className="rounded-[28px] overflow-hidden border border-white/10 bg-white/5 animate-pulse">
-      <div className="relative h-[440px] bg-white/10">
-        <div className="absolute top-4 left-4 h-7 w-24 rounded-full bg-white/10" />
-
-        <div className="absolute bottom-0 left-0 right-0 p-5">
-          <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-5">
-            <div className="h-7 w-2/3 rounded bg-white/10 mb-4" />
-
-            <div className="space-y-3">
-              <div className="h-4 w-1/2 rounded bg-white/10" />
-              <div className="h-4 w-1/3 rounded bg-white/10" />
-              <div className="h-4 w-2/3 rounded bg-white/10" />
-              <div className="h-4 w-3/4 rounded bg-white/10" />
-            </div>
-
-            <div className="mt-5 h-11 w-full rounded-xl bg-white/10" />
-          </div>
-        </div>
+    <div className="rounded-[20px] overflow-hidden border border-white/10 bg-white/5 animate-pulse">
+      <div className="h-[200px] bg-white/10" />
+      <div className="p-4 space-y-3">
+        <div className="h-4 w-2/3 rounded bg-white/10" />
+        <div className="h-3 w-1/2 rounded bg-white/10" />
+        <div className="h-3 w-1/3 rounded bg-white/10" />
+        <div className="h-3 w-3/4 rounded bg-white/10" />
       </div>
     </div>
   );
-}
-
-function getDefaultFilters() {
-  return {
-    type: [],
-    residence: "",
-    bedrooms: [],
-    location: "",
-    subLocation: "",
-    developer: "",
-    communities: "",
-    minSize: "",
-    maxSize: "",
-    minPrice: "",
-    maxPrice: "",
-    priceRange: "",
-    sort: "",
-    featured: "",
-  };
-}
-
-function buildQuery(filters: any) {
-  const params = new URLSearchParams();
-
-  Object.entries(filters).forEach(([key, value]) => {
-    if (value !== "" && value !== null && value !== undefined) {
-      params.set(key, String(value));
-    }
-  });
-
-  return params.toString();
 }
