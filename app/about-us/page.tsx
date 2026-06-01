@@ -108,11 +108,11 @@ export default function AboutUs() {
   ];
 console.log("aboutPage",aboutPage)
   return (
-    <main className="bg-black text-white min-h-screen overflow-x-hidden sm:mt-[80px]">
+    <main className="bg-black text-white min-h-screen overflow-x-hidden sm:mt-[78px]">
       {/* HERO */}
 
       {/* <AboutHero data={aboutPage} /> */}
-        <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white mt-20">
+        <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white sm:mt-20 md:mt-0">
             {/* IMAGE */}
             <div className="absolute inset-0">
               <Image

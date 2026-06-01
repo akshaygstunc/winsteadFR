@@ -24,7 +24,7 @@ export default function ProjectsHero() {
     "Explore premium properties crafted for clients";
 
   return (
-    <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white sm:mt-20 lg:mt-0 bg-center">
+    <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white sm:mt-20 md:mt-0 bg-center">
       {" "}
       {/* IMAGE */}{" "}
       <div className="absolute inset-0">
