@@ -327,7 +327,9 @@ export default function DeveloperDetailsPage() {
         })}
       />
       <main className="bg-black text-white">
+
         <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden bg-black text-white bg-center">
+
           {/* IMAGE */}
           <div className="absolute inset-0">
             <Image
@@ -412,11 +414,13 @@ export default function DeveloperDetailsPage() {
                           {property.title}
                         </h3>
 
+
                        <p className="mt-2 text-sm text-white/75">
                           {projects?.data?.city ||
                             property?.locations?.title ||
                             property?.data?.city ||
                             "Dubai"}
+
                         </p>
                       </div>
                     </div>
@@ -463,12 +467,14 @@ export default function DeveloperDetailsPage() {
           <h3 className="mt-2 text-2xl font-semibold text-white">
             {property.title}
           </h3>
+
            <p className="mt-2 text-sm text-white/75">
                           {projects?.data?.city ||
                             property?.locations?.title ||
                             property?.data?.city ||
                             "Dubai"}
                         </p>
+
         </div>
       </div>
     </Link>
