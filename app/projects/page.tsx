@@ -551,7 +551,7 @@ function Sidebar({ filters, updateFilter, categories }: any) {
   const [developersWithCommunity, setDevelopersWithCommunity] = useState<any[]>(
     [],
   );
-  
+
   const [standaloneDevelopers, setStandaloneDevelopers] = useState<any[]>([]);
 
   useEffect(() => {
@@ -578,22 +578,22 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         // FIX: Both lists use _id consistently for comparison
         // Developers that have at least one community linked to them
         const withCommunity = devs.filter((developer: any) =>
-  communitiesData.some(
-    (community: any) =>
-      community?.data?.developer === developer._id ||
-      community?.data?.developer === developer.title,
-  ),
-);
+          communitiesData.some(
+            (community: any) =>
+              community?.data?.developer === developer._id ||
+              community?.data?.developer === developer.title,
+          ),
+        );
 
-const standalone = devs.filter(
-  (developer: any) =>
-    !communitiesData.some(
-      (community: any) =>
-        community?.data?.developer === developer._id ||
-        community?.data?.developer === developer.title,
-    ),
-);
-        
+        const standalone = devs.filter(
+          (developer: any) =>
+            !communitiesData.some(
+              (community: any) =>
+                community?.data?.developer === developer._id ||
+                community?.data?.developer === developer.title,
+            ),
+        );
+
         setDevelopersWithCommunity(withCommunity);
         setStandaloneDevelopers(standalone);
       } catch (error) {
@@ -606,19 +606,19 @@ const standalone = devs.filter(
 
   // When developer filter changes, filter communities to only those belonging to that developer
   useEffect(() => {
-  if (!filters.developer) {
-    setFilteredCommunities(allCommunities);
-    return;
-  }
+    if (!filters.developer) {
+      setFilteredCommunities(allCommunities);
+      return;
+    }
 
-  const matched = allCommunities.filter(
-    (community: any) =>
-      community?.data?.developer === filters.developer ||
-      community?.data?.developer === filters.developer,
-  );
+    const matched = allCommunities.filter(
+      (community: any) =>
+        community?.data?.developer === filters.developer ||
+        community?.data?.developer === filters.developer,
+    );
 
-  setFilteredCommunities(matched);
-}, [filters.developer, allCommunities]);
+    setFilteredCommunities(matched);
+  }, [filters.developer, allCommunities]);
 
   const toggleArrayFilter = (key: string, value: string, current: string[]) => {
     const exists = current.includes(value);
