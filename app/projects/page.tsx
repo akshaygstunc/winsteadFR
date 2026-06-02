@@ -93,12 +93,12 @@ function ProjectsContent() {
       setCurrentPage(1);
 
       const query = buildQuery(filters);
-
+      console.log("Sending query:", query);
       const [response, cat] = await Promise.all([
         WebsiteContentService.getProperties(query),
         WebsiteContentService.getCategory(),
       ]);
-
+      console.log("Got projects:", response?.length, response?.[0]?.developer);
       setAllProjects(
         response?.sort((a: any, b: any) => a._sortOrder - b._sortOrder) || [],
       );
@@ -551,7 +551,7 @@ function Sidebar({ filters, updateFilter, categories }: any) {
   const [developersWithCommunity, setDevelopersWithCommunity] = useState<any[]>(
     [],
   );
-  // Developers marked isStandalone=true → shown in "Standalone Developers" section
+  
   const [standaloneDevelopers, setStandaloneDevelopers] = useState<any[]>([]);
 
   useEffect(() => {
@@ -578,25 +578,22 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         // FIX: Both lists use _id consistently for comparison
         // Developers that have at least one community linked to them
         const withCommunity = devs.filter((developer: any) =>
-          communitiesData.some(
-            (community: any) => community?.data?.developer === developer._id,
-          ),
-        );
+  communitiesData.some(
+    (community: any) =>
+      community?.data?.developer === developer._id ||
+      community?.data?.developer === developer.title,
+  ),
+);
 
-        // Standalone developers (isStandalone flag on the developer record)
-        const standalone = devs.filter(
-          (developer: any) =>
-            !communitiesData.some(
-              (community: any) => community?.data?.developer === developer._id,
-            ),
-        );
-        console.log("Selected Developer", filters.developer);
-        console.log(
-          communitiesData.map((c: any) => ({
-            community: c.title,
-            developer: c?.data?.developer,
-          })),
-        );
+const standalone = devs.filter(
+  (developer: any) =>
+    !communitiesData.some(
+      (community: any) =>
+        community?.data?.developer === developer._id ||
+        community?.data?.developer === developer.title,
+    ),
+);
+        
         setDevelopersWithCommunity(withCommunity);
         setStandaloneDevelopers(standalone);
       } catch (error) {
@@ -609,17 +606,19 @@ function Sidebar({ filters, updateFilter, categories }: any) {
 
   // When developer filter changes, filter communities to only those belonging to that developer
   useEffect(() => {
-    if (!filters.developer) {
-      setFilteredCommunities(allCommunities);
-      return;
-    }
+  if (!filters.developer) {
+    setFilteredCommunities(allCommunities);
+    return;
+  }
 
-    const matched = allCommunities.filter(
-      (community: any) => community?.data?.developer === filters.developer,
-    );
+  const matched = allCommunities.filter(
+    (community: any) =>
+      community?.data?.developer === filters.developer ||
+      community?.data?.developer === filters.developer,
+  );
 
-    setFilteredCommunities(matched);
-  }, [filters.developer, allCommunities]);
+  setFilteredCommunities(matched);
+}, [filters.developer, allCommunities]);
 
   const toggleArrayFilter = (key: string, value: string, current: string[]) => {
     const exists = current.includes(value);
@@ -753,11 +752,11 @@ function Sidebar({ filters, updateFilter, categories }: any) {
           <Check
             key={d._id}
             label={d.title}
-            checked={filters.developer === d._id}
+            checked={filters.developer === d.title}
             onChange={() =>
               updateFilter(
                 "developer",
-                filters.developer === d._id ? "" : d._id,
+                filters.developer === d.title ? "" : d.title,
               )
             }
           />
@@ -775,11 +774,11 @@ function Sidebar({ filters, updateFilter, categories }: any) {
           <Check
             key={c._id}
             label={c.title}
-            checked={filters.communities === c._id}
+            checked={filters.communities === c.title}
             onChange={() =>
               updateFilter(
                 "communities",
-                filters.communities === c._id ? "" : c._id,
+                filters.communities === c.title ? "" : c.title,
               )
             }
           />

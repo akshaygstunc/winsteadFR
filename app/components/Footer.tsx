@@ -59,7 +59,6 @@ export default function Footer() {
     fetchContact();
   }, []);
   const pageData = contactInfo || {};
-  console.log("wwwwwwwwww", pageData);
   const phones = (pageData?.data?.phoneNumbers || "")
     .split("\n")
     .map((item) => item.trim())
