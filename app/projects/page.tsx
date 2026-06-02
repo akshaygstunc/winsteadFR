@@ -727,11 +727,11 @@ function Sidebar({ filters, updateFilter, categories }: any) {
           <Check
             key={d._id}
             label={d.title}
-            checked={filters.developer === d.title}
+            checked={filters.developer === d._id}
             onChange={() =>
               updateFilter(
                 "developer",
-                filters.developer === d.title ? "" : d.title,
+                filters.developer === d._id ? "" : d._id,
               )
             }
           />
