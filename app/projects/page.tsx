@@ -952,7 +952,7 @@ function ProjectCard({ data }: any) {
               <FaMapMarkerAlt className="text-yellow-400 text-[11px] shrink-0" />
               {/* property.sublocation is a string (may be ID or label depending on API) */}
               <span className="truncate">
-                {[data.location, data.sublocation || data.subLocation]
+                {[data.location?.name, data?.subLocation?.name || data?.subLocation?.name]
                   .filter(Boolean)
                   .join(", ")}
               </span>
