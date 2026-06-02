@@ -383,129 +383,130 @@ export default function DeveloperDetailsPage() {
         </section>
 
         <section className="px-6 md:px-10 pb-24">
-  <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-7xl">
+            {/* Communities */}
+            {projects?.communities?.length > 0 && (
+              <>
+                <h2 className="mb-8 text-3xl font-semibold text-white">
+                  Communities
+                </h2>
 
-    {/* Communities */}
-    {projects?.communities?.length > 0 && (
-      <>
-        <h2 className="mb-8 text-3xl font-semibold text-white">
-          Communities
-        </h2>
+                <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3 mb-16">
+                  {projects.communities.map((property: any) => (
+                    <Link
+                      key={property._id}
+                      href={`/projects/${property.slug}`}
+                      className="group block overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.03] transition duration-500 hover:border-[#D4AF37]/40 hover:bg-white/[0.05]"
+                    >
+                      <div className="relative h-[300px] overflow-hidden">
+                        <Image
+                          src={property?.image}
+                          alt={property.title}
+                          fill
+                          className="object-cover transition duration-700 group-hover:scale-105"
+                        />
 
-        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3 mb-16">
-          {projects.communities.map((property: any) => (
-            <Link
-              key={property._id}
-              href={`/projects/${developer.slug}/${property.slug}`}
-              className="group block overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.03] transition duration-500 hover:border-[#D4AF37]/40 hover:bg-white/[0.05]"
-            >
-              <div className="relative h-[300px] overflow-hidden">
-                <Image
-                  src={property?.propertyBanner}
-                  alt={property.title}
-                  fill
-                  className="object-cover transition duration-700 group-hover:scale-105"
-                />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                        <div className="absolute bottom-5 left-5 right-5">
+                          <p className="text-xs uppercase tracking-[0.25em] text-[#D4AF37]">
+                            Community
+                          </p>
 
-                <div className="absolute bottom-5 left-5 right-5">
-                  <p className="text-xs uppercase tracking-[0.25em] text-[#D4AF37]">
-                    Community
-                  </p>
+                          <h3 className="mt-2 text-2xl font-semibold text-white">
+                            {property.title}
+                          </h3>
 
-                  <h3 className="mt-2 text-2xl font-semibold text-white">
-                    {property.title}
-                  </h3>
-
-                  <p className="mt-2 text-sm text-white/75">
-                    {projects?.data?.city ||
-                      property?.locations?.title ||
-                      property?.data?.city ||
-                      "Dubai"}
-                  </p>
+                          <p className="mt-2 text-sm text-white/75">
+                            {projects?.data?.city ||
+                              property?.locations?.title ||
+                              property?.data?.city ||
+                              "Dubai"}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
+              </>
+            )}
+
+            {/* Standalone Projects */}
+            {standaloneprojects?.length > 0 && (
+              <>
+                <h2 className="mb-8 text-3xl font-semibold text-white">
+                  Standalone Projects
+                </h2>
+
+                <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+                  {standaloneprojects.map((property: any) => {
+                    const fallbackImage =
+                      property.thumbnail ||
+                      property.image ||
+                      property.propertyBanner ||
+                      property.gallery?.[0] ||
+                      property.data?.gallery?.[0] ||
+                      property.data?.bannerimage ||
+                      property.data?.banner ||
+                      projects?.developer?.data?.bannerimage ||
+                      developer?.bannerimage;
+
+                    return (
+                      <Link
+                        key={property._id}
+                        href={`/projects/${property.slug}`}
+                        className="group block overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.03] transition duration-500 hover:border-[#D4AF37]/40 hover:bg-white/[0.05]"
+                      >
+                        <div className="relative h-[300px] overflow-hidden">
+                          {fallbackImage ? (
+                            <Image
+                              src={fallbackImage}
+                              alt={property.title}
+                              fill
+                              className="object-cover transition duration-700 group-hover:scale-105"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-white/5">
+                              <span className="text-sm text-white/30">
+                                No Image Available
+                              </span>
+                            </div>
+                          )}
+
+                          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+                          <div className="absolute bottom-5 left-5 right-5">
+                            <p className="text-xs uppercase tracking-[0.25em] text-[#D4AF37]">
+                              Project
+                            </p>
+
+                            <h3 className="mt-2 text-2xl font-semibold text-white">
+                              {property.title}
+                            </h3>
+
+                            <p className="mt-2 text-sm text-white/75">
+                              {property?.locations?.title ||
+                                property?.data?.city ||
+                                "Dubai"}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+
+            {!projects?.communities?.length && !standaloneprojects?.length && (
+              <div className="text-center py-20">
+                <h3 className="text-2xl font-semibold text-white mb-4">
+                  No projects available
+                </h3>
               </div>
-            </Link>
-          ))}
-        </div>
-      </>
-    )}
-
-    {/* Standalone Projects */}
-    {standaloneprojects?.length > 0 && (
-      <>
-        <h2 className="mb-8 text-3xl font-semibold text-white">
-          Standalone Projects
-        </h2>
-
-        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-          {standaloneprojects.map((property: any) => {
-            const fallbackImage =
-              property.image ||
-              property.data?.bannerimage ||
-              property.data?.banner ||
-              property.data?.gallery?.[0] ||
-              projects?.developer?.data?.bannerimage ||
-              developer?.bannerimage;
-
-            return (
-              <Link
-                key={property._id}
-                href={`/projects/${property.slug}`}
-                className="group block overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.03] transition duration-500 hover:border-[#D4AF37]/40 hover:bg-white/[0.05]"
-              >
-                <div className="relative h-[300px] overflow-hidden">
-                  {fallbackImage ? (
-                    <Image
-                      src={fallbackImage}
-                      alt={property.title}
-                      fill
-                      className="object-cover transition duration-700 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-white/5">
-                      <span className="text-sm text-white/30">
-                        No Image Available
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
-                  <div className="absolute bottom-5 left-5 right-5">
-                    <p className="text-xs uppercase tracking-[0.25em] text-[#D4AF37]">
-                      Project
-                    </p>
-
-                    <h3 className="mt-2 text-2xl font-semibold text-white">
-                      {property.title}
-                    </h3>
-
-                    <p className="mt-2 text-sm text-white/75">
-                      {property?.locations?.title ||
-                        property?.data?.city ||
-                        "Dubai"}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </>
-    )}
-
-    {!projects?.communities?.length &&
-      !standaloneprojects?.length && (
-        <div className="text-center py-20">
-          <h3 className="text-2xl font-semibold text-white mb-4">
-            No projects available
-          </h3>
-        </div>
-      )}
-  </div>
-</section>
+            )}
+          </div>
+        </section>
       </main>
     </>
   );

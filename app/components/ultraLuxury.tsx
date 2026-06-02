@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import WebsiteContentService from "../services/websitecontent.service";
-import ReadMoreSlider from "./ReadMoreSlider"
+import ReadMoreSlider from "./ReadMoreSlider";
 export default function UltraLuxury() {
   const [luxuaryProject, setLuxuaryProjects] = useState<any[]>([]);
   const [activeProject, setActiveProject] = useState(0);
@@ -14,9 +14,8 @@ export default function UltraLuxury() {
   console.log("currentProject fields:", currentProject);
 
   // ✅ BUILD MEDIA ARRAY FROM API
-  const media =
-    currentProject
-      ? [
+  const media = currentProject
+    ? [
         ...(currentProject.thumbnail
           ? [{ type: "image", src: currentProject.thumbnail }]
           : []),
@@ -28,20 +27,20 @@ export default function UltraLuxury() {
           ? [{ type: "video", src: currentProject.propertydoc }]
           : []),
       ]
-      : [];
+    : [];
 
   const currentMedia = media[activeMedia];
 
   const nextProject = () => {
     setActiveProject((prev) =>
-      prev + 1 >= luxuaryProject.length ? 0 : prev + 1
+      prev + 1 >= luxuaryProject.length ? 0 : prev + 1,
     );
     setActiveMedia(0);
   };
 
   const prevProject = () => {
     setActiveProject((prev) =>
-      prev - 1 < 0 ? luxuaryProject.length - 1 : prev - 1
+      prev - 1 < 0 ? luxuaryProject.length - 1 : prev - 1,
     );
     setActiveMedia(0);
   };
@@ -51,10 +50,11 @@ export default function UltraLuxury() {
       const luxuryProjects = await WebsiteContentService.getProperties();
 
       // ✅ FILTER BY TYPE ID
-      const filteredLuxuaryProject = luxuryProjects.filter(
-        (project: any) =>
-          project.type.includes("69d711938447debd74aa5b13")
-      ).sort((a: any, b: any) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+      const filteredLuxuaryProject = luxuryProjects
+        .filter((project: any) =>
+          project.type.includes("69d711938447debd74aa5b13"),
+        )
+        .sort((a: any, b: any) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 
       setLuxuaryProjects(filteredLuxuaryProject);
     }
@@ -66,7 +66,6 @@ export default function UltraLuxury() {
   if (!luxuaryProject.length) {
     return (
       <section className="max-w-[87rem] mx-auto bg-black text-white py-16 px-6 md:px-10 animate-pulse">
-
         {/* HEADER SHIMMER */}
         <div className="flex items-center justify-between mb-10">
           <div className="h-10 w-48 bg-gray-800 rounded-lg"></div>
@@ -79,7 +78,6 @@ export default function UltraLuxury() {
 
         {/* MAIN GRID SHIMMER */}
         <div className="grid md:grid-cols-[60%_40%] gap-8 items-start">
-
           {/* LEFT IMAGE */}
           <div>
             <div className="w-full h-[250px] md:h-[355px] bg-gray-800 rounded-xl"></div>
@@ -87,10 +85,7 @@ export default function UltraLuxury() {
             {/* THUMBNAILS */}
             <div className="flex gap-3 mt-4">
               {[1, 2, 3, 4].map((_, i) => (
-                <div
-                  key={i}
-                  className="w-20 h-16 bg-gray-800 rounded-lg"
-                ></div>
+                <div key={i} className="w-20 h-16 bg-gray-800 rounded-lg"></div>
               ))}
             </div>
           </div>
@@ -113,9 +108,7 @@ export default function UltraLuxury() {
     <section className="max-w-[87rem] mx-auto bg-black text-white py-16 px-6 md:px-10">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-10">
-        <h1 className="text-3xl md:text-5xl font-semibold">
-          Ultra Luxury
-        </h1>
+        <h1 className="text-3xl md:text-5xl font-semibold">Ultra Luxury</h1>
 
         {/* NAVIGATION */}
         <div className="flex items-center gap-4">
@@ -153,6 +146,10 @@ export default function UltraLuxury() {
             ) : (
               <video
                 src={currentMedia?.src}
+                autoPlay
+                loop
+                muted
+                playsInline
                 controls
                 className="w-full h-[250px] md:h-[325px] object-cover"
               />
@@ -165,11 +162,12 @@ export default function UltraLuxury() {
               <div
                 key={index}
                 onClick={() => setActiveMedia(index)}
-                className={`cursor-pointer border-2 rounded-lg overflow-hidden ${activeMedia === index
+                className={`cursor-pointer border-2 rounded-lg overflow-hidden ${
+                  activeMedia === index
                     ? "border-yellow-400"
                     : "border-transparent"
-                  }`}
-                  style={{ pointerEvents: 'auto' }}
+                }`}
+                style={{ pointerEvents: "auto" }}
               >
                 {item.type === "image" ? (
                   <Image
@@ -180,10 +178,7 @@ export default function UltraLuxury() {
                     className="w-full h-20 object-cover pointer-events-none"
                   />
                 ) : (
-                  <video
-                    src={item.src}
-                    className="w-full h-20 object-cover"
-                  />
+                  <video src={item.src} className="w-full h-20 object-cover" />
                 )}
               </div>
             ))}
@@ -202,11 +197,14 @@ export default function UltraLuxury() {
                 "Luxury living with premium amenities."}
             </p>
 
-            <div  className="text-gray-300 mt-4 leading-relaxed">
-              {<ReadMoreSlider description={currentProject.fullDescription} heading={currentProject.title} /> ||
-                "Experience world-class comfort and elegance."}
+            <div className="text-gray-300 mt-4 leading-relaxed">
+              {(
+                <ReadMoreSlider
+                  description={currentProject.fullDescription}
+                  heading={currentProject.title}
+                />
+              ) || "Experience world-class comfort and elegance."}
             </div>
-
           </div>
         </div>
       </div>
