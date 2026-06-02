@@ -369,7 +369,7 @@ function TeamCTA() {
     </section>
   );
 }
-
+   
 export default function TeamPage() {
   const [teamData, setTeamData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
