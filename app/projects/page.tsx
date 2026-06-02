@@ -76,7 +76,7 @@ function buildQuery(filters: ReturnType<typeof getDefaultFilters>) {
 
 function ProjectsContent() {
   const searchParams = useSearchParams();
-
+const [selectedCommunity, setSelectedCommunity] = useState<any>(null);
   const [allProjects, setAllProjects] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -94,28 +94,37 @@ function ProjectsContent() {
 
       const query = buildQuery(filters);
       console.log("Sending query:", query);
+      // const [response, cat] = await Promise.all([
+      //   WebsiteContentService.getProperties(query),
+      //   WebsiteContentService.getCategory(),
+      // ]);
+      
+      // setAllProjects(
+      //   response?.sort((a: any, b: any) => a._sortOrder - b._sortOrder) || [],
+      // );
       const [response, cat] = await Promise.all([
-        WebsiteContentService.getProperties(query),
-        WebsiteContentService.getCategory(),
-      ]);
-      console.log(
-  "Filtered Response",
-  response.map((p: any) => ({
-    title: p.title,
-    community: p.community,
-  }))
+  WebsiteContentService.getProperties(query),
+  WebsiteContentService.getCategory(),
+]);
+
+let projects = response || [];
+
+// Community title based frontend filtering
+if (filters.communities && selectedCommunity?.title) {
+  const community = selectedCommunity.title.toLowerCase();
+
+  projects = projects.filter(
+    (p: any) =>
+      p.title?.toLowerCase().includes(community) ||
+      p.fullDescription?.toLowerCase().includes(community),
+  );
+}
+
+console.log("Filtered Response", projects);
+
+setAllProjects(
+  projects.sort((a: any, b: any) => a.sortOrder - b.sortOrder),
 );
-console.log(JSON.stringify(response[0], null, 2));
-      console.log("projrechttt",
-  response.map((p: any) => ({
-    title: p.title,
-    community: p.communities,
-  }))
-);
-      console.log("Got projects:", response?.length, response?.[0]?.developer);
-      setAllProjects(
-        response?.sort((a: any, b: any) => a._sortOrder - b._sortOrder) || [],
-      );
       setCategories(cat?.filter((c: any) => c.title !== "Ultra Luxury") || []);
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -221,6 +230,8 @@ console.log(JSON.stringify(response[0], null, 2));
               filters={liveFilters}
               updateFilter={updateLiveFilter}
               categories={categories}
+              selectedCommunity={selectedCommunity}
+  setSelectedCommunity={setSelectedCommunity}
             />
           </div>
 
@@ -555,13 +566,13 @@ function ResultsBar({ count, filters, clearAllFilters }: any) {
 
 /* ================= SIDEBAR ================= */
 
-function Sidebar({ filters, updateFilter, categories }: any) {
+function Sidebar({ filters, updateFilter, categories,selectedCommunity, setSelectedCommunity }: any) {
   const [open, setOpen] = useState({ developer: true, amenities: true });
   const [locations, setLocations] = useState<any[]>([]);
   const [allCommunities, setAllCommunities] = useState<any[]>([]);
   const [filteredCommunities, setFilteredCommunities] = useState<any[]>([]);
   const [selectedDeveloper, setSelectedDeveloper] = useState<any>(null);
-  const [selectedCommunity, setSelectedCommunity] = useState<any>(null);
+  // const [selectedCommunity, setSelectedCommunity] = useState<any>(null);
   const [developersWithCommunity, setDevelopersWithCommunity] = useState<any[]>(
     [],
   );
@@ -771,8 +782,8 @@ function Sidebar({ filters, updateFilter, categories }: any) {
               const value = selectedCommunity?._id === c._id ? null : c;
 
               setSelectedCommunity(value);
-console.log("Selected Community", value);
-              updateFilter("communities", value ? value._id : "");
+              console.log("Selected Community", value);
+              updateFilter("communities", value ? value._id : value.title);
             }}
           />
         ))}
