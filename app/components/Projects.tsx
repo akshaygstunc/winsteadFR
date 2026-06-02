@@ -353,7 +353,7 @@ return filtered.slice(0, 6);
               <Card
                 image={project.thumbnail}
                 title={project.title}
-                location={project.location || project.data?.location}
+                location={project?.location?.name || project.data?.location?.name}
                 price={Number(
                   project.price || project.data?.price,
                 ).toLocaleString()}

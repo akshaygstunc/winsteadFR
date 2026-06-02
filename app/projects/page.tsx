@@ -552,8 +552,6 @@ function Sidebar({ filters, updateFilter, categories }: any) {
     [],
   );
 
-  const [standaloneDevelopers, setStandaloneDevelopers] = useState<any[]>([]);
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -569,33 +567,13 @@ function Sidebar({ filters, updateFilter, categories }: any) {
 
         setLocations(locationsData || []);
         setAllCommunities(communitiesData || []);
-
+        console.log("Filters", filters);
+        console.log("Query", buildQuery(filters));
         // Only entities that are developers
         const devs = (developersData || []).filter(
           (item: any) => item.entity === "developer-community",
         );
-
-        // FIX: Both lists use _id consistently for comparison
-        // Developers that have at least one community linked to them
-        const withCommunity = devs.filter((developer: any) =>
-          communitiesData.some(
-            (community: any) =>
-              community?.data?.developer === developer._id ||
-              community?.data?.developer === developer.title,
-          ),
-        );
-
-        const standalone = devs.filter(
-          (developer: any) =>
-            !communitiesData.some(
-              (community: any) =>
-                community?.data?.developer === developer._id ||
-                community?.data?.developer === developer.title,
-            ),
-        );
-
-        setDevelopersWithCommunity(withCommunity);
-        setStandaloneDevelopers(standalone);
+        setDevelopersWithCommunity(devs);
       } catch (error) {
         console.error(error);
       }
@@ -611,15 +589,18 @@ function Sidebar({ filters, updateFilter, categories }: any) {
       return;
     }
 
-    const matched = allCommunities.filter(
-      (community: any) =>
-        community?.data?.developer === filters.developer ||
-        community?.data?.developer === filters.developer,
-    );
+    const matched = allCommunities.filter((community: any) => {
+  const dev = community?.data?.developer;
 
-    setFilteredCommunities(matched);
+  return (
+    dev === filters.developer ||
+    String(dev).trim() === String(filters.developer).trim()
+  );
+});
+
+    // agar community nahi mili to sab dikhao
+    setFilteredCommunities(matched.length ? matched : allCommunities);
   }, [filters.developer, allCommunities]);
-
   const toggleArrayFilter = (key: string, value: string, current: string[]) => {
     const exists = current.includes(value);
     updateFilter(
@@ -732,12 +713,6 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         />
       </Section>
 
-      {/*
-        Developers with Communities section.
-        FIX: always sends developer._id (matches property.developer which is an ID).
-        A developer can appear here AND in Standalone section simultaneously.
-        Selecting a developer here will also filter the Community section below.
-      */}
       <Collapsible
         title="Developers"
         open={open.developer}
@@ -792,7 +767,7 @@ function Sidebar({ filters, updateFilter, categories }: any) {
         sections set the same filter key so they stay in sync (only one can be
         active at a time).
       */}
-      <Section title="Standalone Developers">
+      {/* <Section title="Standalone Developers">
         {standaloneDevelopers.map((d: any) => (
           <Check
             key={d._id}
@@ -806,7 +781,7 @@ function Sidebar({ filters, updateFilter, categories }: any) {
             }
           />
         ))}
-      </Section>
+      </Section> */}
     </div>
   );
 }
@@ -952,7 +927,10 @@ function ProjectCard({ data }: any) {
               <FaMapMarkerAlt className="text-yellow-400 text-[11px] shrink-0" />
               {/* property.sublocation is a string (may be ID or label depending on API) */}
               <span className="truncate">
-                {[data.location?.name, data?.subLocation?.name || data?.subLocation?.name]
+                {[
+                  data.location?.name,
+                  data?.subLocation?.name || data?.subLocation?.name,
+                ]
                   .filter(Boolean)
                   .join(", ")}
               </span>

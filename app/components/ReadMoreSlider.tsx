@@ -64,9 +64,9 @@ export default function ReadMoreSlider({ description, heading }: Props) {
                 </div>
 
                 <div className="h-[calc(100%-80px)] overflow-y-auto px-6 py-6">
-                    <p className="text-white leading-8 text-base md:text-lg whitespace-pre-line">
+                    <div className="text-white leading-8 text-base md:text-lg whitespace-pre-line">
                         <HtmlRenderer content={fullText} />
-                    </p>
+                    </div>
                 </div>
             </div>
         </>
