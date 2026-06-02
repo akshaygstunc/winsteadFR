@@ -98,6 +98,20 @@ function ProjectsContent() {
         WebsiteContentService.getProperties(query),
         WebsiteContentService.getCategory(),
       ]);
+      console.log(
+  "Filtered Response",
+  response.map((p: any) => ({
+    title: p.title,
+    community: p.community,
+  }))
+);
+console.log(JSON.stringify(response[0], null, 2));
+      console.log("projrechttt",
+  response.map((p: any) => ({
+    title: p.title,
+    community: p.communities,
+  }))
+);
       console.log("Got projects:", response?.length, response?.[0]?.developer);
       setAllProjects(
         response?.sort((a: any, b: any) => a._sortOrder - b._sortOrder) || [],
@@ -546,8 +560,8 @@ function Sidebar({ filters, updateFilter, categories }: any) {
   const [locations, setLocations] = useState<any[]>([]);
   const [allCommunities, setAllCommunities] = useState<any[]>([]);
   const [filteredCommunities, setFilteredCommunities] = useState<any[]>([]);
-
-  // Developers that have at least one community → shown in "Developers" section
+  const [selectedDeveloper, setSelectedDeveloper] = useState<any>(null);
+  const [selectedCommunity, setSelectedCommunity] = useState<any>(null);
   const [developersWithCommunity, setDevelopersWithCommunity] = useState<any[]>(
     [],
   );
@@ -584,23 +598,23 @@ function Sidebar({ filters, updateFilter, categories }: any) {
 
   // When developer filter changes, filter communities to only those belonging to that developer
   useEffect(() => {
-    if (!filters.developer) {
+    if (!selectedDeveloper) {
       setFilteredCommunities(allCommunities);
       return;
     }
 
     const matched = allCommunities.filter((community: any) => {
-  const dev = community?.data?.developer;
+      const dev = community?.data?.developer;
 
-  return (
-    dev === filters.developer ||
-    String(dev).trim() === String(filters.developer).trim()
-  );
-});
+      return (
+        String(dev) === String(selectedDeveloper._id) ||
+        String(dev).trim().toLowerCase() ===
+          String(selectedDeveloper.title).trim().toLowerCase()
+      );
+    });
 
-    // agar community nahi mili to sab dikhao
-    setFilteredCommunities(matched.length ? matched : allCommunities);
-  }, [filters.developer, allCommunities]);
+    setFilteredCommunities(matched);
+  }, [selectedDeveloper, allCommunities]);
   const toggleArrayFilter = (key: string, value: string, current: string[]) => {
     const exists = current.includes(value);
     updateFilter(
@@ -727,13 +741,16 @@ function Sidebar({ filters, updateFilter, categories }: any) {
           <Check
             key={d._id}
             label={d.title}
-            checked={filters.developer === d._id}
-            onChange={() =>
+            checked={selectedDeveloper?._id === d._id}
+            onChange={() => {
+              setSelectedDeveloper(selectedDeveloper?._id === d._id ? null : d);
+
+              // API ke liye title bhejo
               updateFilter(
                 "developer",
-                filters.developer === d._id ? "" : d._id,
-              )
-            }
+                selectedDeveloper?._id === d._id ? "" : d.title,
+              );
+            }}
           />
         ))}
       </Collapsible>
@@ -749,13 +766,14 @@ function Sidebar({ filters, updateFilter, categories }: any) {
           <Check
             key={c._id}
             label={c.title}
-            checked={filters.communities === c.title}
-            onChange={() =>
-              updateFilter(
-                "communities",
-                filters.communities === c.title ? "" : c.title,
-              )
-            }
+            checked={selectedCommunity?._id === c._id}
+            onChange={() => {
+              const value = selectedCommunity?._id === c._id ? null : c;
+
+              setSelectedCommunity(value);
+console.log("Selected Community", value);
+              updateFilter("communities", value ? value._id : "");
+            }}
           />
         ))}
       </Section>
