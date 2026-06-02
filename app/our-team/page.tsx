@@ -368,7 +368,7 @@ function TeamCTA() {
       </div>
     </section>
   );
-}
+} 
    
 export default function TeamPage() {
   const [teamData, setTeamData] = useState<any>(null);
