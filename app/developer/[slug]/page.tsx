@@ -395,7 +395,7 @@ export default function DeveloperDetailsPage() {
                   {projects.communities.map((property: any) => (
                     <Link
                       key={property._id}
-                      href={`/projects/${property.slug}`}
+                      href={`/community/${property.slug}`}
                       className="group block overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.03] transition duration-500 hover:border-[#D4AF37]/40 hover:bg-white/[0.05]"
                     >
                       <div className="relative h-[300px] overflow-hidden">
