@@ -283,7 +283,7 @@ export default function CommunityPage() {
 
                         {/* RIGHT SIDE */}
                         <div className="w-full flex justify-center lg:justify-end items-center h-full">
-                            <div className="w-full max-w-md rounded-3xl border border-[#D4AF37]/20 bg-gradient-to-b from-white/[0.05] to-white/[0.02] backdrop-blur-xl p-6 hover:border-[#FFD700]/40 transition-all duration-300">
+                            <div className=" w-full max-w-md rounded-3xl border border-[#D4AF37]/20 bg-gradient-to-b from-white/[0.05] to-white/[0.02]  p-6 hover:border-[#FFD700]/40 transition-all duration-300">
 
                                 {/* Logo + Name */}
                                 <div className="flex gap-4 items-center">
@@ -311,7 +311,7 @@ export default function CommunityPage() {
 
                                 {/* Description */}
                                 <p className="mt-5 text-sm leading-6 text-white/70">
-                                    {community?.developer?.description}
+                                    <ReadMoreSlider description={community?.developer?.description} heading={"Community Description"} />
                                 </p>
 
                             </div>
