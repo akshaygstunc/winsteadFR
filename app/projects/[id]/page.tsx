@@ -158,11 +158,28 @@ function getDisplayValue(value: unknown, fallback = EMPTY_VALUE) {
 }
 
 function getRelationLabel(
-  value: string | { name?: string; title?: string } | undefined,
+  value:
+    | string
+    | { name?: string; title?: string }
+    | Array<{ name?: string; title?: string }>
+    | undefined,
   fallback = EMPTY_VALUE,
 ) {
   if (!value) return fallback;
-  if (typeof value === "string") return value.trim() || fallback;
+
+  if (typeof value === "string") {
+    return value.trim() || fallback;
+  }
+
+  if (Array.isArray(value)) {
+    return (
+      value
+        .map((item) => item.name || item.title)
+        .filter(Boolean)
+        .join(", ") || fallback
+    );
+  }
+
   return value.name || value.title || fallback;
 }
 
@@ -774,7 +791,7 @@ export default function ProjectDetailPage() {
             <div className="rounded-[28px] border border-white/10 bg-black/65 backdrop-blur-xl p-5 md:p-6 shadow-[0_0_40px_rgba(250,204,21,0.06)]">
               <div className="space-y-3 text-sm text-white-300">
                 <MetaRow label="Developer" value={project.developer} />
-                <MetaRow label="Property Type" value={project.residence} />
+                <MetaRow label="Property Type" value={project.propertyType} />
                 <MetaRow label="Handover" value={project.status} />
                 <MetaRow label="Category" value={project.category} />
                 <MetaRow
