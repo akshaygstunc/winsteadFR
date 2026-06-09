@@ -425,7 +425,7 @@ export default function ProjectDetailPage() {
         .filter(Boolean);
 
       const prefixes: string[] = [];
-      let suffix = "Apartments";
+      let suffix = "";
 
       for (const plan of plans) {
         const lower = plan.toLowerCase();
