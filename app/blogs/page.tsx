@@ -14,7 +14,7 @@ export default function BlogsPage() {
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 9;
+  const ITEMS_PER_PAGE = 18;
   const [pageContent, setPageContent] = useState(null); 
   useEffect(() => {
     async function fetch() {

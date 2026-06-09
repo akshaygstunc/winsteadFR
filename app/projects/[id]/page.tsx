@@ -418,38 +418,49 @@ export default function ProjectDetailPage() {
       duringconstruction: getDisplayValue(projectDetails.duringconstruction),
       developer: getRelationLabel(projectDetails.developer as any),
       propertyType: getRelationLabel(projectDetails?.type),
-      residence: Array.isArray(projectDetails.floorPlans)
-        ? (() => {
-            const plans = projectDetails.floorPlans
-              .map((t: any) => (t?.title || t?.name || "").trim())
-              .filter(Boolean);
+     residence: Array.isArray(projectDetails.floorPlans)
+  ? (() => {
+      const plans = projectDetails.floorPlans
+        .map((t: any) => (t?.title || t?.name || "").trim())
+        .filter(Boolean);
 
-            const groups: Record<string, string[]> = {};
-            for (const plan of plans) {
-              const words = plan.split(" ");
-              const suffix = words[words.length - 1];
-              const prefix = words
-                .slice(0, -1)
-                .join(" ")
-                .replace(/\s+/g, "")
-                .toUpperCase();
-              if (!groups[suffix]) groups[suffix] = [];
-              if (!groups[suffix].includes(prefix)) groups[suffix].push(prefix);
-            }
+      const prefixes: string[] = [];
+      let suffix = "Apartments";
 
-            const allSuffixes = Object.keys(groups).join(", ");
-            const allPrefixes = Object.values(groups)
-              .flat()
-              .filter((v, i, arr) => arr.indexOf(v) === i);
+      for (const plan of plans) {
+        const lower = plan.toLowerCase();
 
-            const compressed = allPrefixes.map((p, i) => {
-              if (i === 0 || i === allPrefixes.length - 1) return p;
-              return p.replace("BR", "");
-            });
+        // detect suffix (use first one found)
+        if (lower.includes("apartment")) {
+          suffix = "Apartments";
+        } else if (lower.includes("villa")) {
+          suffix = "Villas";
+        } else if (lower.includes("penthouse")) {
+          suffix = "Penthouses";
+        }
 
-            return `${compressed.join(", ")} ${allSuffixes}`;
-          })()
-        : getRelationLabel(projectDetails.type),
+        // extract prefix
+        const prefix = plan
+          .replace(/apartments?/i, "")
+          .replace(/villas?/i, "")
+          .replace(/penthouses?/i, "")
+          .trim();
+
+        if (prefix && !prefixes.includes(prefix)) {
+          prefixes.push(prefix);
+        }
+      }
+
+      // sort: Studio first, then 1BR, 2BR etc
+      prefixes.sort((a, b) => {
+        if (a.toLowerCase() === "studio") return -1;
+        if (b.toLowerCase() === "studio") return 1;
+        return a.localeCompare(b, undefined, { numeric: true });
+      });
+
+      return `${prefixes.join(", ")} ${suffix}`;
+    })()
+  : getRelationLabel(projectDetails.type),
       description:
         projectDetails.fullDescription?.trim() ||
         projectDetails.shortDescription?.trim() ||
@@ -811,9 +822,9 @@ export default function ProjectDetailPage() {
                 <p className="text-sm uppercase tracking-[0.22em] text-yellow-400 mb-3">
                   Project Overview
                 </p>
-                <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-5">
+                {/* <h2 className="text-2xl md:text-3xl font-semibold leading-tight mb-5">
                   Premium living shaped by design, location, and long-term value
-                </h2>
+                </h2> */}
 
                 <ReadMoreSlider
                   description={project.description}

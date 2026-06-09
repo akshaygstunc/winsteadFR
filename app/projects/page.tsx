@@ -957,8 +957,8 @@ function ProjectCard({ data }: any) {
               {/* property.sublocation is a string (may be ID or label depending on API) */}
               <span className="truncate">
                 {[
-                  data.location?.name,
-                  data?.subLocation?.name || data?.subLocation?.name,
+                  
+                  data?.subLocation?.name, data.location?.name || data?.subLocation?.name,
                 ]
                   .filter(Boolean)
                   .join(", ")}
