@@ -10,7 +10,7 @@ type Props = {
     };
 };
 
-export default function ReadMoreSlider({ description, heading }: Props) {
+export default function ReadMoreSlider({ description, heading, url }: Props) {
     const [open, setOpen] = useState(false);
 
     const fullText = description || "No description available.";
@@ -25,7 +25,15 @@ export default function ReadMoreSlider({ description, heading }: Props) {
                 </div>
 
                 {fullText.length > 80 && (
-                    <button
+                   url !== undefined ? <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-gradient-to-r from-yellow-300 to-yellow-600 py-3 px-4 rounded-xl text-black text-sm mt-4 inline-block"
+                    >
+                        Read More
+                    </a> :
+                     <button
                         onClick={() => setOpen(true)}
                         className="bg-gradient-to-r from-yellow-300 to-yellow-600 py-3 px-4 rounded-xl text-black text-sm mt-4"
                     >

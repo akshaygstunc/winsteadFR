@@ -1016,11 +1016,11 @@ export default function ProjectDetailPage() {
                     <div className="min-w-0">
                       <div className="flex flex-wrap gap-x-2 text-xs text-white/60 leading-tight">
                         <span>{plan.size}</span>
-                        <span>• {plan.data.bedrooms} Beds</span>
+                        <span>• {plan.data.bedrooms  == 0 ?"" :`${plan.data.bedrooms} Beds`} </span>
                         <span>• {plan.category}</span>
                       </div>
                       <p className="text-sm font-semibold text-white mt-0.5">
-                        AED {plan.data.price}
+                        {plan.data.price == 0 ? <div></div> : `AED ${plan.data.price}`}
                       </p>
                       {plan?.title && (
                         <p className="text-[10px] text-yellow-400 uppercase mt-0.5 truncate">
@@ -1039,7 +1039,7 @@ export default function ProjectDetailPage() {
                       }}
                       className="shrink-0 text-[11px] px-3 py-1.5 rounded-full bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black"
                     >
-                      Download
+                      Request Price
                     </button>
                   </div>
                 </div>

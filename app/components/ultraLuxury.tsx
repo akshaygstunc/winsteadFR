@@ -202,6 +202,7 @@ export default function UltraLuxury() {
                 <ReadMoreSlider
                   description={currentProject.fullDescription}
                   heading={currentProject.title}
+                  url={"#"}
                 />
               ) || "Experience world-class comfort and elegance."}
             </div>
