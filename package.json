@@ -12,6 +12,7 @@
     "@ai-sdk/openai": "^3.0.53",
     "@ai-sdk/react": "^3.0.166",
     "@gsap/react": "^2.1.2",
+    "@next/third-parties": "^16.2.9",
     "@tailwindcss/typography": "^0.5.19",
     "ai": "^6.0.164",
     "autoprefixer": "^10.4.27",
