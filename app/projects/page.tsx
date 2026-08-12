@@ -982,7 +982,7 @@ function ProjectCard({ data }: any) {
           </h3>
 
           {/* Location */}
-          <div className="flex items-center gap-1.5 text-xs text-white/60">
+<div className="flex items-center gap-1.5 text-xs text-white">
             <FaMapMarkerAlt className="text-yellow-400 text-[10px] shrink-0" />
             <span className="truncate">
               {[data?.subLocation?.name, data.location?.name || data?.subLocation?.name]
@@ -995,7 +995,7 @@ function ProjectCard({ data }: any) {
           <div className="border-t border-white/5 pt-3">
             <div className="grid grid-cols-2 gap-2">
               {/* Bedrooms */}
-              <div className="flex items-center gap-1.5 text-xs text-white/70">
+              <div className="flex items-center gap-1.5 text-xs text-white">
                 <FaBed className="text-yellow-400 text-[10px] shrink-0" />
                 <span className="font-medium">
                   {getBedroomRange(data.floorPlans) || "—"}
