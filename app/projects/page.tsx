@@ -567,8 +567,11 @@ function ResultsBar({ count, filters, clearAllFilters }: any) {
 /* ================= SIDEBAR ================= */
 
 function Sidebar({ filters, updateFilter, categories,selectedCommunity, setSelectedCommunity }: any) {
-  const [open, setOpen] = useState({ developer: true, amenities: true });
-  const [locations, setLocations] = useState<any[]>([]);
+const [open, setOpen] = useState({
+  developer: false,
+  community: false,
+  amenities: true,
+});  const [locations, setLocations] = useState<any[]>([]);
   const [allCommunities, setAllCommunities] = useState<any[]>([]);
   const [filteredCommunities, setFilteredCommunities] = useState<any[]>([]);
   const [selectedDeveloper, setSelectedDeveloper] = useState<any>(null);
@@ -576,7 +579,8 @@ function Sidebar({ filters, updateFilter, categories,selectedCommunity, setSelec
   const [developersWithCommunity, setDevelopersWithCommunity] = useState<any[]>(
     [],
   );
-
+  const [communityOpen, setCommunityOpen] = useState(true);
+  
   useEffect(() => {
     async function fetchData() {
       try {
@@ -772,22 +776,31 @@ function Sidebar({ filters, updateFilter, categories,selectedCommunity, setSelec
         When a developer is selected above, only that developer's communities are shown.
         When no developer is selected, all communities are shown.
       */}
-      <Section title="Community">
-        {filteredCommunities.map((c: any) => (
-          <Check
-            key={c._id}
-            label={c.title}
-            checked={selectedCommunity?._id === c._id}
-            onChange={() => {
-              const value = selectedCommunity?._id === c._id ? null : c;
+     <Collapsible
+  title="Community"
+  open={open.community}
+  toggle={() =>
+    setOpen((prev) => ({
+      ...prev,
+      community: !prev.community,
+    }))
+  }
+>
+  {filteredCommunities.map((c: any) => (
+    <Check
+      key={c._id}
+      label={c.title}
+      checked={selectedCommunity?._id === c._id}
+      onChange={() => {
+        const value = selectedCommunity?._id === c._id ? null : c;
 
-              setSelectedCommunity(value);
-              console.log("Selected Community", value);
-              updateFilter("communities", value ? value._id : value.title);
-            }}
-          />
-        ))}
-      </Section>
+        setSelectedCommunity(value);
+        console.log("Selected Community", value);
+        updateFilter("communities", value ? value._id : "");
+      }}
+    />
+  ))}
+</Collapsible>
 
       {/*
         Standalone Developers section.
@@ -872,6 +885,8 @@ function Collapsible({ title, children, open, toggle }: any) {
 
 /* ================= CARD ================= */
 
+/* ================= CARD - PREMIUM REAL ESTATE DESIGN ================= */
+
 function ProjectCard({ data }: any) {
   function getBedroomRange(floorPlans: any[]) {
     if (!Array.isArray(floorPlans) || !floorPlans.length) return null;
@@ -913,77 +928,103 @@ function ProjectCard({ data }: any) {
   }
 
   return (
-    <Link href={`/projects/${data.slug}`} className="block">
-      <div className="group relative rounded-[20px] overflow-hidden border border-black/20 bg-[#0e0e0f] transition-all duration-350 hover:-translate-y-1 cursor-pointer">
-        <div className="relative h-[200px] overflow-hidden">
+    <Link href={`/projects/${data.slug}`} className="block group">
+      <div className="relative rounded-2xl overflow-hidden bg-[#111] border border-white/5 hover:border-yellow-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-yellow-500/5 cursor-pointer">
+        
+        {/* Image Container */}
+        <div className="relative h-[220px] overflow-hidden">
           {data?.thumbnail ? (
             <Image
               src={data.thumbnail}
               alt={data.title}
               fill
-              className="object-cover group-hover:scale-105 transition duration-600"
+              className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
             />
           ) : (
-            <div className="w-full h-full bg-white/5 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center">
               <span className="text-white/20 text-xs">No Image</span>
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b]/15 via-[#0a0a0b]/10 to-transparent" />
-          <div className="absolute top-[10px] left-[10px] text-[10px] font-medium tracking-wide px-[9px] py-[3px] rounded-full bg-black/10 border border-white/15 backdrop-blur-md text-white/85">
-            {data.category}
+          
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          
+          {/* Category Badge */}
+          <div className="absolute top-3 left-3">
+            <span className="text-[10px] font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white/90">
+              {data.category || "Luxury"}
+            </span>
+          </div>
+
+          {/* Featured Badge */}
+          {data.featured && (
+            <div className="absolute top-3 right-3">
+              <span className="text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full bg-gradient-to-r from-yellow-500/90 to-yellow-600/90 text-black">
+                Featured
+              </span>
+            </div>
+          )}
+
+          {/* Price on Image */}
+          <div className="absolute bottom-3 left-3">
+            <p className="text-white font-bold text-lg">
+              <sup className="text-[10px] font-medium text-yellow-400 mr-1">AED</sup>
+              {Number(data.price || 0).toLocaleString()}
+            </p>
           </div>
         </div>
 
-        <div className="px-[14px] pt-3 pb-[14px]">
-          <h2 className="text-[14px] font-semibold text-white mb-[10px] truncate">
+        {/* Content */}
+        <div className="p-4 space-y-3">
+          {/* Title */}
+          <h3 className="text-[15px] font-semibold text-white leading-tight group-hover:text-yellow-400 transition-colors line-clamp-1">
             {data.title}
-          </h2>
+          </h3>
 
-          <div className="grid grid-cols-2 gap-[6px] mb-3">
-            <div className="flex items-center gap-[5px] text-[11px] text-white/55">
-              <FaBed className="text-yellow-400 text-[11px] shrink-0" />
-              <span className="truncate">
-                {getBedroomRange(data.floorPlans) || "—"}
-              </span>
-            </div>
-            <div className="flex items-center gap-[5px] text-[11px] text-white/55">
-              <FaRulerCombined className="text-yellow-400 text-[11px] shrink-0" />
-              <span className="truncate">
-                {getSqftRange(data.floorPlans) || "—"}
-              </span>
-            </div>
-            <div className="col-span-2 flex items-center gap-[5px] text-[11px] text-white/55">
-              <FaMapMarkerAlt className="text-yellow-400 text-[11px] shrink-0" />
-              {/* property.sublocation is a string (may be ID or label depending on API) */}
-              <span className="truncate">
-                {[
-                  
-                  data?.subLocation?.name, data.location?.name || data?.subLocation?.name,
-                ]
-                  .filter(Boolean)
-                  .join(", ")}
-              </span>
+          {/* Location */}
+          <div className="flex items-center gap-1.5 text-xs text-white/60">
+            <FaMapMarkerAlt className="text-yellow-400 text-[10px] shrink-0" />
+            <span className="truncate">
+              {[data?.subLocation?.name, data.location?.name || data?.subLocation?.name]
+                .filter(Boolean)
+                .join(", ")}
+            </span>
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-white/5 pt-3">
+            <div className="grid grid-cols-2 gap-2">
+              {/* Bedrooms */}
+              <div className="flex items-center gap-1.5 text-xs text-white/70">
+                <FaBed className="text-yellow-400 text-[10px] shrink-0" />
+                <span className="font-medium">
+                  {getBedroomRange(data.floorPlans) || "—"}
+                </span>
+              </div>
+              
+              {/* Area */}
+              <div className="flex items-center gap-1.5 text-xs text-white/70">
+                <FaRulerCombined className="text-yellow-400 text-[10px] shrink-0" />
+                <span className="font-medium">
+                  {getSqftRange(data.floorPlans) || "—"}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-[10px] border-t border-white/7 flex-wrap lg:flex-nowrap">
-            <p className="text-[15px] font-semibold text-white">
-              <sup className="text-[10px] font-medium text-yellow-400 mr-[2px]">
-                AED
-              </sup>
-              <span className="sm:text-[13px] lg:text-[16px]">
-                {Number(data.price || 0).toLocaleString()}
-              </span>
-            </p>
-            <button className="flex items-center gap-1 text-[11px] font-medium text-white/50 border border-white/12 mt-1 lg:mt-0 px-[10px] py-[5px] rounded-[8px] group-hover:text-yellow-400 group-hover:border-yellow-400/40 transition-all">
-              Details <FaArrowRight className="text-[9px]" />
+          {/* View Details Button */}
+          <div className="pt-2">
+            <button className="w-full flex items-center justify-center gap-2 text-xs font-medium text-white/80 border border-white/10 rounded-lg px-4 py-2.5 hover:bg-yellow-500 hover:text-black hover:border-yellow-500 transition-all duration-300 group-hover:border-yellow-500/30">
+              View Details
+              <FaArrowRight className="text-[10px] group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-0 rounded-[20px] border border-transparent group-hover:border-yellow-400/40 transition duration-500" />
-        <div className="absolute top-0 left-0 w-0 h-[2px] bg-gradient-to-r from-transparent via-yellow-400 to-transparent transition-all duration-500 group-hover:w-full" />
-        <div className="absolute bottom-0 right-0 w-0 h-[2px] bg-gradient-to-l from-transparent via-yellow-400 to-transparent transition-all duration-500 group-hover:w-full" />
+        {/* Shine Effect on Hover */}
+        <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+          <div className="absolute -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/5 to-transparent group-hover:animate-shine" />
+        </div>
       </div>
     </Link>
   );

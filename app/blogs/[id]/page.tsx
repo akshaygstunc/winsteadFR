@@ -218,6 +218,7 @@ export default function BlogDetailPage() {
   const slug = String(params?.id || "");
 
   const [blogDetails, setBlogDetails] = useState<any>(null);
+  
   const [blogs, setBlogs] = useState<any[]>([]);
   const [suggestedProperties, setSuggestedProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -230,7 +231,9 @@ export default function BlogDetailPage() {
 
         const response = await WebsiteContentService.getBlogBySlug(slug);
         const blogsResponse = await WebsiteContentService.getBlogs();
-
+console.log(response);
+console.log(response.description);
+console.log(response.data);
         setBlogDetails(response || null);
         setBlogs(blogsResponse || []);
         setSuggestedProperties(response?.suggestedProperties || []);
@@ -298,10 +301,11 @@ export default function BlogDetailPage() {
         EMPTY_TEXT,
 
       fullDesc:
-        blogDetails.metaDescription ||
-        blogDetails.data?.metaDescription ||
-        blogDetails.description ||
-        EMPTY_TEXT,
+  blogDetails.description ||
+  blogDetails.data?.description ||
+  blogDetails.metaDescription ||
+  blogDetails.data?.metaDescription ||
+  EMPTY_TEXT,
 
       img: blogDetails.image || Img1,
 
@@ -398,10 +402,8 @@ export default function BlogDetailPage() {
 
     {/* ── RIGHT: Advertisement Sidebar ── */}
     <aside className="hidden lg:flex flex-col gap-6 sticky top-28 self-start">
-       <div >
-  
-
-   <EnquiryForm />
+ <div className="border border-yellow-500/30 rounded-2xl bg-black/20 p-4 backdrop-blur-sm">
+    <EnquiryForm />
   </div>
       <div className="grid grid-cols-2 gap-3">
         
