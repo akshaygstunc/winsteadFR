@@ -25,7 +25,8 @@ export default function NewsGrid({
 }: any) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const ARTICLES_PER_PAGE = 3;
+  // Changed to show 6 items (2 rows of 3 columns)
+  const ARTICLES_PER_PAGE = 6;
 
   const totalPages = Math.ceil((news?.length || 0) / ARTICLES_PER_PAGE);
 
@@ -41,7 +42,7 @@ export default function NewsGrid({
       <div className="max-w-[85rem] mx-auto">
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {Array.from({ length: 3 }).map((_, index) => (
+            {Array.from({ length: 6 }).map((_, index) => (
               <article
                 key={index}
                 className="rounded-[24px] overflow-hidden border border-white/10 bg-white/5 animate-pulse"

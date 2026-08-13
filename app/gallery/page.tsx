@@ -17,6 +17,7 @@ import {
 import galleryImg1 from "../../public/hero1.jpg";
 import AutoBreadcrumbs from "../components/BreadCrumbs";
 import WebsiteContentService from "../services/websitecontent.service";
+import Pagination from "../components/Pagination"; // ✅ Import Pagination component
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -379,10 +380,16 @@ function GalleryGrid({
   events = [],
   loading,
   galleryData,
+  currentPage,
+  totalPages,
+  onPageChange,
 }: {
   events: EventFromApi[];
   loading: boolean;
   galleryData?: any;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
 }) {
   const [activeTab, setActiveTab] = useState("All");
   const [selectedEvent, setSelectedEvent] = useState<EventFromApi | null>(null);
@@ -572,6 +579,8 @@ export default function GalleryPage() {
   const [galleryData, setGalleryData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState<EventFromApi[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 6; // ✅ 2 rows × 3 columns
 
   useEffect(() => {
     async function fetchGalleryData() {
@@ -584,6 +593,18 @@ export default function GalleryPage() {
     fetchGalleryData();
   }, []);
 
+  // ✅ Pagination logic
+  const totalPages = Math.ceil(events.length / ITEMS_PER_PAGE);
+  const paginatedEvents = events.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  // ✅ Reset to page 1 when events change (optional)
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [events]);
+
   return (
     <main className="bg-black text-white">
       <GalleryHero galleryData={galleryData} loading={loading} />
@@ -591,9 +612,18 @@ export default function GalleryPage() {
         <AutoBreadcrumbs />
       </section>
       <GalleryGrid
-        events={events}
+        events={paginatedEvents}
         loading={loading}
         galleryData={galleryData}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
+      {/* ✅ Pagination component */}
+      <Pagination 
+        currentPage={currentPage} 
+        totalPages={totalPages} 
+        onChange={setCurrentPage} 
       />
     </main>
   );

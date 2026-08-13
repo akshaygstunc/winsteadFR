@@ -10,7 +10,7 @@ import { FaCircleNotch } from "react-icons/fa";
 export default function Hero({ asset }) {
   const [videoError, setVideoError] = useState(false);
 const [videoLoaded, setVideoLoaded] = useState(false);
-const videoSrc = asset?.heroVideo || "/videoabout.mp4";
+const videoSrc = asset?.heroVideo || "/testing.mp4";
 
 useEffect(() => {
   setVideoLoaded(false);
@@ -35,7 +35,6 @@ useEffect(() => {
       ease: "power3.out",
     });
   }, []);
-  console.log("assetess",asset)
 
   return (
     <div className="h-[350] lg:h-screen relative">
@@ -62,8 +61,9 @@ useEffect(() => {
 
       {/* VIDEO */}
       <video
-      key={asset?.heroVideo || "/videoabout.mp4"} 
-      src={asset?.heroVideo || "/videoabout.mp4"} // ✅ dynamic
+      key={asset?.heroVideo || "/testing.mp4"} 
+        src={asset?.heroVideo || "/testing.mp4"} // ✅ dynamic
+
       autoPlay
       muted
       loop
