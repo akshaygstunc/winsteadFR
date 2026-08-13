@@ -76,7 +76,7 @@ function buildQuery(filters: ReturnType<typeof getDefaultFilters>) {
 
 function ProjectsContent() {
   const searchParams = useSearchParams();
-const [selectedCommunity, setSelectedCommunity] = useState<any>(null);
+  const [selectedCommunity, setSelectedCommunity] = useState<any>(null);
   const [allProjects, setAllProjects] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -98,33 +98,33 @@ const [selectedCommunity, setSelectedCommunity] = useState<any>(null);
       //   WebsiteContentService.getProperties(query),
       //   WebsiteContentService.getCategory(),
       // ]);
-      
+
       // setAllProjects(
       //   response?.sort((a: any, b: any) => a._sortOrder - b._sortOrder) || [],
       // );
       const [response, cat] = await Promise.all([
-  WebsiteContentService.getProperties(query),
-  WebsiteContentService.getCategory(),
-]);
+        WebsiteContentService.getProperties(query),
+        WebsiteContentService.getCategory(),
+      ]);
 
-let projects = response || [];
+      let projects = response || [];
 
-// Community title based frontend filtering
-if (filters.communities && selectedCommunity?.title) {
-  const community = selectedCommunity.title.toLowerCase();
+      // Community title based frontend filtering
+      if (filters.communities && selectedCommunity?.title) {
+        const community = selectedCommunity.title.toLowerCase();
 
-  projects = projects.filter(
-    (p: any) =>
-      p.title?.toLowerCase().includes(community) ||
-      p.fullDescription?.toLowerCase().includes(community),
-  );
-}
+        projects = projects.filter(
+          (p: any) =>
+            p.title?.toLowerCase().includes(community) ||
+            p.fullDescription?.toLowerCase().includes(community),
+        );
+      }
 
-console.log("Filtered Response", projects);
+      console.log("Filtered Response", projects);
 
-setAllProjects(
-  projects.sort((a: any, b: any) => a.sortOrder - b.sortOrder),
-);
+      setAllProjects(
+        projects.sort((a: any, b: any) => a.sortOrder - b.sortOrder),
+      );
       setCategories(cat?.filter((c: any) => c.title !== "Ultra Luxury") || []);
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -231,7 +231,7 @@ setAllProjects(
               updateFilter={updateLiveFilter}
               categories={categories}
               selectedCommunity={selectedCommunity}
-  setSelectedCommunity={setSelectedCommunity}
+              setSelectedCommunity={setSelectedCommunity}
             />
           </div>
 
@@ -351,11 +351,10 @@ function Pagination({
             <button
               key={p}
               onClick={() => onPageChange(p as number)}
-              className={`w-9 h-9 flex items-center justify-center rounded-full text-sm font-medium transition ${
-                p === currentPage
+              className={`w-9 h-9 flex items-center justify-center rounded-full text-sm font-medium transition ${p === currentPage
                   ? "bg-[linear-gradient(84.04deg,#B9A650,#F1DC7F,#7C5700)] text-black"
                   : "border border-white/10 text-white/60 hover:border-yellow-500/50 hover:text-yellow-400"
-              }`}
+                }`}
             >
               {p}
             </button>
@@ -566,12 +565,12 @@ function ResultsBar({ count, filters, clearAllFilters }: any) {
 
 /* ================= SIDEBAR ================= */
 
-function Sidebar({ filters, updateFilter, categories,selectedCommunity, setSelectedCommunity }: any) {
-const [open, setOpen] = useState({
-  developer: false,
-  community: false,
-  amenities: true,
-});  const [locations, setLocations] = useState<any[]>([]);
+function Sidebar({ filters, updateFilter, categories, selectedCommunity, setSelectedCommunity }: any) {
+  const [open, setOpen] = useState({
+    developer: false,
+    community: false,
+    amenities: true,
+  }); const [locations, setLocations] = useState<any[]>([]);
   const [allCommunities, setAllCommunities] = useState<any[]>([]);
   const [filteredCommunities, setFilteredCommunities] = useState<any[]>([]);
   const [selectedDeveloper, setSelectedDeveloper] = useState<any>(null);
@@ -580,7 +579,7 @@ const [open, setOpen] = useState({
     [],
   );
   const [communityOpen, setCommunityOpen] = useState(true);
-  
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -624,7 +623,7 @@ const [open, setOpen] = useState({
       return (
         String(dev) === String(selectedDeveloper._id) ||
         String(dev).trim().toLowerCase() ===
-          String(selectedDeveloper.title).trim().toLowerCase()
+        String(selectedDeveloper.title).trim().toLowerCase()
       );
     });
 
@@ -776,31 +775,31 @@ const [open, setOpen] = useState({
         When a developer is selected above, only that developer's communities are shown.
         When no developer is selected, all communities are shown.
       */}
-     <Collapsible
-  title="Community"
-  open={open.community}
-  toggle={() =>
-    setOpen((prev) => ({
-      ...prev,
-      community: !prev.community,
-    }))
-  }
->
-  {filteredCommunities.map((c: any) => (
-    <Check
-      key={c._id}
-      label={c.title}
-      checked={selectedCommunity?._id === c._id}
-      onChange={() => {
-        const value = selectedCommunity?._id === c._id ? null : c;
+      <Collapsible
+        title="Community"
+        open={open.community}
+        toggle={() =>
+          setOpen((prev) => ({
+            ...prev,
+            community: !prev.community,
+          }))
+        }
+      >
+        {filteredCommunities.map((c: any) => (
+          <Check
+            key={c._id}
+            label={c.title}
+            checked={selectedCommunity?._id === c._id}
+            onChange={() => {
+              const value = selectedCommunity?._id === c._id ? null : c;
 
-        setSelectedCommunity(value);
-        console.log("Selected Community", value);
-        updateFilter("communities", value ? value._id : "");
-      }}
-    />
-  ))}
-</Collapsible>
+              setSelectedCommunity(value);
+              console.log("Selected Community", value);
+              updateFilter("communities", value ? value._id : "");
+            }}
+          />
+        ))}
+      </Collapsible>
 
       {/*
         Standalone Developers section.
@@ -926,13 +925,31 @@ function ProjectCard({ data }: any) {
     const max = Math.max(...nums);
     return min === max ? `${min} sqft` : `${min} to ${max} sqft`;
   }
+  function formatPrice(price: number | string) {
+    const value = Number(price);
 
+    if (isNaN(value)) return "0";
+
+    if (value >= 1000000) {
+      return `${(value / 1000000).toFixed(
+        value % 1000000 === 0 ? 0 : 1
+      )}M`;
+    }
+
+    if (value >= 1000) {
+      return `${(value / 1000).toFixed(
+        value % 1000 === 0 ? 0 : 1
+      )}K`;
+    }
+
+    return value.toString();
+  }
   return (
     <Link href={`/projects/${data.slug}`} className="block group">
       <div className="relative rounded-2xl overflow-hidden bg-[#111] border border-white/5 hover:border-yellow-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-yellow-500/5 cursor-pointer">
-        
+
         {/* Image Container */}
-        <div className="relative h-[220px] overflow-hidden">
+        <div className="relative h-[360px] overflow-hidden">
           {data?.thumbnail ? (
             <Image
               src={data.thumbnail}
@@ -945,10 +962,10 @@ function ProjectCard({ data }: any) {
               <span className="text-white/20 text-xs">No Image</span>
             </div>
           )}
-          
+
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          
+
           {/* Category Badge */}
           <div className="absolute top-3 left-3">
             <span className="text-[10px] font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white/90">
@@ -966,11 +983,14 @@ function ProjectCard({ data }: any) {
           )}
 
           {/* Price on Image */}
-          <div className="absolute bottom-3 left-3">
-            <p className="text-white font-bold text-lg">
-              <sup className="text-[10px] font-medium text-yellow-400 mr-1">AED</sup>
-              {Number(data.price || 0).toLocaleString()}
+          <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-md rounded-xl px-4 py-3">
+            <p className="text-[11px] uppercase text-white">
+              Starting From
             </p>
+
+            <h3 className="text-[#D4AF37] text-2xl font-bold">
+              AED {formatPrice(data.price)}
+            </h3>
           </div>
         </div>
 
@@ -982,7 +1002,7 @@ function ProjectCard({ data }: any) {
           </h3>
 
           {/* Location */}
-<div className="flex items-center gap-1.5 text-xs text-white">
+          <div className="flex items-center gap-1.5 text-xs text-white">
             <FaMapMarkerAlt className="text-yellow-400 text-[10px] shrink-0" />
             <span className="truncate">
               {[data?.subLocation?.name, data.location?.name || data?.subLocation?.name]
@@ -1001,14 +1021,14 @@ function ProjectCard({ data }: any) {
                   {getBedroomRange(data.floorPlans) || "—"}
                 </span>
               </div>
-              
+
               {/* Area */}
-              <div className="flex items-center gap-1.5 text-xs text-white/70">
+              {/* <div className="flex items-center gap-1.5 text-xs text-white/70">
                 <FaRulerCombined className="text-yellow-400 text-[10px] shrink-0" />
                 <span className="font-medium">
                   {getSqftRange(data.floorPlans) || "—"}
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
 
