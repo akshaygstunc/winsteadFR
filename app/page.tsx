@@ -21,13 +21,15 @@ export default function Home() {
   useEffect(() => {
     async function fetchHomePage() {
       try {
-        const response = await WebsiteContentService.getHomePageContent1(); // ✅ correct
+      const [response, projects, testimonials] = await Promise.all([
+  WebsiteContentService.getHomePageContent1(),
+  WebsiteContentService.getProperties({}),
+  WebsiteContentService.getTestimonials(),
+]);
 
-        const projects = await WebsiteContentService.getProperties({});
-        const testimonials = await WebsiteContentService.getTestimonials();
-        settestimonials(testimonials);
-        setHomePage(response); // ✅ direct object
-        setProjects(projects);
+setHomePage(response);
+setProjects(projects);
+settestimonials(testimonials);
       } catch (error) {
         console.error("Error fetching homepage content:", error);
       }
